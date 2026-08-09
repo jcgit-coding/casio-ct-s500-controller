@@ -726,3 +726,13 @@ function pushAllToKeyboard() {
         sendCC(part, 64, tuning[part].sus ? 127 : 0);
     });
 }
+
+
+function debugMidiPorts() {
+    let msg = 'Inputs:\n';
+    for(let i of midiAccess.inputs.values()) msg += '- ' + i.name + '\n';
+    msg += '\nOutputs:\n';
+    for(let o of midiAccess.outputs.values()) msg += '- ' + o.name + '\n';
+    alert(msg || 'No midiAccess object found yet.');
+}
+document.getElementById('midiStatus')?.addEventListener('click', debugMidiPorts);
