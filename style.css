@@ -853,7 +853,11 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
 @media (max-width: 1024px) {
     /* Tablets (Landscape & Portrait) */
     .tracks-row {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .track-card {
+        flex: 1 1 280px;
     }
     .settings-grid {
         grid-template-columns: 1fr;
@@ -895,8 +899,12 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
         padding: 10px 5px;
     }
     .tracks-row {
-        grid-template-columns: 1fr; /* Stack cards vertically */
+        flex-direction: column; /* Stack cards vertically */
         gap: 10px;
+    }
+    .track-card {
+        flex: none;
+        width: 100%;
     }
     .arranger-panel {
         grid-template-columns: 1fr; /* Giant buttons stacked */
