@@ -1,6 +1,6 @@
-﻿// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  MIDI state
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 let midiAccess  = null;
 let midiInput   = null;
 let midiOutput  = null;
@@ -27,9 +27,9 @@ const eqState = { U1: {}, U2: {}, L: {} };
 // Which part the EQ panel is editing
 let activePart = 'U1';
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  INIT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 
 document.addEventListener("DOMContentLoaded", () => {
     buildEQ();          // also seeds eqState defaults
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const savedTheme = localStorage.getItem('casioTheme') || 'dark';
         if (savedTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
-            btnThemeToggle.innerText = 'ðŸŒ™';
+            btnThemeToggle.innerText = '🌙';
         }
         
         btnThemeToggle.addEventListener('click', () => {
@@ -82,101 +82,66 @@ document.addEventListener("DOMContentLoaded", () => {
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('casioTheme', next);
-            btnThemeToggle.innerText = next === 'light' ? 'ðŸŒ™' : 'â˜€ï¸';
+            btnThemeToggle.innerText = next === 'light' ? '🌙' : '☀️';
         });
     }
 });
 
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-//  MIDI INIT â€” always-on with auto-reconnect
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
+//  MIDI INIT — always-on with auto-reconnect
+// ════════════════════════════════════════════════
 function initMIDI() {
     if (!navigator.requestMIDIAccess) {
-        setStatus("Web MIDI no soportado â€” usa Chrome o Edge", false);
+        setStatus("Web MIDI no soportado — usa Chrome o Edge", false);
         return;
     }
-    setStatus("Conectandoâ€¦", false);
+    setStatus("Conectando…", false);
     navigator.requestMIDIAccess({ sysex: true }).then(access => {
         midiAccess = access;
         access.onstatechange = () => scanAndConnect();
         scanAndConnect();
     }, err => {
-        setStatus("Acceso MIDI denegado â€” revisa permisos", false);
+        setStatus("Acceso MIDI denegado — revisa permisos", false);
         console.error(err);
     });
 }
 
 function scanAndConnect() {
-    const inSel = document.getElementById('midiInSelect');
-    const outSel = document.getElementById('midiOutSelect');
-    if (!inSel || !outSel) return;
-    
-    const prevIn = inSel.value;
-    const prevOut = outSel.value;
-    
-    inSel.innerHTML = '';
-    outSel.innerHTML = '';
+    midiInput  = null;
+    midiOutput = null;
 
-    let bestIn = null;
-    let bestOut = null;
-    
+    // Try CASIO / CT-S first, fallback to first available port
     for (let o of midiAccess.outputs.values()) {
         if (o.state !== 'connected') continue;
-        const opt = document.createElement('option');
-        opt.value = o.id;
-        opt.text = o.name;
-        outSel.add(opt);
         const n = o.name.toUpperCase();
-        if (!bestOut || n.includes('CASIO') || n.includes('CT-S')) bestOut = o;
+        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S")) midiOutput = o;
     }
-    
     for (let i of midiAccess.inputs.values()) {
         if (i.state !== 'connected') continue;
-        const opt = document.createElement('option');
-        opt.value = i.id;
-        opt.text = i.name;
-        inSel.add(opt);
         const n = i.name.toUpperCase();
-        if (!bestIn || n.includes('CASIO') || n.includes('CT-S')) bestIn = i;
+        if (!midiInput || n.includes("CASIO") || n.includes("CT-S")) midiInput = i;
     }
 
-    if (prevIn && Array.from(inSel.options).some(o => o.value === prevIn)) {
-        inSel.value = prevIn;
-    } else if (bestIn) {
-        inSel.value = bestIn.id;
+    if (midiOutput) {
+        // Explicitly open the port to help prevent browser/device sleep
+        midiOutput.open().catch(console.error);
     }
     
-    if (prevOut && Array.from(outSel.options).some(o => o.value === prevOut)) {
-        outSel.value = prevOut;
-    } else if (bestOut) {
-        outSel.value = bestOut.id;
+    if (midiInput) {
+        midiInput.onmidimessage = onMIDIMessage;
     }
-
-    applySelectedMIDIPorts();
-}
-
-function applySelectedMIDIPorts() {
-    if (midiInput) midiInput.onmidimessage = null;
-
-    const inSel = document.getElementById('midiInSelect');
-    const outSel = document.getElementById('midiOutSelect');
-    if (!inSel || !outSel) return;
-
-    midiInput = midiAccess.inputs.get(inSel.value) || null;
-    midiOutput = midiAccess.outputs.get(outSel.value) || null;
-
-    if (midiOutput) midiOutput.open().catch(console.error);
-    if (midiInput) midiInput.onmidimessage = onMIDIMessage;
 
     if (midiOutput && midiInput) {
-        setStatus('🔌 ' + midiOutput.name, true);
-        document.getElementById('connectBtn').innerText = 'Escanear / Reconectar MIDI';
+        setStatus("✓ " + midiOutput.name, true);
+        document.getElementById("connectBtn").innerText = "Reconectar";
         pushAllToKeyboard();
     } else {
-        setStatus('Sin dispositivos MIDI', false);
+        setStatus("Sin dispositivos MIDI", false);
+        document.getElementById("connectBtn").innerText = "Conectar";
     }
 }
+
 function setStatus(text, connected) {
     document.getElementById("statusText").innerText = text;
     document.getElementById("statusIndicator").classList.toggle("connected", connected);
@@ -184,9 +149,9 @@ function setStatus(text, connected) {
 
 
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  INCOMING MIDI (bidireccional)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function onMIDIMessage(e) {
     const [status, d1, d2] = e.data;
 
@@ -196,7 +161,7 @@ function onMIDIMessage(e) {
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
 
-        // Sustain from physical pedal â†’ sync button UI
+        // Sustain from physical pedal → sync button UI
         if (d1 === 64) {
             tuning[part].sus = d2 >= 64;
             const btn = document.getElementById('sus-' + part);
@@ -223,17 +188,17 @@ function onMIDIMessage(e) {
     }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  EQ PANEL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// EQ sections â€” grouped logically with readable titles
+// ════════════════════════════════════════════════
+// EQ sections — grouped logically with readable titles
 const EQ_SECTIONS = [
     {
-        title: 'Volumen & PanorÃ¡mica',
+        title: 'Volumen & Panorámica',
         controls: [
             { label: 'VOL',  cc: 7,  def: 100, tip: 'Volumen' },
-            { label: 'EXP',  cc: 11, def: 127, tip: 'ExpresiÃ³n (dinÃ¡mico)' },
-            { label: 'PAN',  cc: 10, def: 64,  tip: 'PanorÃ¡mica (izq/der)' },
+            { label: 'EXP',  cc: 11, def: 127, tip: 'Expresión (dinámico)' },
+            { label: 'PAN',  cc: 10, def: 64,  tip: 'Panorámica (izq/der)' },
         ]
     },
     {
@@ -248,7 +213,7 @@ const EQ_SECTIONS = [
         controls: [
             { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
-            { label: 'RELEASE', cc: 72, def: 64, tip: 'Tiempo de LiberaciÃ³n' },
+            { label: 'RELEASE', cc: 72, def: 64, tip: 'Tiempo de Liberación' },
         ]
     },
     {
@@ -262,15 +227,15 @@ const EQ_SECTIONS = [
     {
         title: 'Efectos Espaciales',
         controls: [
-            { label: 'REVERB', cc: 91, def: 40, tip: 'EnvÃ­o de Reverb (eco de sala)' },
-            { label: 'CHORUS', cc: 93, def: 0,  tip: 'EnvÃ­o de Chorus (engrosamiento)' },
-            { label: 'DELAY',  cc: 94, def: 0,  tip: 'EnvÃ­o de Delay (repeticiÃ³n)' },
+            { label: 'REVERB', cc: 91, def: 40, tip: 'Envío de Reverb (eco de sala)' },
+            { label: 'CHORUS', cc: 93, def: 0,  tip: 'Envío de Chorus (engrosamiento)' },
+            { label: 'DELAY',  cc: 94, def: 0,  tip: 'Envío de Delay (repetición)' },
         ]
     },
     {
-        title: 'ModulaciÃ³n & Pedales',
+        title: 'Modulación & Pedales',
         controls: [
-            { label: 'MOD',       cc: 1,  def: 0, tip: 'Rueda de ModulaciÃ³n' },
+            { label: 'MOD',       cc: 1,  def: 0, tip: 'Rueda de Modulación' },
             { label: 'PORTAM.',   cc: 65, def: 0, tip: 'Portamento On/Off' },
             { label: 'PORT.TIME', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
             { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)' },
@@ -418,9 +383,9 @@ function formatVal(label, val) {
     return val;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  TONE SEARCH (filterable select)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function initToneSearch() {
     if (typeof db === 'undefined') return;
 
@@ -533,9 +498,9 @@ function initToneSearch() {
     });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  GLOBAL TRANSPOSE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function initGlobalTranspose() {
     const valEl = document.getElementById('gTrnVal');
 
@@ -555,9 +520,9 @@ function initGlobalTranspose() {
     });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  PER-PART QUICK CONTROLS (Octave, Sustain)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function initQuickControls() {
     document.querySelectorAll('.step-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -587,16 +552,16 @@ function initQuickControls() {
     });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  PRESETS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function initPresets() {
     document.getElementById("btnSavePreset").addEventListener("click", () => {
         const input = document.getElementById("presetName");
         const name  = input.value.trim();
         if (!name) { alert("Escribe un nombre para el preset."); return; }
         const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
-        if (presets[name] && !confirm(`"${name}" ya existe. Â¿Sobreescribir?`)) return;
+        if (presets[name] && !confirm(`"${name}" ya existe. ¿Sobreescribir?`)) return;
         captureAndSavePreset(name);
         input.value = '';
     });
@@ -678,18 +643,18 @@ function renderPresets() {
         actions.className = 'preset-actions';
 
         const loadBtn = document.createElement('button');
-        loadBtn.innerText = 'â–¶'; loadBtn.title = 'Cargar';
+        loadBtn.innerText = '▶'; loadBtn.title = 'Cargar';
         loadBtn.onclick = () => loadPreset(data);
 
         const overBtn = document.createElement('button');
-        overBtn.innerText = 'âœï¸'; overBtn.title = 'Sobreescribir con estado actual';
-        overBtn.onclick = () => { if (confirm(`Â¿Sobreescribir "${name}"?`)) captureAndSavePreset(name); };
+        overBtn.innerText = '✏️'; overBtn.title = 'Sobreescribir con estado actual';
+        overBtn.onclick = () => { if (confirm(`¿Sobreescribir "${name}"?`)) captureAndSavePreset(name); };
 
         const delBtn = document.createElement('button');
-        delBtn.innerText   = 'ðŸ—‘ï¸'; delBtn.title = 'Eliminar';
+        delBtn.innerText   = '🗑️'; delBtn.title = 'Eliminar';
         delBtn.className   = 'del-btn';
         delBtn.onclick = () => {
-            if (!confirm(`Â¿Eliminar "${name}"?`)) return;
+            if (!confirm(`¿Eliminar "${name}"?`)) return;
             const p = JSON.parse(localStorage.getItem("casioPresets") || "{}");
             delete p[name];
             localStorage.setItem("casioPresets", JSON.stringify(p));
@@ -705,9 +670,9 @@ function renderPresets() {
     }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  ARRANGER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function initArranger() {
     let isPlaying = false;
     const btn = document.getElementById("btnStartStop");
@@ -716,15 +681,15 @@ function initArranger() {
             if (!midiOutput) return;
             isPlaying = !isPlaying;
             midiOutput.send(isPlaying ? [0xFA] : [0xFC]);
-            btn.innerText = isPlaying ? 'â–  STOP' : 'â–¶ Start / Stop';
+            btn.innerText = isPlaying ? '■ STOP' : '▶ Start / Stop';
             btn.classList.toggle('btn-stop', isPlaying);
         });
     }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 //  MIDI SEND HELPERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ════════════════════════════════════════════════
 function sendCC(part, cc, value) {
     if (!midiOutput) return;
     midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
@@ -741,7 +706,7 @@ function changeTone(part, msb, pc) {
 function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
-    // Octave contributes Â±12 semitones, global transpose is additional offset.
+    // Octave contributes ±12 semitones, global transpose is additional offset.
     const total = Math.min(127, Math.max(0, 64 + tuning[part].oct * 12 + globalTranspose));
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
@@ -761,7 +726,3 @@ function pushAllToKeyboard() {
         sendCC(part, 64, tuning[part].sus ? 127 : 0);
     });
 }
-
-
-document.getElementById('midiInSelect')?.addEventListener('change', applySelectedMIDIPorts);
-document.getElementById('midiOutSelect')?.addEventListener('change', applySelectedMIDIPorts);

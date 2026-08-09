@@ -205,16 +205,11 @@
                 
                 <div class="panel">
                     <div class="panel-title">Conexión MIDI</div>
-                    <p style="color:var(--muted); font-size:14px; margin-bottom:15px;">
-                        Selecciona los puertos MIDI correctos si no se detectan automáticamente.
+                    <p style="font-size:13px; color:var(--muted); margin-bottom:15px; line-height:1.5;">
+                        La aplicación intenta conectar automáticamente con cualquier dispositivo <b>CASIO USB-MIDI</b>. 
+                        Si la conexión falla o el teclado entra en suspensión, presiona Reconectar.
                     </p>
-                    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
-                        <label style="font-size:12px; color:var(--muted);">Puerto de Entrada (MIDI IN):</label>
-                        <select id="midiInSelect" class="fader-input" style="width:100%;"></select>
-                        <label style="font-size:12px; color:var(--muted);">Puerto de Salida (MIDI OUT):</label>
-                        <select id="midiOutSelect" class="fader-input" style="width:100%;"></select>
-                    </div>
-                    <button id="connectBtn" class="btn btn-primary" style="width:100%; padding:14px; font-size:14px;">Escanear / Reconectar MIDI</button>
+                    <button id="connectBtn" class="btn btn-primary" style="width:100%; padding:14px; font-size:14px;">Reconectar Dispositivo MIDI</button>
                 </div>
 
                 <div class="panel" style="grid-row: span 2;">
