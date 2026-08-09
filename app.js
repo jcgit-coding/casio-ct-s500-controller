@@ -1,0 +1,719 @@
+// ════════════════════════════════════════════════
+//  MIDI state
+// ════════════════════════════════════════════════
+let midiAccess  = null;
+let midiInput   = null;
+let midiOutput  = null;
+
+// Global transpose: -12 to +12 semitones, sent to all 3 channels
+let globalTranspose = 0;
+
+// Per-part state (octave and sustain are independent per channel)
+const tuning = {
+    U1: { oct: 0, sus: false },
+    U2: { oct: 0, sus: false },
+    L:  { oct: 0, sus: false }
+};
+
+// MIDI channel per part
+const CHANNEL = { U1: 0, U2: 1, L: 2 };
+
+
+
+
+// In-memory EQ values per part
+const eqState = { U1: {}, U2: {}, L: {} };
+
+// Which part the EQ panel is editing
+let activePart = 'U1';
+
+// ════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════
+
+document.addEventListener("DOMContentLoaded", () => {
+    buildEQ();          // also seeds eqState defaults
+    initToneSearch();
+    initQuickControls();
+    initGlobalTranspose();
+    initPresets();
+    initArranger();
+
+    initMIDI(); // auto-detect on load
+    document.getElementById("connectBtn").addEventListener("click", () => {
+        if (midiAccess) scanAndConnect(); else initMIDI();
+    });
+
+    // View Navigation Logic
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            // Update active tab
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            
+            // Show corresponding view
+            const targetId = e.currentTarget.dataset.target;
+            document.querySelectorAll('.app-view').forEach(v => {
+                v.classList.toggle('active', v.id === targetId);
+            });
+        });
+    });
+
+    // Theme Toggle Logic
+    const btnThemeToggle = document.getElementById('btnThemeToggle');
+    if (btnThemeToggle) {
+        const savedTheme = localStorage.getItem('casioTheme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            btnThemeToggle.innerText = '🌙';
+        }
+        
+        btnThemeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('casioTheme', next);
+            btnThemeToggle.innerText = next === 'light' ? '🌙' : '☀️';
+        });
+    }
+});
+
+
+// ════════════════════════════════════════════════
+//  MIDI INIT — always-on with auto-reconnect
+// ════════════════════════════════════════════════
+function initMIDI() {
+    if (!navigator.requestMIDIAccess) {
+        setStatus("Web MIDI no soportado — usa Chrome o Edge", false);
+        return;
+    }
+    setStatus("Conectando…", false);
+    navigator.requestMIDIAccess({ sysex: true }).then(access => {
+        midiAccess = access;
+        access.onstatechange = () => scanAndConnect();
+        scanAndConnect();
+    }, err => {
+        setStatus("Acceso MIDI denegado — revisa permisos", false);
+        console.error(err);
+    });
+}
+
+function scanAndConnect() {
+    midiInput  = null;
+    midiOutput = null;
+
+    // Try CASIO / CT-S first, fallback to first available port
+    for (let o of midiAccess.outputs.values()) {
+        if (o.state !== 'connected') continue;
+        const n = o.name.toUpperCase();
+        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S")) midiOutput = o;
+    }
+    for (let i of midiAccess.inputs.values()) {
+        if (i.state !== 'connected') continue;
+        const n = i.name.toUpperCase();
+        if (!midiInput || n.includes("CASIO") || n.includes("CT-S")) midiInput = i;
+    }
+
+    if (midiOutput) {
+        // Explicitly open the port to help prevent browser/device sleep
+        midiOutput.open().catch(console.error);
+    }
+    
+    if (midiInput) {
+        midiInput.onmidimessage = onMIDIMessage;
+    }
+
+    if (midiOutput && midiInput) {
+        setStatus("✓ " + midiOutput.name, true);
+        document.getElementById("connectBtn").innerText = "Reconectar";
+        pushAllToKeyboard();
+    } else {
+        setStatus("Sin dispositivos MIDI", false);
+        document.getElementById("connectBtn").innerText = "Conectar";
+    }
+}
+
+function setStatus(text, connected) {
+    document.getElementById("statusText").innerText = text;
+    document.getElementById("statusIndicator").classList.toggle("connected", connected);
+}
+
+
+
+// ════════════════════════════════════════════════
+//  INCOMING MIDI (bidireccional)
+// ════════════════════════════════════════════════
+function onMIDIMessage(e) {
+    const [status, d1, d2] = e.data;
+
+    // Control Change
+    if (status >= 0xB0 && status <= 0xBF) {
+        const ch   = status & 0x0F;
+        const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
+        if (!part) return;
+
+        // Sustain from physical pedal → sync button UI
+        if (d1 === 64) {
+            tuning[part].sus = d2 >= 64;
+            const btn = document.getElementById('sus-' + part);
+            if (btn) {
+                btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+                btn.classList.toggle('sus-on', tuning[part].sus);
+            }
+        }
+
+        // Update EQ memory
+        eqState[part][d1] = d2;
+
+        // If EQ panel is showing this part, update fader UI
+        if (part === activePart) {
+            const fader = document.querySelector(`.eq-fader[data-cc="${d1}"]`);
+            if (fader) {
+                fader.value = d2;
+                const ctrl  = EQ_CONTROLS.find(c => c && c.cc === d1);
+                const lbl   = ctrl ? ctrl.label : '';
+                const valEl = document.getElementById('eq-val-' + d1);
+                if (valEl) valEl.innerText = formatVal(lbl, d2);
+            }
+        }
+    }
+}
+
+// ════════════════════════════════════════════════
+//  EQ PANEL
+// ════════════════════════════════════════════════
+// EQ sections — grouped logically with readable titles
+const EQ_SECTIONS = [
+    {
+        title: 'Volumen & Panorámica',
+        controls: [
+            { label: 'VOL',  cc: 7,  def: 100, tip: 'Volumen' },
+            { label: 'EXP',  cc: 11, def: 127, tip: 'Expresión (dinámico)' },
+            { label: 'PAN',  cc: 10, def: 64,  tip: 'Panorámica (izq/der)' },
+        ]
+    },
+    {
+        title: 'Filtros',
+        controls: [
+            { label: 'CUTOFF', cc: 74, def: 64, tip: 'Frecuencia de Corte del Filtro' },
+            { label: 'RESO',   cc: 71, def: 64, tip: 'Resonancia del Filtro' },
+        ]
+    },
+    {
+        title: 'Envolvente (ADSR)',
+        controls: [
+            { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
+            { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
+            { label: 'RELEASE', cc: 72, def: 64, tip: 'Tiempo de Liberación' },
+        ]
+    },
+    {
+        title: 'Vibrato (LFO)',
+        controls: [
+            { label: 'RATE',  cc: 76, def: 64, tip: 'Velocidad del Vibrato' },
+            { label: 'DEPTH', cc: 77, def: 64, tip: 'Profundidad del Vibrato' },
+            { label: 'DELAY', cc: 78, def: 64, tip: 'Retraso del inicio del Vibrato' },
+        ]
+    },
+    {
+        title: 'Efectos Espaciales',
+        controls: [
+            { label: 'REVERB', cc: 91, def: 40, tip: 'Envío de Reverb (eco de sala)' },
+            { label: 'CHORUS', cc: 93, def: 0,  tip: 'Envío de Chorus (engrosamiento)' },
+            { label: 'DELAY',  cc: 94, def: 0,  tip: 'Envío de Delay (repetición)' },
+        ]
+    },
+    {
+        title: 'Modulación & Pedales',
+        controls: [
+            { label: 'MOD',       cc: 1,  def: 0, tip: 'Rueda de Modulación' },
+            { label: 'PORTAM.',   cc: 65, def: 0, tip: 'Portamento On/Off' },
+            { label: 'PORT.TIME', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
+            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)' },
+            { label: 'SOFT',      cc: 67, def: 0, tip: 'Pedal Suave (reduce volumen)' },
+        ]
+    },
+];
+
+// Flatten for easy CC lookup
+const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
+
+function buildEQ() {
+    // Seed default values for all parts
+    ['U1','U2','L'].forEach(part => {
+        EQ_CONTROLS.forEach(ctrl => { 
+            let defVal = ctrl.def;
+            if (part === 'U2' && ctrl.cc === 7) defVal = 60; // default U2 vol to 60
+            eqState[part][ctrl.cc] = defVal; 
+        });
+    });
+
+    const container = document.getElementById('eqFaders');
+    container.innerHTML = '';
+
+    EQ_SECTIONS.forEach(section => {
+        const secEl = document.createElement('div');
+        secEl.className = 'fader-section';
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'fader-section-title';
+        titleEl.innerText = section.title;
+        secEl.appendChild(titleEl);
+
+        const innerEl = document.createElement('div');
+        innerEl.className = 'fader-section-inner';
+
+        section.controls.forEach(ctrl => {
+            const group = document.createElement('div');
+            group.className = 'fader-group';
+
+            const lbl = document.createElement('span');
+            lbl.className = 'fader-label';
+            lbl.innerText = ctrl.label;
+            lbl.title     = ctrl.tip; // tooltip on hover
+
+            const fader = document.createElement('input');
+            fader.type = 'range';
+            fader.setAttribute('orient', 'vertical');
+            fader.className  = 'eq-fader';
+            fader.dataset.cc = ctrl.cc;
+            fader.title      = ctrl.tip;
+            fader.min = 0; fader.max = 127;
+            fader.value = ctrl.def;
+
+            const valSpan = document.createElement('span');
+            valSpan.className = 'fader-value';
+            valSpan.id        = 'eq-val-' + ctrl.cc;
+            valSpan.innerText = formatVal(ctrl.label, ctrl.def);
+
+            fader.addEventListener('input', e => {
+                const val = parseInt(e.target.value);
+                const cc  = parseInt(e.target.dataset.cc);
+                valSpan.innerText = formatVal(ctrl.label, val);
+                eqState[activePart][cc] = val;
+                sendCC(activePart, cc, val);
+            });
+
+            group.appendChild(lbl);
+            group.appendChild(fader);
+            group.appendChild(valSpan);
+            innerEl.appendChild(group);
+        });
+
+        secEl.appendChild(innerEl);
+        container.appendChild(secEl);
+    });
+
+    // EDITAR EQ buttons
+    document.querySelectorAll('.btn-eq').forEach(btn => {
+        btn.addEventListener('click', e => switchEQ(e.currentTarget.dataset.part));
+    });
+
+    // Reset EQ button
+    document.getElementById('btnResetEQ').addEventListener('click', resetEQ);
+
+    document.getElementById('eqTargetBadge').innerText = 'UPPER 1';
+    document.querySelector('.btn-eq[data-part="U1"]').classList.add('active-eq');
+}
+
+function resetEQ() {
+    // Restore defaults for the active part only
+    EQ_CONTROLS.forEach(ctrl => {
+        let defVal = ctrl.def;
+        if (activePart === 'U2' && ctrl.cc === 7) defVal = 60;
+        
+        eqState[activePart][ctrl.cc] = defVal;
+        sendCC(activePart, ctrl.cc, defVal);
+    });
+    // Refresh fader UI
+    document.querySelectorAll('.eq-fader').forEach(fader => {
+        const cc   = parseInt(fader.dataset.cc);
+        const ctrl = EQ_CONTROLS.find(c => c.cc === cc);
+        if (!ctrl) return;
+        
+        let defVal = ctrl.def;
+        if (activePart === 'U2' && ctrl.cc === 7) defVal = 60;
+
+        fader.value = defVal;
+        const valEl = document.getElementById('eq-val-' + cc);
+        if (valEl) valEl.innerText = formatVal(ctrl.label, defVal);
+    });
+}
+
+function switchEQ(part) {
+    activePart = part;
+    const labels = { U1: 'UPPER 1', U2: 'UPPER 2', L: 'LOWER' };
+    document.getElementById('eqTargetBadge').innerText = labels[part];
+
+    document.querySelectorAll('.btn-eq').forEach(b => b.classList.remove('active-eq'));
+    document.querySelector('.btn-eq[data-part="' + part + '"]').classList.add('active-eq');
+
+    document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active-track'));
+    document.getElementById('card-' + part).classList.add('active-track');
+
+    // Load this part's EQ values into faders
+    document.querySelectorAll('.eq-fader').forEach(fader => {
+        const cc  = parseInt(fader.dataset.cc);
+        const val = eqState[part][cc] !== undefined ? eqState[part][cc] : 64;
+        fader.value = val;
+        const ctrl  = EQ_CONTROLS.find(c => c.cc === cc);
+        const valEl = document.getElementById('eq-val-' + cc);
+        if (valEl) valEl.innerText = formatVal(ctrl ? ctrl.label : '', val);
+    });
+}
+
+function formatVal(label, val) {
+    if (label === 'PAN') {
+        if (val === 64) return 'C';
+        return val < 64 ? 'L' + (64 - val) : 'R' + (val - 64);
+    }
+    // Switch-style controls (on/off)
+    if (['PORTAM.','SOSTENUTO','SOFT'].includes(label)) {
+        return val >= 64 ? 'ON' : 'OFF';
+    }
+    return val;
+}
+
+// ════════════════════════════════════════════════
+//  TONE SEARCH (filterable select)
+// ════════════════════════════════════════════════
+function initToneSearch() {
+    if (typeof db === 'undefined') return;
+
+    const allTones = [];
+    db.forEach(cat => {
+        cat.tones.forEach(tone => {
+            allTones.push({
+                id: tone.id, name: tone.name,
+                category: cat.category,
+                bank: tone.bank, program: tone.program,
+                label: `${tone.id}. ${tone.name}`
+            });
+        });
+    });
+
+    ['U1','U2','L'].forEach(part => {
+        const searchEl = document.getElementById('search-' + part);
+        const listEl   = document.getElementById('list-' + part);
+
+        function populateList(tones) {
+            listEl.innerHTML = '';
+            const grouped = {};
+            tones.forEach(t => {
+                if (!grouped[t.category]) grouped[t.category] = [];
+                grouped[t.category].push(t);
+            });
+            for (const [cat, items] of Object.entries(grouped)) {
+                const grp = document.createElement('optgroup');
+                grp.label = cat;
+                items.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = JSON.stringify({ bank: t.bank, program: t.program });
+                    opt.text  = t.label;
+                    grp.appendChild(opt);
+                });
+                listEl.appendChild(grp);
+            }
+        }
+
+        populateList(allTones);
+
+        searchEl.addEventListener('input', () => {
+            const q = searchEl.value.trim().toLowerCase();
+            populateList(q ? allTones.filter(t =>
+                t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)
+            ) : allTones);
+            if (listEl.options.length > 0) listEl.selectedIndex = 0;
+        });
+
+        listEl.addEventListener('change', () => {
+            const opt = listEl.options[listEl.selectedIndex];
+            if (!opt) return;
+            const data = JSON.parse(opt.value);
+            changeTone(part, data.bank, data.program);
+            
+            // Update the name shown in the card header
+            const nameEl = document.getElementById('selectedTone-' + part);
+            if (nameEl) nameEl.innerText = opt.text;
+            
+            // Update category shown in the card header
+            const catEl = document.getElementById('selectedCat-' + part);
+            if (catEl && opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
+                catEl.innerText = opt.parentElement.label;
+            }
+        });
+
+        // Prev / Next Buttons (Tones)
+        document.querySelectorAll(`.tone-nav-btn[data-part="${part}"]`).forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const dir = parseInt(e.currentTarget.dataset.dir);
+                let newIdx = listEl.selectedIndex + dir;
+                if (newIdx < 0) newIdx = listEl.options.length - 1;
+                if (newIdx >= listEl.options.length) newIdx = 0;
+                
+                listEl.selectedIndex = newIdx;
+                listEl.dispatchEvent(new Event('change'));
+            });
+        });
+
+        // Prev / Next Buttons (Categories)
+        document.querySelectorAll(`.cat-nav-btn[data-part="${part}"]`).forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const optgroups = Array.from(listEl.querySelectorAll('optgroup'));
+                if (optgroups.length === 0) return;
+
+                const currentOpt = listEl.options[listEl.selectedIndex];
+                const currentGrp = currentOpt ? currentOpt.parentElement : optgroups[0];
+                let grpIdx = optgroups.indexOf(currentGrp);
+
+                const dir = parseInt(e.currentTarget.dataset.dir);
+                grpIdx += dir;
+                
+                if (grpIdx < 0) grpIdx = optgroups.length - 1;
+                if (grpIdx >= optgroups.length) grpIdx = 0;
+
+                const targetGrp = optgroups[grpIdx];
+                const firstOption = targetGrp.querySelector('option');
+                if (firstOption) {
+                    firstOption.selected = true;
+                    listEl.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+        
+        // Ensure category label is initialized
+        if (listEl.options.length > 0) {
+            listEl.selectedIndex = 0;
+            listEl.dispatchEvent(new Event('change'));
+        }
+    });
+}
+
+// ════════════════════════════════════════════════
+//  GLOBAL TRANSPOSE
+// ════════════════════════════════════════════════
+function initGlobalTranspose() {
+    const valEl = document.getElementById('gTrnVal');
+
+    function updateGlobalTranspose(delta) {
+        globalTranspose = Math.max(-12, Math.min(12, globalTranspose + delta));
+        valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+        // Send to ALL channels via RPN Coarse Tuning
+        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
+    }
+
+    document.getElementById('gTrnPlus' ).addEventListener('click', () => updateGlobalTranspose(+1));
+    document.getElementById('gTrnMinus').addEventListener('click', () => updateGlobalTranspose(-1));
+    document.getElementById('gTrnReset').addEventListener('click', () => {
+        globalTranspose = 0;
+        valEl.innerText = '0';
+        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
+    });
+}
+
+// ════════════════════════════════════════════════
+//  PER-PART QUICK CONTROLS (Octave, Sustain)
+// ════════════════════════════════════════════════
+function initQuickControls() {
+    document.querySelectorAll('.step-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const part   = btn.dataset.part;
+            const action = btn.dataset.action;
+            if (!part) return; // skip global buttons handled elsewhere
+
+            if (action === 'oct+' && tuning[part].oct < 3)  tuning[part].oct++;
+            if (action === 'oct-' && tuning[part].oct > -3) tuning[part].oct--;
+
+            const octEl = document.getElementById('oct-' + part);
+            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
+
+            sendCoarseTuning(part);
+        });
+    });
+
+    document.querySelectorAll('.sus-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const part = btn.dataset.part;
+            tuning[part].sus = !tuning[part].sus;
+            const val = tuning[part].sus ? 127 : 0;
+            btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+            btn.classList.toggle('sus-on', tuning[part].sus);
+            sendCC(part, 64, val);
+        });
+    });
+}
+
+// ════════════════════════════════════════════════
+//  PRESETS
+// ════════════════════════════════════════════════
+function initPresets() {
+    document.getElementById("btnSavePreset").addEventListener("click", () => {
+        const input = document.getElementById("presetName");
+        const name  = input.value.trim();
+        if (!name) { alert("Escribe un nombre para el preset."); return; }
+        const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+        if (presets[name] && !confirm(`"${name}" ya existe. ¿Sobreescribir?`)) return;
+        captureAndSavePreset(name);
+        input.value = '';
+    });
+    renderPresets();
+}
+
+function captureAndSavePreset(name) {
+    const data = {
+        eqState:         JSON.parse(JSON.stringify(eqState)),
+        tuning:          JSON.parse(JSON.stringify(tuning)),
+        globalTranspose: globalTranspose,
+        tones: {
+            U1: (() => { const l = document.getElementById('list-U1'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+            U2: (() => { const l = document.getElementById('list-U2'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+            L:  (() => { const l = document.getElementById('list-L');  return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+        }
+    };
+    const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+    presets[name] = data;
+    localStorage.setItem("casioPresets", JSON.stringify(presets));
+    renderPresets();
+}
+
+function loadPreset(data) {
+    ['U1','U2','L'].forEach(part => {
+        if (data.eqState?.[part])  Object.assign(eqState[part], data.eqState[part]);
+        if (data.tuning?.[part]) {
+            tuning[part].oct = data.tuning[part].oct || 0;
+            tuning[part].sus = data.tuning[part].sus || false;
+
+            const octEl = document.getElementById('oct-' + part);
+            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
+
+            const susBtn = document.getElementById('sus-' + part);
+            if (susBtn) {
+                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+                susBtn.classList.toggle('sus-on', tuning[part].sus);
+            }
+        }
+        // Restore tone selection
+        if (data.tones?.[part]) {
+            const listEl = document.getElementById('list-' + part);
+            if (listEl) {
+                for (let i = 0; i < listEl.options.length; i++) {
+                    if (listEl.options[i].text === data.tones[part]) {
+                        listEl.selectedIndex = i; break;
+                    }
+                }
+            }
+        }
+    });
+
+    // Restore global transpose
+    if (data.globalTranspose !== undefined) {
+        globalTranspose = data.globalTranspose;
+        const valEl = document.getElementById('gTrnVal');
+        if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+    }
+
+    switchEQ(activePart);
+    pushAllToKeyboard();
+}
+
+function renderPresets() {
+    const list    = document.getElementById("presetsList");
+    const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+    list.innerHTML = '';
+
+    for (const [name, data] of Object.entries(presets)) {
+        const item = document.createElement('div');
+        item.className = 'preset-item';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'preset-item-name';
+        nameSpan.title     = name;
+        nameSpan.innerText = name;
+
+        const actions = document.createElement('div');
+        actions.className = 'preset-actions';
+
+        const loadBtn = document.createElement('button');
+        loadBtn.innerText = '▶'; loadBtn.title = 'Cargar';
+        loadBtn.onclick = () => loadPreset(data);
+
+        const overBtn = document.createElement('button');
+        overBtn.innerText = '✏️'; overBtn.title = 'Sobreescribir con estado actual';
+        overBtn.onclick = () => { if (confirm(`¿Sobreescribir "${name}"?`)) captureAndSavePreset(name); };
+
+        const delBtn = document.createElement('button');
+        delBtn.innerText   = '🗑️'; delBtn.title = 'Eliminar';
+        delBtn.className   = 'del-btn';
+        delBtn.onclick = () => {
+            if (!confirm(`¿Eliminar "${name}"?`)) return;
+            const p = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+            delete p[name];
+            localStorage.setItem("casioPresets", JSON.stringify(p));
+            renderPresets();
+        };
+
+        actions.appendChild(loadBtn);
+        actions.appendChild(overBtn);
+        actions.appendChild(delBtn);
+        item.appendChild(nameSpan);
+        item.appendChild(actions);
+        list.appendChild(item);
+    }
+}
+
+// ════════════════════════════════════════════════
+//  ARRANGER
+// ════════════════════════════════════════════════
+function initArranger() {
+    let isPlaying = false;
+    const btn = document.getElementById("btnStartStop");
+    if (btn) {
+        btn.addEventListener("click", () => {
+            if (!midiOutput) return;
+            isPlaying = !isPlaying;
+            midiOutput.send(isPlaying ? [0xFA] : [0xFC]);
+            btn.innerText = isPlaying ? '■ STOP' : '▶ Start / Stop';
+            btn.classList.toggle('btn-stop', isPlaying);
+        });
+    }
+}
+
+// ════════════════════════════════════════════════
+//  MIDI SEND HELPERS
+// ════════════════════════════════════════════════
+function sendCC(part, cc, value) {
+    if (!midiOutput) return;
+    midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
+}
+
+function changeTone(part, msb, pc) {
+    if (!midiOutput) return;
+    const ch = CHANNEL[part];
+    midiOutput.send([0xB0 | ch, 0x00, msb]);
+    midiOutput.send([0xB0 | ch, 0x20, 0x00]);
+    midiOutput.send([0xC0 | ch, pc]);
+}
+
+function sendCoarseTuning(part) {
+    if (!midiOutput) return;
+    // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
+    // Octave contributes ±12 semitones, global transpose is additional offset.
+    const total = Math.min(127, Math.max(0, 64 + tuning[part].oct * 12 + globalTranspose));
+    const ch = CHANNEL[part];
+    midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
+    midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
+    midiOutput.send([0xB0 | ch, 6,   total]); // Data Entry
+    midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
+    midiOutput.send([0xB0 | ch, 100, 0x7F]);
+}
+
+function pushAllToKeyboard() {
+    ['U1','U2','L'].forEach(part => {
+        EQ_CONTROLS.forEach(ctrl => {
+            if (!ctrl) return;
+            sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
+        });
+        sendCoarseTuning(part);
+        sendCC(part, 64, tuning[part].sus ? 127 : 0);
+    });
+}

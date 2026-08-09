@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casio CT-S500 Pro Controller</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <h1>CT-S500 <span class="dim">PRO</span></h1>
+            
+            <!-- VIEW NAVIGATION -->
+            <div class="view-nav">
+                <button class="nav-tab active" data-target="view-mixer">🎹 MIXER</button>
+                <button class="nav-tab" data-target="view-arranger">🥁 ARRANGER</button>
+                <button class="nav-tab" data-target="view-settings">⚙️ SETTINGS & PRESETS</button>
+            </div>
+        </div>
+
+        <div class="global-bar">
+            <span class="global-label">TRANSPOSE GLOBAL</span>
+            <div class="step-btns">
+                <button class="step-btn" id="gTrnMinus">−</button>
+                <span class="step-val" id="gTrnVal">0</span>
+                <button class="step-btn" id="gTrnPlus">+</button>
+            </div>
+            <button class="btn-reset-small" id="gTrnReset">Reset</button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema">☀️</button>
+            <div class="status-badge">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">Buscando MIDI…</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-console">
+
+        <!-- ═══════════ VIEW: MIXER (PISTAS & EQ) ═══════════ -->
+        <div class="app-view active" id="view-mixer">
+
+
+
+            <!-- PISTAS (U1, U2, L) — Octava y Sustain POR PISTA -->
+            <div class="tracks-row">
+
+                <!-- UPPER 1 -->
+                <div class="track-card active-track" id="card-U1" data-part="U1">
+                    <div class="track-label">UPPER 1</div>
+                    <div class="tone-display-row" style="margin-bottom:4px;">
+                        <button class="cat-nav-btn" data-part="U1" data-dir="-1">◀</button>
+                        <div class="selected-cat" id="selectedCat-U1">CATEGORÍA</div>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="1">▶</button>
+                    </div>
+                    <div class="tone-display-row">
+                        <button class="tone-nav-btn" data-part="U1" data-dir="-1">◀</button>
+                        <div class="selected-tone" id="selectedTone-U1">– sin instrumento –</div>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="1">▶</button>
+                    </div>
+                    <div class="tone-picker">
+                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="🔍 Buscar instrumento..." autocomplete="off">
+                        <select class="tone-list" id="list-U1" size="5"></select>
+                    </div>
+                    <div class="track-quick">
+                        <div class="quick-group">
+                            <span class="quick-label">Octava</span>
+                            <div class="step-btns">
+                                <button class="step-btn" data-part="U1" data-action="oct-">−</button>
+                                <span class="step-val" id="oct-U1">0</span>
+                                <button class="step-btn" data-part="U1" data-action="oct+">+</button>
+                            </div>
+                        </div>
+                        <div class="quick-group">
+                            <span class="quick-label">Sustain</span>
+                            <button class="sus-btn" id="sus-U1" data-part="U1">OFF</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-eq" data-part="U1">EDITAR EQ ↓</button>
+                </div>
+
+                <!-- UPPER 2 -->
+                <div class="track-card" id="card-U2" data-part="U2">
+                    <div class="track-label">UPPER 2 <span class="dim">Layer</span></div>
+                    <div class="tone-display-row" style="margin-bottom:4px;">
+                        <button class="cat-nav-btn" data-part="U2" data-dir="-1">◀</button>
+                        <div class="selected-cat" id="selectedCat-U2">CATEGORÍA</div>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="1">▶</button>
+                    </div>
+                    <div class="tone-display-row">
+                        <button class="tone-nav-btn" data-part="U2" data-dir="-1">◀</button>
+                        <div class="selected-tone" id="selectedTone-U2">– sin instrumento –</div>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="1">▶</button>
+                    </div>
+                    <div class="tone-picker">
+                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="🔍 Buscar instrumento..." autocomplete="off">
+                        <select class="tone-list" id="list-U2" size="5"></select>
+                    </div>
+                    <div class="track-quick">
+                        <div class="quick-group">
+                            <span class="quick-label">Octava</span>
+                            <div class="step-btns">
+                                <button class="step-btn" data-part="U2" data-action="oct-">−</button>
+                                <span class="step-val" id="oct-U2">0</span>
+                                <button class="step-btn" data-part="U2" data-action="oct+">+</button>
+                            </div>
+                        </div>
+                        <div class="quick-group">
+                            <span class="quick-label">Sustain</span>
+                            <button class="sus-btn" id="sus-U2" data-part="U2">OFF</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-eq" data-part="U2">EDITAR EQ ↓</button>
+                </div>
+
+                <!-- LOWER -->
+                <div class="track-card" id="card-L" data-part="L">
+                    <div class="track-label">LOWER <span class="dim">Split</span></div>
+                    <div class="tone-display-row" style="margin-bottom:4px;">
+                        <button class="cat-nav-btn" data-part="L" data-dir="-1">◀</button>
+                        <div class="selected-cat" id="selectedCat-L">CATEGORÍA</div>
+                        <button class="cat-nav-btn" data-part="L" data-dir="1">▶</button>
+                    </div>
+                    <div class="tone-display-row">
+                        <button class="tone-nav-btn" data-part="L" data-dir="-1">◀</button>
+                        <div class="selected-tone" id="selectedTone-L">– sin instrumento –</div>
+                        <button class="tone-nav-btn" data-part="L" data-dir="1">▶</button>
+                    </div>
+                    <div class="tone-picker">
+                        <input type="text" class="search-input tone-search" id="search-L" placeholder="🔍 Buscar instrumento..." autocomplete="off">
+                        <select class="tone-list" id="list-L" size="5"></select>
+                    </div>
+                    <div class="track-quick">
+                        <div class="quick-group">
+                            <span class="quick-label">Octava</span>
+                            <div class="step-btns">
+                                <button class="step-btn" data-part="L" data-action="oct-">−</button>
+                                <span class="step-val" id="oct-L">0</span>
+                                <button class="step-btn" data-part="L" data-action="oct+">+</button>
+                            </div>
+                        </div>
+                        <div class="quick-group">
+                            <span class="quick-label">Sustain</span>
+                            <button class="sus-btn" id="sus-L" data-part="L">OFF</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-eq" data-part="L">EDITAR EQ ↓</button>
+                </div>
+
+            </div><!-- /tracks-row -->
+
+            <!-- ECUALIZADOR DINÁMICO ÚNICO -->
+            <div class="panel eq-panel">
+                <div class="panel-title">
+                    <span>Ecualizador &amp; Efectos</span>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <button class="btn-reset-small" id="btnResetEQ">↺ Reset</button>
+                        <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
+                    </div>
+                </div>
+                <div class="eq-faders" id="eqFaders"></div>
+            </div>
+
+        </div><!-- /view-mixer -->
+
+        <!-- ═══════════ VIEW: ARRANGER ═══════════ -->
+        <div class="app-view" id="view-arranger">
+            <div class="panel arranger-panel">
+                <div class="panel-title">Rhythm Control Center</div>
+                
+                <div class="arranger-huge-grid">
+                    <button class="btn-giant btn-start" id="btnStartStop">
+                        <div class="icon">▶■</div>
+                        <div class="text">START / STOP</div>
+                    </button>
+                    
+                    <button class="btn-giant" id="btnSyncStart">
+                        <div class="icon">⏳</div>
+                        <div class="text">SYNC START</div>
+                    </button>
+                    
+                    <button class="btn-giant" id="btnAccomp">
+                        <div class="icon">🎹</div>
+                        <div class="text">ACCOMP (CHORDS)</div>
+                    </button>
+                </div>
+
+                <div class="arranger-huge-grid four-cols">
+                    <button class="btn-giant" id="btnIntro">INTRO</button>
+                    <button class="btn-giant" id="btnVar1">VAR 1 <br><span class="dim">/ FILL</span></button>
+                    <button class="btn-giant" id="btnVar2">VAR 2 <br><span class="dim">/ FILL</span></button>
+                    <button class="btn-giant" id="btnEnding">ENDING</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ VIEW: SETTINGS & PRESETS ═══════════ -->
+        <div class="app-view" id="view-settings">
+            <div class="settings-grid">
+                
+                <div class="panel">
+                    <div class="panel-title">Conexión MIDI</div>
+                    <p style="font-size:13px; color:var(--muted); margin-bottom:15px; line-height:1.5;">
+                        La aplicación intenta conectar automáticamente con cualquier dispositivo <b>CASIO USB-MIDI</b>. 
+                        Si la conexión falla o el teclado entra en suspensión, presiona Reconectar.
+                    </p>
+                    <button id="connectBtn" class="btn btn-primary" style="width:100%; padding:14px; font-size:14px;">Reconectar Dispositivo MIDI</button>
+                </div>
+
+                <div class="panel" style="grid-row: span 2;">
+                    <div class="panel-title">Biblioteca de Presets</div>
+                    <div class="preset-save-row" style="margin-bottom:15px;">
+                        <input type="text" id="presetName" class="search-input" placeholder="Nombre del nuevo preset...">
+                        <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
+                    </div>
+                    <div class="presets-list" id="presetsList" style="max-height: 400px;"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div><!-- /main-console -->
+
+    <script src="raw_tones.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
