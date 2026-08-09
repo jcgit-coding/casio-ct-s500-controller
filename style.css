@@ -848,3 +848,67 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
 [data-theme="light"] .view-nav button { color: var(--muted); border-color: transparent; }
 [data-theme="light"] .view-nav button:hover { background: #f3f4f6; color: var(--text); }
 [data-theme="light"] .view-nav button.active { border-color: var(--accent); color: var(--accent); background: #ecfdf5; }
+
+/* ── RESPONSIVE DESIGN (TABLETS & MOBILE) ────────────── */
+@media (max-width: 1024px) {
+    /* Tablets (Landscape & Portrait) */
+    .tracks-row {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    .arranger-panel {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .view-nav {
+        gap: 5px;
+    }
+    .nav-tab {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Phones (Vertical) */
+    header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+        padding: 10px;
+    }
+    header > div {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .view-nav {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+    .nav-tab {
+        flex: 1;
+        text-align: center;
+        font-size: 11px;
+        padding: 10px 5px;
+    }
+    .tracks-row {
+        grid-template-columns: 1fr; /* Stack cards vertically */
+        gap: 10px;
+    }
+    .arranger-panel {
+        grid-template-columns: 1fr; /* Giant buttons stacked */
+    }
+    .btn-giant {
+        height: 60px;
+        font-size: 16px;
+    }
+    .eq-faders {
+        max-height: 150px;
+    }
+    .main-console {
+        padding: 10px;
+    }
+}
