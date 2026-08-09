@@ -115,12 +115,12 @@ function scanAndConnect() {
     for (let o of midiAccess.outputs.values()) {
         if (o.state !== 'connected') continue;
         const n = o.name.toUpperCase();
-        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S")) midiOutput = o;
+        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) midiOutput = o;
     }
     for (let i of midiAccess.inputs.values()) {
         if (i.state !== 'connected') continue;
         const n = i.name.toUpperCase();
-        if (!midiInput || n.includes("CASIO") || n.includes("CT-S")) midiInput = i;
+        if (!midiInput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) midiInput = i;
     }
 
     if (midiOutput) {
