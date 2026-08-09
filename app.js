@@ -39,7 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
     initPresets();
     initArranger();
 
-    initMIDI(); // auto-detect on load
+    // Trick for Android/Chrome: Web MIDI with SysEx requires a user gesture.
+    // We wait for the FIRST tap anywhere on the screen to initialize MIDI.
+    let midiInitAttempted = false;
+    document.addEventListener("click", () => {
+        if (!midiInitAttempted) {
+            midiInitAttempted = true;
+            initMIDI();
+        }
+    }, { once: true });
+    
     document.getElementById("connectBtn").addEventListener("click", () => {
         if (midiAccess) scanAndConnect(); else initMIDI();
     });
