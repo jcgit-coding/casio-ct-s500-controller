@@ -862,7 +862,7 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
     .settings-grid {
         grid-template-columns: 1fr;
     }
-    .arranger-panel {
+    .arranger-huge-grid, .arranger-huge-grid.four-cols {
         grid-template-columns: repeat(2, 1fr);
     }
     .view-nav {
@@ -906,17 +906,32 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
         flex: none;
         width: 100%;
     }
-    .arranger-panel {
-        grid-template-columns: 1fr; /* Giant buttons stacked */
+    .arranger-huge-grid, .arranger-huge-grid.four-cols {
+        grid-template-columns: 1fr 1fr; /* 2 columns on phones to avoid extreme vertical scrolling */
+        gap: 8px;
     }
     .btn-giant {
-        height: 60px;
-        font-size: 16px;
+        padding: 15px 10px;
+        font-size: 14px;
+        height: auto;
+    }
+    .btn-giant .icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+    .eq-panel {
+        width: 100%;
+        max-width: 100vw;
+        overflow: hidden;
     }
     .eq-faders {
         max-height: 150px;
+        padding-bottom: 15px;
+        overflow-x: auto;
     }
     .main-console {
         padding: 10px;
+        overflow-x: hidden;
+        width: 100%;
     }
 }
