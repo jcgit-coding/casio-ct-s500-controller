@@ -181,8 +181,8 @@ function onMIDIMessage(e) {
             }
         }
 
-        // Update EQ memory
-        eqState[part][d1] = d2;
+        // Update EQ memory (exclude CC 64 — sustain is tracked separately in tuning[part].sus)
+        if (d1 !== 64) eqState[part][d1] = d2;
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
