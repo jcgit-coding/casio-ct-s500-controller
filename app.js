@@ -7,6 +7,7 @@ let midiOutput  = null;
 
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
 let globalTranspose = 0;
+const pendingBank = { U1: 0, U2: 0, L: 0 };
 
 // Per-part state (octave and sustain are independent per channel)
 const tuning = {
@@ -38,6 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initGlobalTranspose();
     initPresets();
     initArranger();
+
+    // Load saved settings if any, then start auto-save
+    loadAppState();
+    setInterval(saveAppState, 1000);
 
     // Trick for Android/Chrome: Web MIDI with SysEx requires a user gesture.
     // We wait for the FIRST tap anywhere on the screen to initialize MIDI.
@@ -160,6 +165,11 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
+
+        // Catch Bank Select MSB (CC0)
+        if (d1 === 0) {
+            pendingBank[part] = d2;
+        }
 
         // Sustain from physical pedal → sync button UI
         if (d1 === 64) {
@@ -711,6 +721,231 @@ function sendCoarseTuning(part) {
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
     midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
+        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
+    });
+}
+
+// ════════════════════════════════════════════════
+//  PER-PART QUICK CONTROLS (Octave, Sustain)
+// ════════════════════════════════════════════════
+function initQuickControls() {
+    document.querySelectorAll('.step-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const part   = btn.dataset.part;
+            const action = btn.dataset.action;
+            if (!part) return; // skip global buttons handled elsewhere
+
+            if (action === 'oct+' && tuning[part].oct < 3)  tuning[part].oct++;
+            if (action === 'oct-' && tuning[part].oct > -3) tuning[part].oct--;
+
+            const octEl = document.getElementById('oct-' + part);
+            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
+
+            sendCoarseTuning(part);
+        });
+    });
+
+    document.querySelectorAll('.sus-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const part = btn.dataset.part;
+            tuning[part].sus = !tuning[part].sus;
+            const val = tuning[part].sus ? 127 : 0;
+            btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+            btn.classList.toggle('sus-on', tuning[part].sus);
+            sendCC(part, 64, val);
+        });
+    });
+}
+
+// ════════════════════════════════════════════════
+//  PRESETS
+// ════════════════════════════════════════════════
+function initPresets() {
+    document.getElementById("btnSavePreset").addEventListener("click", () => {
+        const input = document.getElementById("presetName");
+        const name  = input.value.trim();
+        if (!name) { alert("Escribe un nombre para el preset."); return; }
+        const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+        if (presets[name] && !confirm(`"${name}" ya existe. ¿Sobreescribir?`)) return;
+        captureAndSavePreset(name);
+        input.value = '';
+    });
+    renderPresets();
+}
+
+function captureAndSavePreset(name) {
+    const data = {
+        eqState:         JSON.parse(JSON.stringify(eqState)),
+        tuning:          JSON.parse(JSON.stringify(tuning)),
+        globalTranspose: globalTranspose,
+        tones: {
+            U1: (() => { const l = document.getElementById('list-U1'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+            U2: (() => { const l = document.getElementById('list-U2'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+            L:  (() => { const l = document.getElementById('list-L');  return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+        }
+    };
+    const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+    presets[name] = data;
+    localStorage.setItem("casioPresets", JSON.stringify(presets));
+    renderPresets();
+}
+
+function loadPreset(data) {
+    ['U1','U2','L'].forEach(part => {
+        if (data.eqState?.[part])  Object.assign(eqState[part], data.eqState[part]);
+        if (data.tuning?.[part]) {
+            tuning[part].oct = data.tuning[part].oct || 0;
+            tuning[part].sus = data.tuning[part].sus || false;
+
+            const octEl = document.getElementById('oct-' + part);
+            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
+
+            const susBtn = document.getElementById('sus-' + part);
+            if (susBtn) {
+                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+                susBtn.classList.toggle('sus-on', tuning[part].sus);
+            }
+        }
+        // Restore tone selection
+        if (data.tones?.[part]) {
+            const listEl = document.getElementById('list-' + part);
+            if (listEl) {
+                for (let i = 0; i < listEl.options.length; i++) {
+                    if (listEl.options[i].text === data.tones[part]) {
+                        listEl.selectedIndex = i; break;
+                    }
+                }
+            }
+        }
+    });
+
+    // Restore global transpose
+    if (data.globalTranspose !== undefined) {
+        globalTranspose = data.globalTranspose;
+        const valEl = document.getElementById('gTrnVal');
+        if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+    }
+
+    // Program Change
+    if (status >= 0xC0 && status <= 0xCF) {
+        const ch = status & 0x0F;
+        const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
+        if (!part) return;
+
+        const pc = d1;
+        const bank = pendingBank[part] || 0;
+
+        const listEl = document.getElementById('list-' + part);
+        if (listEl) {
+            for (let i = 0; i < listEl.options.length; i++) {
+                try {
+                    const data = JSON.parse(listEl.options[i].value);
+                    if (data.bank === bank && data.program === pc) {
+                        listEl.selectedIndex = i;
+                        // update UI elements manually (don't dispatch change to avoid loop)
+                        const nameEl = document.getElementById('selectedTone-' + part);
+                        if (nameEl) nameEl.innerText = listEl.options[i].text;
+                        const catEl = document.getElementById('selectedCat-' + part);
+                        if (catEl && listEl.options[i].parentElement && listEl.options[i].parentElement.tagName === 'OPTGROUP') {
+                            catEl.innerText = listEl.options[i].parentElement.label;
+                        }
+                        break;
+                    }
+                } catch(e) {}
+            }
+        }
+    }
+
+    switchEQ(activePart);
+    pushAllToKeyboard();
+}
+
+function renderPresets() {
+    const list    = document.getElementById("presetsList");
+    const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+    list.innerHTML = '';
+
+    for (const [name, data] of Object.entries(presets)) {
+        const item = document.createElement('div');
+        item.className = 'preset-item';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'preset-item-name';
+        nameSpan.title     = name;
+        nameSpan.innerText = name;
+
+        const actions = document.createElement('div');
+        actions.className = 'preset-actions';
+
+        const loadBtn = document.createElement('button');
+        loadBtn.innerText = '▶'; loadBtn.title = 'Cargar';
+        loadBtn.onclick = () => loadPreset(data);
+
+        const overBtn = document.createElement('button');
+        overBtn.innerText = '✏️'; overBtn.title = 'Sobreescribir con estado actual';
+        overBtn.onclick = () => { if (confirm(`¿Sobreescribir "${name}"?`)) captureAndSavePreset(name); };
+
+        const delBtn = document.createElement('button');
+        delBtn.innerText   = '🗑️'; delBtn.title = 'Eliminar';
+        delBtn.className   = 'del-btn';
+        delBtn.onclick = () => {
+            if (!confirm(`¿Eliminar "${name}"?`)) return;
+            const p = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+            delete p[name];
+            localStorage.setItem("casioPresets", JSON.stringify(p));
+            renderPresets();
+        };
+
+        actions.appendChild(loadBtn);
+        actions.appendChild(overBtn);
+        actions.appendChild(delBtn);
+        item.appendChild(nameSpan);
+        item.appendChild(actions);
+        list.appendChild(item);
+    }
+}
+
+// ════════════════════════════════════════════════
+//  ARRANGER
+// ════════════════════════════════════════════════
+function initArranger() {
+    let isPlaying = false;
+    const btn = document.getElementById("btnStartStop");
+    if (btn) {
+        btn.addEventListener("click", () => {
+            if (!midiOutput) return;
+            isPlaying = !isPlaying;
+            midiOutput.send(isPlaying ? [0xFA] : [0xFC]);
+            btn.innerText = isPlaying ? '■ STOP' : '▶ Start / Stop';
+            btn.classList.toggle('btn-stop', isPlaying);
+        });
+    }
+}
+
+// ════════════════════════════════════════════════
+//  MIDI SEND HELPERS
+// ════════════════════════════════════════════════
+function sendCC(part, cc, value) {
+    if (!midiOutput) return;
+    midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
+}
+
+function changeTone(part, msb, pc) {
+    if (!midiOutput) return;
+    const ch = CHANNEL[part];
+    midiOutput.send([0xB0 | ch, 0x00, msb]);
+    midiOutput.send([0xB0 | ch, 0x20, 0x00]);
+    midiOutput.send([0xC0 | ch, pc]);
+}
+
+function sendCoarseTuning(part) {
+    if (!midiOutput) return;
+    // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
+    // Octave contributes ±12 semitones, global transpose is additional offset.
+    const total = Math.min(127, Math.max(0, 64 + tuning[part].oct * 12 + globalTranspose));
+    const ch = CHANNEL[part];
+    midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
+    midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
     midiOutput.send([0xB0 | ch, 6,   total]); // Data Entry
     midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
     midiOutput.send([0xB0 | ch, 100, 0x7F]);
@@ -724,6 +959,17 @@ function pushAllToKeyboard() {
         });
         sendCoarseTuning(part);
         sendCC(part, 64, tuning[part].sus ? 127 : 0);
+        
+        const listEl = document.getElementById('list-' + part);
+        if (listEl && listEl.selectedIndex >= 0) {
+            const opt = listEl.options[listEl.selectedIndex];
+            if (opt && opt.value) {
+                try {
+                    const data = JSON.parse(opt.value);
+                    changeTone(part, data.bank, data.program);
+                } catch(e) {}
+            }
+        }
     });
 }
 
@@ -736,3 +982,56 @@ function debugMidiPorts() {
     alert(msg || 'No midiAccess object found yet.');
 }
 document.getElementById('midiStatus')?.addEventListener('click', debugMidiPorts);
+function saveAppState() {
+    const appState = {
+        eqState,
+        tuning,
+        globalTranspose,
+        activePart,
+        tones: {
+            U1: document.getElementById('list-U1') ? document.getElementById('list-U1').selectedIndex : 0,
+            U2: document.getElementById('list-U2') ? document.getElementById('list-U2').selectedIndex : 0,
+            L: document.getElementById('list-L') ? document.getElementById('list-L').selectedIndex : 0
+        }
+    };
+    localStorage.setItem('casioAppState', JSON.stringify(appState));
+}
+
+function loadAppState() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('casioAppState'));
+        if (!saved) return;
+        
+        if (saved.eqState) Object.assign(eqState, saved.eqState);
+        if (saved.tuning) Object.assign(tuning, saved.tuning);
+        if (saved.globalTranspose !== undefined) {
+            globalTranspose = saved.globalTranspose;
+            document.getElementById('gTrnVal').innerText = (globalTranspose>0?'+':'')+globalTranspose;
+        }
+        if (saved.activePart) {
+            activePart = saved.activePart;
+            // Update UI buttons
+            document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
+        }
+        
+        if (saved.tones) {
+            ['U1', 'U2', 'L'].forEach(part => {
+                const list = document.getElementById('list-' + part);
+                if (list && saved.tones[part] !== undefined) {
+                    list.selectedIndex = saved.tones[part];
+                    list.dispatchEvent(new Event('change'));
+                }
+                // Update tuning UI
+                document.getElementById('oct-' + part).innerText = (tuning[part].oct>0?'+':'')+tuning[part].oct;
+                const susBtn = document.getElementById('sus-' + part);
+                if (susBtn) {
+                    susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+                    susBtn.classList.toggle('sus-on', tuning[part].sus);
+                }
+            });
+        }
+        switchEQ(activePart); // updates sliders on screen
+    } catch (e) {
+        console.error("Error loading app state:", e);
+    }
+}
