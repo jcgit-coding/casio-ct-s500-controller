@@ -380,7 +380,7 @@ header h1 {
     border: 1px solid rgba(255,255,255,0.1);
     color: var(--text);
     border-radius: 8px;
-    font-size: 13px; font-weight: 600;
+    font-size: 15px; font-weight: 600;
     cursor: pointer;
     transition: all .18s;
     text-align: center;
@@ -472,7 +472,8 @@ header h1 {
     gap: 8px;
     margin-bottom: 12px;
 }
-.preset-save-row .search-input { flex: 1; }
+.preset-save-row .search-input { flex: 1; min-height: 44px; font-size: 16px; }
+.preset-save-row .btn-accent { min-height: 44px; font-size: 16px; padding: 0 20px; }
 
 .tone-picker {
     display: flex;
@@ -758,7 +759,7 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    max-height: 200px;
+    max-height: 65vh;
     overflow-y: auto;
 }
 .presets-list::-webkit-scrollbar { width: 4px; }
@@ -770,7 +771,8 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
     align-items: center;
     background: rgba(0,0,0,0.3);
     border: 1px solid rgba(255,255,255,0.07);
-    padding: 9px 12px;
+    padding: 12px 16px;
+    margin-bottom: 4px;
     border-radius: 8px;
     transition: border-color .2s;
 }
