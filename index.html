@@ -170,33 +170,80 @@
 
         <!-- ═══════════ VIEW: ARRANGER ═══════════ -->
         <div class="app-view" id="view-arranger">
-            <div class="panel arranger-panel">
-                <div class="panel-title">Rhythm Control Center</div>
-                
-                <div class="arranger-huge-grid">
-                    <button class="btn-giant btn-start" id="btnStartStop">
-                        <div class="icon">▶■</div>
+
+            <!-- Rhythm Browser -->
+            <div class="panel">
+                <div class="panel-title">🥁 Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el número en el teclado)</span></div>
+                <div class="arranger-search-row">
+                    <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
+                    <input type="text" id="rhythmSearch" class="search-input" placeholder="🔍 Buscar ritmo..." autocomplete="off">
+                </div>
+                <div class="rhythm-list-wrap">
+                    <div class="rhythm-list" id="rhythmList"></div>
+                </div>
+            </div>
+
+            <!-- Transport + Tempo + Volume -->
+            <div class="panel">
+                <div class="panel-title">🎛️ Control de Ritmo</div>
+
+                <!-- Tempo row -->
+                <div class="arranger-row" style="margin-bottom:16px;">
+                    <span class="arranger-label">TEMPO</span>
+                    <div class="step-btns">
+                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">−</button>
+                        <span class="step-val" id="bpmVal" style="min-width:72px;font-size:20px;">120</span>
+                        <button class="step-btn" id="bpmPlus" style="width:44px;height:44px;font-size:22px;">+</button>
+                    </div>
+                    <span style="font-size:13px;color:var(--muted);">BPM</span>
+                    <label class="clock-toggle" title="Enviar MIDI Clock al teclado">
+                        <input type="checkbox" id="chkMidiClock"> CLOCK
+                    </label>
+                </div>
+
+                <!-- Volume row -->
+                <div class="arranger-row" style="margin-bottom:20px;">
+                    <span class="arranger-label">VOL RITMO</span>
+                    <input type="range" id="rhythmVol" min="0" max="127" value="100" style="flex:1;height:44px;">
+                    <span class="step-val" id="rhythmVolVal" style="min-width:40px;font-size:16px;">100</span>
+                </div>
+
+                <!-- Transport buttons -->
+                <div class="arranger-transport">
+                    <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
+                        <div class="icon">▶</div>
                         <div class="text">START / STOP</div>
                     </button>
-                    
                     <button class="btn-giant" id="btnSyncStart">
                         <div class="icon">⏳</div>
-                        <div class="text">SYNC START</div>
+                        <div class="text">SYNC</div>
                     </button>
-                    
                     <button class="btn-giant" id="btnAccomp">
                         <div class="icon">🎹</div>
-                        <div class="text">ACCOMP (CHORDS)</div>
+                        <div class="text">ACOMPAÑ.</div>
                     </button>
                 </div>
 
-                <div class="arranger-huge-grid four-cols">
-                    <button class="btn-giant" id="btnIntro">INTRO</button>
-                    <button class="btn-giant" id="btnVar1">VAR 1 <br><span class="dim">/ FILL</span></button>
-                    <button class="btn-giant" id="btnVar2">VAR 2 <br><span class="dim">/ FILL</span></button>
-                    <button class="btn-giant" id="btnEnding">ENDING</button>
+                <div class="arranger-transport" style="margin-top:12px;">
+                    <button class="btn-giant" id="btnIntro">
+                        <div class="icon">⏮</div>
+                        <div class="text">INTRO</div>
+                    </button>
+                    <button class="btn-giant" id="btnVar1">
+                        <div class="icon">1️⃣</div>
+                        <div class="text">VAR 1<br><span class="dim">FILL</span></div>
+                    </button>
+                    <button class="btn-giant" id="btnVar2">
+                        <div class="icon">2️⃣</div>
+                        <div class="text">VAR 2<br><span class="dim">FILL</span></div>
+                    </button>
+                    <button class="btn-giant" id="btnEnding">
+                        <div class="icon">⏭</div>
+                        <div class="text">ENDING</div>
+                    </button>
                 </div>
             </div>
+
         </div>
 
         <!-- ═══════════ VIEW: SETTINGS & PRESETS ═══════════ -->
@@ -229,6 +276,7 @@
     </div><!-- /main-console -->
 
     <script src="raw_tones.js"></script>
-    <script src="app.js?v=8"></script>
+    <script src="raw_rhythms.js"></script>
+    <script src="app.js?v=9"></script>
 </body>
 </html>
