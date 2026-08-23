@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -201,32 +201,34 @@
 
         <!-- ═══════════ VIEW: SETTINGS & PRESETS ═══════════ -->
         <div class="app-view" id="view-settings">
-            <div class="settings-grid">
-                
-                <div class="panel">
-                    <div class="panel-title">Conexión MIDI</div>
-                    <p style="font-size:13px; color:var(--muted); margin-bottom:15px; line-height:1.5;">
+
+            <!-- MIDI Connection row -->
+            <div class="panel">
+                <div class="panel-title">Conexión MIDI</div>
+                <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+                    <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
                         La aplicación intenta conectar automáticamente con cualquier dispositivo <b>CASIO USB-MIDI</b>. 
                         Si la conexión falla o el teclado entra en suspensión, presiona Reconectar.
                     </p>
-                    <button id="connectBtn" class="btn btn-primary" style="width:100%; padding:14px; font-size:14px;">Reconectar Dispositivo MIDI</button>
+                    <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconectar MIDI</button>
                 </div>
-
-                <div class="panel" style="grid-row: span 2;">
-                    <div class="panel-title">Biblioteca de Presets</div>
-                    <div class="preset-save-row" style="margin-bottom:15px;">
-                        <input type="text" id="presetName" class="search-input" placeholder="Nombre del nuevo preset...">
-                        <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
-                    </div>
-                    <div class="presets-list" id="presetsList"></div>
-                </div>
-
             </div>
+
+            <!-- Presets library - full width, no grid constraint -->
+            <div class="panel presets-panel">
+                <div class="panel-title" style="font-size:13px; margin-bottom:16px;">📁 Biblioteca de Presets</div>
+                <div class="preset-save-row">
+                    <input type="text" id="presetName" class="search-input" placeholder="Nombre del nuevo preset...">
+                    <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
+                </div>
+                <div class="presets-list" id="presetsList"></div>
+            </div>
+
         </div>
 
     </div><!-- /main-console -->
 
     <script src="raw_tones.js"></script>
-    <script src="app.js?v=7"></script>
+    <script src="app.js?v=8"></script>
 </body>
 </html>

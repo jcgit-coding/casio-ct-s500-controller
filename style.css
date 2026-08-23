@@ -755,44 +755,65 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
 }
 
 /* ── PRESETS ─────────────────────────────────── */
+.presets-panel {
+    flex: 1;
+}
+.preset-save-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.preset-save-row .search-input {
+    flex: 1;
+    min-height: 52px;
+    font-size: 17px;
+}
+.preset-save-row .btn-accent {
+    min-height: 52px;
+    font-size: 17px;
+    padding: 0 24px;
+    white-space: nowrap;
+}
 .presets-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    max-height: 65vh;
+    gap: 10px;
     overflow-y: auto;
 }
-.presets-list::-webkit-scrollbar { width: 4px; }
-.presets-list::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+.presets-list::-webkit-scrollbar { width: 6px; }
+.presets-list::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
 
 .preset-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.07);
-    padding: 12px 16px;
-    margin-bottom: 4px;
-    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.09);
+    padding: 18px 22px;
+    border-radius: 12px;
     transition: border-color .2s;
+    gap: 12px;
 }
 .preset-item:hover { border-color: var(--accent-dim); }
 .preset-item-name {
-    font-size: 13px; font-weight: 600;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-size: 18px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     flex: 1;
 }
-.preset-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.preset-actions { display: flex; gap: 10px; flex-shrink: 0; }
 .preset-actions button {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
     color: var(--text);
-    border-radius: 8px;
-    padding: 8px 14px;
+    border-radius: 10px;
+    padding: 0;
     cursor: pointer;
-    font-size: 16px;
-    min-height: 38px;
-    min-width: 38px;
+    font-size: 22px;
+    min-height: 52px;
+    min-width: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -971,3 +992,5 @@ input[type=range][orient=vertical]:active::-webkit-slider-thumb {
         width: 100%;
     }
 }
+
+
