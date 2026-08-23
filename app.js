@@ -647,7 +647,15 @@ function loadPreset(data) {
             if (listEl) {
                 for (let i = 0; i < listEl.options.length; i++) {
                     if (listEl.options[i].text === data.tones[part]) {
-                        listEl.selectedIndex = i; break;
+                        listEl.selectedIndex = i;
+                        // update custom UI text
+                        const nameEl = document.getElementById('selectedTone-' + part);
+                        if (nameEl) nameEl.innerText = listEl.options[i].text;
+                        const catEl = document.getElementById('selectedCat-' + part);
+                        if (catEl && listEl.options[i].parentElement && listEl.options[i].parentElement.tagName === 'OPTGROUP') {
+                            catEl.innerText = listEl.options[i].parentElement.label;
+                        }
+                        break;
                     }
                 }
             }
