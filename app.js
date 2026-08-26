@@ -168,12 +168,12 @@ function onMIDIMessage(e) {
         
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
-                window.pcSynth.noteOn(d1, Math.round(d2 * vol), ch);
+                if (window.pcSynth.synth && window.pcSynth.synth.ctx && window.pcSynth.synth.ctx.state === 'suspended') { window.pcSynth.synth.ctx.resume(); } window.pcSynth.noteOn(d1, Math.round(d2 * vol), 0);
             } else {
-                window.pcSynth.noteOff(d1, 0, ch);
+                window.pcSynth.noteOff(d1, 0, 0);
             }
         } else if (cmd === 0x80) { // Note Off
-            window.pcSynth.noteOff(d1, d2, ch);
+            window.pcSynth.noteOff(d1, d2, 0);
         } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal
             // sf2-player library might support sustain via noteOff logic if not we ignore or handle
         }
@@ -1110,3 +1110,6 @@ function loadAppState() {
          d o c u m e n t . g e t E l e m e n t B y I d ( ' s f 2 - v o l - v a l ' ) . i n n e r T e x t   =   e . t a r g e t . v a l u e ; 
  } ) ;  
  
+
+
+
