@@ -15,9 +15,9 @@
             
             <!-- VIEW NAVIGATION -->
             <div class="view-nav">
-                <button class="nav-tab active" data-target="view-mixer">🎹 MIXER</button>
-                <button class="nav-tab" data-target="view-arranger">🥁 ARRANGER</button>
-                <button class="nav-tab" data-target="view-settings">⚙️ SETTINGS & PRESETS</button>
+                <button class="nav-tab active" data-target="view-mixer"><span class="material-symbols-outlined" style="font-size:inherit;">piano</span> MIXER</button>
+                <button class="nav-tab" data-target="view-arranger"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> ARRANGER</button>
+                <button class="nav-tab" data-target="view-settings"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">settings</span> SETTINGS & PRESETS</button>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
         </div>
 
         <div style="display: flex; align-items: center; gap: 10px;">
-            <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema">☀️</button>
+            <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
             <div class="status-badge">
                 <div class="status-indicator" id="statusIndicator"></div>
                 <span id="statusText">Buscando MIDI…</span>
@@ -54,17 +54,17 @@
                 <div class="track-card active-track" id="card-U1" data-part="U1">
                     <div class="track-label">UPPER 1</div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="U1" data-dir="-1">◀</button>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit;">arrow_left</span></button>
                         <div class="selected-cat" id="selectedCat-U1">CATEGORÍA</div>
-                        <button class="cat-nav-btn" data-part="U1" data-dir="1">▶</button>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="U1" data-dir="-1">◀</button>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit;">arrow_left</span></button>
                         <div class="selected-tone" id="selectedTone-U1">– sin instrumento –</div>
-                        <button class="tone-nav-btn" data-part="U1" data-dir="1">▶</button>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="🔍 Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="<span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:4px;">search</span> Buscar instrumento..." autocomplete="off">
                         <select class="tone-list" id="list-U1" size="5"></select>
                     </div>
                     <div class="track-quick">
@@ -88,17 +88,17 @@
                 <div class="track-card" id="card-U2" data-part="U2">
                     <div class="track-label">UPPER 2 <span class="dim">Layer</span></div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="U2" data-dir="-1">◀</button>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit;">arrow_left</span></button>
                         <div class="selected-cat" id="selectedCat-U2">CATEGORÍA</div>
-                        <button class="cat-nav-btn" data-part="U2" data-dir="1">▶</button>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="U2" data-dir="-1">◀</button>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit;">arrow_left</span></button>
                         <div class="selected-tone" id="selectedTone-U2">– sin instrumento –</div>
-                        <button class="tone-nav-btn" data-part="U2" data-dir="1">▶</button>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="🔍 Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="<span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:4px;">search</span> Buscar instrumento..." autocomplete="off">
                         <select class="tone-list" id="list-U2" size="5"></select>
                     </div>
                     <div class="track-quick">
@@ -122,17 +122,17 @@
                 <div class="track-card" id="card-L" data-part="L">
                     <div class="track-label">LOWER <span class="dim">Split</span></div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="L" data-dir="-1">◀</button>
+                        <button class="cat-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit;">arrow_left</span></button>
                         <div class="selected-cat" id="selectedCat-L">CATEGORÍA</div>
-                        <button class="cat-nav-btn" data-part="L" data-dir="1">▶</button>
+                        <button class="cat-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="L" data-dir="-1">◀</button>
+                        <button class="tone-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit;">arrow_left</span></button>
                         <div class="selected-tone" id="selectedTone-L">– sin instrumento –</div>
-                        <button class="tone-nav-btn" data-part="L" data-dir="1">▶</button>
+                        <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-L" placeholder="🔍 Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-L" placeholder="<span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:4px;">search</span> Buscar instrumento..." autocomplete="off">
                         <select class="tone-list" id="list-L" size="5"></select>
                     </div>
                     <div class="track-quick">
@@ -173,10 +173,10 @@
 
             <!-- Rhythm Browser -->
             <div class="panel">
-                <div class="panel-title">🥁 Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el número en el teclado)</span></div>
+                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el número en el teclado)</span></div>
                 <div class="arranger-search-row">
                     <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
-                    <input type="text" id="rhythmSearch" class="search-input" placeholder="🔍 Buscar ritmo..." autocomplete="off">
+                    <input type="text" id="rhythmSearch" class="search-input" placeholder="<span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:4px;">search</span> Buscar ritmo..." autocomplete="off">
                 </div>
                 <div class="rhythm-list-wrap">
                     <div class="rhythm-list" id="rhythmList"></div>
@@ -185,7 +185,7 @@
 
             <!-- Transport + Tempo + Volume -->
             <div class="panel">
-                <div class="panel-title">🎛️ Control de Ritmo</div>
+                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">tune</span> Control de Ritmo</div>
 
                 <!-- Tempo row -->
                 <div class="arranger-row" style="margin-bottom:16px;">
@@ -211,34 +211,34 @@
                 <!-- Transport buttons -->
                 <div class="arranger-transport">
                     <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
-                        <div class="icon">▶</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">play_arrow</span></div>
                         <div class="text">START / STOP</div>
                     </button>
                     <button class="btn-giant" id="btnSyncStart">
-                        <div class="icon">⏳</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">hourglass_empty</span></div>
                         <div class="text">SYNC</div>
                     </button>
                     <button class="btn-giant" id="btnAccomp">
-                        <div class="icon">🎹</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">piano</span></div>
                         <div class="text">ACOMPAÑ.</div>
                     </button>
                 </div>
 
                 <div class="arranger-transport" style="margin-top:12px;">
                     <button class="btn-giant" id="btnIntro">
-                        <div class="icon">⏮</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">skip_previous</span></div>
                         <div class="text">INTRO</div>
                     </button>
                     <button class="btn-giant" id="btnVar1">
-                        <div class="icon">1️⃣</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">looks_one</span></div>
                         <div class="text">VAR 1<br><span class="dim">FILL</span></div>
                     </button>
                     <button class="btn-giant" id="btnVar2">
-                        <div class="icon">2️⃣</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">looks_two</span></div>
                         <div class="text">VAR 2<br><span class="dim">FILL</span></div>
                     </button>
                     <button class="btn-giant" id="btnEnding">
-                        <div class="icon">⏭</div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit;">skip_next</span></div>
                         <div class="text">ENDING</div>
                     </button>
                 </div>
@@ -263,7 +263,7 @@
 
             <!-- Presets library - full width, no grid constraint -->
             <div class="panel presets-panel">
-                <div class="panel-title" style="font-size:13px; margin-bottom:16px;">📁 Biblioteca de Presets</div>
+                <div class="panel-title" style="font-size:13px; margin-bottom:16px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">folder</span> Biblioteca de Presets</div>
                 <div class="preset-save-row">
                     <input type="text" id="presetName" class="search-input" placeholder="Nombre del nuevo preset...">
                     <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
@@ -303,6 +303,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=26"></script>
+    <script src="app.js?v=27"></script>
 </body>
 </html>
