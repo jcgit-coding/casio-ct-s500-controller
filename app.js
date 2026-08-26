@@ -73,6 +73,26 @@ document.addEventListener("DOMContentLoaded", () => {
     // Theme Toggle Logic
     const btnThemeToggle = document.getElementById('btnThemeToggle');
     if (btnThemeToggle) {
+        
+    const envSel = document.getElementById('envSelector');
+    if (envSel) {
+        // Load saved env
+        if (localStorage.getItem('casioEnv')) {
+            currentEnv = localStorage.getItem('casioEnv');
+            envSel.value = currentEnv;
+        }
+        envSel.addEventListener('change', (e) => {
+            currentEnv = e.target.value;
+            localStorage.setItem('casioEnv', currentEnv);
+            // Reapply profiles to all parts that have a category
+            ['U1', 'U2', 'L'].forEach(part => {
+                if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
+            });
+            switchEQ(activePart);
+            pushAllToKeyboard(); // Update hardware
+        });
+    }
+
         const savedTheme = localStorage.getItem('casioTheme') || 'dark';
         if (savedTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
@@ -314,56 +334,656 @@ const EQ_SECTIONS = [
 // Flatten for easy CC lookup
 const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
-const CATEGORY_PROFILES = {
-    // Teclados Clásicos
-    'PIANO': { 91: 52 },
-    'HARPSICHORD': { 91: 40, 74: 68 }, // Clavecín más brillante
-    'ELEC.PIANO': { 91: 45, 93: 45, 74: 62 }, // Rhodes cálido con chorus
-    'CLAVI': { 91: 30, 74: 70 }, // Funky brillante, poca reverb
-    'VIB./CHROM.PERC.': { 91: 55, 93: 10 }, // Vibráfonos y campanitas
-    
-    // Órganos
-    'ELEC.ORGAN': { 91: 50, 93: 35 }, // Simulador de parlante rotatorio
-    'PIPE ORGAN': { 91: 85, 93: 10 }, // Acústica gigante de iglesia
-    'ACCORDION': { 91: 40, 93: 20 }, // Detune estilo musette
-    
-    // Cuerdas y Coros (Pads orgánicos)
-    'STRING ENSEMBLE': { 91: 75, 93: 15, 73: 68, 74: 62 }, // Ataque suave, cálido
-    'CHOIR': { 91: 85, 93: 35, 73: 72 }, // Ensambles vocales etéreos
-    
-    // Instrumentos Solistas (Vibrato humano retrasado y ataques suaves)
-    'SOLO STRINGS': { 91: 65, 73: 66, 77: 72, 78: 80 }, // Violín/Cello
-    'SOLO BRASS': { 91: 55, 77: 70, 78: 75 }, // Trompeta
-    'BRASS ENSEMBLE': { 91: 60, 74: 70, 73: 66 }, // Sección de metales brillante
-    'SAX': { 91: 60, 77: 75, 78: 80, 73: 66 }, // Saxofón expresivo
-    'REED': { 91: 55, 77: 70, 78: 75 }, // Oboe, Fagot, Clarinete
-    'PIPE': { 91: 65, 77: 72, 78: 80 }, // Flauta traversa/dulce
-    
-    // Guitarras
-    'ACOUS.GUITAR': { 91: 45, 93: 5, 73: 65 }, // Púa suavizada, cuerpo acústico
-    'ELEC.GUITAR': { 91: 40, 94: 30 }, // Eco para solos
-    
-    // Bajos (Secos para no ensuciar la mezcla)
-    'ACOUS.BASS': { 91: 10, 74: 55 }, // Contrabajo oscuro/cálido
-    'ELEC.BASS': { 91: 15, 74: 60 }, // Bajo eléctrico
-    
-    // Sintetizadores
-    'SYNTH-PAD': { 91: 85, 93: 40, 74: 58, 73: 78 }, // Pads evolutivos lentos
-    'SYNTH-LEAD': { 91: 60, 94: 45, 78: 75 }, // Solos sintéticos con eco
-    'SYNTH-BRASS': { 91: 60, 93: 20, 74: 75 }, // Metales sintéticos brillantes
-    'SYNTH-BASS': { 91: 15, 74: 70, 71: 70 }, // Bajos punchy y resonantes
-    'EDM SYNTH': { 91: 50, 94: 30, 74: 75 }, // Modernos y brillantes
-    'CASIO CLASSIC': { 91: 30, 93: 0 }, // Sonidos vintage secos
-    
-    // Étnicos y Mundo
-    'INDIAN': { 91: 50, 73: 64 },
-    'INDONESIAN': { 91: 50, 73: 64 },
-    'ARABIC': { 91: 50, 78: 75 }, // Suelen tener maderas solistas
-    'CHINESE': { 91: 50, 77: 70, 78: 75 }, // Erhu y Dizi con vibrato
-    'BRAZILIAN': { 91: 40, 73: 65 },
-    'ETHNIC OTHERS': { 91: 50 },
-    'GM TONES': { 91: 40 } // Standard MIDI
+
+let currentEnv = 'Estudio';
+const ENVIRONMENTS = {
+    "Estudio": {
+        "PIANO": {
+            "74": 64,
+            "91": 30
+        },
+        "HARPSICHORD": {
+            "91": 25
+        },
+        "ELEC.PIANO": {
+            "74": 64,
+            "91": 30
+        },
+        "CLAVI": {
+            "91": 25
+        },
+        "VIB./CHROM.PERC.": {
+            "91": 25
+        },
+        "ELEC.ORGAN": {
+            "91": 20,
+            "93": 10
+        },
+        "PIPE ORGAN": {
+            "91": 60
+        },
+        "ACCORDION": {
+            "91": 25
+        },
+        "ACOUS.GUITAR": {
+            "91": 15
+        },
+        "ELEC.GUITAR": {
+            "91": 15
+        },
+        "ACOUS.BASS": {
+            "91": 15
+        },
+        "ELEC.BASS": {
+            "91": 15
+        },
+        "SYNTH-BASS": {
+            "74": 64,
+            "91": 40
+        },
+        "SOLO STRINGS": {
+            "73": 64,
+            "91": 50
+        },
+        "STRING ENSEMBLE": {
+            "73": 64,
+            "91": 50
+        },
+        "SOLO BRASS": {
+            "91": 25
+        },
+        "BRASS ENSEMBLE": {
+            "91": 25
+        },
+        "SYNTH-BRASS": {
+            "74": 64,
+            "91": 40
+        },
+        "SAX": {
+            "91": 25
+        },
+        "REED": {
+            "91": 25
+        },
+        "PIPE": {
+            "91": 25
+        },
+        "SYNTH-LEAD": {
+            "74": 64,
+            "91": 40
+        },
+        "SYNTH-PAD": {
+            "74": 64,
+            "91": 40
+        },
+        "CHOIR": {
+            "73": 64,
+            "91": 50
+        },
+        "EDM SYNTH": {
+            "74": 64,
+            "91": 40
+        },
+        "CASIO CLASSIC": {
+            "91": 25
+        },
+        "INDIAN": {
+            "91": 25
+        },
+        "INDONESIAN": {
+            "91": 25
+        },
+        "ARABIC": {
+            "91": 25
+        },
+        "CHINESE": {
+            "91": 25
+        },
+        "BRAZILIAN": {
+            "91": 25
+        },
+        "ETHNIC OTHERS": {
+            "91": 25
+        },
+        "GM TONES": {
+            "91": 25
+        }
+    },
+    "Vivo": {
+        "PIANO": {
+            "74": 70,
+            "91": 45
+        },
+        "HARPSICHORD": {
+            "74": 68,
+            "91": 40
+        },
+        "ELEC.PIANO": {
+            "74": 70,
+            "91": 45
+        },
+        "CLAVI": {
+            "74": 68,
+            "91": 40
+        },
+        "VIB./CHROM.PERC.": {
+            "74": 68,
+            "91": 40
+        },
+        "ELEC.ORGAN": {
+            "74": 70,
+            "91": 30,
+            "93": 30
+        },
+        "PIPE ORGAN": {
+            "74": 72,
+            "91": 70
+        },
+        "ACCORDION": {
+            "74": 68,
+            "91": 40
+        },
+        "ACOUS.GUITAR": {
+            "74": 68,
+            "91": 25
+        },
+        "ELEC.GUITAR": {
+            "74": 68,
+            "91": 25
+        },
+        "ACOUS.BASS": {
+            "74": 68,
+            "91": 25
+        },
+        "ELEC.BASS": {
+            "74": 68,
+            "91": 25
+        },
+        "SYNTH-BASS": {
+            "74": 75,
+            "91": 50,
+            "93": 15
+        },
+        "SOLO STRINGS": {
+            "73": 62,
+            "91": 65
+        },
+        "STRING ENSEMBLE": {
+            "73": 62,
+            "91": 65
+        },
+        "SOLO BRASS": {
+            "74": 68,
+            "91": 40
+        },
+        "BRASS ENSEMBLE": {
+            "74": 68,
+            "91": 40
+        },
+        "SYNTH-BRASS": {
+            "74": 75,
+            "91": 50,
+            "93": 15
+        },
+        "SAX": {
+            "74": 68,
+            "91": 40
+        },
+        "REED": {
+            "74": 68,
+            "91": 40
+        },
+        "PIPE": {
+            "74": 68,
+            "91": 40
+        },
+        "SYNTH-LEAD": {
+            "74": 75,
+            "91": 50,
+            "93": 15
+        },
+        "SYNTH-PAD": {
+            "74": 75,
+            "91": 50,
+            "93": 15
+        },
+        "CHOIR": {
+            "73": 62,
+            "91": 65
+        },
+        "EDM SYNTH": {
+            "74": 75,
+            "91": 50,
+            "93": 15
+        },
+        "CASIO CLASSIC": {
+            "74": 68,
+            "91": 40
+        },
+        "INDIAN": {
+            "74": 68,
+            "91": 40
+        },
+        "INDONESIAN": {
+            "74": 68,
+            "91": 40
+        },
+        "ARABIC": {
+            "74": 68,
+            "91": 40
+        },
+        "CHINESE": {
+            "74": 68,
+            "91": 40
+        },
+        "BRAZILIAN": {
+            "74": 68,
+            "91": 40
+        },
+        "ETHNIC OTHERS": {
+            "74": 68,
+            "91": 40
+        },
+        "GM TONES": {
+            "74": 68,
+            "91": 40
+        }
+    },
+    "Catedral": {
+        "PIANO": {
+            "74": 60,
+            "91": 95,
+            "94": 20
+        },
+        "HARPSICHORD": {
+            "73": 70,
+            "91": 90
+        },
+        "ELEC.PIANO": {
+            "74": 60,
+            "91": 95,
+            "94": 20
+        },
+        "CLAVI": {
+            "73": 70,
+            "91": 90
+        },
+        "VIB./CHROM.PERC.": {
+            "73": 70,
+            "91": 90
+        },
+        "ELEC.ORGAN": {
+            "91": 85,
+            "93": 20
+        },
+        "PIPE ORGAN": {
+            "74": 64,
+            "91": 120
+        },
+        "ACCORDION": {
+            "73": 70,
+            "91": 90
+        },
+        "ACOUS.GUITAR": {
+            "73": 70,
+            "91": 75
+        },
+        "ELEC.GUITAR": {
+            "73": 70,
+            "91": 75
+        },
+        "ACOUS.BASS": {
+            "73": 70,
+            "91": 75
+        },
+        "ELEC.BASS": {
+            "73": 70,
+            "91": 75
+        },
+        "SYNTH-BASS": {
+            "73": 75,
+            "74": 55,
+            "91": 100
+        },
+        "SOLO STRINGS": {
+            "73": 85,
+            "91": 110,
+            "93": 40
+        },
+        "STRING ENSEMBLE": {
+            "73": 85,
+            "91": 110,
+            "93": 40
+        },
+        "SOLO BRASS": {
+            "73": 70,
+            "91": 90
+        },
+        "BRASS ENSEMBLE": {
+            "73": 70,
+            "91": 90
+        },
+        "SYNTH-BRASS": {
+            "73": 75,
+            "74": 55,
+            "91": 100
+        },
+        "SAX": {
+            "73": 70,
+            "91": 90
+        },
+        "REED": {
+            "73": 70,
+            "91": 90
+        },
+        "PIPE": {
+            "73": 70,
+            "91": 90
+        },
+        "SYNTH-LEAD": {
+            "73": 75,
+            "74": 55,
+            "91": 100
+        },
+        "SYNTH-PAD": {
+            "73": 75,
+            "74": 55,
+            "91": 100
+        },
+        "CHOIR": {
+            "73": 85,
+            "91": 110,
+            "93": 40
+        },
+        "EDM SYNTH": {
+            "73": 75,
+            "74": 55,
+            "91": 100
+        },
+        "CASIO CLASSIC": {
+            "73": 70,
+            "91": 90
+        },
+        "INDIAN": {
+            "73": 70,
+            "91": 90
+        },
+        "INDONESIAN": {
+            "73": 70,
+            "91": 90
+        },
+        "ARABIC": {
+            "73": 70,
+            "91": 90
+        },
+        "CHINESE": {
+            "73": 70,
+            "91": 90
+        },
+        "BRAZILIAN": {
+            "73": 70,
+            "91": 90
+        },
+        "ETHNIC OTHERS": {
+            "73": 70,
+            "91": 90
+        },
+        "GM TONES": {
+            "73": 70,
+            "91": 90
+        }
+    },
+    "Lofi": {
+        "PIANO": {
+            "71": 70,
+            "74": 40,
+            "76": 80,
+            "77": 64,
+            "91": 15,
+            "93": 40
+        },
+        "HARPSICHORD": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "ELEC.PIANO": {
+            "71": 70,
+            "74": 40,
+            "76": 80,
+            "77": 64,
+            "91": 15,
+            "93": 40
+        },
+        "CLAVI": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "VIB./CHROM.PERC.": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "ELEC.ORGAN": {
+            "74": 45,
+            "76": 85,
+            "77": 68,
+            "91": 15,
+            "93": 60
+        },
+        "PIPE ORGAN": {
+            "71": 80,
+            "74": 50,
+            "76": 90,
+            "77": 70,
+            "91": 30
+        },
+        "ACCORDION": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "ACOUS.GUITAR": {
+            "74": 35,
+            "91": 10,
+            "93": 50
+        },
+        "ELEC.GUITAR": {
+            "74": 35,
+            "91": 10,
+            "93": 50
+        },
+        "ACOUS.BASS": {
+            "74": 35,
+            "91": 10,
+            "93": 50
+        },
+        "ELEC.BASS": {
+            "74": 35,
+            "91": 10,
+            "93": 50
+        },
+        "SYNTH-BASS": {
+            "71": 90,
+            "74": 35,
+            "76": 75,
+            "77": 64,
+            "91": 20,
+            "93": 50
+        },
+        "SOLO STRINGS": {
+            "71": 85,
+            "74": 45,
+            "76": 70,
+            "77": 70,
+            "91": 25
+        },
+        "STRING ENSEMBLE": {
+            "71": 85,
+            "74": 45,
+            "76": 70,
+            "77": 70,
+            "91": 25
+        },
+        "SOLO BRASS": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "BRASS ENSEMBLE": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "SYNTH-BRASS": {
+            "71": 90,
+            "74": 35,
+            "76": 75,
+            "77": 64,
+            "91": 20,
+            "93": 50
+        },
+        "SAX": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "REED": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "PIPE": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "SYNTH-LEAD": {
+            "71": 90,
+            "74": 35,
+            "76": 75,
+            "77": 64,
+            "91": 20,
+            "93": 50
+        },
+        "SYNTH-PAD": {
+            "71": 90,
+            "74": 35,
+            "76": 75,
+            "77": 64,
+            "91": 20,
+            "93": 50
+        },
+        "CHOIR": {
+            "71": 85,
+            "74": 45,
+            "76": 70,
+            "77": 70,
+            "91": 25
+        },
+        "EDM SYNTH": {
+            "71": 90,
+            "74": 35,
+            "76": 75,
+            "77": 64,
+            "91": 20,
+            "93": 50
+        },
+        "CASIO CLASSIC": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "INDIAN": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "INDONESIAN": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "ARABIC": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "CHINESE": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "BRAZILIAN": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "ETHNIC OTHERS": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        },
+        "GM TONES": {
+            "71": 75,
+            "74": 40,
+            "76": 75,
+            "77": 60,
+            "91": 20,
+            "93": 45
+        }
+    }
 };
+
 
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
 

@@ -36,7 +36,18 @@
         <div style="display: flex; align-items: center; gap: 10px;">
             <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
             <div class="status-badge">
-                <div class="status-indicator" id="statusIndicator"></div>
+                
+        <div class="env-selector-wrap" style="margin-right: 15px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent);">stadium</span>
+            <select id="envSelector" class="search-input" style="min-height: 30px; font-size: 11px; font-weight: bold; padding: 4px 10px; width: auto; cursor: pointer; text-transform: uppercase;">
+                <option value="Estudio">Estudio (Preciso)</option>
+                <option value="Vivo">En Vivo (Brillante)</option>
+                <option value="Catedral">Catedral (Épico)</option>
+                <option value="Lofi">Lo-Fi (Vintage)</option>
+            </select>
+        </div>
+    
+            <div class="status-indicator" id="statusIndicator"></div>
                 <span id="statusText">Buscando MIDI…</span>
             </div>
         </div>
@@ -317,6 +328,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=55"></script>
+    <script src="app.js?v=56"></script>
 </body>
 </html>
