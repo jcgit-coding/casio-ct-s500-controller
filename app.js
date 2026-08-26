@@ -1,10 +1,12 @@
 // ======================================================================
 //  MIDI state
 // ======================================================================
-let midiAccess  = null;
-let midiInput   = null;
-let midiOutput  = null;
-let lastConnKey = '';
+let midiAccess      = null;
+let midiInput       = null;
+let midiOutput      = null;
+let lastConnKey     = '';
+let midiInitPending = false;   // guard against concurrent initMIDI calls
+let midiPollTimer   = null;    // periodic re-scan while disconnected
 
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
 let globalTranspose = 0;
@@ -45,16 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAppState();
     setInterval(saveAppState, 1000);
 
-    // Trick for Android/Chrome: Web MIDI with SysEx requires a user gesture.
-    // We wait for the FIRST tap anywhere on the screen to initialize MIDI.
-    let midiInitAttempted = false;
-    document.addEventListener("click", () => {
-        if (!midiInitAttempted) {
-            midiInitAttempted = true;
-            initMIDI();
-        }
-    }, { once: true });
-    
+    // Inicializar MIDI de inmediato (sysex:false no requiere gesto de usuario).
+    // El botón Conectar sirve para reconectar manualmente.
+    initMIDI();
+
     document.getElementById("connectBtn").addEventListener("click", () => {
         if (midiAccess) scanAndConnect(); else initMIDI();
     });
@@ -98,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //  MIDI INIT — always-on with auto-reconnect
 // ======================================================================
 function initMIDI() {
+    if (midiInitPending) return;          // evita llamadas concurrentes
     if (!navigator.requestMIDIAccess) {
         setStatus("Web MIDI no soportado (usa Chrome o Edge)", false);
         return;
@@ -106,24 +103,29 @@ function initMIDI() {
         setStatus("Android exige HTTPS o localhost para MIDI", false);
         return;
     }
+    midiInitPending = true;
     setStatus("Conectando...", false);
     let accessPromise;
     try {
         accessPromise = navigator.requestMIDIAccess({ sysex: false });
     } catch (e) {
+        midiInitPending = false;
         setStatus("Error MIDI: " + e.message, false);
         return;
     }
     accessPromise.then(access => {
+        midiInitPending = false;
         midiAccess = access;
         access.onstatechange = () => scanAndConnect();
         scanAndConnect();
-        // Android/Chrome enumera los puertos USB-MIDI con retraso:
-        // reintentamos solo mientras no haya conexión.
+        // Android/Chrome enumera los puertos USB-MIDI con retraso.
         [600, 1800, 4000, 8000].forEach(t => setTimeout(() => {
             if (!midiInput || !midiOutput) scanAndConnect();
         }, t));
+        // Polling periódico mientras no haya conexión completa.
+        startMidiPoll();
     }, err => {
+        midiInitPending = false;
         console.error(err);
         if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
             setStatus("Permiso MIDI denegado: mira la guía en Ajustes", false);
@@ -133,6 +135,19 @@ function initMIDI() {
             setStatus("Error MIDI (" + err.name + "): " + err.message, false);
         }
     });
+}
+
+function startMidiPoll() {
+    if (midiPollTimer) return;
+    midiPollTimer = setInterval(() => {
+        if (!midiAccess) { clearInterval(midiPollTimer); midiPollTimer = null; return; }
+        if (!midiInput || !midiOutput) {
+            scanAndConnect();
+        } else {
+            clearInterval(midiPollTimer);
+            midiPollTimer = null;
+        }
+    }, 3000);
 }
 
 function scanAndConnect() {
@@ -165,7 +180,8 @@ function scanAndConnect() {
         const connKey = midiOutput.id + '|' + midiInput.id;
         setStatus("Conectado: " + midiOutput.name, true);
         document.getElementById("connectBtn").innerText = "Reconectar";
-        document.getElementById('midiPermissionWarn').style.display = 'none';
+        const warn = document.getElementById('midiPermissionWarn');
+        if (warn) warn.style.display = 'none';
         // Evita reenviar todo el estado en cada re-escaneo redundante
         if (connKey !== lastConnKey) {
             lastConnKey = connKey;
@@ -181,6 +197,7 @@ function scanAndConnect() {
         else                           msg = "Solo entrada MIDI. Falta la salida de " + midiInput.name;
         setStatus(msg, false);
         document.getElementById("connectBtn").innerText = "Conectar";
+        startMidiPoll();  // reanudar polling si se perdió la conexión
     }
 }
 
