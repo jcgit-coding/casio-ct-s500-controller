@@ -1,48 +1,81 @@
-# Casio CT-S500 Pro Controller
+# Casio CT-S500 Pro Controller - Documentación Técnica Detallada
 
-Una aplicación web profesional (Web MIDI) diseñada para controlar el teclado **Casio CT-S500** (y modelos compatibles de la línea CT-S) directamente desde el navegador. Convierte tu computadora, tablet o teléfono en un centro de control estilo DAW (Digital Audio Workstation) para actuaciones en vivo, ensayos y diseño sonoro.
-
-## Características Principales
-
-- **Gestión Multicanal:** Control independiente de las partes **Upper 1 (U1)**, **Upper 2 (U2)** y **Lower (L)**.
-- **Buscador de Tones y Ritmos:** Acceso instantáneo a los más de 800 tonos y 243 ritmos del teclado mediante menús de búsqueda rápida, categorizados lógicamente.
-- **Mezcladora y EQ Profesional:** Faders de 200px de recorrido que controlan en tiempo real (vía MIDI CC):
-  - Volumen, Expresión y Panorámica.
-  - Filtros (Cutoff, Resonancia).
-  - Envolventes ADSR (Ataque, Decay).
-  - Vibrato LFO (Rate, Depth, Delay).
-  - Efectos Espaciales (Envíos de Reverb, Chorus, Delay).
-  - Modulación, Portamento y Control de Pedales.
-- **Perfiles Acústicos Inteligentes:** Al cambiar de categoría (ej. de Piano a Órgano o Sintetizador), la app reajusta automáticamente los parámetros del ecualizador para reflejar la acústica ideal del instrumento.
-- **Control de Arranger:** Panel táctil para manejar ritmos, variaciones, fills, intros, endings y tempo.
-- **Diseño Fluido (Responsive):** Tipografía Montserrat, modo claro/oscuro inteligente y una cuadrícula (grid) fluida que se estira y adapta desde monitores ultra-anchos hasta pantallas de teléfonos móviles.
+Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
 ---
 
-## Lógica y Funcionamiento de la Conexión MIDI (Documentación Técnica)
+## 1. Arquitectura del Sistema
 
-Esta aplicación utiliza la **Web MIDI API** (`navigator.requestMIDIAccess`). Dado que la conexión MIDI en navegadores (especialmente en móviles) tiene políticas de seguridad estrictas, el sistema de conexión está programado con la siguiente arquitectura:
+La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS) para garantizar un rendimiento instantáneo, compatibilidad absoluta con Web MIDI y cero latencia al procesar eventos musicales.
 
-### 1. Detección y Enrutamiento (Evitando Puertos Fantasma)
-- El código escanea todos los puertos MIDI de entrada y salida disponibles.
-- **Prioridad Casio:** Busca palabras clave en el nombre del hardware (`CASIO`, `CT-S`, `WU-BT`, `BLE`, `BLUETOOTH`) para engancharse automáticamente al teclado si hay múltiples dispositivos.
-- **Bloqueo de "MidiThrough":** En sistemas Android, el sistema operativo inyecta un puerto virtual inútil llamado `"MidiThrough"`. Si usamos un adaptador USB OTG genérico que no exponga la marca "Casio", un script básico se conectaría por error al `MidiThrough`. Esta app **ignora explícitamente** puertos que contengan la palabra `THROUGH` o `ANDROID` para forzar la conexión al adaptador USB real.
-
-### 2. Permisos y Seguridad en Android Chrome
-- **Requisito HTTPS:** La API Web MIDI exige que la página se cargue sobre un servidor seguro (`https://` o `localhost`).
-- **Gesto de Usuario (User Gesture):** Las versiones modernas de Chrome en Android bloquean el acceso silencioso al MIDI arrojando un `SecurityError` o `NotAllowedError`. Si la auto-conexión falla, la app pide al usuario presionar manualmente el botón **"Reconectar"**. Este "clic" funciona como el gesto de usuario obligatorio que permite al navegador abrir el diálogo de permisos USB.
-- **OTG Configuration:** Al conectar el teclado a un teléfono Android, la notificación del sistema ("Cargando dispositivo por USB") debe cambiarse manualmente a **"Dispositivo MIDI"** antes de que el navegador pueda detectarlo.
-
-### 3. Evitando SysEx (System Exclusive) en la Conexión Inicial
-- Aunque Casio usa mensajes SysEx para ciertas configuraciones profundas, solicitar `{ sysex: true }` en el `requestMIDIAccess` hace que Chrome aplique un nivel de seguridad mucho más restrictivo (a menudo bloqueando por completo la app en móviles).
-- La inicialización se hace con `{ sysex: false }` para asegurar que el teclado sea reconocido y los mensajes estándar de Control Change (CC) y Program Change fluyan sin problemas de permisos.
+### Estructura de Archivos
+- `index.html`: La estructura visual, construida semánticamente. Carga iconos Material UI y la tipografía Montserrat.
+- `style.css`: Motor de diseño. Utiliza CSS Variables (`--panel-bg`, `--accent`, etc.) para gestionar dinámicamente un Tema Claro / Tema Oscuro. Usa una arquitectura puramente basada en Flexbox para lograr un diseño "Responsive" extremo (funciona igual de bien en monitores 4K que en smartphones verticales).
+- `app.js`: El cerebro de la aplicación. Gestiona la conexión MIDI, el "State Management" global, los listeners de la interfaz y la inyección en el DOM.
+- `raw_tones.js` y `raw_rhythms.js`: Bases de datos crudas del manual oficial de Casio. Contienen listas de texto sin formato que `app.js` "parsea" al arrancar para construir los catálogos lógicos.
 
 ---
 
-## Uso
+## 2. Gestión de Estado y Persistencia (State Management)
 
-1. Conecta tu Casio CT-S500 a tu dispositivo mediante USB (o adaptador USB OTG).
-2. Si estás en Android, abre tus notificaciones USB y selecciona **MIDI**.
-3. Abre la aplicación en Google Chrome, Edge o cualquier navegador basado en Chromium.
-4. Si la app dice "Acceso Denegado", presiona el botón **Reconectar** para forzar la validación de permisos.
-5. ¡Empieza a mezclar y tocar!
+Dado que la comunicación MIDI es a menudo unidireccional (el teclado no siempre reporta la posición de todos sus parámetros internos al encenderse), la app mantiene un árbol de estado estricto:
+
+- `eqState`: Un objeto que almacena los valores (0-127) de 18 parámetros CC (Control Change) independientes para cada canal o parte (`U1`, `U2`, `L`).
+- `tuning`: Mantiene registro de la octava y el estado del pedal Sustain por cada parte.
+- `globalTranspose`: Almacena la transposición maestra del teclado.
+- **LocalStorage (`casioState`)**: Un `setInterval` captura y guarda todo el estado de la mesa de mezclas y los instrumentos seleccionados cada 1000ms. Al recargar la página, la función `loadAppState()` inyecta silenciosamente estos valores de regreso a los faders sin bombardear de inmediato al teclado, permitiendo retomar el ensayo exactamente donde se dejó.
+
+---
+
+## 3. Motor Web MIDI y Mitigación de Errores
+
+El módulo MIDI de la aplicación fue diseñado para sortear las extremas limitaciones de seguridad impuestas por navegadores modernos, especialmente en ecosistemas móviles (Android/Chrome).
+
+### Bloqueo de Puertos "Fantasma" (MidiThrough)
+En Android, el sistema operativo inyecta rutinariamente un puerto virtual llamado `Android MIDI` o `MidiThrough`. Adaptadores USB OTG genéricos a menudo se reportan como "Dispositivo USB genérico" en lugar de "Casio".
+- **La Solución:** La función `scanAndConnect()` rastrea todos los puertos. Prioriza nombres que contengan `CASIO`, `CT-S`, `WU-BT`, `BLE`. Si no los encuentra, filtra y expulsa agresivamente cualquier puerto que contenga la palabra `THROUGH` o `ANDROID`, obligando a la app a engancharse al cable físico USB real.
+
+### Seguridad y SysEx en Chrome Móvil
+Solicitar acceso exclusivo de sistema (`{ sysex: true }`) provoca que Chrome bloquee el acceso silencioso al hardware.
+- El código se inicializa con `{ sysex: false }` para asegurar que el teclado sea reconocido para mensajes estándar (Notas, CC, PC).
+- Si Chrome en Android bloquea la conexión inicial (`NotAllowedError` / `SecurityError`), la app captura el error y redirige al usuario a utilizar el botón manual de **Reconectar**. Presionar este botón cuenta como un "Gesto de Usuario" (User Gesture), lo que obliga al navegador móvil a abrir el pop-up de permisos USB.
+
+### Prevención de Desbordamiento del Búfer Casio (Throttling)
+Cuando se cambia un instrumento (Program Change), Casio tarda unos milisegundos en cargar el nuevo DSP. Si la aplicación dispara inmediatamente un aluvión de 18 mensajes de ecualización (CC), el teclado ignora el comando de cambio de instrumento.
+- **La Solución:** `setTimeout(() => applySmartProfile(...), 100);`. La app espera estratégicamente 100ms después de solicitar un nuevo Tono antes de enviar el paquete masivo de configuraciones de ecualización.
+
+---
+
+## 4. Perfiles Acústicos Inteligentes (Smart Acoustic Profiles)
+
+Seleccionar un sonido no es suficiente; un Órgano necesita distorsión y rotary, mientras que un Piano necesita Reverb profunda. 
+La constante `CATEGORY_PROFILES` en `app.js` es un motor de diseño sonoro automatizado.
+- Cuando la aplicación detecta que el usuario seleccionó un tono desde un `optgroup` (ej. cambió de "PIANO" a "ELEC.ORGAN"), inyecta automáticamente una matriz de valores predefinidos:
+  - *String Ensemble:* Ataques lentos, liberación larga, Reverb profunda.
+  - *Synth Lead:* Filtros (Cutoff) cerrados, alta resonancia, vibrato activo y Portamento.
+  - *Elec. Organ:* Activación del DSP Rotatorio, cero resonancia.
+Esto emula el comportamiento de los "Registrations" de alta gama, haciendo que cualquier sonido suene profesional y "mezclado" al instante de ser seleccionado.
+
+---
+
+## 5. Complejidad de la Interfaz y Workarounds de CSS
+
+La mesa de mezclas requiere potenciómetros (faders) verticales muy largos (200px) para permitir precisión al tacto en pantallas de celulares y tablets.
+
+### El Bug de Renderizado "Webkit Transform Bounding-Box"
+Para crear faders verticales de manera compatible entre navegadores, se rotan faders horizontales nativos: `transform: rotate(-90deg)`.
+- **El Problema:** El motor Webkit (Chrome/Safari Móvil) calcula el ancho del contenedor padre basándose en el elemento *antes* de ser rotado (un fader horizontal de 200px de ancho). Esto creaba un "ancho fantasma" masivo que empujaba el resto de la interfaz fuera de la pantalla, rompiendo los cálculos de `justify-content: space-evenly` de la cuadrícula.
+- **La Solución Arquitectónica:** Se descartó el uso de `position: absolute`. En su lugar, el fader mantiene su flujo estándar de bloque pero utiliza márgenes negativos matemáticamente perfectos (`margin: 88px -88px;`). Esto anula obligatoriamente la caja delimitadora invisible (bounding box) calculada por el navegador, forzando a la cuadrícula Flexbox a distribuir los controles de ecualización uniformemente (18px de separación estricta) a lo largo de toda la pantalla, independientemente de la resolución del dispositivo.
+
+---
+
+## 6. Bases de Datos Dinámicas
+
+En lugar de construir listas masivas de código HTML manualmente, el sistema ingiere catálogos crudos extraídos de manuales.
+- El script lee líneas del tipo `1 STAGE PIANO 0 1 0/64` utilizando Expresiones Regulares (`RegEx`).
+- Extrae el ID, Nombre, Program Change (PC) y Controladores de Banco (MSB/LSB).
+- Construye menús `<select>` anidados (`<optgroup>`) clasificados automáticamente por categoría, permitiendo a la app buscar, iterar e inyectar atributos `data-` a una velocidad excepcionalmente rápida.
+
+---
+
+*Creado para llevar las capacidades del motor de sonido Casio AiX a un entorno visual táctil, profesional y sin interrupciones.*
