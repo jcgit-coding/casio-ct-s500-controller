@@ -32,7 +32,7 @@
 /* ── TRACK CARDS ─────────────────────────────── */
 .tracks-row {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     flex-shrink: 0;
 }
 .track-card {
@@ -72,7 +72,7 @@
 }
 .track-label .dim {
     color: var(--text-muted);
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 700;
     align-self: flex-end;
 }
@@ -107,7 +107,7 @@
 }
 
 .selected-tone {
-    font-size: 13px;
+    font-size: 10px;
     color: var(--accent);
     font-weight: 600;
     white-space: nowrap;
@@ -214,7 +214,7 @@ header h1 {
     color: var(--text-muted);
     border-radius: 6px;
     padding: 4px 10px;
-    font-size: 11px;
+    font-size: 9px;
     font-family: var(--main-font);
     cursor: pointer;
     transition: background .15s;
@@ -255,7 +255,7 @@ header h1 {
 /* ── VIEWS & NAVIGATION ──────────────────────── */
 .view-nav {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     background: rgba(255,255,255,0.05);
     padding: 6px;
     border-radius: 12px;
@@ -264,7 +264,7 @@ header h1 {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 8px;
@@ -286,7 +286,7 @@ header h1 {
 .app-view {
     display: none;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
     width: 100%;
 }
 .app-view.active {
@@ -303,7 +303,7 @@ header h1 {
 /* ── ARRANGER ────────────────────────────────── */
 .arranger-search-row {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     margin-bottom: 12px;
 }
 .rhythm-list-wrap {
@@ -342,7 +342,7 @@ header h1 {
     flex: 1;
 }
 .rhythm-cat {
-    font-size: 11px;
+    font-size: 9px;
     color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
@@ -352,10 +352,12 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 14px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
 }
 .arranger-label {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -381,12 +383,12 @@ header h1 {
 .clock-toggle input { accent-color: var(--accent); width: 16px; height: 16px; }
 .arranger-transport {
     display: flex;
-    gap: 10px;
+    gap: 6px;
 }
 .arranger-transport .btn-giant {
     flex: 1;
     padding: 20px 12px;
-    font-size: 13px;
+    font-size: 10px;
 }
 .arranger-transport .btn-giant .icon { font-size: 26px; }
 
@@ -397,7 +399,7 @@ header h1 {
 .arranger-huge-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 6px;
     margin-bottom: 20px;
 }
 .arranger-huge-grid.four-cols {
@@ -462,7 +464,7 @@ header h1 {
     backdrop-filter: blur(12px);
  box-shadow: 0 4px 15px var(--shadow-color); }
 .panel-title {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -560,7 +562,7 @@ header h1 {
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
     color: var(--text);
-    font-size: 13px;
+    font-size: 10px;
     font-family: var(--main-font);
     outline: none;
     transition: border-color .2s;
@@ -635,7 +637,7 @@ header h1 {
     padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
     transition: border-color .25s, background .25s;
     cursor: default;
 }
@@ -645,7 +647,7 @@ header h1 {
 }
 
 .track-label {
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -664,8 +666,10 @@ header h1 {
 /* Quick controls: Octave, Transpose, Sustain */
 .track-quick {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
 }
 .quick-group {
     display: flex;
@@ -703,7 +707,7 @@ header h1 {
 .step-val {
     min-width: 28px;
     text-align: center;
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--accent);
     font-variant-numeric: tabular-nums;
@@ -745,10 +749,12 @@ header h1 {
 
 .eq-faders {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
     justify-content: center;
-    gap: 10px;
-    padding: 5px;
+    gap: 6px;
+    padding: 5px 0;
 }
 .eq-faders::-webkit-scrollbar { height: 6px; }
 .eq-faders::-webkit-scrollbar-track { background: transparent; }
@@ -762,7 +768,7 @@ header h1 {
     min-width: 44px;
 }
 .fader-label {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 800;
     color: var(--fader-label);
     text-transform: uppercase;
@@ -771,14 +777,19 @@ header h1 {
     white-space: nowrap;
 }
 .fader-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 18px 0 18px;
-    border-right: 1px solid var(--border-light);
-    flex-shrink: 0;
- background: var(--panel-bg); border-radius: 8px; padding: 12px 18px;  box-shadow: inset 0 0 10px var(--shadow-color); border: 1px solid var(--panel-border); }
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-right: 1px solid var(--border-strong) !important;
+    padding-right: 6px !important;
+}
+.fader-section:last-child {
+    border-right: none !important;
+    padding-right: 0 !important;
+}
 .fader-section:first-child { padding-left: 4px; border-left: none; }
 .fader-section-title {
     font-size: 9px;
@@ -793,7 +804,7 @@ header h1 {
 }
 .fader-section-inner {
     display: flex;
-    gap: 18px;
+    gap: 4px;
     align-items: flex-end;
     padding-bottom: 4px;
 }
@@ -805,7 +816,7 @@ header h1 {
     display: none; /* hidden, replaced by section layout */
 }
 .fader-value {
-    font-size: 11px;
+    font-size: 9px;
     color: var(--text);
     background: var(--fader-val-bg); color: var(--fader-val-text);
     border-radius: 10px;
@@ -889,7 +900,9 @@ header h1 {
 @media (max-width: 1024px) {
     /* Tablets (Landscape & Portrait) */
     .tracks-row {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
         justify-content: center;
     }
     .track-card {
@@ -906,7 +919,7 @@ header h1 {
     }
     .nav-tab {
         padding: 8px 12px;
-        font-size: 13px;
+        font-size: 10px;
     }
 }
 
@@ -921,7 +934,9 @@ header h1 {
     header > div {
         width: 100%;
         justify-content: space-between;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
     }
     .view-nav {
         width: 100%;
@@ -931,12 +946,12 @@ header h1 {
     .nav-tab {
         flex: 1;
         text-align: center;
-        font-size: 11px;
+        font-size: 9px;
         padding: 10px 5px;
     }
     .tracks-row {
         flex-direction: column; /* Stack cards vertically */
-        gap: 10px;
+        gap: 6px;
     }
     .track-card {
         flex: none;
@@ -1010,17 +1025,17 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    min-width: 36px;
+    gap: 4px;
+    min-width: 28px;
 }
 .eq-fader {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
     cursor: pointer;
-        width: 120px;
-    height: 24px;
-    margin: 48px -48px; /* Math: (120 - 24)/2 = 48 */ /* Adjust spacing because of rotation */
+        width: 100px;
+    height: 20px;
+    margin: 40px -40px; /* Math: (120 - 24)/2 = 48 */ /* Adjust spacing because of rotation */
     transform: rotate(-90deg);
     outline: none;
     position: relative;
@@ -1047,13 +1062,13 @@ header h1 {
 
 .eq-fader::-webkit-slider-thumb {
     -webkit-appearance: none;
-        height: 30px;
-    width: 18px;
+        height: 24px;
+    width: 16px;
     border-radius: 4px;
     background: var(--panel-bg);
     border: 2px solid var(--panel-border);
     box-shadow: 0 4px 8px var(--shadow-color), inset 0 1px 1px rgba(255,255,255,0.2);
-    margin-top: -11px; /* Center thumb on track */
+    margin-top: -9px; /* Center thumb on track */
     /* Fader grip line (horizontal line on the rotated thumb, which becomes vertical... wait, if the slider is rotated, the thumb is also rotated! */
     /* The thumb needs a vertical line across it, so when rotated it's horizontal! */
     background-image: linear-gradient(to right, transparent 10px, var(--accent) 10px, var(--accent) 14px, transparent 14px);
@@ -1061,8 +1076,8 @@ header h1 {
 }
 
 .eq-fader::-moz-range-thumb {
-        height: 30px;
-    width: 18px;
+        height: 24px;
+    width: 16px;
     border-radius: 4px;
     background: var(--panel-bg);
     border: 2px solid var(--panel-border);
@@ -1082,20 +1097,20 @@ header h1 {
 
 /* Fix values and labels for better contrast and size */
 .fader-value {
-    font-size: 13px !important;
+    font-size: 10px !important;
     font-weight: bold;
     color: var(--fader-val-text);
     background: var(--fader-val-bg);
     border: 1px solid var(--panel-border);
     box-shadow: inset 0 1px 3px var(--shadow-color);
-    padding: 4px 8px !important;
+    padding: 2px 4px !important;
     border-radius: 6px !important;
-    min-width: 40px !important;
+    min-width: 28px !important;
     min-height: unset !important;
 }
 
 .fader-label {
-    font-size: 11px !important;
+    font-size: 9px !important;
     font-weight: 800;
     color: var(--fader-label) !important;
     text-transform: uppercase;
@@ -1104,17 +1119,10 @@ header h1 {
     white-space: nowrap;
 }
 
-.fader-section {
-    background: var(--panel-bg) !important;
-    border-radius: 8px !important;
-    padding: 8px 12px !important;
-    
-    box-shadow: 0 4px 15px var(--shadow-color) !important;
-    border: 1px solid var(--panel-border) !important;
-}
+
 
 .fader-section-title {
-    font-size: 11px !important;
+    font-size: 9px !important;
     color: var(--text) !important;
     opacity: 0.8;
 }
