@@ -253,7 +253,7 @@ const EQ_SECTIONS = [
         controls: [
             { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
-            { label: 'RELEASE', cc: 72, def: 64, tip: 'Tiempo de Liberación' },
+
         ]
     },
     {
