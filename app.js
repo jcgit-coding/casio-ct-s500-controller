@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //  MIDI INIT — always-on with auto-reconnect
 // ======================================================================
 function initMIDI() {
-    if (midiInitPending) return;          // evita llamadas concurrentes
+    if (midiInitPending) return;
     if (!navigator.requestMIDIAccess) {
         setStatus("Web MIDI no soportado (usa Chrome o Edge)", false);
         return;
@@ -105,15 +105,35 @@ function initMIDI() {
     }
     midiInitPending = true;
     setStatus("Conectando...", false);
+
+    let settled = false;
+
+    // En Android Chrome sin gesto de usuario la promesa queda colgada sin
+    // resolver ni rechazar. Detectamos esto con un timeout y pedimos al usuario
+    // que toque la pantalla para que Chrome pueda mostrar el diálogo de permisos.
+    const gestureTimeout = setTimeout(() => {
+        if (settled) return;
+        midiInitPending = false;
+        setStatus("Toca la pantalla o el botón Conectar para activar MIDI", false);
+        const retry = () => { if (!midiAccess) initMIDI(); };
+        document.addEventListener('click',      retry, { once: true });
+        document.addEventListener('touchstart', retry, { once: true });
+    }, 2000);
+
     let accessPromise;
     try {
         accessPromise = navigator.requestMIDIAccess({ sysex: false });
     } catch (e) {
+        settled = true;
+        clearTimeout(gestureTimeout);
         midiInitPending = false;
         setStatus("Error MIDI: " + e.message, false);
         return;
     }
+
     accessPromise.then(access => {
+        settled = true;
+        clearTimeout(gestureTimeout);
         midiInitPending = false;
         midiAccess = access;
         access.onstatechange = () => scanAndConnect();
@@ -122,9 +142,10 @@ function initMIDI() {
         [600, 1800, 4000, 8000].forEach(t => setTimeout(() => {
             if (!midiInput || !midiOutput) scanAndConnect();
         }, t));
-        // Polling periódico mientras no haya conexión completa.
         startMidiPoll();
     }, err => {
+        settled = true;
+        clearTimeout(gestureTimeout);
         midiInitPending = false;
         console.error(err);
         if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
