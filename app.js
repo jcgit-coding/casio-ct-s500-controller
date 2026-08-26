@@ -269,7 +269,7 @@ const EQ_SECTIONS = [
         controls: [
             { label: 'REVERB', cc: 91, def: 40, tip: 'Envío de Reverb (eco de sala)' },
             { label: 'CHORUS', cc: 93, def: 0,  tip: 'Envío de Chorus (engrosamiento)' },
-            { label: 'DELAY',  cc: 94, def: 0,  tip: 'Envío de Delay (repetición)' },
+            { label: 'ECO',    cc: 94, def: 0,  tip: 'Envío de Delay (repetición)' },
         ]
     },
     {
