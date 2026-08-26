@@ -986,7 +986,23 @@ function loadAppState() {
                 const list = document.getElementById('list-' + part);
                 if (list && saved.tones[part] !== undefined) {
                     list.selectedIndex = saved.tones[part];
-                    list.dispatchEvent(new Event('change'));
+                    
+                    // Manually change tone and update UI instead of firing 'change' 
+                    // which would trigger applySmartProfile and wipe saved eqState!
+                    const opt = list.options[list.selectedIndex];
+                    if (opt) {
+                        const data = JSON.parse(opt.value);
+                        changeTone(part, data.bank, data.program);
+                        
+                        const nameEl = document.getElementById('selectedTone-' + part);
+                        if (nameEl) nameEl.innerText = opt.text;
+                        
+                        const catEl = document.getElementById('selectedCat-' + part);
+                        if (catEl && opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
+                            catEl.innerText = opt.parentElement.label;
+                            activeCategories[part] = opt.parentElement.label; // Restore active category tracking
+                        }
+                    }
                 }
                 // Update tuning UI
                 document.getElementById('oct-' + part).innerText = (tuning[part].oct>0?'+':'')+tuning[part].oct;
