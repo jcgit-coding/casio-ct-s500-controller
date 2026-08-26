@@ -1,5 +1,15 @@
+
+/* GLOBAL FONT ENFORCEMENT */
+body, input, button, select, textarea, optgroup, option, div, span, p, h1, h2, h3, h4, h5, h6, label {
+    font-family: var(--main-font);
+}
+/* Ensure material symbols retain their specific font */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+}
+
 :root {
-    --main-font: "Inter", system-ui, -apple-system, sans-serif;
+    --main-font: "Roboto", "Segoe UI", system-ui, sans-serif;
     --bg: #111111;
     --panel-bg: #1c1c1c;
     --panel-border: #333333;
