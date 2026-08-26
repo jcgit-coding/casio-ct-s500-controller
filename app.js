@@ -47,9 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAppState();
     setInterval(saveAppState, 1000);
 
-    // Inicializar MIDI de inmediato (sysex:false no requiere gesto de usuario).
-    // El botón Conectar sirve para reconectar manualmente.
-    initMIDI();
+    // Android Chrome necesita un gesto de usuario para mostrar el diálogo de
+    // permisos MIDI. Esperamos el primer click en cualquier lugar de la pantalla.
+    let midiInitAttempted = false;
+    document.addEventListener("click", () => {
+        if (!midiInitAttempted) { midiInitAttempted = true; initMIDI(); }
+    }, { once: true });
 
     document.getElementById("connectBtn").addEventListener("click", () => {
         if (midiAccess) scanAndConnect(); else initMIDI();
@@ -94,59 +97,21 @@ document.addEventListener("DOMContentLoaded", () => {
 //  MIDI INIT — always-on with auto-reconnect
 // ======================================================================
 function initMIDI() {
-    if (midiInitPending) return;
     if (!navigator.requestMIDIAccess) {
         setStatus("Web MIDI no soportado (usa Chrome o Edge)", false);
         return;
     }
-    if (!window.isSecureContext) {
-        setStatus("Android exige HTTPS o localhost para MIDI", false);
-        return;
-    }
-    midiInitPending = true;
     setStatus("Conectando...", false);
-
-    let settled = false;
-
-    // En Android Chrome sin gesto de usuario la promesa queda colgada sin
-    // resolver ni rechazar. Detectamos esto con un timeout y pedimos al usuario
-    // que toque la pantalla para que Chrome pueda mostrar el diálogo de permisos.
-    const gestureTimeout = setTimeout(() => {
-        if (settled) return;
-        midiInitPending = false;
-        setStatus("Toca la pantalla o el botón Conectar para activar MIDI", false);
-        const retry = () => { if (!midiAccess) initMIDI(); };
-        document.addEventListener('click',      retry, { once: true });
-        document.addEventListener('touchstart', retry, { once: true });
-    }, 2000);
-
-    let accessPromise;
-    try {
-        accessPromise = navigator.requestMIDIAccess({ sysex: false });
-    } catch (e) {
-        settled = true;
-        clearTimeout(gestureTimeout);
-        midiInitPending = false;
-        setStatus("Error MIDI: " + e.message, false);
-        return;
-    }
-
-    accessPromise.then(access => {
-        settled = true;
-        clearTimeout(gestureTimeout);
-        midiInitPending = false;
+    navigator.requestMIDIAccess({ sysex: true }).then(access => {
         midiAccess = access;
         access.onstatechange = () => scanAndConnect();
         scanAndConnect();
         // Android/Chrome enumera los puertos USB-MIDI con retraso.
         [600, 1800, 4000, 8000].forEach(t => setTimeout(() => {
-            if (!midiInput || !midiOutput) scanAndConnect();
+            if (!midiInput) scanAndConnect();
         }, t));
         startMidiPoll();
     }, err => {
-        settled = true;
-        clearTimeout(gestureTimeout);
-        midiInitPending = false;
         console.error(err);
         if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
             setStatus("Permiso MIDI denegado: mira la guía en Ajustes", false);
