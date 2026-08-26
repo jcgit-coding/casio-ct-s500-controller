@@ -5,6 +5,24 @@ let midiAccess  = null;
 let midiInput   = null;
 let midiOutput  = null;
 
+// PC Synth Sustain Buffer
+const pcActiveNotes = {};
+const pcSustainedNotes = {};
+let pcSustainOn = false;
+
+function applyPcSustain(isSustain) {
+    if (!window.pcSynth) return;
+    pcSustainOn = isSustain;
+    if (!pcSustainOn) {
+        for (const note in pcSustainedNotes) {
+            if (!pcActiveNotes[note]) {
+                window.pcSynth.noteOff(parseInt(note), 0, 0);
+            }
+            delete pcSustainedNotes[note];
+        }
+    }
+}
+
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
 let globalTranspose = 0;
 const pendingBank = { U1: 0, U2: 0, L: 0 };
@@ -206,22 +224,27 @@ function onMIDIMessage(e) {
     // --- PC SYNTH HOOK ---
     if (window.sf2Ready && window.pcSynth) {
         const cmd = status & 0xF0;
-        const ch = status & 0x0F;
         const vol = (document.getElementById('sf2-vol') ? parseInt(document.getElementById('sf2-vol').value) : 100) / 100;
         
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
-                if (window.pcSynth.synth && window.pcSynth.synth.ctx && window.pcSynth.synth.ctx.state === 'suspended') { window.pcSynth.synth.ctx.resume(); } window.pcSynth.noteOn(d1, Math.round(d2 * vol), 0);
+                pcActiveNotes[d1] = true;
+                if (window.pcSynth.synth && window.pcSynth.synth.ctx && window.pcSynth.synth.ctx.state === 'suspended') { window.pcSynth.synth.ctx.resume(); } 
+                window.pcSynth.noteOn(d1, Math.round(d2 * vol), 0);
             } else {
-                window.pcSynth.noteOff(d1, 0, 0);
+                pcActiveNotes[d1] = false;
+                if (pcSustainOn) pcSustainedNotes[d1] = true;
+                else window.pcSynth.noteOff(d1, 0, 0);
             }
         } else if (cmd === 0x80) { // Note Off
-            window.pcSynth.noteOff(d1, d2, 0);
+            pcActiveNotes[d1] = false;
+            if (pcSustainOn) pcSustainedNotes[d1] = true;
+            else window.pcSynth.noteOff(d1, d2, 0);
         } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal
-            // sf2-player library might support sustain via noteOff logic if not we ignore or handle
+            applyPcSustain(d2 >= 64);
         }
     }
-
+    
     // Control Change
     if (status >= 0xB0 && status <= 0xBF) {
         const ch   = status & 0x0F;
@@ -1385,7 +1408,10 @@ function initQuickControls() {
             btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
             btn.classList.toggle('sus-on', tuning[part].sus);
             
-              sendCC(part, 64, val);
+            // Sync PC Synth sustain if manipulating Upper 1
+            if (part === 'U1') applyPcSustain(tuning[part].sus);
+            
+            sendCC(part, 64, val);
               if (val === 0) {
                   // Casio CT-S500 sometimes ignores a single CC64=0 if the buffer is busy.
                   // Send it again after 20ms, and also clear Sostenuto (CC 66)
