@@ -168,7 +168,7 @@ function onMIDIMessage(e) {
         
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
-                window.pcSynth.noteOn(d1, d2 * vol, ch);
+                window.pcSynth.noteOn(d1, Math.round(d2 * vol), ch);
             } else {
                 window.pcSynth.noteOff(d1, 0, ch);
             }
