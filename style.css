@@ -25,7 +25,16 @@
     --cat-color: #38bdf8;
 }
 
-* { box-sizing:border-box; margin:0; padding:0; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    
+}
+
+input, button, select, textarea, optgroup, option {
+    
+}
 
 /* ── TRACK CARDS ─────────────────────────────── */
 .tracks-row {
@@ -152,10 +161,10 @@
 }
 
 body {
-    font-family: var(--main-font);
+    
     background: var(--bg);
     color: var(--text);
-    font-family: var(--main-font);
+    
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -213,7 +222,7 @@ header h1 {
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 11px;
-    font-family: var(--main-font);
+    
     cursor: pointer;
     transition: background .15s;
     white-space: nowrap;
@@ -483,7 +492,7 @@ header h1 {
     cursor: pointer;
     transition: all .18s;
     text-align: center;
-    font-family: var(--main-font);
+    
  box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-weight: 600; letter-spacing: 0.3px; }
 .btn:hover { background: rgba(255,255,255,0.12); }
 
@@ -559,7 +568,7 @@ header h1 {
     border-radius: 8px;
     color: var(--text);
     font-size: 13px;
-    font-family: var(--main-font);
+    
     outline: none;
     transition: border-color .2s;
 }
@@ -588,7 +597,7 @@ header h1 {
     border-radius: 8px;
     color: var(--text);
     font-size: 12px;
-    font-family: var(--main-font);
+    
     outline: none;
     padding: 4px 0;
     /* size attribute controls height (number of visible rows) */
@@ -695,7 +704,7 @@ header h1 {
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background .15s;
-    font-family: var(--main-font);
+    
  box-shadow: 0 1px 3px rgba(0,0,0,0.15); border: 1px solid var(--panel-border); background: linear-gradient(to bottom, var(--panel-bg), var(--bg)); }
 .step-btn:hover { background: rgba(255,255,255,0.18); }
 .step-val {
@@ -716,7 +725,7 @@ header h1 {
     font-size: 12px; font-weight: 700;
     cursor: pointer;
     transition: all .18s;
-    font-family: var(--main-font);
+    
 }
 .sus-btn.sus-on {
     background: var(--accent);
@@ -817,7 +826,7 @@ header h1 {
     align-items: center;
     justify-content: center;
     transition: background .15s;
-    font-family: var(--main-font);
+    
 }
 .preset-actions button:hover { background: rgba(255,255,255,0.15); }
 .preset-actions .del-btn:hover { background: rgba(255,51,102,0.2); color: var(--danger); border-color: var(--danger); }
