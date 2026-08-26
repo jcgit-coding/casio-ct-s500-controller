@@ -15,9 +15,10 @@
             
             <!-- VIEW NAVIGATION -->
             <div class="view-nav">
-                <button class="nav-tab active" data-target="view-mixer">🎹 MIXER</button>
+                <button class="nav-tab active" data-target="view-mixer">🎛️ MIXER</button>
                 <button class="nav-tab" data-target="view-arranger">🥁 ARRANGER</button>
                 <button class="nav-tab" data-target="view-settings">⚙️ SETTINGS & PRESETS</button>
+                <button class="nav-tab" data-target="view-synth">🎹 PC SYNTH (.SF2)</button>
             </div>
         </div>
 
@@ -269,14 +270,40 @@
                     <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
                 </div>
                 <div class="presets-list" id="presetsList"></div>
-            </div>
+            </div><!-- /view-settings -->
 
+        <!-- 🎹🎹🎹🎹🎹🎹🎹🎹🎹🎹 VIEW: PC SYNTH 🎹🎹🎹🎹🎹🎹🎹🎹🎹🎹 -->
+        <div class="app-view" id="view-synth">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Módulo de Sonido de PC (SoundFonts)</h2>
+                </div>
+                <div style="padding: 1rem; color: #ccc;">
+                    <p>Aquí puedes cargar archivos <strong>.sf2</strong> para que suenen directamente desde los parlantes de tu PC, usando tu Casio como teclado controlador. Ideal para videollamadas.</p>
+                    
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: #222; border-radius: 8px; text-align: center;">
+                        <input type="file" id="sf2-file" accept=".sf2" style="display: none;">
+                        <label for="sf2-file" style="background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                            📂 Cargar Archivo .sf2
+                        </label>
+                        <p id="sf2-status" style="margin-top: 15px; color: #888;">Ningún sonido cargado.</p>
+                    </div>
+
+                    <div class="eq-row">
+                        <div class="slider-group">
+                            <label>Volumen PC Synth</label>
+                            <input type="range" class="eq-fader" id="sf2-vol" min="0" max="100" value="100">
+                            <div class="val-display" id="sf2-vol-val">100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div><!-- /main-console -->
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=17"></script>
+    <script src="app.js?v=19"></script>
 </body>
 </html>
