@@ -536,7 +536,10 @@ function initToneSearch() {
             if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
                 catName = opt.parentElement.label;
             }
-            applySmartProfile(part, catName);
+            
+            // Delay sending 18 CCs to prevent overwhelming the Casio's MIDI buffer
+            // which causes it to abort the Program Change.
+            setTimeout(() => applySmartProfile(part, catName), 100);
             
             // Update the name shown in the card header
             const nameEl = document.getElementById('selectedTone-' + part);
