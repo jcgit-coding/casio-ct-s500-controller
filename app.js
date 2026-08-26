@@ -430,7 +430,7 @@ function buildEQ() {
 
             const fader = document.createElement('input');
             fader.type = 'range';
-            fader.setAttribute('orient', 'vertical');
+            // fader.setAttribute("orient", "vertical"); // Removed in favor of CSS transform
             fader.className  = 'eq-fader';
             fader.dataset.cc = ctrl.cc;
             fader.title      = ctrl.tip;
