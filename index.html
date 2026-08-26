@@ -6,11 +6,12 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=60">
+    <link rel="stylesheet" href="style.css?v=61">
 </head>
 <body>
 
-    <header>
+        <header style="justify-content: flex-start; padding-bottom: 12px; border-bottom: none;">
+
         <div style="display: flex; align-items: center; gap: 20px;">
             <h1>CT-S500 <span class="dim">PRO</span></h1>
             
@@ -23,6 +24,9 @@
             </div>
         </div>
 
+            </header>
+
+    <div class="sub-header" style="display: flex; justify-content: flex-end; align-items: center; gap: 20px; padding: 10px 28px 15px; border-bottom: 1px solid var(--panel-border); background: rgba(0,0,0,0.5); flex-wrap: wrap;">
         <div class="global-bar">
             <span class="global-label">TRANSPOSE GLOBAL</span>
             <div class="step-btns">
@@ -45,7 +49,7 @@
                 <span id="statusText">Buscando MIDI…</span>
             </div>
         </div>
-    </header>
+    
 
     <div class="main-console">
 
@@ -334,6 +338,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=60"></script>
+    <script src="app.js?v=61"></script>
 </body>
 </html>
