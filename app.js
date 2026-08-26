@@ -95,17 +95,23 @@ document.addEventListener("DOMContentLoaded", () => {
 // ======================================================================
 function initMIDI() {
     if (!navigator.requestMIDIAccess) {
-        setStatus("Web MIDI no soportado — usa Chrome o Edge", false);
+        setStatus("Web MIDI no soportado (Usa Chrome o Edge)", false);
         return;
     }
-    setStatus("Conectando…", false);
-    navigator.requestMIDIAccess({ sysex: true }).then(access => {
+    setStatus("Conectando...", false);
+    navigator.requestMIDIAccess({ sysex: false }).then(access => {
         midiAccess = access;
         access.onstatechange = () => scanAndConnect();
         scanAndConnect();
     }, err => {
         console.error(err);
-        setStatus("Acceso MIDI denegado — revisa permisos", false);
+        
+        if (err.name === 'SecurityError' || err.name === 'NotAllowedError') {
+            setStatus("MIDI bloqueado: Toca 'Reconectar' o da permisos en Chrome", false);
+        } else {
+            setStatus("Error MIDI: " + err.message, false);
+        }
+    
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'block';
     });
@@ -119,12 +125,14 @@ function scanAndConnect() {
     for (let o of midiAccess.outputs.values()) {
         if (o.state !== 'connected') continue;
         const n = o.name.toUpperCase();
-        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) midiOutput = o;
+        if (n.includes("THROUGH")) continue; // Ignore Android's internal dummy port
+        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH") || n.includes("USB") || n.includes("MIDI")) midiOutput = o;
     }
     for (let i of midiAccess.inputs.values()) {
         if (i.state !== 'connected') continue;
         const n = i.name.toUpperCase();
-        if (!midiInput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) midiInput = i;
+        if (n.includes("THROUGH")) continue; // Ignore Android's internal dummy port
+        if (!midiInput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH") || n.includes("USB") || n.includes("MIDI")) midiInput = i;
     }
 
     if (midiOutput) {
@@ -256,7 +264,7 @@ const EQ_SECTIONS = [
         title: 'Volumen & Panorámica',
         controls: [
             { label: 'VOLUMEN',  cc: 7,  def: 100, tip: 'Volumen' },
-            { label: 'EXPRESION',  cc: 11, def: 127, tip: 'Expresión (dinámica)' },
+            { label: 'EXPRESIÓN',  cc: 11, def: 127, tip: 'Expresión (dinámica)' },
             { label: 'PANORAMA',  cc: 10, def: 64,  tip: 'Panorámica (izq/der)' },
         ]
     },
@@ -268,7 +276,7 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        title: 'Envolvente (ADSR)',
+        title: 'Envíolvente (ADSR)',
         controls: [
             { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
@@ -294,7 +302,7 @@ const EQ_SECTIONS = [
     {
         title: 'Modulación & Pedales',
         controls: [
-            { label: 'MODULACION',       cc: 1,  def: 0, tip: 'Rueda de Modulación' },
+            { label: 'MODULACIÓN',       cc: 1,  def: 0, tip: 'Rueda de Modulación' },
             { label: 'PORTAMENTO',   cc: 65, def: 0, tip: 'Portamento On/Off' },
             { label: 'TIEMPO PORT.', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
             { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)' },
