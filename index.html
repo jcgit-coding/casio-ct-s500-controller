@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=37">
 </head>
 <body>
 
@@ -282,15 +282,15 @@
                 <div class="panel-header">
                     <h2>Módulo de Sonido de PC (SoundFonts)</h2>
                 </div>
-                <div style="padding: 1rem; color: #ccc;">
+                <div style="padding: 1rem; ">
                     <p>Aquí puedes cargar archivos <strong>.sf2</strong> para que suenen directamente desde los parlantes de tu PC, usando tu Casio como teclado controlador. Ideal para videollamadas.</p>
                     
-                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: #222; border-radius: 8px; text-align: center;">
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--panel-border); border-radius: 8px; text-align: center;">
                         <input type="file" id="sf2-file" accept=".sf2,audio/*,application/*,*/*" style="display: none;">
-                        <label for="sf2-file" style="background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        <label for="sf2-file" style="background: var(--accent);  padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
                             <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">folder_open</span> Cargar Archivo .sf2
                         </label>
-                        <p id="sf2-status" style="margin-top: 15px; color: #888;">Ningún sonido cargado.</p>
+                        <p id="sf2-status" style="margin-top: 15px; ">Ningún sonido cargado.</p>
                     </div>
 
                     <div class="eq-row">
@@ -308,6 +308,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=36"></script>
+    <script src="app.js?v=37"></script>
 </body>
 </html>
