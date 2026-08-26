@@ -1075,41 +1075,41 @@ function loadAppState() {
     }
 }
 
- / /   - - -   P C   S Y N T H   ( S F 2   P L A Y E R )   - - -  
- 
- / /   - - -   P C   S Y N T H   F I L E   L O A D E R   - - - 
- w i n d o w . p c S y n t h   =   n u l l ; 
- w i n d o w . s f 2 R e a d y   =   f a l s e ; 
- 
- d o c u m e n t . g e t E l e m e n t B y I d ( ' s f 2 - f i l e ' ) ? . a d d E v e n t L i s t e n e r ( ' c h a n g e ' ,   a s y n c   ( e )   = >   { 
-         c o n s t   f i l e   =   e . t a r g e t . f i l e s [ 0 ] ; 
-         i f   ( ! f i l e )   r e t u r n ; 
- 
-         c o n s t   s t a t u s E l   =   d o c u m e n t . g e t E l e m e n t B y I d ( ' s f 2 - s t a t u s ' ) ; 
-         s t a t u s E l . i n n e r H T M L   =   ' < s p a n   s t y l e = " c o l o r : v a r ( - - a c c e n t ) ; " > C a r g a n d o   m o t o r   d e   a u d i o   y   a r c h i v o . . . < / s p a n > ' ; 
- 
-         t r y   { 
-                 c o n s t   m o d u l e   =   a w a i t   i m p o r t ( ' h t t p s : / / u n p k g . c o m / s f 2 - p l a y e r ' ) ; 
-                 c o n s t   S o u n d F o n t   =   m o d u l e . d e f a u l t ; 
-                 i f   ( ! w i n d o w . p c S y n t h )   w i n d o w . p c S y n t h   =   n e w   S o u n d F o n t ( ) ; 
-                 
-                 a w a i t   w i n d o w . p c S y n t h . l o a d S o u n d F o n t F r o m F i l e ( f i l e ) ; 
-                 w i n d o w . p c S y n t h . b a n k   =   w i n d o w . p c S y n t h . b a n k s [ 0 ] . i d ; 
-                 w i n d o w . p c S y n t h . p r o g r a m   =   w i n d o w . p c S y n t h . p r o g r a m s [ 0 ] . i d ; 
-                 
-                 w i n d o w . s f 2 R e a d y   =   t r u e ; 
-                 s t a t u s E l . i n n e r H T M L   =   ' < s p a n   s t y l e = " c o l o r : # 4 C A F 5 0 ; " > '  L i s t o :   '   +   f i l e . n a m e   +   ' < / s p a n > ' ; 
-         }   c a t c h   ( e r r )   { 
-                 c o n s o l e . e r r o r ( e r r ) ; 
-                 s t a t u s E l . i n n e r H T M L   =   ' < s p a n   s t y l e = " c o l o r : # F 4 4 3 3 6 ; " > L'  E r r o r   c a r g a n d o   e l   a r c h i v o   . s f 2 < / s p a n > ' ; 
-                 w i n d o w . s f 2 R e a d y   =   f a l s e ; 
-         } 
- } ) ; 
- 
- d o c u m e n t . g e t E l e m e n t B y I d ( ' s f 2 - v o l ' ) ? . a d d E v e n t L i s t e n e r ( ' i n p u t ' ,   ( e )   = >   { 
-         d o c u m e n t . g e t E l e m e n t B y I d ( ' s f 2 - v o l - v a l ' ) . i n n e r T e x t   =   e . t a r g e t . v a l u e ; 
- } ) ;  
- 
+// --- PC SYNTH (SF2 PLAYER) ---
+
+// --- PC SYNTH FILE LOADER ---
+window.pcSynth = null;
+window.sf2Ready = false;
+
+document.getElementById('sf2-file')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const statusEl = document.getElementById('sf2-status');
+    statusEl.innerHTML = '<span style="color:var(--accent);">Cargando motor de audio y archivo...</span>';
+
+    try {
+        const module = await import('https://unpkg.com/sf2-player');
+        const SoundFont = module.default;
+        if (!window.pcSynth) window.pcSynth = new SoundFont();
+        
+        await window.pcSynth.loadSoundFontFromFile(file);
+        window.pcSynth.bank = window.pcSynth.banks[0].id;
+        window.pcSynth.program = window.pcSynth.programs[0].id;
+        
+        window.sf2Ready = true;
+        statusEl.innerHTML = '<span style="color:#4CAF50;">' Listo: ' + file.name + '</span>';
+    } catch (err) {
+        console.error(err);
+        statusEl.innerHTML = '<span style="color:#F44336;">L' Error cargando el archivo .sf2</span>';
+        window.sf2Ready = false;
+    }
+});
+
+document.getElementById('sf2-vol')?.addEventListener('input', (e) => {
+    document.getElementById('sf2-vol-val').innerText = e.target.value;
+});
+
 
 
 
