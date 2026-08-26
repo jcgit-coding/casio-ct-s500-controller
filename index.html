@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=58">
+    <link rel="stylesheet" href="style.css?v=59">
 </head>
 <body>
 
@@ -36,15 +36,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
             <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
             
-        <div class="env-selector-wrap" style="margin-right: 15px; display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent);">stadium</span>
-            <select id="envSelector" class="search-input" style="min-height: 30px; font-size: 11px; font-weight: bold; padding: 4px 10px; width: auto; cursor: pointer; text-transform: uppercase;">
-                <option value="Estudio">Estudio (Preciso)</option>
-                <option value="Vivo">En Vivo (Brillante)</option>
-                <option value="Catedral">Catedral (Épico)</option>
-                <option value="Lofi">Lo-Fi (Vintage)</option>
-            </select>
-        </div>
+        
             <div class="status-badge">
                 
         
@@ -177,6 +169,18 @@
                         <button class="btn-reset-small" id="btnResetEQ">↺ Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
                     </div>
+                </div>
+                <div style="margin: 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size:12px; color:var(--muted); font-weight:bold;">Perfil Acústico:</span>
+                    <div class="env-selector-wrap" style="margin-right: 0; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent);">stadium</span>
+            <select id="envSelector" class="search-input" style="min-height: 30px; font-size: 11px; font-weight: bold; padding: 4px 10px; width: auto; cursor: pointer; text-transform: uppercase;">
+                <option value="Estudio">Estudio (Preciso)</option>
+                <option value="Vivo">En Vivo (Brillante)</option>
+                <option value="Catedral">Catedral (Épico)</option>
+                <option value="Lofi">Lo-Fi (Vintage)</option>
+            </select>
+        </div>
                 </div>
                 <div class="eq-faders" id="eqFaders"></div>
             </div>
@@ -330,6 +334,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=58"></script>
+    <script src="app.js?v=59"></script>
 </body>
 </html>
