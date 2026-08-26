@@ -450,9 +450,16 @@ function buildEQ() {
                 sendCC(activePart, cc, val);
             });
 
+            
             group.appendChild(lbl);
-            group.appendChild(fader);
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'fader-wrapper';
+            wrapper.appendChild(fader);
+            group.appendChild(wrapper);
+            
             group.appendChild(valSpan);
+
             innerEl.appendChild(group);
         });
 

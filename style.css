@@ -9,7 +9,7 @@ body, input, button, select, textarea, optgroup, option, div, span, p, h1, h2, h
 }
 
 :root {
-    --main-font: "Roboto", "Segoe UI", system-ui, sans-serif;
+    --main-font: "Montserrat", "Segoe UI", system-ui, sans-serif;
     --bg: #111111;
     --panel-bg: #1c1c1c;
     --panel-border: #333333;
@@ -764,8 +764,8 @@ header h1 {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    justify-content: flex-start; /* Explicitly align left */
-    overflow-x: auto;
+    justify-content: center;
+    overflow-x: auto; flex-wrap: wrap;
     scrollbar-width: thin;
     padding: 10px 5px;
     gap: 4px; /* Tighter gap between sections */
@@ -779,20 +779,16 @@ header h1 {
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    width: 32px; /* Force strict width to prevent text from pushing it */
-    min-width: 32px;
-    max-width: 32px;
+    min-width: 44px;
 }
 .fader-label {
-    font-size: 9px !important;
+    font-size: 10px !important;
     font-weight: 800;
     color: var(--fader-label) !important;
     text-transform: uppercase;
     letter-spacing: .5px;
     text-align: center;
     white-space: nowrap;
-    width: 100%;
-    overflow: visible;
 }
 .fader-section {
     background: var(--panel-bg) !important;
@@ -1016,7 +1012,7 @@ header h1 {
     }
     .eq-faders {
         padding-bottom: 25px;
-        overflow-x: auto;
+        overflow-x: auto; flex-wrap: wrap;
     }
     .main-console {
         padding: 10px;
@@ -1036,17 +1032,29 @@ header h1 {
     gap: 12px;
     min-width: 44px;
 }
+.fader-wrapper {
+    position: relative;
+    width: 24px;
+    height: 140px; /* The visual height of the fader */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
 .eq-fader {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
     cursor: pointer;
-        width: 140px; /* Slightly shorter to avoid any vertical stretch */
+    width: 140px; /* Actual width before rotation */
     height: 24px;
-    margin: 58px -58px; /* Math: (140 - 24)/2 = 58 */ /* Adjust spacing because of rotation */
     transform: rotate(-90deg);
+    position: absolute;
+    left: -58px; /* (140 - 24) / -2 */
+    top: 58px;
+    margin: 0;
     outline: none;
-    position: relative;
     border-radius: 8px;
 }
 
