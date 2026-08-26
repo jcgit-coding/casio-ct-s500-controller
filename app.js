@@ -98,16 +98,16 @@ document.addEventListener("DOMContentLoaded", () => {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function initMIDI() {
     if (!navigator.requestMIDIAccess) {
-        setStatus("Web MIDI no soportado â€” usa Chrome o Edge", false);
+        setStatus("Web MIDI no soportado (Usa Chrome o Edge)", false);
         return;
     }
-    setStatus("Conectandoâ€¦", false);
-    navigator.requestMIDIAccess({ sysex: true }).then(access => {
+    setStatus("Conectando...", false);
+    navigator.requestMIDIAccess({ sysex: false }).then(access => {
         midiAccess = access;
         access.onstatechange = () => scanAndConnect();
         scanAndConnect();
     }, err => {
-        setStatus("Acceso MIDI denegado â€” revisa permisos", false);
+        setStatus("Acceso MIDI denegado (Revisa permisos)", false);
         console.error(err);
     });
 }
