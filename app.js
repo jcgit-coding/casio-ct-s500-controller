@@ -1377,7 +1377,7 @@ function initQuickControls() {
         });
     });
 
-    document.querySelectorAll('.sus-btn').forEach(btn => {
+    document.querySelectorAll('button[id^="sus-"]').forEach(btn => {
         btn.addEventListener('click', () => {
             const part = btn.dataset.part;
             tuning[part].sus = !tuning[part].sus;
