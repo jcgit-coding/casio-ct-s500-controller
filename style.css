@@ -791,7 +791,13 @@ header h1 {
     text-transform: uppercase;
     letter-spacing: .5px;
     text-align: center;
-    white-space: nowrap;
+    white-space: normal; /* Let long labels wrap to 2 lines! */
+    width: 50px; /* Constrain label width */
+    line-height: 1.1;
+    height: 24px; /* Fixed height for labels */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .fader-section {
     flex: 1 1 auto; /* Grow to fill available space, shrink if needed */
@@ -819,8 +825,8 @@ header h1 {
 }
 .fader-section-inner {
     display: flex;
-    justify-content: space-evenly; /* Let faders spread across the entire section box */
-    align-items: flex-end;
+    justify-content: space-evenly;
+    align-items: flex-start; /* CRITICAL: Align top so fader tracks don't zig-zag based on bottom text height */
     padding-top: 15px;
     width: 100%;
 }
@@ -1126,15 +1132,7 @@ header h1 {
     min-height: unset !important;
 }
 
-.fader-label {
-    font-size: 10px !important;
-    font-weight: 800;
-    color: var(--fader-label) !important;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    text-align: center;
-    white-space: nowrap;
-}
+
 
 
 
@@ -1153,13 +1151,15 @@ header h1 {
 }
 
 .fader-note {
-    font-size: 8px;
+    font-size: 8.5px;
     color: var(--text-muted);
     text-align: center;
-    line-height: 1.2;
-    margin-top: 4px;
-    max-width: 60px;
+    line-height: 1.1;
+    margin-top: 6px;
+    width: 64px; /* Fixed width for text wrap */
     white-space: normal;
     word-wrap: break-word;
-    opacity: 0.8;
+    opacity: 0.7;
+    height: 30px; /* Fixed height so the bottom of the blocks look uniform */
+    overflow: hidden;
 }
