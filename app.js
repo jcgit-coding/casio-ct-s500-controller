@@ -288,20 +288,36 @@ const EQ_SECTIONS = [
 const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
 const CATEGORY_PROFILES = {
-    'PIANO': { 91: 50 },
-    'ELEC.PIANO': { 91: 45, 93: 40 },
-    'ELEC.ORGAN': { 91: 50, 93: 20 },
-    'STRING ENSEMBLE': { 91: 70, 93: 10, 73: 68 },
-    'SOLO STRINGS': { 91: 65, 73: 68 },
-    'BRASS ENSEMBLE': { 91: 55, 74: 68 },
-    'SYNTH-PAD': { 91: 80, 93: 30, 74: 60, 73: 75 },
-    'SYNTH-LEAD': { 91: 60, 94: 40 },
-    'ACOUS.GUITAR': { 91: 45 },
-    'ELEC.GUITAR': { 91: 40, 94: 20 },
-    'ACOUS.BASS': { 91: 20, 74: 60 },
-    'ELEC.BASS': { 91: 15 },
-    'SYNTH-BASS': { 91: 15, 74: 70 },
-    'CHOIR': { 91: 80, 93: 30 }
+    'PIANO': { 91: 52 },
+    'HARPSICHORD': { 91: 40, 74: 68 },
+    'ELEC.PIANO': { 91: 45, 93: 45, 74: 62 },
+    'CLAVI': { 91: 30, 74: 70 },
+    'ELEC.ORGAN': { 91: 50, 93: 35 },
+    'PIPE ORGAN': { 91: 85, 93: 10 },
+    'ACCORDION': { 91: 40, 93: 20 },
+    
+    // Lush and warm pads
+    'STRING ENSEMBLE': { 91: 75, 93: 15, 73: 70, 74: 62 },
+    'CHOIR': { 91: 85, 93: 35, 73: 72 },
+    'SYNTH-PAD': { 91: 85, 93: 40, 74: 58, 73: 78 },
+    
+    // Acoustic Solo Instruments (Delayed human vibrato + softened attacks)
+    'SOLO STRINGS': { 91: 65, 73: 68, 77: 72, 78: 80 },
+    'BRASS ENSEMBLE': { 91: 60, 74: 70, 73: 66 },
+    'SOLO BRASS': { 91: 55, 77: 70, 78: 75 },
+    'SAX': { 91: 60, 77: 75, 78: 80, 73: 66 },
+    'REED': { 91: 55, 77: 70, 78: 75 },
+    'PIPE': { 91: 65, 77: 72, 78: 80 },
+    
+    // Plucked / Synths
+    'SYNTH-LEAD': { 91: 60, 94: 45, 78: 75 },
+    'ACOUS.GUITAR': { 91: 45, 93: 5, 73: 65 },
+    'ELEC.GUITAR': { 91: 40, 94: 30 },
+    
+    // Bass (Very dry, warm cutoff)
+    'ACOUS.BASS': { 91: 10, 74: 55 },
+    'ELEC.BASS': { 91: 15, 74: 60 },
+    'SYNTH-BASS': { 91: 15, 74: 70, 71: 70 }
 };
 
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
