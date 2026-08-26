@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=69">
+    <link rel="stylesheet" href="style.css?v=70">
 </head>
 <body>
 
@@ -296,6 +296,12 @@
                     <input type="text" id="presetName" class="search-input" placeholder="Nombre del nuevo preset...">
                     <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
                 </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn" id="btnExportPresets" style="flex:1; padding: 8px; font-size: 13px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px; font-size:16px;">download</span> Exportar Biblioteca (.json)</button>
+                    <button class="btn" id="btnImportPresets" style="flex:1; padding: 8px; font-size: 13px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px; font-size:16px;">upload</span> Importar (.json)</button>
+                    <input type="file" id="fileImportPresets" accept=".json" style="display:none;">
+                </div>
                 <div class="presets-list" id="presetsList"></div>
             </div>
 
@@ -334,6 +340,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=69"></script>
+    <script src="app.js?v=70"></script>
 </body>
 </html>
