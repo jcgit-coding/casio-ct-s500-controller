@@ -617,7 +617,7 @@ header h1 {
 }
 .tone-list:focus { border-color: var(--accent); }
 .tone-list option {
-    padding: 5px 10px;
+    padding: 8px 10px;
     background: #151520; /* Solid dark background */
     color: var(--text);
     cursor: pointer;
