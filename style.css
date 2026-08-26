@@ -754,10 +754,11 @@ header h1 {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    overflow-x: auto; /* Re-enable single row */
+    justify-content: flex-start; /* Explicitly align left */
+    overflow-x: auto;
     scrollbar-width: thin;
     padding: 10px 5px;
-    gap: 2px;
+    gap: 4px; /* Tighter gap between sections */
 }
 .eq-faders::-webkit-scrollbar { height: 6px; }
 .eq-faders::-webkit-scrollbar-track { background: transparent; }
@@ -767,17 +768,21 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px; /* Tighter gap */
-    min-width: 28px; /* Tighter width */
+    gap: 4px;
+    width: 32px; /* Force strict width to prevent text from pushing it */
+    min-width: 32px;
+    max-width: 32px;
 }
 .fader-label {
-    font-size: 11px;
+    font-size: 9px !important;
     font-weight: 800;
-    color: var(--fader-label);
+    color: var(--fader-label) !important;
     text-transform: uppercase;
     letter-spacing: .5px;
     text-align: center;
     white-space: nowrap;
+    width: 100%;
+    overflow: visible;
 }
 .fader-section {
     background: var(--panel-bg) !important;

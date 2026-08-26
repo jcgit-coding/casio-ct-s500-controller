@@ -253,11 +253,11 @@ function onMIDIMessage(e) {
 // EQ sections â€” grouped logically with readable titles
 const EQ_SECTIONS = [
     {
-        title: 'Volumen & PanorÃ¡mica',
+        title: 'Volumen & Panoramica',
         controls: [
             { label: 'VOL',  cc: 7,  def: 100, tip: 'Volumen' },
-            { label: 'EXP',  cc: 11, def: 127, tip: 'Expresión (dinámico)' },
-            { label: 'PAN',  cc: 10, def: 64,  tip: 'PanorÃ¡mica (izq/der)' },
+            { label: 'EXP',  cc: 11, def: 127, tip: 'Expresion (dinámico)' },
+            { label: 'PAN',  cc: 10, def: 64,  tip: 'Panoramica (izq/der)' },
         ]
     },
     {
@@ -292,9 +292,9 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        title: 'ModulaciÃ³n & Pedales',
+        title: 'Modulacion & Pedales',
         controls: [
-            { label: 'MOD',       cc: 1,  def: 0, tip: 'Rueda de ModulaciÃ³n' },
+            { label: 'MOD',       cc: 1,  def: 0, tip: 'Rueda de Modulacion' },
             { label: 'PORTAM.',   cc: 65, def: 0, tip: 'Portamento On/Off' },
             { label: 'PORT.TIME', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
             { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)' },
