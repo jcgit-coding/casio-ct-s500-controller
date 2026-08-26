@@ -1041,12 +1041,12 @@ header h1 {
 [data-theme="light"] [data-theme="light"] 
 
 .fader-wrapper {
-    position: relative;
-    width: 24px;
-    height: 200px; /* Taller fader */
+    /* No absolute wrapper needed for flow, just keep it as a structural flex container */
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 24px;
+    height: 200px;
     margin: 10px 0;
 }
 
@@ -1055,13 +1055,14 @@ header h1 {
     appearance: none;
     background: transparent;
     cursor: pointer;
-    width: 200px; /* Longer fader */
+    width: 200px;
     height: 24px;
     transform: rotate(-90deg);
-    position: absolute;
-    left: -88px; /* (200 - 24) / -2 = 88 */
-    top: 88px;
-    margin: 0;
+    /* REVERT to negative margins to fix Webkit untransformed bounding-box bug */
+    position: relative;
+    left: auto;
+    top: auto;
+    margin: 88px -88px; /* Perfectly cancels out the 200px width in normal flow */
     outline: none;
     border-radius: 8px;
 }

@@ -107,8 +107,14 @@ function initMIDI() {
         access.onstatechange = () => scanAndConnect();
         scanAndConnect();
     }, err => {
-        setStatus("Acceso MIDI denegado (Revisa permisos)", false);
+        
         console.error(err);
+        if (err.name === 'SecurityError' || err.name === 'NotAllowedError') {
+            setStatus("MIDI bloqueado: Toca 'Reset' o da permisos en Chrome", false);
+        } else {
+            setStatus("Error MIDI: " + err.message, false);
+        }
+
     });
 }
 
