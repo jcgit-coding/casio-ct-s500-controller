@@ -1418,6 +1418,18 @@ function initQuickControls() {
                   setTimeout(() => {
                       sendCC(part, 64, 0);
                       sendCC(part, 66, 0);
+                      
+                      // Also sync the UI to reflect that Sostenuto was cleared
+                      if (eqState[part] && eqState[part][66] !== 0) {
+                          eqState[part][66] = 0;
+                          if (activePart === part) {
+                              const sosBtn = document.querySelector('.eq-switch[data-cc="66"]');
+                              if (sosBtn) {
+                                  sosBtn.innerText = 'OFF';
+                                  sosBtn.classList.remove('sus-on');
+                              }
+                          }
+                      }
                   }, 20);
               }
 
