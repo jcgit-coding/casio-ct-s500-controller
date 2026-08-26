@@ -263,7 +263,7 @@ header h1 {
 .main-console {
     display: flex;
     flex: 1;
-    gap: 18px;
+    gap: 4px;
     padding: 18px;
     min-height: 0;      /* allow flex children to scroll */
     align-items: flex-start;
@@ -769,8 +769,8 @@ header h1 {
     overflow-y: hidden;
     flex-wrap: nowrap !important; /* FORCE SINGLE ROW */
     scrollbar-width: thin;
-    padding: 15px;
-    gap: 15px;
+    padding: 10px;
+    gap: 8px;
     width: 100%;
     -webkit-overflow-scrolling: touch;
 }
@@ -782,19 +782,19 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    min-width: 44px;
+    gap: 2px;
+    min-width: 38px;
     justify-content: flex-start;
 }
 .fader-label {
-    font-size: 10px !important;
+    font-size: 8.5px !important;
     font-weight: 800;
     color: var(--fader-label) !important;
     text-transform: uppercase;
-    letter-spacing: .5px;
+    letter-spacing: 0px;
     text-align: center;
-    white-space: normal; /* Let long labels wrap to 2 lines! */
-    width: 50px; /* Constrain label width */
+    white-space: normal;
+    width: 42px; /* Constrain label width */
     line-height: 1.1;
     height: 24px; /* Fixed height for labels */
     display: flex;
@@ -808,7 +808,7 @@ header h1 {
     align-items: center;
     background: var(--panel-bg) !important;
     border-radius: 12px !important;
-    padding: 12px 16px !important; /* Nice spacious padding */
+    padding: 8px 8px !important; /* Nice spacious padding */
     box-shadow: 0 4px 15px var(--shadow-color) !important;
     border: 1px solid var(--panel-border) !important;
 }
@@ -829,7 +829,7 @@ header h1 {
     display: flex;
     justify-content: center;
     align-items: flex-start; /* keep top alignment */
-    gap: 18px; /* Consistent spacious gap across all sections */
+    gap: 4px; /* Consistent spacious gap across all sections */
     padding-top: 15px;
     width: 100%;
 }
@@ -1183,7 +1183,7 @@ header h1 {
     text-align: center;
     line-height: 1.1;
     margin-top: 6px;
-    width: 64px; /* Fixed width for text wrap */
+    width: 44px; /* Fixed width for text wrap */
     white-space: normal;
     word-wrap: break-word;
     opacity: 0.7;
