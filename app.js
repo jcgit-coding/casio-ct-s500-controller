@@ -255,20 +255,20 @@ const EQ_SECTIONS = [
     {
         title: 'Volumen & Panoramica',
         controls: [
-            { label: 'VOL',  cc: 7,  def: 100, tip: 'Volumen' },
-            { label: 'EXP',  cc: 11, def: 127, tip: 'Expresion (dinámico)' },
-            { label: 'PAN',  cc: 10, def: 64,  tip: 'Panoramica (izq/der)' },
+            { label: 'VOLUMEN',  cc: 7,  def: 100, tip: 'Volumen' },
+            { label: 'EXPRESION',  cc: 11, def: 127, tip: 'Expresion (dinamico)' },
+            { label: 'PANORAMA',  cc: 10, def: 64,  tip: 'Panoramica (izq/der)' },
         ]
     },
     {
         title: 'Filtros',
         controls: [
             { label: 'CUTOFF', cc: 74, def: 64, tip: 'Frecuencia de Corte del Filtro' },
-            { label: 'RESO',   cc: 71, def: 64, tip: 'Resonancia del Filtro' },
+            { label: 'RESONANCIA',   cc: 71, def: 64, tip: 'Resonancia del Filtro' },
         ]
     },
     {
-        title: 'Envolvente (ADSR)',
+        title: 'Enviolvente (ADSR)',
         controls: [
             { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
@@ -286,17 +286,17 @@ const EQ_SECTIONS = [
     {
         title: 'Efectos Espaciales',
         controls: [
-            { label: 'REVERB', cc: 91, def: 40, tip: 'EnvÃ­o de Reverb (eco de sala)' },
-            { label: 'CHORUS', cc: 93, def: 0,  tip: 'EnvÃ­o de Chorus (engrosamiento)' },
-            { label: 'ECO',    cc: 94, def: 0,  tip: 'EnvÃ­o de Delay (repeticiÃ³n)' },
+            { label: 'REVERB', cc: 91, def: 40, tip: 'Envio de Reverb (eco de sala)' },
+            { label: 'CHORUS', cc: 93, def: 0,  tip: 'Envio de Chorus (engrosamiento)' },
+            { label: 'ECO',    cc: 94, def: 0,  tip: 'Envio de Delay (repeticion)' },
         ]
     },
     {
         title: 'Modulacion & Pedales',
         controls: [
-            { label: 'MOD',       cc: 1,  def: 0, tip: 'Rueda de Modulacion' },
-            { label: 'PORTAM.',   cc: 65, def: 0, tip: 'Portamento On/Off' },
-            { label: 'PORT.TIME', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
+            { label: 'MODULACION',       cc: 1,  def: 0, tip: 'Rueda de Modulacion' },
+            { label: 'PORTAMENTO',   cc: 65, def: 0, tip: 'Portamento On/Off' },
+            { label: 'TIEMPO PORT.', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
             { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)' },
             { label: 'SOFT',      cc: 67, def: 0, tip: 'Pedal Suave (reduce volumen)' },
         ]
@@ -459,6 +459,11 @@ function buildEQ() {
             group.appendChild(wrapper);
             
             group.appendChild(valSpan);
+            
+            const noteSpan = document.createElement('div');
+            noteSpan.className = 'fader-note';
+            noteSpan.innerText = ctrl.tip;
+            group.appendChild(noteSpan);
 
             innerEl.appendChild(group);
         });

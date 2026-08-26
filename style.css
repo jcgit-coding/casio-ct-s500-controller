@@ -782,6 +782,7 @@ header h1 {
     align-items: center;
     gap: 4px;
     min-width: 44px;
+    justify-content: flex-start;
 }
 .fader-label {
     font-size: 10px !important;
@@ -1149,4 +1150,16 @@ header h1 {
 [data-theme="light"] .fader-section-title {
     color: #222 !important;
     border-bottom: 2px solid var(--accent) !important;
+}
+
+.fader-note {
+    font-size: 8px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+    margin-top: 4px;
+    max-width: 60px;
+    white-space: normal;
+    word-wrap: break-word;
+    opacity: 0.8;
 }
