@@ -818,10 +818,9 @@ header h1 {
 }
 .fader-section-inner {
     display: flex;
-    justify-content: center; /* Center the faders inside the section */
-    gap: 12px; /* Good breathing room between individual faders */
+    justify-content: space-evenly; /* Let faders spread across the entire section box */
     align-items: flex-end;
-    padding-top: 12px;
+    padding-top: 15px;
     width: 100%;
 }
 .fader-divider {
@@ -1032,18 +1031,11 @@ header h1 {
 
 
 [data-theme="light"] [data-theme="light"] 
-/* FADER STYLES */
-.fader-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    min-width: 44px;
-}
+
 .fader-wrapper {
     position: relative;
     width: 24px;
-    height: 140px; /* The visual height of the fader */
+    height: 200px; /* Taller fader */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1055,12 +1047,12 @@ header h1 {
     appearance: none;
     background: transparent;
     cursor: pointer;
-    width: 140px; /* Actual width before rotation */
+    width: 200px; /* Longer fader */
     height: 24px;
     transform: rotate(-90deg);
     position: absolute;
-    left: -58px; /* (140 - 24) / -2 */
-    top: 58px;
+    left: -88px; /* (200 - 24) / -2 = 88 */
+    top: 88px;
     margin: 0;
     outline: none;
     border-radius: 8px;
