@@ -763,13 +763,13 @@ header h1 {
 .eq-faders {
     display: flex;
     flex-direction: row;
-    align-items: stretch; /* Make all sections equal height */
-    justify-content: space-evenly; /* Evenly distribute empty space! */
+    align-items: stretch;
+    justify-content: space-evenly; /* Spread the sections out evenly across the screen */
     overflow-x: auto; 
     flex-wrap: wrap;
     scrollbar-width: thin;
-    padding: 15px; /* Give it some breathing room from edges */
-    gap: 15px; /* Comfortable gap between wrapped rows on mobile */
+    padding: 15px;
+    gap: 15px;
     width: 100%;
 }
 .eq-faders::-webkit-scrollbar { height: 6px; }
@@ -800,7 +800,7 @@ header h1 {
     justify-content: center;
 }
 .fader-section {
-    flex: 1 1 auto; /* Grow to fill available space, shrink if needed */
+    flex: 0 0 auto; /* DO NOT GROW inconsistently! */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -825,8 +825,9 @@ header h1 {
 }
 .fader-section-inner {
     display: flex;
-    justify-content: space-evenly;
-    align-items: flex-start; /* CRITICAL: Align top so fader tracks don't zig-zag based on bottom text height */
+    justify-content: center;
+    align-items: flex-start; /* keep top alignment */
+    gap: 18px; /* Consistent spacious gap across all sections */
     padding-top: 15px;
     width: 100%;
 }
