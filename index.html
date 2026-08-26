@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=55">
+    <link rel="stylesheet" href="style.css?v=56">
 </head>
 <body>
 
@@ -256,8 +256,10 @@
                 <div class="panel-title">Conexión MIDI</div>
                 <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                     <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
-                        La aplicación intenta conectar automáticamente con cualquier dispositivo <b>CASIO USB-MIDI</b>. 
-                        Si la conexión falla o el teclado entra en suspensión, presiona Reconectar.
+                        Si no detecta el teclado en Android:<br>
+                        1. Usa <b>cable USB-OTG</b> (el adaptador Bluetooth WU-BT10 no es visible para Chrome Android).<br>
+                        2. Abre la página por <b>HTTPS</b>.<br>
+                        3. Si negaste el permiso antes: toca el candado junto a la dirección &rarr; Permisos &rarr; <b>MIDI &rarr; Permitir</b>.
                     </p>
                     <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconectar MIDI</button>
                 </div>
@@ -308,6 +310,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=52"></script>
+    <script src="app.js?v=53"></script>
 </body>
 </html>

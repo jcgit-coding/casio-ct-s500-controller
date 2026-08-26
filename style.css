@@ -854,8 +854,29 @@ header h1 {
     transition: background .15s;
     
 }
+/* ── BIBLIOTECA DE PRESETS ─────────────────────── */
+.presets-list { display: flex; flex-direction: column; gap: 10px; }
+.preset-item {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 10px 12px;
+    background: var(--card-bg); border: 1px solid var(--panel-border);
+    border-radius: 10px;
+}
+.preset-item-name {
+    font-size: 16px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.preset-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.preset-actions button {
+    min-height: 46px; min-width: 68px; padding: 0 16px;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    color: var(--text); background: rgba(255,255,255,0.06);
+    border: 1px solid var(--panel-border); border-radius: 8px;
+    cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+}
 .preset-actions button:hover { background: rgba(255,255,255,0.15); }
 .preset-actions .del-btn:hover { background: rgba(255,51,102,0.2); color: var(--danger); border-color: var(--danger); }
+.preset-actions button:last-child { min-width: auto; }
 
 /* ── LIGHT MODE OVERRIDES ──────────────────────── */
 [data-theme="light"] {

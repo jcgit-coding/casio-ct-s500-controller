@@ -153,8 +153,9 @@ function scanAndConnect() {
         // Explicitly open the port to help prevent browser/device sleep
         midiOutput.open().catch(console.error);
     }
-    
+
     if (midiInput) {
+        midiInput.open().catch(console.error);
         midiInput.onmidimessage = onMIDIMessage;
     }
 
@@ -169,7 +170,13 @@ function scanAndConnect() {
         }
     } else {
         lastConnKey = '';
-        setStatus("Sin dispositivos MIDI", false);
+        const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
+        const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
+        let msg;
+        if (!midiOutput && !midiInput) msg = "Sin dispositivos MIDI (" + ins + " ent. / " + outs + " sal.)";
+        else if (!midiInput)           msg = "Solo salida MIDI. Falta la entrada de " + midiOutput.name;
+        else                           msg = "Solo entrada MIDI. Falta la salida de " + midiInput.name;
+        setStatus(msg, false);
         document.getElementById("connectBtn").innerText = "Conectar";
     }
 }
@@ -824,18 +831,16 @@ function renderPresets() {
         const actions = document.createElement('div');
         actions.className = 'preset-actions';
 
-        const icon = n => '<span class="material-symbols-outlined">' + n + '</span>';
-
         const loadBtn = document.createElement('button');
-        loadBtn.innerHTML = icon('play_arrow'); loadBtn.title = 'Cargar';
+        loadBtn.innerText = 'Cargar'; loadBtn.title = 'Cargar preset';
         loadBtn.onclick = () => loadPreset(data);
 
         const overBtn = document.createElement('button');
-        overBtn.innerHTML = icon('edit'); overBtn.title = 'Sobrescribir con el estado actual';
+        overBtn.innerText = 'Guardar'; overBtn.title = 'Sobrescribir con el estado actual';
         overBtn.onclick = () => { if (confirm(`¿Sobrescribir "${name}"?`)) captureAndSavePreset(name); };
 
         const delBtn = document.createElement('button');
-        delBtn.innerHTML   = icon('delete'); delBtn.title = 'Eliminar';
+        delBtn.innerText = 'Borrar'; delBtn.title = 'Eliminar preset';
         delBtn.className   = 'del-btn';
         delBtn.onclick = () => {
             if (!confirm(`¿Eliminar "${name}"?`)) return;
