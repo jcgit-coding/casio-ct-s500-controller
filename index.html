@@ -1,11 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
@@ -16,17 +15,16 @@
             
             <!-- VIEW NAVIGATION -->
             <div class="view-nav">
-                <button class="nav-tab active" data-target="view-mixer"><span class="material-symbols-outlined" style="vertical-align: middle; font-size: 1.2rem; margin-right: 5px;">tune</span> MIXER</button>
-                <button class="nav-tab" data-target="view-arranger"><span class="material-symbols-outlined" style="vertical-align: middle; font-size: 1.2rem; margin-right: 5px;">queue_music</span> ARRANGER</button>
-                <button class="nav-tab" data-target="view-settings"><span class="material-symbols-outlined" style="vertical-align: middle; font-size: 1.2rem; margin-right: 5px;">settings</span> SETTINGS</button>
-                <button class="nav-tab" data-target="view-synth"><span class="material-symbols-outlined" style="vertical-align: middle; font-size: 1.2rem; margin-right: 5px;">piano</span> PC SYNTH</button>
+                <button class="nav-tab active" data-target="view-mixer">🎹 MIXER</button>
+                <button class="nav-tab" data-target="view-arranger">🥁 ARRANGER</button>
+                <button class="nav-tab" data-target="view-settings">⚙️ SETTINGS & PRESETS</button>
             </div>
         </div>
 
         <div class="global-bar">
             <span class="global-label">TRANSPOSE GLOBAL</span>
             <div class="step-btns">
-                <button class="step-btn" id="gTrnMinus">Ã¢Ë†â€™</button>
+                <button class="step-btn" id="gTrnMinus">−</button>
                 <span class="step-val" id="gTrnVal">0</span>
                 <button class="step-btn" id="gTrnPlus">+</button>
             </div>
@@ -34,46 +32,46 @@
         </div>
 
         <div style="display: flex; align-items: center; gap: 10px;">
-            <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema">Ã¢Ëœâ‚¬Ã¯Â¸Â</button>
+            <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema">☀️</button>
             <div class="status-badge">
                 <div class="status-indicator" id="statusIndicator"></div>
-                <span id="statusText">Buscando MIDIÃ¢â‚¬Â¦</span>
+                <span id="statusText">Buscando MIDI…</span>
             </div>
         </div>
     </header>
 
     <div class="main-console">
 
-        <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â VIEW: MIXER (PISTAS & EQ) Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
+        <!-- ═══════════ VIEW: MIXER (PISTAS & EQ) ═══════════ -->
         <div class="app-view active" id="view-mixer">
 
 
 
-            <!-- PISTAS (U1, U2, L) Ã¢â‚¬â€ Octava y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) — Octava y Sustain POR PISTA -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
                 <div class="track-card active-track" id="card-U1" data-part="U1">
                     <div class="track-label">UPPER 1</div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="U1" data-dir="-1">Ã¢â€”â‚¬</button>
-                        <div class="selected-cat" id="selectedCat-U1">CATEGORÃƒÂA</div>
-                        <button class="cat-nav-btn" data-part="U1" data-dir="1">Ã¢â€“Â¶</button>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="-1">◀</button>
+                        <div class="selected-cat" id="selectedCat-U1">CATEGORÍA</div>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="1">▶</button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="U1" data-dir="-1">Ã¢â€”â‚¬</button>
-                        <div class="selected-tone" id="selectedTone-U1">Ã¢â‚¬â€œ sin instrumento Ã¢â‚¬â€œ</div>
-                        <button class="tone-nav-btn" data-part="U1" data-dir="1">Ã¢â€“Â¶</button>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="-1">◀</button>
+                        <div class="selected-tone" id="selectedTone-U1">– sin instrumento –</div>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="1">▶</button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="Ã°Å¸â€Â Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="🔍 Buscar instrumento..." autocomplete="off">
                         <select class="tone-list" id="list-U1" size="5"></select>
                     </div>
                     <div class="track-quick">
                         <div class="quick-group">
                             <span class="quick-label">Octava</span>
                             <div class="step-btns">
-                                <button class="step-btn" data-part="U1" data-action="oct-">Ã¢Ë†â€™</button>
+                                <button class="step-btn" data-part="U1" data-action="oct-">−</button>
                                 <span class="step-val" id="oct-U1">0</span>
                                 <button class="step-btn" data-part="U1" data-action="oct+">+</button>
                             </div>
@@ -83,31 +81,31 @@
                             <button class="sus-btn" id="sus-U1" data-part="U1">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U1">EDITAR EQ Ã¢â€ â€œ</button>
+                    <button class="btn btn-eq" data-part="U1">EDITAR EQ ↓</button>
                 </div>
 
                 <!-- UPPER 2 -->
                 <div class="track-card" id="card-U2" data-part="U2">
                     <div class="track-label">UPPER 2 <span class="dim">Layer</span></div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="U2" data-dir="-1">Ã¢â€”â‚¬</button>
-                        <div class="selected-cat" id="selectedCat-U2">CATEGORÃƒÂA</div>
-                        <button class="cat-nav-btn" data-part="U2" data-dir="1">Ã¢â€“Â¶</button>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="-1">◀</button>
+                        <div class="selected-cat" id="selectedCat-U2">CATEGORÍA</div>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="1">▶</button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="U2" data-dir="-1">Ã¢â€”â‚¬</button>
-                        <div class="selected-tone" id="selectedTone-U2">Ã¢â‚¬â€œ sin instrumento Ã¢â‚¬â€œ</div>
-                        <button class="tone-nav-btn" data-part="U2" data-dir="1">Ã¢â€“Â¶</button>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="-1">◀</button>
+                        <div class="selected-tone" id="selectedTone-U2">– sin instrumento –</div>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="1">▶</button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="Ã°Å¸â€Â Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="🔍 Buscar instrumento..." autocomplete="off">
                         <select class="tone-list" id="list-U2" size="5"></select>
                     </div>
                     <div class="track-quick">
                         <div class="quick-group">
                             <span class="quick-label">Octava</span>
                             <div class="step-btns">
-                                <button class="step-btn" data-part="U2" data-action="oct-">Ã¢Ë†â€™</button>
+                                <button class="step-btn" data-part="U2" data-action="oct-">−</button>
                                 <span class="step-val" id="oct-U2">0</span>
                                 <button class="step-btn" data-part="U2" data-action="oct+">+</button>
                             </div>
@@ -117,31 +115,31 @@
                             <button class="sus-btn" id="sus-U2" data-part="U2">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U2">EDITAR EQ Ã¢â€ â€œ</button>
+                    <button class="btn btn-eq" data-part="U2">EDITAR EQ ↓</button>
                 </div>
 
                 <!-- LOWER -->
                 <div class="track-card" id="card-L" data-part="L">
                     <div class="track-label">LOWER <span class="dim">Split</span></div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="L" data-dir="-1">Ã¢â€”â‚¬</button>
-                        <div class="selected-cat" id="selectedCat-L">CATEGORÃƒÂA</div>
-                        <button class="cat-nav-btn" data-part="L" data-dir="1">Ã¢â€“Â¶</button>
+                        <button class="cat-nav-btn" data-part="L" data-dir="-1">◀</button>
+                        <div class="selected-cat" id="selectedCat-L">CATEGORÍA</div>
+                        <button class="cat-nav-btn" data-part="L" data-dir="1">▶</button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="L" data-dir="-1">Ã¢â€”â‚¬</button>
-                        <div class="selected-tone" id="selectedTone-L">Ã¢â‚¬â€œ sin instrumento Ã¢â‚¬â€œ</div>
-                        <button class="tone-nav-btn" data-part="L" data-dir="1">Ã¢â€“Â¶</button>
+                        <button class="tone-nav-btn" data-part="L" data-dir="-1">◀</button>
+                        <div class="selected-tone" id="selectedTone-L">– sin instrumento –</div>
+                        <button class="tone-nav-btn" data-part="L" data-dir="1">▶</button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-L" placeholder="Ã°Å¸â€Â Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-L" placeholder="🔍 Buscar instrumento..." autocomplete="off">
                         <select class="tone-list" id="list-L" size="5"></select>
                     </div>
                     <div class="track-quick">
                         <div class="quick-group">
                             <span class="quick-label">Octava</span>
                             <div class="step-btns">
-                                <button class="step-btn" data-part="L" data-action="oct-">Ã¢Ë†â€™</button>
+                                <button class="step-btn" data-part="L" data-action="oct-">−</button>
                                 <span class="step-val" id="oct-L">0</span>
                                 <button class="step-btn" data-part="L" data-action="oct+">+</button>
                             </div>
@@ -151,17 +149,17 @@
                             <button class="sus-btn" id="sus-L" data-part="L">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="L">EDITAR EQ Ã¢â€ â€œ</button>
+                    <button class="btn btn-eq" data-part="L">EDITAR EQ ↓</button>
                 </div>
 
             </div><!-- /tracks-row -->
 
-            <!-- ECUALIZADOR DINÃƒÂMICO ÃƒÅ¡NICO -->
+            <!-- ECUALIZADOR DINÁMICO ÚNICO -->
             <div class="panel eq-panel">
                 <div class="panel-title">
                     <span>Ecualizador &amp; Efectos</span>
                     <div style="display:flex;gap:8px;align-items:center;">
-                        <button class="btn-reset-small" id="btnResetEQ">Ã¢â€ Âº Reset</button>
+                        <button class="btn-reset-small" id="btnResetEQ">↺ Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
                     </div>
                 </div>
@@ -170,15 +168,15 @@
 
         </div><!-- /view-mixer -->
 
-        <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â VIEW: ARRANGER Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
+        <!-- ═══════════ VIEW: ARRANGER ═══════════ -->
         <div class="app-view" id="view-arranger">
 
             <!-- Rhythm Browser -->
             <div class="panel">
-                <div class="panel-title">Ã°Å¸Â¥Â Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el nÃƒÂºmero en el teclado)</span></div>
+                <div class="panel-title">🥁 Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el número en el teclado)</span></div>
                 <div class="arranger-search-row">
                     <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
-                    <input type="text" id="rhythmSearch" class="search-input" placeholder="Ã°Å¸â€Â Buscar ritmo..." autocomplete="off">
+                    <input type="text" id="rhythmSearch" class="search-input" placeholder="🔍 Buscar ritmo..." autocomplete="off">
                 </div>
                 <div class="rhythm-list-wrap">
                     <div class="rhythm-list" id="rhythmList"></div>
@@ -187,13 +185,13 @@
 
             <!-- Transport + Tempo + Volume -->
             <div class="panel">
-                <div class="panel-title">Ã°Å¸Å½â€ºÃ¯Â¸Â Control de Ritmo</div>
+                <div class="panel-title">🎛️ Control de Ritmo</div>
 
                 <!-- Tempo row -->
                 <div class="arranger-row" style="margin-bottom:16px;">
                     <span class="arranger-label">TEMPO</span>
                     <div class="step-btns">
-                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">Ã¢Ë†â€™</button>
+                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">−</button>
                         <span class="step-val" id="bpmVal" style="min-width:72px;font-size:20px;">120</span>
                         <button class="step-btn" id="bpmPlus" style="width:44px;height:44px;font-size:22px;">+</button>
                     </div>
@@ -213,34 +211,34 @@
                 <!-- Transport buttons -->
                 <div class="arranger-transport">
                     <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
-                        <div class="icon">Ã¢â€“Â¶</div>
+                        <div class="icon">▶</div>
                         <div class="text">START / STOP</div>
                     </button>
                     <button class="btn-giant" id="btnSyncStart">
-                        <div class="icon">Ã¢ÂÂ³</div>
+                        <div class="icon">⏳</div>
                         <div class="text">SYNC</div>
                     </button>
                     <button class="btn-giant" id="btnAccomp">
-                        <div class="icon">Ã°Å¸Å½Â¹</div>
-                        <div class="text">ACOMPAÃƒâ€˜.</div>
+                        <div class="icon">🎹</div>
+                        <div class="text">ACOMPAÑ.</div>
                     </button>
                 </div>
 
                 <div class="arranger-transport" style="margin-top:12px;">
                     <button class="btn-giant" id="btnIntro">
-                        <div class="icon">Ã¢ÂÂ®</div>
+                        <div class="icon">⏮</div>
                         <div class="text">INTRO</div>
                     </button>
                     <button class="btn-giant" id="btnVar1">
-                        <div class="icon">1Ã¯Â¸ÂÃ¢Æ’Â£</div>
+                        <div class="icon">1️⃣</div>
                         <div class="text">VAR 1<br><span class="dim">FILL</span></div>
                     </button>
                     <button class="btn-giant" id="btnVar2">
-                        <div class="icon">2Ã¯Â¸ÂÃ¢Æ’Â£</div>
+                        <div class="icon">2️⃣</div>
                         <div class="text">VAR 2<br><span class="dim">FILL</span></div>
                     </button>
                     <button class="btn-giant" id="btnEnding">
-                        <div class="icon">Ã¢ÂÂ­</div>
+                        <div class="icon">⏭</div>
                         <div class="text">ENDING</div>
                     </button>
                 </div>
@@ -248,16 +246,16 @@
 
         </div>
 
-        <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â VIEW: SETTINGS & PRESETS Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
+        <!-- ═══════════ VIEW: SETTINGS & PRESETS ═══════════ -->
         <div class="app-view" id="view-settings">
 
             <!-- MIDI Connection row -->
             <div class="panel">
-                <div class="panel-title">ConexiÃƒÂ³n MIDI</div>
+                <div class="panel-title">Conexión MIDI</div>
                 <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                     <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
-                        La aplicaciÃƒÂ³n intenta conectar automÃƒÂ¡ticamente con cualquier dispositivo <b>CASIO USB-MIDI</b>. 
-                        Si la conexiÃƒÂ³n falla o el teclado entra en suspensiÃƒÂ³n, presiona Reconectar.
+                        La aplicación intenta conectar automáticamente con cualquier dispositivo <b>CASIO USB-MIDI</b>. 
+                        Si la conexión falla o el teclado entra en suspensión, presiona Reconectar.
                     </p>
                     <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconectar MIDI</button>
                 </div>
@@ -265,7 +263,7 @@
 
             <!-- Presets library - full width, no grid constraint -->
             <div class="panel presets-panel">
-                <div class="panel-title" style="font-size:13px; margin-bottom:16px;">Ã°Å¸â€œÂ Biblioteca de Presets</div>
+                <div class="panel-title" style="font-size:13px; margin-bottom:16px;">📁 Biblioteca de Presets</div>
                 <div class="preset-save-row">
                     <input type="text" id="presetName" class="search-input" placeholder="Nombre del nuevo preset...">
                     <button class="btn btn-accent" id="btnSavePreset">Guardar</button>
@@ -273,21 +271,21 @@
                 <div class="presets-list" id="presetsList"></div>
             </div><!-- /view-settings -->
 
-        <!-- Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹ VIEW: PC SYNTH Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹Ã°Å¸Å½Â¹ -->
+        <!-- VIEW: PC SYNTH -->
         <div class="app-view" id="view-synth">
             <div class="panel">
                 <div class="panel-header">
-                    <h2>MÃƒÂ³dulo de Sonido de PC (SoundFonts)</h2>
+                    <h2>Módulo de Sonido de PC (SoundFonts)</h2>
                 </div>
                 <div style="padding: 1rem; color: #ccc;">
-                    <p>AquÃƒÂ­ puedes cargar archivos <strong>.sf2</strong> para que suenen directamente desde los parlantes de tu PC, usando tu Casio como teclado controlador. Ideal para videollamadas.</p>
+                    <p>Aquí puedes cargar archivos <strong>.sf2</strong> para que suenen directamente desde los parlantes de tu PC, usando tu Casio como teclado controlador. Ideal para videollamadas.</p>
                     
                     <div style="margin: 1.5rem 0; padding: 1.5rem; background: #222; border-radius: 8px; text-align: center;">
                         <input type="file" id="sf2-file" accept=".sf2" style="display: none;">
                         <label for="sf2-file" style="background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
                             <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">folder_open</span> Cargar Archivo .sf2
                         </label>
-                        <p id="sf2-status" style="margin-top: 15px; color: #888;">NingÃºn sonido cargado.</p>
+                        <p id="sf2-status" style="margin-top: 15px; color: #888;">Ningún sonido cargado.</p>
                     </div>
 
                     <div class="eq-row">
@@ -305,6 +303,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=25"></script>
+    <script src="app.js?v=26"></script>
 </body>
 </html>
