@@ -126,7 +126,9 @@ function initMIDI() {
     }, err => {
         console.error(err);
         if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
-            setStatus("Permiso MIDI denegado: tócalo en el candado de Chrome", false);
+            setStatus("Permiso MIDI denegado: mira la guía en Ajustes", false);
+            const warn = document.getElementById('midiPermissionWarn');
+            if (warn) warn.style.display = 'block';
         } else {
             setStatus("Error MIDI (" + err.name + "): " + err.message, false);
         }
@@ -163,6 +165,7 @@ function scanAndConnect() {
         const connKey = midiOutput.id + '|' + midiInput.id;
         setStatus("Conectado: " + midiOutput.name, true);
         document.getElementById("connectBtn").innerText = "Reconectar";
+        document.getElementById('midiPermissionWarn').style.display = 'none';
         // Evita reenviar todo el estado en cada re-escaneo redundante
         if (connKey !== lastConnKey) {
             lastConnKey = connKey;
