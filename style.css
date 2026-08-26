@@ -784,6 +784,7 @@ header h1 {
     align-items: center;
     gap: 12px;
     min-width: 44px;
+    flex-shrink: 0;
     justify-content: flex-start;
 }
 .fader-label {
@@ -802,7 +803,7 @@ header h1 {
     justify-content: center;
 }
 .fader-section {
-    flex: 0 0 auto; /* DO NOT GROW inconsistently! */
+    flex: 0 0 auto; flex-shrink: 0; /* DO NOT GROW inconsistently! */
     display: flex;
     flex-direction: column;
     align-items: center;
