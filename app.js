@@ -168,7 +168,7 @@ function scanAndConnect() {
         document.getElementById("connectBtn").innerText = "Reconectar";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
-        pushAllToKeyboard();
+        pushAllToKeyboard(true); // Sync CCs but DON'T overwrite keyboard instruments on boot
     } else {
         setStatus("Sin dispositivos MIDI", false);
         document.getElementById("connectBtn").innerText = "Conectar";
@@ -1614,7 +1614,7 @@ function sendCoarseTuning(part) {
     midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
     midiOutput.send([0xB0 | ch, 100, 0x7F]);
 }
-function pushAllToKeyboard() {
+function pushAllToKeyboard(skipTones = false) {
     ['U1','U2','L'].forEach(part => {
         EQ_CONTROLS.forEach(ctrl => {
             if (!ctrl) return;
@@ -1627,10 +1627,12 @@ function pushAllToKeyboard() {
         if (listEl && listEl.selectedIndex >= 0) {
             const opt = listEl.options[listEl.selectedIndex];
             if (opt && opt.value) {
-                try {
-                    const data = JSON.parse(opt.value);
-                    changeTone(part, data.bank, data.program);
-                } catch(e) {}
+                
+try {
+    const data = JSON.parse(opt.value);
+    if (!skipTones) changeTone(part, data.bank, data.program);
+} catch(e) {}
+
             }
         }
     });
@@ -1689,9 +1691,10 @@ function loadAppState() {
                     const opt = list.options[list.selectedIndex];
                     if (opt) {
                         const data = JSON.parse(opt.value);
-                        changeTone(part, data.bank, data.program);
                         
-                        const nameEl = document.getElementById('selectedTone-' + part);
+// changeTone(part, data.bank, data.program); // Disabled on boot so we don't force the keyboard
+const nameEl = document.getElementById('selectedTone-' + part);
+
                         if (nameEl) nameEl.innerText = opt.text;
                         
                         const catEl = document.getElementById('selectedCat-' + part);
