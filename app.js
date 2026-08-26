@@ -1115,3 +1115,12 @@ document.getElementById('sf2-vol')?.addEventListener('input', (e) => {
 
 
 
+
+// Mobile Web Audio API fix: AudioContext MUST be resumed via user gesture
+['click', 'touchstart', 'touchend'].forEach(evt => {
+    document.addEventListener(evt, () => {
+        if (window.pcSynth && window.pcSynth.synth && window.pcSynth.synth.ctx && window.pcSynth.synth.ctx.state === 'suspended') {
+            window.pcSynth.synth.ctx.resume();
+        }
+    }, { once: false, passive: true });
+});

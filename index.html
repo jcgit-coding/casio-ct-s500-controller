@@ -286,7 +286,7 @@
                     <p>Aquí puedes cargar archivos <strong>.sf2</strong> para que suenen directamente desde los parlantes de tu PC, usando tu Casio como teclado controlador. Ideal para videollamadas.</p>
                     
                     <div style="margin: 1.5rem 0; padding: 1.5rem; background: #222; border-radius: 8px; text-align: center;">
-                        <input type="file" id="sf2-file" accept=".sf2" style="display: none;">
+                        <input type="file" id="sf2-file" accept=".sf2,audio/*,application/*,*/*" style="display: none;">
                         <label for="sf2-file" style="background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
                             <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">folder_open</span> Cargar Archivo .sf2
                         </label>
@@ -308,6 +308,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=31"></script>
+    <script src="app.js?v=32"></script>
 </body>
 </html>
