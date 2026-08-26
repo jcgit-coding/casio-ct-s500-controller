@@ -4,20 +4,18 @@
     --panel-bg: #1c1c1c;
     --panel-border: #333333;
     --accent: #0ea5e9;
-    --accent-glow: rgba(0, 210, 255, 0.25);
-    --accent-dim: rgba(0, 210, 255, 0.15);
-    --blue: #4facfe;
-    --blue-glow: rgba(79, 172, 254, 0.3);
+    --accent-glow: rgba(14, 165, 233, 0.25);
+    --accent-dim: rgba(14, 165, 233, 0.15);
+    --blue: #0ea5e9;
+    --blue-glow: rgba(14, 165, 233, 0.3);
     --danger: #ff4d4d;
     --danger-glow: rgba(255, 77, 77, 0.3);
     --text: #f3f4f6;
-    --text-muted: #9ca3af; /* Changed from muted to text-muted to avoid conflicts if any */
+    --text-muted: #9ca3af;
     --fader-track: #090909;
     --card-bg: #252525;
     --card-active: #2a2a2a;
     --card-border-active: #0ea5e9;
-    
-    /* New Variables for semantic colors instead of hardcoded RGBA */
     --fader-label: #aab;
     --fader-val-bg: #111111;
     --fader-val-text: #fff;
@@ -32,7 +30,7 @@
 /* ── TRACK CARDS ─────────────────────────────── */
 .tracks-row {
     display: flex;
-    gap: 6px;
+    gap: 16px;
     flex-shrink: 0;
 }
 .track-card {
@@ -72,7 +70,7 @@
 }
 .track-label .dim {
     color: var(--text-muted);
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     align-self: flex-end;
 }
@@ -107,7 +105,7 @@
 }
 
 .selected-tone {
-    font-size: 10px;
+    font-size: 13px;
     color: var(--accent);
     font-weight: 600;
     white-space: nowrap;
@@ -214,7 +212,7 @@ header h1 {
     color: var(--text-muted);
     border-radius: 6px;
     padding: 4px 10px;
-    font-size: 9px;
+    font-size: 11px;
     font-family: var(--main-font);
     cursor: pointer;
     transition: background .15s;
@@ -255,7 +253,7 @@ header h1 {
 /* ── VIEWS & NAVIGATION ──────────────────────── */
 .view-nav {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     background: rgba(255,255,255,0.05);
     padding: 6px;
     border-radius: 12px;
@@ -264,7 +262,7 @@ header h1 {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 8px;
@@ -286,7 +284,7 @@ header h1 {
 .app-view {
     display: none;
     flex-direction: column;
-    gap: 6px;
+    gap: 16px;
     width: 100%;
 }
 .app-view.active {
@@ -303,7 +301,7 @@ header h1 {
 /* ── ARRANGER ────────────────────────────────── */
 .arranger-search-row {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     margin-bottom: 12px;
 }
 .rhythm-list-wrap {
@@ -342,7 +340,7 @@ header h1 {
     flex: 1;
 }
 .rhythm-cat {
-    font-size: 9px;
+    font-size: 11px;
     color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
@@ -352,12 +350,10 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 14px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: thin;
+    flex-wrap: wrap;
 }
 .arranger-label {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -383,12 +379,12 @@ header h1 {
 .clock-toggle input { accent-color: var(--accent); width: 16px; height: 16px; }
 .arranger-transport {
     display: flex;
-    gap: 6px;
+    gap: 10px;
 }
 .arranger-transport .btn-giant {
     flex: 1;
     padding: 20px 12px;
-    font-size: 10px;
+    font-size: 13px;
 }
 .arranger-transport .btn-giant .icon { font-size: 26px; }
 
@@ -399,7 +395,7 @@ header h1 {
 .arranger-huge-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 16px;
     margin-bottom: 20px;
 }
 .arranger-huge-grid.four-cols {
@@ -464,7 +460,7 @@ header h1 {
     backdrop-filter: blur(12px);
  box-shadow: 0 4px 15px var(--shadow-color); }
 .panel-title {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -562,7 +558,7 @@ header h1 {
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
     color: var(--text);
-    font-size: 10px;
+    font-size: 13px;
     font-family: var(--main-font);
     outline: none;
     transition: border-color .2s;
@@ -637,7 +633,7 @@ header h1 {
     padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
     transition: border-color .25s, background .25s;
     cursor: default;
 }
@@ -647,7 +643,7 @@ header h1 {
 }
 
 .track-label {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -666,10 +662,8 @@ header h1 {
 /* Quick controls: Octave, Transpose, Sustain */
 .track-quick {
     display: flex;
-    gap: 6px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: thin;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 .quick-group {
     display: flex;
@@ -707,7 +701,7 @@ header h1 {
 .step-val {
     min-width: 28px;
     text-align: center;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--accent);
     font-variant-numeric: tabular-nums;
@@ -749,12 +743,12 @@ header h1 {
 
 .eq-faders {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow-x: auto; /* Re-enable single row */
     scrollbar-width: thin;
-    justify-content: center;
-    gap: 6px;
-    padding: 5px 0;
+    padding: 10px 5px;
+    gap: 2px;
 }
 .eq-faders::-webkit-scrollbar { height: 6px; }
 .eq-faders::-webkit-scrollbar-track { background: transparent; }
@@ -764,11 +758,11 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    min-width: 44px;
+    gap: 4px; /* Tighter gap */
+    min-width: 28px; /* Tighter width */
 }
 .fader-label {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 800;
     color: var(--fader-label);
     text-transform: uppercase;
@@ -777,18 +771,12 @@ header h1 {
     white-space: nowrap;
 }
 .fader-section {
-    background: transparent !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-right: 1px solid var(--border-strong) !important;
-    padding-right: 6px !important;
-}
-.fader-section:last-child {
-    border-right: none !important;
-    padding-right: 0 !important;
+    background: var(--panel-bg) !important;
+    border-radius: 8px !important;
+    padding: 8px 6px !important; /* Extremely tight horizontal padding */
+    margin-right: 4px !important; /* Extremely tight gap */
+    box-shadow: 0 4px 15px var(--shadow-color) !important;
+    border: 1px solid var(--panel-border) !important;
 }
 .fader-section:first-child { padding-left: 4px; border-left: none; }
 .fader-section-title {
@@ -804,9 +792,9 @@ header h1 {
 }
 .fader-section-inner {
     display: flex;
-    gap: 4px;
+    gap: 2px; /* Very tight inner gap */
     align-items: flex-end;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
 }
 .fader-divider {
     width: 1px;
@@ -816,7 +804,7 @@ header h1 {
     display: none; /* hidden, replaced by section layout */
 }
 .fader-value {
-    font-size: 9px;
+    font-size: 11px;
     color: var(--text);
     background: var(--fader-val-bg); color: var(--fader-val-text);
     border-radius: 10px;
@@ -900,9 +888,7 @@ header h1 {
 @media (max-width: 1024px) {
     /* Tablets (Landscape & Portrait) */
     .tracks-row {
-        flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: thin;
+        flex-wrap: wrap;
         justify-content: center;
     }
     .track-card {
@@ -919,7 +905,7 @@ header h1 {
     }
     .nav-tab {
         padding: 8px 12px;
-        font-size: 10px;
+        font-size: 13px;
     }
 }
 
@@ -934,9 +920,7 @@ header h1 {
     header > div {
         width: 100%;
         justify-content: space-between;
-        flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: thin;
+        flex-wrap: wrap;
     }
     .view-nav {
         width: 100%;
@@ -946,12 +930,12 @@ header h1 {
     .nav-tab {
         flex: 1;
         text-align: center;
-        font-size: 9px;
+        font-size: 11px;
         padding: 10px 5px;
     }
     .tracks-row {
         flex-direction: column; /* Stack cards vertically */
-        gap: 6px;
+        gap: 10px;
     }
     .track-card {
         flex: none;
@@ -1025,17 +1009,17 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    min-width: 28px;
+    gap: 12px;
+    min-width: 44px;
 }
 .eq-fader {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
     cursor: pointer;
-        width: 100px;
-    height: 20px;
-    margin: 40px -40px; /* Math: (120 - 24)/2 = 48 */ /* Adjust spacing because of rotation */
+        width: 140px; /* Slightly shorter to avoid any vertical stretch */
+    height: 24px;
+    margin: 58px -58px; /* Math: (140 - 24)/2 = 58 */ /* Adjust spacing because of rotation */
     transform: rotate(-90deg);
     outline: none;
     position: relative;
@@ -1062,13 +1046,13 @@ header h1 {
 
 .eq-fader::-webkit-slider-thumb {
     -webkit-appearance: none;
-        height: 24px;
-    width: 16px;
+        height: 32px;
+    width: 18px; /* Narrower thumb! */
     border-radius: 4px;
     background: var(--panel-bg);
     border: 2px solid var(--panel-border);
     box-shadow: 0 4px 8px var(--shadow-color), inset 0 1px 1px rgba(255,255,255,0.2);
-    margin-top: -9px; /* Center thumb on track */
+    margin-top: -12px; /* Center thumb on track */
     /* Fader grip line (horizontal line on the rotated thumb, which becomes vertical... wait, if the slider is rotated, the thumb is also rotated! */
     /* The thumb needs a vertical line across it, so when rotated it's horizontal! */
     background-image: linear-gradient(to right, transparent 10px, var(--accent) 10px, var(--accent) 14px, transparent 14px);
@@ -1076,8 +1060,8 @@ header h1 {
 }
 
 .eq-fader::-moz-range-thumb {
-        height: 24px;
-    width: 16px;
+        height: 32px;
+    width: 18px; /* Narrower thumb! */
     border-radius: 4px;
     background: var(--panel-bg);
     border: 2px solid var(--panel-border);
@@ -1110,7 +1094,7 @@ header h1 {
 }
 
 .fader-label {
-    font-size: 9px !important;
+    font-size: 10px !important;
     font-weight: 800;
     color: var(--fader-label) !important;
     text-transform: uppercase;
@@ -1121,11 +1105,7 @@ header h1 {
 
 
 
-.fader-section-title {
-    font-size: 9px !important;
-    color: var(--text) !important;
-    opacity: 0.8;
-}
+
 
 [data-theme="light"] .fader-value {
     background: #fff;
