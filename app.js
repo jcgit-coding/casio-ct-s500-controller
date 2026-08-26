@@ -287,6 +287,60 @@ const EQ_SECTIONS = [
 // Flatten for easy CC lookup
 const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
+const CATEGORY_PROFILES = {
+    'PIANO': { 91: 50 },
+    'ELEC.PIANO': { 91: 45, 93: 40 },
+    'ELEC.ORGAN': { 91: 50, 93: 20 },
+    'STRING ENSEMBLE': { 91: 70, 93: 10, 73: 68 },
+    'SOLO STRINGS': { 91: 65, 73: 68 },
+    'BRASS ENSEMBLE': { 91: 55, 74: 68 },
+    'SYNTH-PAD': { 91: 80, 93: 30, 74: 60, 73: 75 },
+    'SYNTH-LEAD': { 91: 60, 94: 40 },
+    'ACOUS.GUITAR': { 91: 45 },
+    'ELEC.GUITAR': { 91: 40, 94: 20 },
+    'ACOUS.BASS': { 91: 20, 74: 60 },
+    'ELEC.BASS': { 91: 15 },
+    'SYNTH-BASS': { 91: 15, 74: 70 },
+    'CHOIR': { 91: 80, 93: 30 }
+};
+
+const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
+
+function applySmartProfile(part, category) {
+    if (category) activeCategories[part] = category;
+    const cat = activeCategories[part];
+    
+    // 1. Reset everything to generic default first
+    EQ_CONTROLS.forEach(ctrl => {
+        eqState[part][ctrl.cc] = ctrl.def;
+    });
+
+    // 2. Apply Category Sound Profile
+    if (CATEGORY_PROFILES[cat]) {
+        for (const [cc, val] of Object.entries(CATEGORY_PROFILES[cat])) {
+            eqState[part][cc] = val;
+        }
+    }
+
+    // 3. Apply Part Mix Rules
+    if (part === 'U1') eqState[part][7] = 100;
+    if (part === 'U2') eqState[part][7] = 60;
+    if (part === 'L')  eqState[part][7] = 80;
+    
+    // 4. Send to keyboard and update UI
+    EQ_CONTROLS.forEach(ctrl => {
+        sendCC(part, ctrl.cc, eqState[part][ctrl.cc]);
+        if (activePart === part) {
+            const f = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
+            const valEl = document.getElementById('eq-val-' + ctrl.cc);
+            if (f && valEl) {
+                f.value = eqState[part][ctrl.cc];
+                valEl.innerText = formatVal(ctrl.label, eqState[part][ctrl.cc]);
+            }
+        }
+    });
+}
+
 function buildEQ() {
     // Seed default values for all parts
     ['U1','U2','L'].forEach(part => {
@@ -366,27 +420,7 @@ function buildEQ() {
 }
 
 function resetEQ() {
-    // Restore defaults for the active part only
-    EQ_CONTROLS.forEach(ctrl => {
-        let defVal = ctrl.def;
-        if (activePart === 'U2' && ctrl.cc === 7) defVal = 60;
-        
-        eqState[activePart][ctrl.cc] = defVal;
-        sendCC(activePart, ctrl.cc, defVal);
-    });
-    // Refresh fader UI
-    document.querySelectorAll('.eq-fader').forEach(fader => {
-        const cc   = parseInt(fader.dataset.cc);
-        const ctrl = EQ_CONTROLS.find(c => c.cc === cc);
-        if (!ctrl) return;
-        
-        let defVal = ctrl.def;
-        if (activePart === 'U2' && ctrl.cc === 7) defVal = 60;
-
-        fader.value = defVal;
-        const valEl = document.getElementById('eq-val-' + cc);
-        if (valEl) valEl.innerText = formatVal(ctrl.label, defVal);
-    });
+    applySmartProfile(activePart);
 }
 
 function switchEQ(part) {
@@ -481,15 +515,20 @@ function initToneSearch() {
             const data = JSON.parse(opt.value);
             changeTone(part, data.bank, data.program);
             
+            // Extract category and apply smart acoustic profile
+            let catName = 'PIANO';
+            if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
+                catName = opt.parentElement.label;
+            }
+            applySmartProfile(part, catName);
+            
             // Update the name shown in the card header
             const nameEl = document.getElementById('selectedTone-' + part);
             if (nameEl) nameEl.innerText = opt.text;
             
             // Update category shown in the card header
             const catEl = document.getElementById('selectedCat-' + part);
-            if (catEl && opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
-                catEl.innerText = opt.parentElement.label;
-            }
+            if (catEl) catEl.innerText = catName;
         });
 
         // Prev / Next Buttons (Tones)
