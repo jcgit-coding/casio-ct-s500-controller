@@ -288,36 +288,54 @@ const EQ_SECTIONS = [
 const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
 const CATEGORY_PROFILES = {
+    // Teclados Clásicos
     'PIANO': { 91: 52 },
-    'HARPSICHORD': { 91: 40, 74: 68 },
-    'ELEC.PIANO': { 91: 45, 93: 45, 74: 62 },
-    'CLAVI': { 91: 30, 74: 70 },
-    'ELEC.ORGAN': { 91: 50, 93: 35 },
-    'PIPE ORGAN': { 91: 85, 93: 10 },
-    'ACCORDION': { 91: 40, 93: 20 },
+    'HARPSICHORD': { 91: 40, 74: 68 }, // Clavecín más brillante
+    'ELEC.PIANO': { 91: 45, 93: 45, 74: 62 }, // Rhodes cálido con chorus
+    'CLAVI': { 91: 30, 74: 70 }, // Funky brillante, poca reverb
+    'VIB./CHROM.PERC.': { 91: 55, 93: 10 }, // Vibráfonos y campanitas
     
-    // Lush and warm pads
-    'STRING ENSEMBLE': { 91: 75, 93: 15, 73: 70, 74: 62 },
-    'CHOIR': { 91: 85, 93: 35, 73: 72 },
-    'SYNTH-PAD': { 91: 85, 93: 40, 74: 58, 73: 78 },
+    // Órganos
+    'ELEC.ORGAN': { 91: 50, 93: 35 }, // Simulador de parlante rotatorio
+    'PIPE ORGAN': { 91: 85, 93: 10 }, // Acústica gigante de iglesia
+    'ACCORDION': { 91: 40, 93: 20 }, // Detune estilo musette
     
-    // Acoustic Solo Instruments (Delayed human vibrato + softened attacks)
-    'SOLO STRINGS': { 91: 65, 73: 68, 77: 72, 78: 80 },
-    'BRASS ENSEMBLE': { 91: 60, 74: 70, 73: 66 },
-    'SOLO BRASS': { 91: 55, 77: 70, 78: 75 },
-    'SAX': { 91: 60, 77: 75, 78: 80, 73: 66 },
-    'REED': { 91: 55, 77: 70, 78: 75 },
-    'PIPE': { 91: 65, 77: 72, 78: 80 },
+    // Cuerdas y Coros (Pads orgánicos)
+    'STRING ENSEMBLE': { 91: 75, 93: 15, 73: 68, 74: 62 }, // Ataque suave, cálido
+    'CHOIR': { 91: 85, 93: 35, 73: 72 }, // Ensambles vocales etéreos
     
-    // Plucked / Synths
-    'SYNTH-LEAD': { 91: 60, 94: 45, 78: 75 },
-    'ACOUS.GUITAR': { 91: 45, 93: 5, 73: 65 },
-    'ELEC.GUITAR': { 91: 40, 94: 30 },
+    // Instrumentos Solistas (Vibrato humano retrasado y ataques suaves)
+    'SOLO STRINGS': { 91: 65, 73: 66, 77: 72, 78: 80 }, // Violín/Cello
+    'SOLO BRASS': { 91: 55, 77: 70, 78: 75 }, // Trompeta
+    'BRASS ENSEMBLE': { 91: 60, 74: 70, 73: 66 }, // Sección de metales brillante
+    'SAX': { 91: 60, 77: 75, 78: 80, 73: 66 }, // Saxofón expresivo
+    'REED': { 91: 55, 77: 70, 78: 75 }, // Oboe, Fagot, Clarinete
+    'PIPE': { 91: 65, 77: 72, 78: 80 }, // Flauta traversa/dulce
     
-    // Bass (Very dry, warm cutoff)
-    'ACOUS.BASS': { 91: 10, 74: 55 },
-    'ELEC.BASS': { 91: 15, 74: 60 },
-    'SYNTH-BASS': { 91: 15, 74: 70, 71: 70 }
+    // Guitarras
+    'ACOUS.GUITAR': { 91: 45, 93: 5, 73: 65 }, // Púa suavizada, cuerpo acústico
+    'ELEC.GUITAR': { 91: 40, 94: 30 }, // Eco para solos
+    
+    // Bajos (Secos para no ensuciar la mezcla)
+    'ACOUS.BASS': { 91: 10, 74: 55 }, // Contrabajo oscuro/cálido
+    'ELEC.BASS': { 91: 15, 74: 60 }, // Bajo eléctrico
+    
+    // Sintetizadores
+    'SYNTH-PAD': { 91: 85, 93: 40, 74: 58, 73: 78 }, // Pads evolutivos lentos
+    'SYNTH-LEAD': { 91: 60, 94: 45, 78: 75 }, // Solos sintéticos con eco
+    'SYNTH-BRASS': { 91: 60, 93: 20, 74: 75 }, // Metales sintéticos brillantes
+    'SYNTH-BASS': { 91: 15, 74: 70, 71: 70 }, // Bajos punchy y resonantes
+    'EDM SYNTH': { 91: 50, 94: 30, 74: 75 }, // Modernos y brillantes
+    'CASIO CLASSIC': { 91: 30, 93: 0 }, // Sonidos vintage secos
+    
+    // Étnicos y Mundo
+    'INDIAN': { 91: 50, 73: 64 },
+    'INDONESIAN': { 91: 50, 73: 64 },
+    'ARABIC': { 91: 50, 78: 75 }, // Suelen tener maderas solistas
+    'CHINESE': { 91: 50, 77: 70, 78: 75 }, // Erhu y Dizi con vibrato
+    'BRAZILIAN': { 91: 40, 73: 65 },
+    'ETHNIC OTHERS': { 91: 50 },
+    'GM TONES': { 91: 40 } // Standard MIDI
 };
 
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
