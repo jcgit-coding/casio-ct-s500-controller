@@ -802,28 +802,38 @@ const lines = rawTonesText.split('\n');
 const db = [];
 let currentCatObj = null;
 
-for(let line of lines) {
+for (let line of lines) {
     line = line.trim();
-    if(!line) continue;
+    if (!line) continue;
     
     // If line doesn't start with a number, it's a category
-    if(!/^\d+/.test(line)) {
+    if (!/^\d+/.test(line)) {
         currentCatObj = { category: line, tones: [] };
         db.push(currentCatObj);
         continue;
     }
 
-    // Example line: 1 STAGE PIANO 0 1 0/64
-    // RegEx matches number, text (greedy, avoiding digits at end), PC, MSB, LSB
-    const match = line.match(/^(\d+)\s+(.+?)\s+(\d+)\s+(\d+)\s+(\d+\/\d+)/);
-    if(match && currentCatObj) {
+    // Split line by whitespace
+    const tokens = line.split(/\s+/);
+    if (tokens.length < 3) continue;
+
+    const id = parseInt(tokens.shift());
+
+    // Extract trailing numbers (PC, MSB, LSB, DSP)
+    const tail = [];
+    while (tokens.length > 0 && /^[\d\/]+$/.test(tokens[tokens.length - 1])) {
+        tail.unshift(tokens.pop());
+    }
+
+    // The remaining tokens form the tone name
+    const name = tokens.join(' ');
+
+    if (currentCatObj && tail.length >= 2) {
         currentCatObj.tones.push({
-            id: parseInt(match[1]),
-            name: match[2].trim(),
-            program: parseInt(match[3]),
-            bank: parseInt(match[4]) // MSB
+            id: id,
+            name: name,
+            program: parseInt(tail[0]),
+            bank: parseInt(tail[1])
         });
     }
 }
-
-console.log(JSON.stringify(db, null, 2));
