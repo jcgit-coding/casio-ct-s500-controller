@@ -162,7 +162,7 @@ function startMidiPoll() {
     if (midiPollTimer) return;
     midiPollTimer = setInterval(() => {
         if (!midiAccess) { clearInterval(midiPollTimer); midiPollTimer = null; return; }
-        if (!midiInput || !midiOutput) {
+        if (!midiInput) {
             scanAndConnect();
         } else {
             clearInterval(midiPollTimer);
@@ -175,14 +175,15 @@ function scanAndConnect() {
     midiInput  = null;
     midiOutput = null;
 
-    // Try CASIO / CT-S first, fallback to first available port
+    // Try CASIO / CT-S first, fallback to first available port.
+    // Aceptamos state 'connected' y 'open' (algunos Android reportan 'open').
     for (let o of midiAccess.outputs.values()) {
-        if (o.state !== 'connected') continue;
+        if (o.state === 'disconnected') continue;
         const n = o.name.toUpperCase();
         if (!midiOutput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) midiOutput = o;
     }
     for (let i of midiAccess.inputs.values()) {
-        if (i.state !== 'connected') continue;
+        if (i.state === 'disconnected') continue;
         const n = i.name.toUpperCase();
         if (!midiInput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) midiInput = i;
     }
@@ -197,16 +198,18 @@ function scanAndConnect() {
         midiInput.onmidimessage = onMIDIMessage;
     }
 
-    if (midiOutput && midiInput) {
-        const connKey = midiOutput.id + '|' + midiInput.id;
-        setStatus("Conectado: " + midiOutput.name, true);
+    if (midiInput) {
+        // La entrada es suficiente para recibir notas (salida es opcional).
+        const connKey = (midiInput.id) + '|' + (midiOutput ? midiOutput.id : 'none');
+        const name = midiInput.name || (midiOutput ? midiOutput.name : 'MIDI');
+        const label = midiOutput ? "Conectado: " + name : "Conectado (entrada): " + name;
+        setStatus(label, true);
         document.getElementById("connectBtn").innerText = "Reconectar";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
-        // Evita reenviar todo el estado en cada re-escaneo redundante
         if (connKey !== lastConnKey) {
             lastConnKey = connKey;
-            pushAllToKeyboard();
+            if (midiOutput) pushAllToKeyboard();
         }
     } else {
         lastConnKey = '';
@@ -214,11 +217,10 @@ function scanAndConnect() {
         const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
         let msg;
         if (!midiOutput && !midiInput) msg = "Sin dispositivos MIDI (" + ins + " ent. / " + outs + " sal.)";
-        else if (!midiInput)           msg = "Solo salida MIDI. Falta la entrada de " + midiOutput.name;
-        else                           msg = "Solo entrada MIDI. Falta la salida de " + midiInput.name;
+        else if (!midiInput)           msg = "Sin entrada MIDI. Conecta el teclado y pulsa Reconectar";
         setStatus(msg, false);
         document.getElementById("connectBtn").innerText = "Conectar";
-        startMidiPoll();  // reanudar polling si se perdió la conexión
+        startMidiPoll();
     }
 }
 
