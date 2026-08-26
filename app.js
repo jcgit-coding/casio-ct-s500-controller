@@ -1714,7 +1714,9 @@ function debugMidiPorts() {
     for (let o of midiAccess.outputs.values()) msg += '- ' + o.name + ' (' + o.state + ')\n';
     alert(msg || 'Sin puertos MIDI.');
 }
-document.querySelector('.status-badge')?.addEventListener('click', debugMidiPorts);
+document.querySelector('.status-badge')?.addEventListener('click', () => {
+    if (midiAccess) scanAndConnect(); else initMIDI();
+});
 function saveAppState() {
     const appState = {
         eqState,
