@@ -233,13 +233,20 @@ function onMIDIMessage(e) {
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
-            const fader = document.querySelector(`.eq-fader[data-cc="${d1}"]`);
-            if (fader) {
-                fader.value = d2;
-                const ctrl  = EQ_CONTROLS.find(c => c && c.cc === d1);
-                const lbl   = ctrl ? ctrl.label : '';
+            const ctrl = EQ_CONTROLS.find(c => c && c.cc === d1);
+            if (ctrl) {
+                if (ctrl.type === 'switch') {
+                    const btn = document.querySelector(`.eq-switch[data-cc="${d1}"]`);
+                    if (btn) {
+                        btn.innerText = d2 > 63 ? 'ON' : 'OFF';
+                        btn.classList.toggle('sus-on', d2 > 63);
+                    }
+                } else {
+                    const fader = document.querySelector(`.eq-fader[data-cc="${d1}"]`);
+                    if (fader) fader.value = d2;
+                }
                 const valEl = document.getElementById('eq-val-' + d1);
-                if (valEl) valEl.innerText = formatVal(lbl, d2);
+                if (valEl) valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
             }
         }
     }
@@ -323,10 +330,10 @@ const EQ_SECTIONS = [
         title: 'Modulación & Pedales',
         controls: [
             { label: 'MODULACIÓN',       cc: 1,  def: 0, tip: 'Rueda de Modulación' },
-            { label: 'PORTAMENTO',   cc: 65, def: 0, tip: 'Portamento On/Off' },
+            { label: 'PORTAMENTO', cc: 65, def: 0, tip: 'Portamento On/Off', type: 'switch' },
             { label: 'TIEMPO PORT.', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
-            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)' },
-            { label: 'SOFT',      cc: 67, def: 0, tip: 'Pedal Suave (reduce volumen)' },
+            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)', type: 'switch' },
+            { label: 'SOFT',      cc: 67, def: 0, tip: 'Pedal Suave (reduce volumen)', type: 'switch' },
         ]
     },
 ];
@@ -997,8 +1004,8 @@ function applySmartProfile(part, category) {
     });
 
     // 2. Apply Category Sound Profile
-    if (CATEGORY_PROFILES[cat]) {
-        for (const [cc, val] of Object.entries(CATEGORY_PROFILES[cat])) {
+    if (ENVIRONMENTS[currentEnv] && ENVIRONMENTS[currentEnv][cat]) {
+        for (const [cc, val] of Object.entries(ENVIRONMENTS[currentEnv][cat])) {
             eqState[part][cc] = val;
         }
     }
@@ -1023,11 +1030,10 @@ function applySmartProfile(part, category) {
 }
 
 function buildEQ() {
-    // Seed default values for all parts
     ['U1','U2','L'].forEach(part => {
         EQ_CONTROLS.forEach(ctrl => { 
             let defVal = ctrl.def;
-            if (part === 'U2' && ctrl.cc === 7) defVal = 60; // default U2 vol to 60
+            if (part === 'U2' && ctrl.cc === 7) defVal = 60;
             eqState[part][ctrl.cc] = defVal; 
         });
     });
@@ -1054,62 +1060,113 @@ function buildEQ() {
             const lbl = document.createElement('span');
             lbl.className = 'fader-label';
             lbl.innerText = ctrl.label;
-            lbl.title     = ctrl.tip; // tooltip on hover
-
-            const fader = document.createElement('input');
-            fader.type = 'range';
-            // fader.setAttribute("orient", "vertical"); // Removed in favor of CSS transform
-            fader.className  = 'eq-fader';
-            fader.dataset.cc = ctrl.cc;
-            fader.title      = ctrl.tip;
-            fader.min = 0; fader.max = 127;
-            fader.value = ctrl.def;
+            lbl.title     = ctrl.tip;
 
             const valSpan = document.createElement('span');
             valSpan.className = 'fader-value';
             valSpan.id        = 'eq-val-' + ctrl.cc;
-            valSpan.innerText = formatVal(ctrl.label, ctrl.def);
+            valSpan.innerText = ctrl.type === 'switch' ? (ctrl.def > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, ctrl.def);
 
-            fader.addEventListener('input', e => {
-                const val = parseInt(e.target.value);
-                const cc  = parseInt(e.target.dataset.cc);
-                valSpan.innerText = formatVal(ctrl.label, val);
-                eqState[activePart][cc] = val;
-                sendCC(activePart, cc, val);
-            });
+            if (ctrl.type === 'switch') {
+                const btn = document.createElement('button');
+                btn.className = 'sus-btn eq-switch';
+                btn.dataset.cc = ctrl.cc;
+                btn.title = ctrl.tip;
+                btn.innerText = ctrl.def > 63 ? 'ON' : 'OFF';
+                if (ctrl.def > 63) btn.classList.add('sus-on');
+                
+                const btnWrap = document.createElement('div');
+                btnWrap.style.margin = '0';
+                btnWrap.style.height = '200px'; 
+                btnWrap.style.display = 'flex';
+                btnWrap.style.alignItems = 'center';
+                btnWrap.style.justifyContent = 'center';
+                btnWrap.appendChild(btn);
+                
+                btn.addEventListener('click', () => {
+                    const currentVal = eqState[activePart][ctrl.cc] || 0;
+                    const newVal = currentVal > 63 ? 0 : 127;
+                    eqState[activePart][ctrl.cc] = newVal;
+                    btn.innerText = newVal > 63 ? 'ON' : 'OFF';
+                    btn.classList.toggle('sus-on', newVal > 63);
+                    valSpan.innerText = newVal > 63 ? 'ON' : 'OFF';
+                    sendCC(activePart, ctrl.cc, newVal);
+                    if (typeof saveAppState === 'function') saveAppState();
+                });
+                
+                const note = document.createElement('div');
+                note.className = 'fader-note';
+                note.innerText = ctrl.tip;
 
-            
-            group.appendChild(lbl);
-            
-            const wrapper = document.createElement('div');
-            wrapper.className = 'fader-wrapper';
-            wrapper.appendChild(fader);
-            group.appendChild(wrapper);
-            
-            group.appendChild(valSpan);
-            
-            const noteSpan = document.createElement('div');
-            noteSpan.className = 'fader-note';
-            noteSpan.innerText = ctrl.tip;
-            group.appendChild(noteSpan);
-
+                group.appendChild(lbl);
+                group.appendChild(btnWrap);
+                group.appendChild(valSpan);
+                group.appendChild(note);
+            } else {
+                const fader = document.createElement('input');
+                fader.type = 'range';
+                fader.className  = 'eq-fader';
+                fader.dataset.cc = ctrl.cc;
+                fader.title      = ctrl.tip;
+                fader.min = 0; fader.max = 127;
+                fader.value = ctrl.def;
+    
+                fader.addEventListener('input', e => {
+                    const v = parseInt(e.target.value);
+                    eqState[activePart][ctrl.cc] = v;
+                    valSpan.innerText = formatVal(ctrl.label, v);
+                    sendCC(activePart, ctrl.cc, v);
+                });
+                fader.addEventListener('change', () => {
+                    if (typeof saveAppState === 'function') saveAppState();
+                });
+    
+                const note = document.createElement('div');
+                note.className = 'fader-note';
+                note.innerText = ctrl.tip;
+    
+                group.appendChild(lbl);
+                group.appendChild(fader);
+                group.appendChild(valSpan);
+                group.appendChild(note);
+            }
             innerEl.appendChild(group);
         });
-
         secEl.appendChild(innerEl);
         container.appendChild(secEl);
     });
+}
 
-    // EDITAR EQ buttons
-    document.querySelectorAll('.btn-eq').forEach(btn => {
-        btn.addEventListener('click', e => switchEQ(e.currentTarget.dataset.part));
+function switchEQ(part) {
+    activePart = part;
+    const labels = { U1: 'UPPER 1', U2: 'UPPER 2', L: 'LOWER' };
+    document.getElementById('eqTargetBadge').innerText = labels[part];
+
+    document.querySelectorAll('.btn-eq').forEach(b => b.classList.remove('active-eq'));
+    document.querySelector('.btn-eq[data-part="' + part + '"]').classList.add('active-eq');
+
+    document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active-track'));
+    document.getElementById('card-' + part).classList.add('active-track');
+
+    EQ_CONTROLS.forEach(ctrl => {
+        const val = eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def;
+        
+        if (ctrl.type === 'switch') {
+            const btn = document.querySelector(`.eq-switch[data-cc="${ctrl.cc}"]`);
+            if (btn) {
+                btn.innerText = val > 63 ? 'ON' : 'OFF';
+                btn.classList.toggle('sus-on', val > 63);
+            }
+        } else {
+            const fader = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
+            if (fader) fader.value = val;
+        }
+        
+        const valEl = document.getElementById('eq-val-' + ctrl.cc);
+        if (valEl) {
+            valEl.innerText = ctrl.type === 'switch' ? (val > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, val);
+        }
     });
-
-    // Reset EQ button
-    document.getElementById('btnResetEQ').addEventListener('click', resetEQ);
-
-    document.getElementById('eqTargetBadge').innerText = 'UPPER 1';
-    document.querySelector('.btn-eq[data-part="U1"]').classList.add('active-eq');
 }
 
 function resetEQ() {
