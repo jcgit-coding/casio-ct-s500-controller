@@ -1322,7 +1322,17 @@ function initQuickControls() {
             const val = tuning[part].sus ? 127 : 0;
             btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
             btn.classList.toggle('sus-on', tuning[part].sus);
-            sendCC(part, 64, val);
+            
+              sendCC(part, 64, val);
+              if (val === 0) {
+                  // Casio CT-S500 sometimes ignores a single CC64=0 if the buffer is busy.
+                  // Send it again after 20ms, and also clear Sostenuto (CC 66)
+                  setTimeout(() => {
+                      sendCC(part, 64, 0);
+                      sendCC(part, 66, 0);
+                  }, 20);
+              }
+
         });
     });
 }
