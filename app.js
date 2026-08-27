@@ -1301,7 +1301,26 @@ function initToneSearch() {
             
             // Delay sending 18 CCs to prevent overwhelming the Casio's MIDI buffer
             // which causes it to abort the Program Change.
-            setTimeout(() => applySmartProfile(part, catName), 100);
+            setTimeout(() => {
+                applySmartProfile(part, catName);
+                
+                // Casio Hardware Quirk: Changing a tone via MIDI on one channel often triggers
+                // an internal reset that disables the Layer (U2) and Split (L) parts physically.
+                // We re-awaken them by re-sending their Program Changes right after!
+                setTimeout(() => {
+                    ['U1', 'U2', 'L'].forEach(p => {
+                        if (p !== part) {
+                            const l = document.getElementById('list-' + p);
+                            if (l && l.selectedIndex >= 0) {
+                                try {
+                                    const d = JSON.parse(l.options[l.selectedIndex].value);
+                                    changeTone(p, d.bank, d.lsb, d.program);
+                                } catch(e){}
+                            }
+                        }
+                    });
+                }, 50);
+            }, 100);
             
             // Update the name shown in the card header
             const nameEl = document.getElementById('selectedTone-' + part);
