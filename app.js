@@ -1055,13 +1055,22 @@ function applySmartProfile(part, category) {
     
     // 4. Send to keyboard and update UI
     EQ_CONTROLS.forEach(ctrl => {
-        sendCC(part, ctrl.cc, eqState[part][ctrl.cc]);
+        const val = eqState[part][ctrl.cc];
+        sendCC(part, ctrl.cc, val);
         if (activePart === part) {
-            const f = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
-            const valEl = document.getElementById('eq-val-' + ctrl.cc);
-            if (f && valEl) {
-                f.value = eqState[part][ctrl.cc];
-                valEl.innerText = formatVal(ctrl.label, eqState[part][ctrl.cc]);
+            if (ctrl.type === 'switch') {
+                const btn = document.querySelector(`.eq-switch[data-cc="${ctrl.cc}"]`);
+                if (btn) {
+                    btn.innerText = val > 63 ? 'ON' : 'OFF';
+                    btn.classList.toggle('sus-on', val > 63);
+                }
+            } else {
+                const f = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
+                const valEl = document.getElementById('eq-val-' + ctrl.cc);
+                if (f && valEl) {
+                    f.value = val;
+                    valEl.innerText = formatVal(ctrl.label, val);
+                }
             }
         }
     });
