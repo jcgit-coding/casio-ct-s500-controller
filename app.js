@@ -1277,7 +1277,9 @@ function initToneSearch() {
             }
         }
 
-        populateList(allTones);
+        if (part === 'U1') searchEl.value = 'Piano';
+        if (part === 'U2') searchEl.value = 'Pad ';
+        if (part === 'L')  searchEl.value = 'String';
 
         searchEl.addEventListener('input', () => {
             const q = searchEl.value.trim().toLowerCase();
@@ -1286,6 +1288,8 @@ function initToneSearch() {
             ) : allTones);
             if (listEl.options.length > 0) listEl.selectedIndex = 0;
         });
+        
+        searchEl.dispatchEvent(new Event('input'));
 
         listEl.addEventListener('change', () => {
             const opt = listEl.options[listEl.selectedIndex];
