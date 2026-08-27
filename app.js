@@ -1269,7 +1269,7 @@ function initToneSearch() {
                 grp.label = cat;
                 items.forEach(t => {
                     const opt = document.createElement('option');
-                    opt.value = JSON.stringify({ bank: t.bank, lsb: t.lsb, program: t.program });
+                    opt.value = JSON.stringify({ id: t.id, bank: t.bank, lsb: t.lsb, program: t.program });
                     opt.text  = t.label;
                     grp.appendChild(opt);
                 });
@@ -1286,7 +1286,7 @@ function initToneSearch() {
             populateList(q ? allTones.filter(t =>
                 t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)
             ) : allTones);
-            if (listEl.options.length > 0) listEl.selectedIndex = 0;
+            if (listEl.options.length > 0) listEl.selectedIndex = -1;
         });
         
         searchEl.dispatchEvent(new Event('input'));
@@ -1308,22 +1308,7 @@ function initToneSearch() {
             setTimeout(() => {
                 applySmartProfile(part, catName);
                 
-                // Casio Hardware Quirk: Changing a tone via MIDI on one channel often triggers
-                // an internal reset that disables the Layer (U2) and Split (L) parts physically.
-                // We re-awaken them by re-sending their Program Changes right after!
-                setTimeout(() => {
-                    ['U1', 'U2', 'L'].forEach(p => {
-                        if (p !== part) {
-                            const l = document.getElementById('list-' + p);
-                            if (l && l.selectedIndex >= 0) {
-                                try {
-                                    const d = JSON.parse(l.options[l.selectedIndex].value);
-                                    changeTone(p, d.bank, d.lsb, d.program);
-                                } catch(e){}
-                            }
-                        }
-                    });
-                }, 50);
+                
             }, 100);
             
             // Update the name shown in the card header
@@ -1783,6 +1768,14 @@ function debugMidiPorts() {
 document.querySelector('.status-badge')?.addEventListener('click', () => {
     if (midiAccess) scanAndConnect(); else initMIDI();
 });
+function _getSavedToneId(part) {
+    const list = document.getElementById('list-' + part);
+    if (!list || list.selectedIndex < 0) return 0;
+    try {
+        return JSON.parse(list.options[list.selectedIndex].value).id;
+    } catch(e) { return 0; }
+}
+
 function saveAppState() {
     const appState = {
         eqState,
@@ -1790,9 +1783,9 @@ function saveAppState() {
         globalTranspose,
         activePart,
         tones: {
-            U1: document.getElementById('list-U1') ? document.getElementById('list-U1').selectedIndex : 0,
-            U2: document.getElementById('list-U2') ? document.getElementById('list-U2').selectedIndex : 0,
-            L: document.getElementById('list-L') ? document.getElementById('list-L').selectedIndex : 0
+            U1: _getSavedToneId('U1'),
+            U2: _getSavedToneId('U2'),
+            L: _getSavedToneId('L')
         }
     };
     localStorage.setItem('casioAppState', JSON.stringify(appState));
@@ -1819,7 +1812,25 @@ function loadAppState() {
             ['U1', 'U2', 'L'].forEach(part => {
                 const list = document.getElementById('list-' + part);
                 if (list && saved.tones[part] !== undefined) {
-                    list.selectedIndex = saved.tones[part];
+                    // Find the option by ID
+                    let targetIndex = -1;
+                    const savedId = saved.tones[part];
+                    for (let i = 0; i < list.options.length; i++) {
+                        try {
+                            const d = JSON.parse(list.options[i].value);
+                            // Fallback: if savedId is likely an old index (e.g. < 800 and not matching IDs),
+                            // we just do our best. But matching by ID is safest.
+                            if (d.id === savedId) {
+                                targetIndex = i;
+                                break;
+                            }
+                        } catch(e){}
+                    }
+                    if (targetIndex >= 0) {
+                        list.selectedIndex = targetIndex;
+                    } else if (savedId < list.options.length) {
+                        list.selectedIndex = savedId; // fallback for old saves
+                    }
                     
                     // Manually change tone and update UI instead of firing 'change' 
                     // which would trigger applySmartProfile and wipe saved eqState!
