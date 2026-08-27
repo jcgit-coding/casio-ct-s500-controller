@@ -88,6 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
         switchEQ(parts[nextIdx]);
     });
 
+    // EQ Reset Button
+    document.getElementById('btnResetEQ')?.addEventListener('click', () => resetEQ());
+
     // View Navigation Logic
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.addEventListener('click', (e) => {
@@ -249,6 +252,20 @@ function onMIDIMessage(e) {
     if (status >= 0xB0 && status <= 0xBF) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
+
+        // CC7 (Volume) from physical knob — may arrive on any channel
+        if (d1 === 7) {
+            ['U1','U2','L'].forEach(p => {
+                eqState[p][7] = d2;
+                if (p === activePart) {
+                    const f = document.querySelector(`.eq-fader[data-cc="7"]`);
+                    if (f) f.value = d2;
+                    const valEl = document.getElementById('eq-val-7');
+                    if (valEl) valEl.innerText = d2;
+                }
+            });
+        }
+
         if (!part) return;
 
         // Catch Bank Select MSB (CC0)
@@ -657,12 +674,12 @@ function resetEQ() {
 }
 
 function formatVal(label, val) {
-    if (label === 'PAN') {
+    if (label === 'PANORAMA') {
         if (val === 64) return 'C';
         return val < 64 ? 'L' + (64 - val) : 'R' + (val - 64);
     }
     // Switch-style controls (on/off)
-    if (['PORTAM.','SOSTENUTO','SOFT'].includes(label)) {
+    if (['PORTAMENTO','SOSTENUTO','SOFT'].includes(label)) {
         return val >= 64 ? 'ON' : 'OFF';
     }
     return val;
