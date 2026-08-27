@@ -151,9 +151,9 @@ input, button, select, textarea, optgroup, option {
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.05);
     color: var(--text-muted);
-    border-radius: 4px;
-    width: 20px;
-    height: 18px;
+    border-radius: 6px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -944,7 +944,7 @@ header h1 {
 [data-theme="light"] .view-nav button.active { border-color: var(--accent); color: var(--accent); background: #ecfdf5; }
 
 /* ── RESPONSIVE DESIGN (TABLETS & MOBILE) ────────────── */
-@media (max-width: 1024px) {
+@media (max-width: 1026px) {
     /* Tablets (Landscape & Portrait) */
     .tracks-row {
         flex-wrap: wrap;
