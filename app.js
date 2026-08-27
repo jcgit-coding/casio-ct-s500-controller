@@ -253,7 +253,7 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
 
-        // CC7 (Volume) from physical knob — may arrive on any channel
+        // CC7 (Volume) — capture from ANY channel (physical knob sends on active part's channel)
         if (d1 === 7) {
             ['U1','U2','L'].forEach(p => {
                 eqState[p][7] = d2;
