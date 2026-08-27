@@ -819,10 +819,12 @@ for (let line of lines) {
 
     const id = parseInt(tokens.shift());
 
-    // Extract trailing numbers (PC, MSB, LSB, DSP)
+    // Extract exactly 3 trailing numbers (PC, MSB, LSB)
     const tail = [];
-    while (tokens.length > 0 && /^[\d\/]+$/.test(tokens[tokens.length - 1])) {
-        tail.unshift(tokens.pop());
+    for (let i = 0; i < 3; i++) {
+        if (tokens.length > 0) {
+            tail.unshift(tokens.pop());
+        }
     }
 
     // The remaining tokens form the tone name
