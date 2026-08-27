@@ -253,6 +253,9 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
 
+        // DEBUG: log all CC to console
+        console.log(`CC ch=${ch} cc=${d1} val=${d2} part=${part || '?'}`);
+
         // CC7 (Volume) — capture from ANY channel (physical knob sends on active part's channel)
         if (d1 === 7) {
             ['U1','U2','L'].forEach(p => {
