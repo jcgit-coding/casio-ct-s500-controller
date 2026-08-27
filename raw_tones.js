@@ -827,13 +827,24 @@ for (let line of lines) {
 
     // The remaining tokens form the tone name
     const name = tokens.join(' ');
+    
+    let lsb = 0;
+    if (tail.length >= 3) {
+        let lsbStr = tail[2];
+        if (lsbStr.includes('/')) {
+            lsb = parseInt(lsbStr.split('/')[0]);
+        } else {
+            lsb = parseInt(lsbStr);
+        }
+    }
 
     if (currentCatObj && tail.length >= 2) {
         currentCatObj.tones.push({
             id: id,
             name: name,
             program: parseInt(tail[0]),
-            bank: parseInt(tail[1])
+            bank: parseInt(tail[1]),
+            lsb: lsb
         });
     }
 }

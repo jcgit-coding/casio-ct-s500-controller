@@ -1247,7 +1247,7 @@ function initToneSearch() {
             allTones.push({
                 id: tone.id, name: tone.name,
                 category: cat.category,
-                bank: tone.bank, program: tone.program,
+                bank: tone.bank, lsb: tone.lsb, program: tone.program,
                 label: `${tone.id}. ${tone.name}`
             });
         });
@@ -1269,7 +1269,7 @@ function initToneSearch() {
                 grp.label = cat;
                 items.forEach(t => {
                     const opt = document.createElement('option');
-                    opt.value = JSON.stringify({ bank: t.bank, program: t.program });
+                    opt.value = JSON.stringify({ bank: t.bank, lsb: t.lsb, program: t.program });
                     opt.text  = t.label;
                     grp.appendChild(opt);
                 });
@@ -1291,7 +1291,7 @@ function initToneSearch() {
             const opt = listEl.options[listEl.selectedIndex];
             if (!opt) return;
             const data = JSON.parse(opt.value);
-            changeTone(part, data.bank, data.program);
+            changeTone(part, data.bank, data.lsb, data.program);
             
             // Extract category and apply smart acoustic profile
             let catName = 'PIANO';
@@ -1704,11 +1704,11 @@ function sendCC(part, cc, value) {
     midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
 }
 
-function changeTone(part, msb, pc) {
+function changeTone(part, msb, lsb, pc) {
     if (!midiOutput) return;
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 0x00, msb]);
-    midiOutput.send([0xB0 | ch, 0x20, 0x00]);
+    midiOutput.send([0xB0 | ch, 0x20, lsb || 0]);
     midiOutput.send([0xC0 | ch, pc]);
 }
 
@@ -1740,7 +1740,7 @@ function pushAllToKeyboard(skipTones = false) {
                 
 try {
     const data = JSON.parse(opt.value);
-    if (!skipTones) changeTone(part, data.bank, data.program);
+    if (!skipTones) changeTone(part, data.bank, data.lsb, data.program);
 } catch(e) {}
 
             }
@@ -1804,7 +1804,7 @@ function loadAppState() {
                     if (opt) {
                         const data = JSON.parse(opt.value);
                         
-// changeTone(part, data.bank, data.program); // Disabled on boot so we don't force the keyboard
+// changeTone(part, data.bank, data.lsb, data.program); // Disabled on boot so we don't force the keyboard
 const nameEl = document.getElementById('selectedTone-' + part);
 
                         if (nameEl) nameEl.innerText = opt.text;
