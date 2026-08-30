@@ -1803,64 +1803,89 @@ async function sf2LoadCache() {
     } catch { return null; }
 }
 
-// Optional SF2 override (loads from cache or manual upload for higher quality)
-async function sf2Init(buffer, name) {
+// Single sf2-player instance (reused across reloads / file changes)
+let pcPlayer = null;
+
+// Real API (from esm.sh/sf2-player source):
+//   constructor()                           — no args
+//   bootSynth(arrayBuffer)                  — load SF2 from ArrayBuffer
+//   loadSoundFontFromFile(File)             — load from File object
+//   loadSoundFontFromURL(url)               — load from URL string
+//   noteOn(note, velocity=127, channel?)    — note FIRST, then vel, then optional channel
+//   noteOff(note, velocity=127, channel?)
+//   player.synth.programChange(ch, prog)   — inner synth instance
+
+async function sf2Init(source, name) {
     const statusEl = document.getElementById('sf2-status');
     if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Cargando SF2…</span>';
     try {
         const mod = await import('https://esm.sh/sf2-player');
-        const SoundFont = mod.SoundFont || mod.default;
-        if (!SoundFont) throw new Error('sf2-player: export not found');
+        const SoundFontPlayer = mod.default;
+        if (typeof SoundFontPlayer !== 'function') throw new Error('sf2-player: default export not a constructor');
 
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        if (ctx.state === 'suspended') await ctx.resume();
+        if (!pcPlayer) pcPlayer = new SoundFontPlayer();
 
-        const sf2 = new SoundFont(ctx);
-        const loadResult = sf2.load(buffer);
-        if (loadResult && typeof loadResult.then === 'function') await loadResult;
+        if (typeof source === 'string') {
+            await pcPlayer.loadSoundFontFromURL(source);
+        } else if (source instanceof File) {
+            await pcPlayer.loadSoundFontFromFile(source);
+        } else {
+            // ArrayBuffer path (from IndexedDB cache or manual fetch)
+            await pcPlayer.bootSynth(source);
+        }
 
-        // Wrapper — interface: noteOn(channel, note, vel), noteOff(channel, note), programChange(channel, prog)
         const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
+
+        // Wrapper — our internal API is noteOn(channel, note, vel) / noteOff(channel, note)
+        // but sf2-player's API is noteOn(note, vel, channel) — we translate here
         window.pcSynth = {
-            _sf2: sf2, _ctx: ctx, _vol: initVol,
-            get synth() { return { ctx: this._ctx }; },
+            _player: pcPlayer, _vol: initVol,
+            get synth() { return { ctx: pcPlayer.synth?.ctx }; },
             noteOn(channel, note, velocity) {
-                if (this._ctx.state === 'suspended') this._ctx.resume();
+                const ctx = pcPlayer.synth?.ctx;
+                if (ctx?.state === 'suspended') ctx.resume();
                 const v = Math.min(127, Math.max(1, Math.round(velocity * this._vol)));
-                sf2.noteOn(channel, note, v);
+                pcPlayer.noteOn(note, v, channel);
             },
-            noteOff(channel, note) { sf2.noteOff(channel, note); },
+            noteOff(channel, note) {
+                pcPlayer.noteOff(note, 64, channel);
+            },
             programChange(channel, prog) {
-                if (sf2.programChange) sf2.programChange(channel, prog);
+                if (pcPlayer.synth) pcPlayer.synth.programChange(channel, prog);
             },
             applyCC(cc, val) {
-                if (cc === 7) this._vol = val / 127;
+                if (cc === 7) {
+                    this._vol = val / 127;
+                    // Also scale the synth master volume directly
+                    if (pcPlayer.synth?.gainMaster) {
+                        pcPlayer.synth.gainMaster.gain.value = this._vol;
+                    }
+                }
             }
         };
         window.sf2Ready = true;
         if (statusEl) statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>';
     } catch(err) {
         console.error('SF2 init error:', err);
-        if (statusEl) statusEl.innerHTML = '<span style="color:#F44336;">Error SF2 — usando sintetizador incorporado</span>';
-        if (!window.pcSynth || !window.pcSynth.noteOn) window.pcSynth = new BuiltInPiano();
+        if (statusEl) statusEl.innerHTML = '<span style="color:#F44336;">Error SF2 — sintetizador incorporado activo</span>';
+        // BuiltInPiano stays as window.pcSynth — no override needed
     }
 }
 
 // Auto-load SF2: try IndexedDB cache first, then fetch from repo
 (async () => {
+    const statusEl = document.getElementById('sf2-status');
     const cached = await sf2LoadCache();
     if (cached) {
-        sf2Init(cached.buffer, cached.name);
+        await sf2Init(cached.buffer, cached.name);
         return;
     }
-    // Try to load bundled soundfont from GitHub Pages
-    const statusEl = document.getElementById('sf2-status');
     try {
         if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Descargando soundfont…</span>';
         const res = await fetch('./soundfont.sf2');
         if (!res.ok) throw new Error('not found');
         const buffer = await res.arrayBuffer();
-        await sf2SaveCache('soundfont.sf2', buffer);
+        sf2SaveCache('soundfont.sf2', buffer); // fire-and-forget
         await sf2Init(buffer, 'soundfont.sf2');
     } catch {
         if (statusEl) statusEl.innerHTML = '<span style="color:#4CAF50;">✓ Sintetizador incorporado listo</span>';
@@ -1869,9 +1894,8 @@ async function sf2Init(buffer, name) {
 
 document.getElementById('sf2-file')?.addEventListener('change', async e => {
     const file = e.target.files[0]; if (!file) return;
-    const buffer = await file.arrayBuffer();
-    await sf2SaveCache(file.name, buffer);
-    await sf2Init(buffer, file.name);
+    sf2SaveCache(file.name, await file.arrayBuffer()); // cache for next visit
+    await sf2Init(file, file.name);
 });
 
 // PC Synth volume slider (range 0-127, same as CC7)
