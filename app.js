@@ -199,15 +199,23 @@ function scanAndConnect() {
         midiInput.onmidimessage = onMIDIMessage;
     }
 
-    if (midiOutput && midiInput) {
-        setStatus("✓ " + midiOutput.name, true);
+    if (midiInput) {
+        const name = (midiOutput || midiInput).name;
+        const label = midiOutput ? "✓ " + name : "✓ " + name + " (solo entrada)";
+        setStatus(label, true);
         document.getElementById("connectBtn").innerText = "Reconectar";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
-        pushAllToKeyboard(true); // Sync CCs but DON'T overwrite keyboard instruments on boot
+        if (midiOutput) pushAllToKeyboard(true);
     } else {
-        setStatus("Sin dispositivos MIDI", false);
+        const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
+        const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
+        setStatus("Sin dispositivos MIDI (" + ins + " ent. / " + outs + " sal.)", false);
         document.getElementById("connectBtn").innerText = "Conectar";
+        // Reintentar en caso de enumeración tardía (común en USB)
+        [800, 2500, 6000].forEach(t => setTimeout(() => {
+            if (!midiInput) scanAndConnect();
+        }, t));
     }
 }
 
