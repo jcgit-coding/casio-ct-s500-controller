@@ -1500,10 +1500,8 @@ function initArranger() {
 // ======================================================================
 function sendCC(part, cc, value) {
     if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
-    // Mirror EQ/ambience/volume CCs to built-in PC synth (only from U1 to avoid triple-apply)
-    if (part === 'U1' && window.pcSynth && window.pcSynth.applyCC) {
-        window.pcSynth.applyCC(cc, value);
-    }
+    // Mirror todos los CCs de EQ al PC Synth (volumen, cutoff, resonancia, reverb, etc.)
+    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value);
 }
 
 function changeTone(part, msb, lsb, pc) {
@@ -1669,271 +1667,257 @@ const nameEl = document.getElementById('selectedTone-' + part);
     }
 }
 
-// --- PC SYNTH ---
-// Sintetizador Web Audio multitimbral. SF2 externo sobreescribe con mejor calidad.
-
-class BuiltInPiano {
+// --- PC SYNTH — WebAudioFontSynth: muestras reales (CDN) + osciladores de respaldo ---
+class WebAudioFontSynth {
     constructor() {
-        this._ctx     = null;
-        this._master  = null;
-        this._filter  = null;
-        this._rvbGain = null;
-        this._active  = {};         // key: `${ch}_${note}` → {oscs, env, rel}
-        this._programs = {};        // ch → GM program number
-        // Parámetros CC-controlables
-        this.volume    = 0.70;
-        this.cutoff    = 8000;
-        this.resonance = 0.8;
-        this.attack    = 0.005;
-        this.release   = 1.0;
-        this.reverbMix = 0;
+        this._ctx = null;
+        this._master = null; this._filter = null;
+        this._rvbDelay = null; this._rvbFB = null; this._rvbGain = null;
+        this._programs = {};   // ch → GM prog
+        this._fonts = {};      // prog → font data (decoded)
+        this._loading = {};    // prog → Promise
+        this._envs = {};       // `${ch}_${note}` → {cancel?|_osc?,oscs?,env?,rel?}
+        this._wafPlayer = null;
+        this._wafReady = false;
+        this._wafFailed = false;
+        this._wafLoading = null;
+        this.volume = 0.70; this.cutoff = 8000; this.resonance = 0.8;
+        this.attack = 0.005; this.release = 1.0; this.reverbMix = 0;
     }
 
     get synth() { return { ctx: this._ctx }; }
 
     _audio() {
-        if (!this._ctx) {
-            this._ctx    = new (window.AudioContext || window.webkitAudioContext)();
-            this._master = this._ctx.createGain();
-            this._master.gain.value = this.volume;
-            this._master.connect(this._ctx.destination);
+        if (this._ctx) return;
+        this._ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this._master = this._ctx.createGain();
+        this._master.gain.value = this.volume;
+        this._master.connect(this._ctx.destination);
+        this._filter = this._ctx.createBiquadFilter();
+        this._filter.type = 'lowpass';
+        this._filter.frequency.value = this.cutoff;
+        this._filter.Q.value = this.resonance;
+        this._filter.connect(this._master);
+        // Reverb: bucle de delay con feedback
+        this._rvbDelay = this._ctx.createDelay(2.0);
+        this._rvbDelay.delayTime.value = 0.08;
+        this._rvbFB = this._ctx.createGain(); this._rvbFB.gain.value = 0.35;
+        this._rvbGain = this._ctx.createGain(); this._rvbGain.gain.value = this.reverbMix;
+        this._rvbDelay.connect(this._rvbFB); this._rvbFB.connect(this._rvbDelay);
+        this._rvbDelay.connect(this._rvbGain); this._rvbGain.connect(this._master);
+        this._filter.connect(this._rvbDelay);
+    }
 
-            this._filter = this._ctx.createBiquadFilter();
-            this._filter.type = 'lowpass';
-            this._filter.frequency.value = this.cutoff;
-            this._filter.Q.value = this.resonance;
-            this._filter.connect(this._master);
+    _startWAF() {
+        if (this._wafReady || this._wafFailed || this._wafLoading) return;
+        this._wafLoading = (async () => {
+            this._audio();
+            if (typeof WebAudioFontPlayer === 'undefined') {
+                await new Promise((res, rej) => {
+                    const s = document.createElement('script');
+                    s.src = 'https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js';
+                    s.onload = res;
+                    s.onerror = () => rej(new Error('WAF unavailable'));
+                    document.head.appendChild(s);
+                });
+            }
+            this._wafPlayer = new WebAudioFontPlayer();
+            this._wafReady = true;
+            const sfStatus = document.getElementById('sf2-status');
+            if (sfStatus && !sfStatus.dataset.sf2loaded) {
+                sfStatus.innerHTML = '<span style="color:#4CAF50;">✓ PC Synth — muestras reales activas</span>';
+            }
+            // Pre-cargar piano (prog 0) para respuesta inmediata
+            this._loadFont(0).catch(() => {});
+        })().catch(e => {
+            this._wafFailed = true;
+            console.warn('[PC Synth] WebAudioFont no disponible — síntesis por osciladores activa.');
+            const sfStatus = document.getElementById('sf2-status');
+            if (sfStatus && !sfStatus.dataset.sf2loaded) {
+                sfStatus.innerHTML = '<span style="color:#FF9800;">⚠ PC Synth — síntesis básica (sin CDN)</span>';
+            }
+        });
+    }
 
-            // Reverb: bucle de delay con feedback
-            this._rvbDelay = this._ctx.createDelay(2.0);
-            this._rvbDelay.delayTime.value = 0.08;
-            this._rvbFB    = this._ctx.createGain();
-            this._rvbFB.gain.value = 0.35;
-            this._rvbGain  = this._ctx.createGain();
-            this._rvbGain.gain.value = this.reverbMix;
-            this._rvbDelay.connect(this._rvbFB);
-            this._rvbFB.connect(this._rvbDelay);
-            this._rvbDelay.connect(this._rvbGain);
-            this._rvbGain.connect(this._master);
-            this._filter.connect(this._rvbDelay);
-        }
-        if (this._ctx.state === 'suspended') this._ctx.resume();
-        return this._ctx;
+    // Nombre del archivo WebAudioFont para un programa GM (prog * 10, 4 dígitos)
+    _fontKey(prog) { return String(prog * 10).padStart(4, '0') + '_JCLive_sf2_file'; }
+
+    async _loadFont(prog) {
+        if (!this._wafReady || !this._ctx) return null;
+        if (this._fonts[prog]) return this._fonts[prog];
+        if (this._loading[prog]) return this._loading[prog];
+        const key = this._fontKey(prog);
+        const varName = '_tone_' + key;
+        this._loading[prog] = (async () => {
+            if (!window[varName]) {
+                await new Promise((res, rej) => {
+                    const s = document.createElement('script');
+                    s.src = 'https://surikov.github.io/webaudiofontdata/sound/' + key + '.js';
+                    s.onload = res;
+                    s.onerror = () => rej(new Error('Font ' + prog + ' failed'));
+                    document.head.appendChild(s);
+                });
+            }
+            const font = window[varName];
+            if (!font) throw new Error('Font var not found: ' + varName);
+            this._wafPlayer.loader.decodeAfterLoading(this._ctx, varName);
+            await new Promise(res => this._wafPlayer.loader.waitLoad(res));
+            this._fonts[prog] = font;
+            return font;
+        })();
+        return this._loading[prog];
     }
 
     programChange(ch, prog) {
         this._programs[ch] = prog;
-    }
-
-    // Devuelve tipo de síntesis según número de programa GM
-    _synthType(ch) {
-        const p = this._programs[ch] || 0;
-        if (p <= 7)   return 'piano';
-        if (p <= 15)  return 'bell';
-        if (p <= 23)  return 'organ';
-        if (p <= 31)  return 'guitar';
-        if (p <= 39)  return 'bass';
-        if (p <= 47)  return 'strings';
-        if (p <= 55)  return 'ensemble';
-        if (p <= 63)  return 'brass';
-        if (p <= 71)  return 'sax';
-        if (p <= 79)  return 'flute';
-        if (p <= 87)  return 'lead';
-        if (p <= 95)  return 'pad';
-        return 'strings';
-    }
-
-    applyCC(cc, val) {
-        if (!this._ctx) {
-            if (cc === 7)  this.volume    = (val / 127) * 0.9;
-            if (cc === 74) this.cutoff    = 200 + (val / 127) * 11800;
-            if (cc === 71) this.resonance = 0.5 + (val / 127) * 18;
-            if (cc === 91) this.reverbMix = (val / 127) * 0.6;
-            if (cc === 73) this.attack    = 0.001 + (val / 127) * 0.5;
-            if (cc === 72) this.release   = 0.1 + (val / 127) * 3.0;
-            return;
+        if (this._wafReady) this._loadFont(prog).catch(() => {});
+        else if (!this._wafFailed) {
+            (this._wafLoading || Promise.resolve()).then(() => {
+                if (this._wafReady) this._loadFont(prog).catch(() => {});
+            });
         }
-        const t = this._ctx.currentTime;
-        if (cc === 7)  { this.volume    = (val/127)*0.9;          this._master.gain.setTargetAtTime(this.volume, t, 0.02); }
-        if (cc === 74) { this.cutoff    = 200+(val/127)*11800;     this._filter.frequency.setTargetAtTime(this.cutoff, t, 0.02); }
-        if (cc === 71) { this.resonance = 0.5+(val/127)*18;        this._filter.Q.setTargetAtTime(this.resonance, t, 0.02); }
-        if (cc === 91) { this.reverbMix = (val/127)*0.6;           this._rvbGain.gain.setTargetAtTime(this.reverbMix, t, 0.05); }
-        if (cc === 73) { this.attack    = 0.001+(val/127)*0.5; }
-        if (cc === 72) { this.release   = 0.1+(val/127)*3.0; }
     }
 
     noteOn(ch, note, velocity) {
-        const ctx  = this._audio();
-        const key  = `${ch}_${note}`;
-        this._forceStop(key);
-        const freq = 440 * Math.pow(2, (note - 69) / 12);
-        const vel  = Math.max(0.02, Math.min(1, (velocity || 64) / 127));
-        const now  = ctx.currentTime;
-        const type = this._synthType(ch);
+        this._audio();
+        if (this._ctx.state === 'suspended') this._ctx.resume();
+        const prog = this._programs[ch] || 0;
+        const key = `${ch}_${note}`;
+        this._stopKey(key);
+        const vol = Math.max(0.01, Math.min(1, (velocity || 64) / 127));
 
-        const env = ctx.createGain();
+        if (this._wafReady && this._fonts[prog]) {
+            try {
+                // queueWaveTable conecta al _filter → todo pasa por cutoff/resonancia/reverb
+                const env = this._wafPlayer.queueWaveTable(this._ctx, this._filter, this._fonts[prog], 0, note, 99999, vol);
+                if (env) this._envs[key] = env;
+                return;
+            } catch(e) { /* cae a osciladores */ }
+        }
+        // Respaldo: osciladores mientras carga WAF
+        this._oscNote(key, note, vol, prog);
+        if (!this._wafFailed) this._startWAF();
+    }
+
+    _oscNote(key, note, vol, prog) {
+        if (!this._ctx) return;
+        const freq = 440 * Math.pow(2, (note - 69) / 12);
+        const now = this._ctx.currentTime;
+        const type = prog <= 7 ? 'piano' : prog <= 15 ? 'bell' : prog <= 23 ? 'organ' :
+            prog <= 31 ? 'guitar' : prog <= 39 ? 'bass' : prog <= 47 ? 'strings' :
+            prog <= 63 ? 'brass' : prog <= 79 ? 'flute' : prog <= 87 ? 'lead' :
+            prog <= 95 ? 'pad' : 'strings';
+
+        const env = this._ctx.createGain();
         env.gain.setValueAtTime(0.001, now);
         env.connect(this._filter);
-
         const oscs = [];
         let rel = this.release;
 
-        const osc = (waveType, f, gain, detuneC = 0) => {
-            const o = ctx.createOscillator();
-            const g = ctx.createGain();
-            o.type = waveType; o.frequency.value = f;
-            if (detuneC) o.detune.value = detuneC;
-            g.gain.value = gain;
-            o.connect(g); g.connect(env); o.start(now);
-            oscs.push(o);
+        const osc = (wt, f, g, det = 0) => {
+            const o = this._ctx.createOscillator(), gn = this._ctx.createGain();
+            o.type = wt; o.frequency.value = f; if (det) o.detune.value = det;
+            gn.gain.value = g; o.connect(gn); gn.connect(env); o.start(now); oscs.push(o);
         };
 
         if (type === 'piano') {
-            // Additive sine con dos capas ligeramente desafinadas
-            [[1,1],[2,0.45],[3,0.2],[4,0.08],[6,0.03]].forEach(([r,g]) => {
-                osc('sine', freq*r, g*0.5);
-                osc('sine', freq*r, g*0.4, 4); // ligero detune
-            });
-            env.gain.linearRampToValueAtTime(vel*0.85, now + this.attack);
-            env.gain.exponentialRampToValueAtTime(vel*0.25, now + this.attack + 0.25);
-            rel = this.release;
-
+            [[1,1],[2,0.45],[3,0.2],[4,0.08]].forEach(([r,g]) => { osc('sine',freq*r,g*0.5); osc('sine',freq*r,g*0.4,4); });
+            env.gain.linearRampToValueAtTime(vol*0.85, now+this.attack);
+            env.gain.exponentialRampToValueAtTime(vol*0.25, now+this.attack+0.25);
         } else if (type === 'bell') {
-            [[1,1],[2.76,0.55],[5.4,0.25],[8.93,0.09]].forEach(([r,g]) => osc('sine', freq*r, g*0.55));
-            env.gain.linearRampToValueAtTime(vel*0.9, now+0.001);
-            env.gain.exponentialRampToValueAtTime(vel*0.01, now+2.5);
-            rel = 0.4;
-
+            [[1,1],[2.76,0.55],[5.4,0.25],[8.93,0.09]].forEach(([r,g]) => osc('sine',freq*r,g*0.55));
+            env.gain.linearRampToValueAtTime(vol*0.9, now+0.001);
+            env.gain.exponentialRampToValueAtTime(vol*0.01, now+2.5); rel = 0.4;
         } else if (type === 'organ') {
-            // Drawbar Hammond — sumas de armónicos con dientes de sierra
-            [1,2,3,4,6].forEach((r,i) => {
-                const g = [0.4,0.3,0.2,0.12,0.06][i];
-                osc('sawtooth', freq*r, g);
-                osc('sawtooth', freq*r, g*0.6, 6); // chorus Leslie
-            });
-            env.gain.linearRampToValueAtTime(vel*0.8, now+0.005);
-            rel = 0.06; // órgano: apagado rápido
-
+            [1,2,3,4].forEach((r,i) => { const g=[0.4,0.3,0.2,0.1][i]; osc('sawtooth',freq*r,g); osc('sawtooth',freq*r,g*0.6,6); });
+            env.gain.linearRampToValueAtTime(vol*0.8, now+0.005); rel = 0.06;
         } else if (type === 'guitar') {
-            // Plucked: ataque rápido, decaimiento rápido
-            osc('sawtooth', freq, 0.4);
-            osc('sine', freq*2, 0.25);
-            osc('sine', freq*3, 0.1);
-            env.gain.linearRampToValueAtTime(vel*0.8, now+0.003);
-            env.gain.exponentialRampToValueAtTime(vel*0.1, now+0.35);
-            rel = 0.3;
-
+            osc('sawtooth',freq,0.4); osc('sine',freq*2,0.25);
+            env.gain.linearRampToValueAtTime(vol*0.8, now+0.003);
+            env.gain.exponentialRampToValueAtTime(vol*0.1, now+0.35); rel = 0.3;
         } else if (type === 'bass') {
-            osc('triangle', freq, 0.5);
-            osc('sine', freq*2, 0.3);
-            osc('sine', freq*0.5, 0.15);
-            env.gain.linearRampToValueAtTime(vel*0.85, now+0.006);
-            env.gain.exponentialRampToValueAtTime(vel*0.35, now+0.12);
-            rel = 0.25;
-
-        } else if (type === 'strings') {
-            // Cuerdas: ataque lento, cuerpo con sawtooth+chorus
-            osc('sawtooth', freq, 0.35);
-            osc('sawtooth', freq, 0.3, -8);
-            osc('sawtooth', freq*2, 0.12);
-            const atk = Math.max(this.attack, 0.25);
-            env.gain.linearRampToValueAtTime(vel*0.75, now+atk);
-            rel = this.release * 1.2;
-
-        } else if (type === 'ensemble') {
-            // Strings+choir: múltiples capas
-            osc('sawtooth', freq, 0.3);
-            osc('sawtooth', freq, 0.25, -10);
-            osc('sawtooth', freq, 0.2, 10);
-            osc('sine', freq*2, 0.1);
-            const atk = Math.max(this.attack, 0.35);
-            env.gain.linearRampToValueAtTime(vel*0.7, now+atk);
-            rel = this.release * 1.5;
-
+            osc('triangle',freq,0.5); osc('sine',freq*2,0.3); osc('sine',freq*0.5,0.15);
+            env.gain.linearRampToValueAtTime(vol*0.85, now+0.006);
+            env.gain.exponentialRampToValueAtTime(vol*0.35, now+0.12); rel = 0.25;
+        } else if (type === 'strings' || type === 'pad') {
+            osc('sawtooth',freq,0.35); osc('sawtooth',freq,0.3,-8); osc('sawtooth',freq*2,0.12);
+            const atk = Math.max(this.attack, type==='pad'?0.65:0.25);
+            env.gain.linearRampToValueAtTime(vol*0.75, now+atk);
+            rel = this.release * (type==='pad'?2:1.2);
         } else if (type === 'brass') {
-            osc('square', freq, 0.3);
-            osc('sawtooth', freq, 0.35);
-            osc('sawtooth', freq*2, 0.12);
-            env.gain.linearRampToValueAtTime(vel*0.85, now+0.018);
-            env.gain.exponentialRampToValueAtTime(vel*0.65, now+0.1);
-            rel = 0.18;
-
-        } else if (type === 'sax') {
-            osc('sawtooth', freq, 0.4);
-            osc('square', freq*0.5, 0.2);
-            osc('sawtooth', freq*2, 0.1);
-            env.gain.linearRampToValueAtTime(vel*0.8, now+0.012);
-            rel = 0.25;
-
-        } else if (type === 'flute') {
-            osc('triangle', freq, 0.5);
-            osc('triangle', freq*2, 0.18);
-            osc('sine', freq*3, 0.06);
-            env.gain.linearRampToValueAtTime(vel*0.75, now+0.04);
-            rel = 0.3;
-
+            osc('square',freq,0.3); osc('sawtooth',freq,0.35); osc('sawtooth',freq*2,0.12);
+            env.gain.linearRampToValueAtTime(vol*0.85, now+0.018);
+            env.gain.exponentialRampToValueAtTime(vol*0.65, now+0.1); rel = 0.18;
+        } else if (type === 'flute' || type === 'sax') {
+            osc('triangle',freq,0.5); osc('triangle',freq*2,0.18); osc('sine',freq*3,0.06);
+            env.gain.linearRampToValueAtTime(vol*0.75, now+0.04); rel = 0.3;
         } else if (type === 'lead') {
-            osc('sawtooth', freq, 0.45);
-            osc('square', freq, 0.2, -5);
-            osc('sawtooth', freq*2, 0.08);
-            env.gain.linearRampToValueAtTime(vel*0.85, now+0.004);
-            rel = 0.12;
-
-        } else if (type === 'pad') {
-            osc('sawtooth', freq, 0.3);
-            osc('sawtooth', freq, 0.25, -12);
-            osc('sawtooth', freq, 0.2, 12);
-            osc('sine', freq*2, 0.1);
-            const atk = Math.max(this.attack, 0.65);
-            env.gain.linearRampToValueAtTime(vel*0.65, now+atk);
-            rel = this.release * 2.0;
-
+            osc('sawtooth',freq,0.45); osc('square',freq,0.2,-5);
+            env.gain.linearRampToValueAtTime(vol*0.85, now+0.004); rel = 0.12;
         } else {
-            osc('sine', freq, 0.7);
-            env.gain.linearRampToValueAtTime(vel*0.8, now+0.01);
+            osc('sine',freq,0.7); env.gain.linearRampToValueAtTime(vol*0.8, now+0.01);
         }
+        this._envs[key] = { _osc: true, oscs, env, rel };
+    }
 
-        this._active[key] = { oscs, env, rel };
+    _stopKey(key) {
+        const e = this._envs[key];
+        if (!e) return;
+        delete this._envs[key];
+        if (e._osc) {
+            e.oscs.forEach(o => { try { o.stop(); } catch(err) {} });
+            try { e.env.disconnect(); } catch(err) {}
+        } else { try { e.cancel(); } catch(err) {} }
     }
 
     noteOff(ch, note) {
         const key = `${ch}_${note}`;
-        const n = this._active[key];
-        this._release(key, n ? n.rel : this.release);
+        const e = this._envs[key];
+        if (!e) return;
+        delete this._envs[key];
+        if (e._osc) {
+            const now = this._ctx.currentTime;
+            const dur = Math.max(0.05, e.rel);
+            e.env.gain.cancelScheduledValues(now);
+            e.env.gain.setValueAtTime(Math.max(0.0001, e.env.gain.value), now);
+            e.env.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+            setTimeout(() => {
+                e.oscs.forEach(o => { try { o.stop(); } catch(err) {} });
+                try { e.env.disconnect(); } catch(err) {}
+            }, (dur + 0.1) * 1000);
+        } else { try { e.cancel(); } catch(err) {} }
     }
 
-    _release(key, dur) {
-        const n = this._active[key];
-        if (!n || !this._ctx) return;
-        delete this._active[key];
-        const now = this._ctx.currentTime;
-        n.env.gain.cancelScheduledValues(now);
-        n.env.gain.setValueAtTime(Math.max(0.0001, n.env.gain.value), now);
-        n.env.gain.exponentialRampToValueAtTime(0.0001, now + Math.max(0.05, dur));
-        setTimeout(() => {
-            n.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
-            try { n.env.disconnect(); } catch(e) {}
-        }, (Math.max(0.05, dur) + 0.1) * 1000);
-    }
-
-    _forceStop(key) {
-        const n = this._active[key];
-        if (!n) return;
-        delete this._active[key];
-        n.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
-        try { n.env.disconnect(); } catch(e) {}
+    applyCC(cc, val) {
+        if (!this._ctx) {
+            if (cc === 7)  this.volume    = (val/127)*0.9;
+            if (cc === 74) this.cutoff    = 200+(val/127)*11800;
+            if (cc === 71) this.resonance = 0.5+(val/127)*18;
+            if (cc === 91) this.reverbMix = (val/127)*0.6;
+            if (cc === 73) this.attack    = 0.001+(val/127)*0.5;
+            if (cc === 72) this.release   = 0.1+(val/127)*3.0;
+            return;
+        }
+        const t = this._ctx.currentTime;
+        if (cc === 7)  { this.volume    = (val/127)*0.9;      this._master.gain.setTargetAtTime(this.volume, t, 0.02); }
+        if (cc === 74) { this.cutoff    = 200+(val/127)*11800; this._filter.frequency.setTargetAtTime(this.cutoff, t, 0.02); }
+        if (cc === 71) { this.resonance = 0.5+(val/127)*18;    this._filter.Q.setTargetAtTime(this.resonance, t, 0.02); }
+        if (cc === 91) { this.reverbMix = (val/127)*0.6;       this._rvbGain.gain.setTargetAtTime(this.reverbMix, t, 0.05); }
+        if (cc === 73) this.attack  = 0.001+(val/127)*0.5;
+        if (cc === 72) this.release = 0.1+(val/127)*3.0;
     }
 }
 
-// Initialise built-in synth immediately (no upload needed)
-window.pcSynth  = new BuiltInPiano();
+// Inicializar sintetizador e iniciar descarga de muestras WebAudioFont
+window.pcSynth  = new WebAudioFontSynth();
 window.sf2Ready = true;
 (function() {
     const el = document.getElementById('sf2-status');
-    if (el) el.innerHTML = '<span style="color:#4CAF50;">✓ Sintetizador incorporado listo</span>';
-    // Sync initial volume from sf2-vol slider so master gain coincide desde el inicio
+    if (el) el.innerHTML = '<span style="color:var(--accent);">Cargando muestras de instrumentos…</span>';
     const initVol = parseInt(document.getElementById('sf2-vol')?.value || 100);
     window.pcSynth.applyCC(7, initVol);
+    // Arrancar descarga de WebAudioFont en background
+    window.pcSynth._startWAF();
 })();
 
 // IndexedDB helpers for optional SF2 cache
@@ -2023,7 +2007,7 @@ async function sf2Init(source, name) {
             }
         };
         window.sf2Ready = true;
-        if (statusEl) statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>';
+        if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
     } catch(err) {
         console.error('SF2 init error:', err);
         if (statusEl) statusEl.innerHTML = '<span style="color:#F44336;">Error SF2 — sintetizador incorporado activo</span>';
@@ -2047,7 +2031,7 @@ async function sf2Init(source, name) {
         sf2SaveCache('soundfont.sf2', buffer); // fire-and-forget
         await sf2Init(buffer, 'soundfont.sf2');
     } catch {
-        if (statusEl) statusEl.innerHTML = '<span style="color:#4CAF50;">✓ Sintetizador incorporado listo</span>';
+        // soundfont.sf2 no encontrado — WebAudioFontSynth está activo (actualiza su propio estado)
     }
 })();
 
