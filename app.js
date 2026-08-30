@@ -67,6 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let midiInitAttempted = false;
     document.addEventListener("click", () => {
         if (!midiInitAttempted) { midiInitAttempted = true; initMIDI(); }
+        // Pre-init AudioContext on first gesture so PC synth is ready immediately
+        if (window.pcSynth && typeof window.pcSynth._audio === 'function') window.pcSynth._audio();
     }, { once: true });
 
     document.getElementById("connectBtn").addEventListener("click", () => {
@@ -617,9 +619,14 @@ function buildEQ() {
     
                 fader.addEventListener('input', e => {
                     const v = parseInt(e.target.value);
-                    eqState[activePart][ctrl.cc] = v;
                     valSpan.innerText = formatVal(ctrl.label, v);
-                    sendCC(activePart, ctrl.cc, v);
+                    if (ctrl.cc === 7) {
+                        // Volume: master — aplica a todos los parts
+                        ['U1','U2','L'].forEach(p => { eqState[p][7] = v; sendCC(p, 7, v); });
+                    } else {
+                        eqState[activePart][ctrl.cc] = v;
+                        sendCC(activePart, ctrl.cc, v);
+                    }
                 });
                 fader.addEventListener('change', () => {
                     if (typeof saveAppState === 'function') saveAppState();
@@ -1306,8 +1313,11 @@ function initArranger() {
 //  MIDI SEND HELPERS
 // ======================================================================
 function sendCC(part, cc, value) {
-    if (!midiOutput) return;
-    midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
+    if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
+    // Mirror EQ/ambience/volume CCs to built-in PC synth (only from U1 to avoid triple-apply)
+    if (part === 'U1' && window.pcSynth && window.pcSynth.applyCC) {
+        window.pcSynth.applyCC(cc, value);
+    }
 }
 
 function changeTone(part, msb, lsb, pc) {
@@ -1468,60 +1478,97 @@ const nameEl = document.getElementById('selectedTone-' + part);
 
 class BuiltInPiano {
     constructor() {
-        this._ctx = null;
+        this._ctx    = null;
         this._master = null;
+        this._filter = null;
+        this._rvbGain = null;
         this._active = {};
+        // CC-controlled params
+        this.volume    = 0.55;
+        this.cutoff    = 10000;
+        this.resonance = 0.8;
+        this.attack    = 0.005;
+        this.release   = 1.1;
+        this.reverbMix = 0;
     }
     get synth() { return { ctx: this._ctx }; }
 
     _audio() {
         if (!this._ctx) {
             this._ctx = new (window.AudioContext || window.webkitAudioContext)();
+            // master gain
             this._master = this._ctx.createGain();
-            this._master.gain.value = 0.55;
+            this._master.gain.value = this.volume;
             this._master.connect(this._ctx.destination);
+            // lowpass filter (cutoff / resonance)
+            this._filter = this._ctx.createBiquadFilter();
+            this._filter.type = 'lowpass';
+            this._filter.frequency.value = this.cutoff;
+            this._filter.Q.value = this.resonance;
+            this._filter.connect(this._master);
+            // simple reverb: feedback delay loop
+            this._rvbDelay = this._ctx.createDelay(2.0);
+            this._rvbDelay.delayTime.value = 0.085;
+            this._rvbFB = this._ctx.createGain();
+            this._rvbFB.gain.value = 0.38;
+            this._rvbGain = this._ctx.createGain();
+            this._rvbGain.gain.value = this.reverbMix;
+            this._rvbDelay.connect(this._rvbFB);
+            this._rvbFB.connect(this._rvbDelay);
+            this._rvbDelay.connect(this._rvbGain);
+            this._rvbGain.connect(this._master);
+            // note envs route to filter, filter sends to both dry (master) and reverb
+            this._filter.connect(this._rvbDelay);
         }
         if (this._ctx.state === 'suspended') this._ctx.resume();
         return this._ctx;
     }
 
+    // Called by sendCC so EQ/ambience/volume mirror to PC synth in real time
+    applyCC(cc, val) {
+        if (!this._ctx) {
+            // Store for when audio starts; update properties
+            const map = { 7: 'volume', 74: 'cutoff', 71: 'resonance', 91: 'reverbMix', 73: 'attack', 72: 'release' };
+            if (map[cc] !== undefined) {
+                if (cc === 7)  this.volume    = (val / 127) * 0.8;
+                if (cc === 74) this.cutoff    = 80 + (val / 127) * 11920;
+                if (cc === 71) this.resonance = 0.5 + (val / 127) * 18;
+                if (cc === 91) this.reverbMix = (val / 127) * 0.65;
+                if (cc === 73) this.attack    = 0.001 + (val / 127) * 0.5;
+                if (cc === 72) this.release   = 0.1   + (val / 127) * 3.0;
+            }
+            return;
+        }
+        const t = this._ctx.currentTime;
+        if (cc === 7)  { this.volume    = (val/127)*0.8;          this._master.gain.setTargetAtTime(this.volume, t, 0.02); }
+        if (cc === 74) { this.cutoff    = 80+(val/127)*11920;      this._filter.frequency.setTargetAtTime(this.cutoff, t, 0.02); }
+        if (cc === 71) { this.resonance = 0.5+(val/127)*18;        this._filter.Q.setTargetAtTime(this.resonance, t, 0.02); }
+        if (cc === 91) { this.reverbMix = (val/127)*0.65;          this._rvbGain.gain.setTargetAtTime(this.reverbMix, t, 0.05); }
+        if (cc === 73) { this.attack    = 0.001+(val/127)*0.5; }
+        if (cc === 72) { this.release   = 0.1+(val/127)*3.0; }
+    }
+
     noteOn(note, velocity) {
         const ctx = this._audio();
         this._forceStop(note);
-        const freq  = 440 * Math.pow(2, (note - 69) / 12);
-        const vel   = Math.max(0.01, Math.min(1, (velocity || 64) / 127));
-        const now   = ctx.currentTime;
-        const env   = ctx.createGain();
-        // Fast piano-like attack → decay → sustain
+        const freq = 440 * Math.pow(2, (note - 69) / 12);
+        const vel  = Math.max(0.01, Math.min(1, (velocity || 64) / 127));
+        const now  = ctx.currentTime;
+        const env  = ctx.createGain();
         env.gain.setValueAtTime(0, now);
-        env.gain.linearRampToValueAtTime(vel * 0.65, now + 0.005);
-        env.gain.exponentialRampToValueAtTime(vel * 0.20, now + 0.35);
-        env.connect(this._master);
-        // Overtone stack (fundamental + harmonics give piano-like timbre)
-        const partials = [
-            { r: 1,   g: 1.0  },
-            { r: 2,   g: 0.45 },
-            { r: 3,   g: 0.20 },
-            { r: 4,   g: 0.09 },
-            { r: 6,   g: 0.04 },
-            { r: 8,   g: 0.02 },
-        ];
-        const oscs = partials.map(({ r, g }) => {
-            const osc = ctx.createOscillator();
-            const gn  = ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = freq * r;
-            gn.gain.value = g;
-            osc.connect(gn); gn.connect(env);
-            osc.start(now);
-            return osc;
+        env.gain.linearRampToValueAtTime(vel * 0.65, now + this.attack);
+        env.gain.exponentialRampToValueAtTime(vel * 0.20, now + this.attack + 0.35);
+        env.connect(this._filter);
+        const partials = [{r:1,g:1},{r:2,g:0.45},{r:3,g:0.20},{r:4,g:0.09},{r:6,g:0.04},{r:8,g:0.02}];
+        const oscs = partials.map(({r,g}) => {
+            const osc = ctx.createOscillator(); const gn = ctx.createGain();
+            osc.type = 'sine'; osc.frequency.value = freq * r; gn.gain.value = g;
+            osc.connect(gn); gn.connect(env); osc.start(now); return osc;
         });
         this._active[note] = { oscs, env };
     }
 
-    noteOff(note) {
-        this._release(note, 1.1);
-    }
+    noteOff(note) { this._release(note, this.release); }
 
     _release(note, dur) {
         const n = this._active[note];
