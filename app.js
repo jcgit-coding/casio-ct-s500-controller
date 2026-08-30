@@ -212,10 +212,6 @@ function scanAndConnect() {
         const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
         setStatus("Sin dispositivos MIDI (" + ins + " ent. / " + outs + " sal.)", false);
         document.getElementById("connectBtn").innerText = "Conectar";
-        // Reintentar en caso de enumeración tardía (común en USB)
-        [800, 2500, 6000].forEach(t => setTimeout(() => {
-            if (!midiInput) scanAndConnect();
-        }, t));
     }
 }
 
