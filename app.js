@@ -372,7 +372,7 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        title: 'Envíolvente (ADSR)',
+        title: 'Envolvente (ADSR)',
         controls: [
             { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
