@@ -354,10 +354,16 @@ function onMIDIMessage(e) {
         // CC7 = master volume: applies to all parts regardless of channel
         if (d1 === 7) {
             ['U1','U2','L'].forEach(p => { eqState[p][7] = d2; });
-            const fader = document.querySelector('.eq-fader[data-cc="7"]');
-            if (fader) fader.value = d2;
-            const valEl = document.getElementById('eq-val-7');
-            if (valEl) valEl.innerText = formatVal('VOLUMEN', d2);
+            
+            // Update UI for the currently active part's fader (consistent with other CCs)
+            const ctrl = EQ_CONTROLS.find(c => c && c.cc === 7);
+            if (ctrl) {
+                const fader = document.querySelector('.eq-fader[data-cc="7"]');
+                if (fader) fader.value = d2;
+                const valEl = document.getElementById('eq-val-7');
+                if (valEl) valEl.innerText = formatVal(ctrl.label, d2);
+            }
+            
             // Sync PC Synth volume slider (0-127 range, same as CC7)
             const sfVol = document.getElementById('sf2-vol');
             if (sfVol) {
@@ -516,152 +522,164 @@ let currentEnv = 'Estudio';
 //   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES
 // SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como categorías del Casio)
 const ENVIRONMENTS = {
+    // ══════════════════════════════════════════════════════════════════════
+    //  ESTUDIO — Respuesta plana, monitoreo de referencia.
+    //  Cutoff alto: dejar pasar todos los armónicos. Reverb mínimo (sala seca).
+    //  Resonancia 0 en acústicos. Attack/Release según naturaleza del instrumento.
+    // ══════════════════════════════════════════════════════════════════════
     "Estudio": {
-        // Seco, preciso, mínimo color. CC71=0 en acústicos; resonancia solo en sinths/metal.
-        "PIANO":            { "74":68, "71":0,  "73":55, "91":18 },
-        "HARPSICHORD":      { "74":70, "71":0,  "73":45, "91":14 },
-        "ELEC.PIANO":       { "74":62, "71":0,  "91":22, "93":12 },
-        "CLAVI":            { "74":70, "71":0,  "73":45, "91":14 },
-        "VIB./CHROM.PERC.": { "74":72, "71":0,  "91":28, "93":8  },
-        "ELEC.ORGAN":       { "74":64, "71":0,  "91":20, "93":40, "77":68 },
-        "PIPE ORGAN":       { "74":62, "71":0,  "91":55, "93":8  },
-        "ACCORDION":        { "74":64, "71":0,  "91":18, "93":10 },
-        "ACOUS.GUITAR":     { "74":66, "71":0,  "73":60, "91":12 },
-        "ELEC.GUITAR":      { "74":68, "71":0,  "73":58, "91":16, "93":8  },
-        "ACOUS.BASS":       { "74":52, "71":0,  "75":55, "91":8  },
-        "ELEC.BASS":        { "74":60, "71":0,  "75":58, "91":6  },
-        "SYNTH-BASS":       { "74":48, "71":72, "73":50, "75":52, "91":12 },
-        "SOLO STRINGS":     { "74":62, "71":0,  "73":68, "77":62, "78":58, "91":35 },
-        "STRING ENSEMBLE":  { "74":60, "71":0,  "73":72, "91":42, "93":14 },
-        "SOLO BRASS":       { "74":72, "71":0,  "73":58, "91":25 },
-        "BRASS ENSEMBLE":   { "74":72, "71":35, "73":55, "91":30, "93":8  },
-        "SYNTH-BRASS":      { "74":65, "71":60, "73":58, "91":35, "93":14 },
-        "SAX":              { "74":68, "71":0,  "73":58, "77":58, "91":22 },
-        "REED":             { "74":62, "71":0,  "73":60, "91":20 },
-        "PIPE":             { "74":68, "71":0,  "73":62, "78":58, "91":28 },
-        "SYNTH-LEAD":       { "74":68, "71":72, "91":38, "94":24 },
-        "SYNTH-PAD":        { "74":50, "71":45, "73":88, "91":58, "93":38, "94":16 },
-        "CHOIR":            { "74":58, "71":0,  "73":80, "91":38, "93":18 },
-        "EDM SYNTH":        { "74":78, "71":85, "73":55, "91":32, "94":26 },
-        "CASIO CLASSIC":    { "74":64, "91":18 },
-        "INDIAN":           { "74":66, "91":28 },
-        "INDONESIAN":       { "74":64, "91":25 },
-        "ARABIC":           { "74":66, "91":25 },
-        "CHINESE":          { "74":66, "91":25 },
-        "BRAZILIAN":        { "74":64, "91":22 },
-        "ETHNIC OTHERS":    { "74":64, "91":22 },
-        "GM TONES":         { "74":64, "91":22 }
+        "PIANO":            { "74":90, "71":0,  "73":42, "72":82, "75":68, "91":12, "93":0  },
+        "HARPSICHORD":      { "74":95, "71":0,  "73":30, "72":55, "75":48, "91":8,  "93":0  },
+        "ELEC.PIANO":       { "74":78, "71":0,  "73":44, "72":72, "91":15, "93":8   },
+        "CLAVI":            { "74":88, "71":0,  "73":28, "72":48, "75":42, "91":8,  "93":0  },
+        "VIB./CHROM.PERC.": { "74":85, "71":0,  "73":25, "72":88, "91":22, "93":4   },
+        "ELEC.ORGAN":       { "74":92, "71":0,  "73":20, "72":32, "91":14, "93":35, "76":72, "77":65 },
+        "PIPE ORGAN":       { "74":80, "71":0,  "73":40, "72":95, "91":48, "93":6   },
+        "ACCORDION":        { "74":78, "71":0,  "73":38, "72":60, "91":12, "93":6   },
+        "ACOUS.GUITAR":     { "74":84, "71":0,  "73":32, "72":65, "75":58, "91":10, "93":0  },
+        "ELEC.GUITAR":      { "74":82, "71":0,  "73":35, "72":55, "91":12, "93":5   },
+        "ACOUS.BASS":       { "74":58, "71":0,  "73":38, "72":48, "75":62, "91":6,  "93":0  },
+        "ELEC.BASS":        { "74":65, "71":0,  "73":40, "72":50, "75":60, "91":4,  "93":0  },
+        "SYNTH-BASS":       { "74":45, "71":78, "73":35, "72":42, "75":55, "91":8,  "93":0  },
+        "SOLO STRINGS":     { "74":76, "71":0,  "73":65, "72":85, "91":28, "76":68, "77":55, "78":62 },
+        "STRING ENSEMBLE":  { "74":72, "71":0,  "73":72, "72":92, "91":35, "93":10  },
+        "SOLO BRASS":       { "74":88, "71":0,  "73":48, "72":58, "91":18  },
+        "BRASS ENSEMBLE":   { "74":90, "71":30, "73":45, "72":55, "91":22, "93":5   },
+        "SYNTH-BRASS":      { "74":72, "71":62, "73":45, "72":52, "91":25, "93":10  },
+        "SAX":              { "74":80, "71":0,  "73":48, "72":60, "91":16, "76":62, "77":52, "78":55 },
+        "REED":             { "74":75, "71":0,  "73":52, "72":65, "91":14  },
+        "PIPE":             { "74":82, "71":0,  "73":55, "72":62, "91":20, "76":58, "77":48, "78":60 },
+        "SYNTH-LEAD":       { "74":75, "71":72, "73":32, "72":40, "91":28, "94":18  },
+        "SYNTH-PAD":        { "74":52, "71":42, "73":92, "72":100,"91":45, "93":30, "94":12  },
+        "CHOIR":            { "74":65, "71":0,  "73":78, "72":90, "91":32, "93":12  },
+        "EDM SYNTH":        { "74":88, "71":90, "73":38, "72":42, "91":22, "94":20  },
+        "CASIO CLASSIC":    { "74":72, "71":0,  "91":12  },
+        "INDIAN":           { "74":78, "71":0,  "73":45, "72":70, "91":22, "76":65, "77":58  },
+        "INDONESIAN":       { "74":80, "71":0,  "73":30, "72":78, "91":20  },
+        "ARABIC":           { "74":76, "71":0,  "73":48, "72":68, "91":22, "76":68, "77":62  },
+        "CHINESE":          { "74":82, "71":0,  "73":35, "72":72, "91":20, "76":60, "77":50  },
+        "BRAZILIAN":        { "74":80, "71":0,  "73":32, "72":55, "91":15  },
+        "ETHNIC OTHERS":    { "74":78, "71":0,  "73":40, "72":65, "91":18  },
+        "GM TONES":         { "74":80, "71":0,  "91":16  }
     },
+    // ══════════════════════════════════════════════════════════════════════
+    //  VIVO — Sala mediana, presencia en medios-altos para cortar en la mezcla.
+    //  Más reverb que estudio, ligero chorus en teclados, vibrato activo en vientos.
+    // ══════════════════════════════════════════════════════════════════════
     "Vivo": {
-        // En vivo — más presencia, más reverb, más vibrato para vientos/cuerdas. CC71=0 en acústicos.
-        "PIANO":            { "74":75, "71":8,  "73":60, "91":50 },
-        "HARPSICHORD":      { "74":74, "71":0,  "73":50, "91":30 },
-        "ELEC.PIANO":       { "74":72, "71":22, "91":48, "93":28 },
-        "CLAVI":            { "74":74, "71":8,  "73":50, "91":28 },
-        "VIB./CHROM.PERC.": { "74":78, "71":8,  "91":52, "93":16 },
-        "ELEC.ORGAN":       { "74":70, "71":8,  "91":40, "93":58, "77":78 },
-        "PIPE ORGAN":       { "74":70, "71":0,  "91":72, "93":16 },
-        "ACCORDION":        { "74":70, "71":0,  "91":42, "93":12 },
-        "ACOUS.GUITAR":     { "74":74, "71":0,  "73":58, "91":38 },
-        "ELEC.GUITAR":      { "74":75, "71":12, "73":56, "91":42, "93":20, "94":16 },
-        "ACOUS.BASS":       { "74":58, "71":0,  "75":52, "91":22 },
-        "ELEC.BASS":        { "74":70, "71":8,  "75":55, "91":18 },
-        "SYNTH-BASS":       { "74":60, "71":88, "73":52, "75":48, "91":30, "93":10 },
-        "SOLO STRINGS":     { "74":70, "71":8,  "73":65, "72":80, "77":76, "78":55, "91":65 },
-        "STRING ENSEMBLE":  { "74":72, "71":8,  "73":72, "91":70, "93":36 },
-        "SOLO BRASS":       { "74":80, "71":8,  "73":58, "91":52 },
-        "BRASS ENSEMBLE":   { "74":82, "71":60, "73":55, "91":55, "93":16 },
-        "SYNTH-BRASS":      { "74":78, "71":75, "73":58, "91":60, "93":28 },
-        "SAX":              { "74":75, "71":10, "73":58, "77":70, "91":52 },
-        "REED":             { "74":70, "71":0,  "91":45 },
-        "PIPE":             { "74":75, "71":0,  "78":55, "91":55 },
-        "SYNTH-LEAD":       { "74":82, "71":80, "91":62, "94":26 },
-        "SYNTH-PAD":        { "74":62, "71":55, "73":85, "91":72, "93":62, "94":26 },
-        "CHOIR":            { "74":68, "71":0,  "73":80, "72":85, "91":72, "93":28 },
-        "EDM SYNTH":        { "74":88, "71":92, "73":55, "91":55, "94":28 },
-        "CASIO CLASSIC":    { "74":70, "91":35 },
-        "INDIAN":           { "74":72, "91":45 },
-        "INDONESIAN":       { "74":72, "91":45 },
-        "ARABIC":           { "74":72, "91":45 },
-        "CHINESE":          { "74":72, "91":45 },
-        "BRAZILIAN":        { "74":72, "91":42 },
-        "ETHNIC OTHERS":    { "74":72, "91":42 },
-        "GM TONES":         { "74":70, "91":40 }
+        "PIANO":            { "74":96, "71":5,  "73":45, "72":78, "75":65, "91":42, "93":4   },
+        "HARPSICHORD":      { "74":98, "71":0,  "73":32, "72":52, "91":28, "93":0   },
+        "ELEC.PIANO":       { "74":85, "71":18, "73":46, "72":70, "91":40, "93":22  },
+        "CLAVI":            { "74":92, "71":5,  "73":30, "72":45, "91":25, "93":0   },
+        "VIB./CHROM.PERC.": { "74":92, "71":5,  "73":25, "72":82, "91":45, "93":10  },
+        "ELEC.ORGAN":       { "74":98, "71":8,  "73":22, "72":30, "91":32, "93":52, "76":78, "77":72 },
+        "PIPE ORGAN":       { "74":85, "71":0,  "73":42, "72":90, "91":68, "93":10  },
+        "ACCORDION":        { "74":82, "71":0,  "73":40, "72":58, "91":35, "93":8   },
+        "ACOUS.GUITAR":     { "74":90, "71":0,  "73":34, "72":62, "91":32, "93":0   },
+        "ELEC.GUITAR":      { "74":88, "71":10, "73":36, "72":52, "91":38, "93":15, "94":12  },
+        "ACOUS.BASS":       { "74":62, "71":0,  "73":40, "72":45, "75":58, "91":18, "93":0   },
+        "ELEC.BASS":        { "74":72, "71":6,  "73":42, "72":48, "75":56, "91":14  },
+        "SYNTH-BASS":       { "74":55, "71":88, "73":38, "72":40, "75":50, "91":22, "93":6   },
+        "SOLO STRINGS":     { "74":82, "71":6,  "73":62, "72":82, "91":55, "76":72, "77":68, "78":52 },
+        "STRING ENSEMBLE":  { "74":78, "71":5,  "73":70, "72":88, "91":62, "93":28  },
+        "SOLO BRASS":       { "74":95, "71":5,  "73":48, "72":55, "91":42  },
+        "BRASS ENSEMBLE":   { "74":98, "71":55, "73":44, "72":52, "91":48, "93":10  },
+        "SYNTH-BRASS":      { "74":85, "71":75, "73":44, "72":50, "91":52, "93":22  },
+        "SAX":              { "74":88, "71":8,  "73":48, "72":58, "91":42, "76":68, "77":65, "78":48 },
+        "REED":             { "74":80, "71":0,  "73":52, "72":62, "91":38  },
+        "PIPE":             { "74":88, "71":0,  "73":55, "72":58, "91":45, "76":65, "77":55, "78":55 },
+        "SYNTH-LEAD":       { "74":90, "71":82, "73":34, "72":38, "91":52, "94":22  },
+        "SYNTH-PAD":        { "74":60, "71":52, "73":88, "72":98, "91":65, "93":55, "94":22  },
+        "CHOIR":            { "74":72, "71":0,  "73":76, "72":88, "91":62, "93":22  },
+        "EDM SYNTH":        { "74":100,"71":95, "73":38, "72":40, "91":45, "94":24  },
+        "CASIO CLASSIC":    { "74":78, "71":0,  "91":30  },
+        "INDIAN":           { "74":82, "71":0,  "73":45, "72":68, "91":38, "76":70, "77":62  },
+        "INDONESIAN":       { "74":85, "71":0,  "73":30, "72":75, "91":38  },
+        "ARABIC":           { "74":80, "71":0,  "73":48, "72":65, "91":38, "76":72, "77":65  },
+        "CHINESE":          { "74":86, "71":0,  "73":35, "72":70, "91":35, "76":65, "77":55  },
+        "BRAZILIAN":        { "74":85, "71":0,  "73":34, "72":52, "91":30  },
+        "ETHNIC OTHERS":    { "74":82, "71":0,  "73":40, "72":62, "91":35  },
+        "GM TONES":         { "74":85, "71":0,  "91":32  }
     },
+    // ══════════════════════════════════════════════════════════════════════
+    //  SALA — Sala de conciertos / catedral. Reverb abundante, release largo,
+    //  cutoff ligeramente más bajo (el aire absorbe agudos). Ataque suave en cuerdas/coro.
+    // ══════════════════════════════════════════════════════════════════════
     "Sala": {
-        // Sala de conciertos — mucho reverb, CC72 (release) largo en sostenidos. CC71=0 en acústicos.
-        "PIANO":            { "74":70, "71":8,  "73":65, "72":88, "91":65 },
-        "HARPSICHORD":      { "74":72, "71":0,  "73":52, "91":48 },
-        "ELEC.PIANO":       { "74":68, "71":14, "91":58, "93":16 },
-        "CLAVI":            { "74":70, "71":8,  "73":52, "91":42 },
-        "VIB./CHROM.PERC.": { "74":75, "71":8,  "91":58, "93":12 },
-        "ELEC.ORGAN":       { "74":68, "71":12, "91":52, "93":48, "77":70 },
-        "PIPE ORGAN":       { "74":64, "71":0,  "72":112, "91":92, "93":10 },
-        "ACCORDION":        { "74":68, "71":0,  "91":48, "93":10 },
-        "ACOUS.GUITAR":     { "74":72, "71":0,  "73":58, "91":48 },
-        "ELEC.GUITAR":      { "74":74, "71":10, "73":56, "91":52, "93":12 },
-        "ACOUS.BASS":       { "74":56, "71":0,  "75":52, "91":28 },
-        "ELEC.BASS":        { "74":66, "71":6,  "75":56, "91":22 },
-        "SYNTH-BASS":       { "74":52, "71":80, "73":54, "75":50, "91":38 },
-        "SOLO STRINGS":     { "74":65, "71":8,  "73":68, "72":92, "77":72, "78":62, "91":72 },
-        "STRING ENSEMBLE":  { "74":66, "71":6,  "73":75, "72":98, "91":82, "93":30 },
-        "SOLO BRASS":       { "74":78, "71":0,  "73":58, "91":58 },
-        "BRASS ENSEMBLE":   { "74":80, "71":55, "73":56, "91":68, "93":12 },
-        "SYNTH-BRASS":      { "74":74, "71":72, "73":58, "91":68, "93":20 },
-        "SAX":              { "74":72, "71":8,  "73":58, "77":65, "91":58 },
-        "REED":             { "74":66, "71":0,  "73":58, "91":52 },
-        "PIPE":             { "74":74, "71":0,  "73":60, "78":62, "91":68 },
-        "SYNTH-LEAD":       { "74":74, "71":76, "91":62, "94":30 },
-        "SYNTH-PAD":        { "74":58, "71":50, "73":90, "72":102, "91":82, "93":50, "94":20 },
-        "CHOIR":            { "74":62, "71":0,  "73":85, "72":100, "91":82, "93":28 },
-        "EDM SYNTH":        { "74":82, "71":85, "73":55, "91":58, "94":30 },
-        "CASIO CLASSIC":    { "74":68, "91":48 },
-        "INDIAN":           { "74":70, "91":52 },
-        "INDONESIAN":       { "74":70, "91":52 },
-        "ARABIC":           { "74":70, "91":52 },
-        "CHINESE":          { "74":70, "91":52 },
-        "BRAZILIAN":        { "74":70, "91":48 },
-        "ETHNIC OTHERS":    { "74":70, "91":48 },
-        "GM TONES":         { "74":68, "91":48 }
+        "PIANO":            { "74":85, "71":4,  "73":50, "72":95, "75":70, "91":62, "93":6   },
+        "HARPSICHORD":      { "74":88, "71":0,  "73":34, "72":62, "91":45, "93":0   },
+        "ELEC.PIANO":       { "74":75, "71":12, "73":50, "72":80, "91":55, "93":14  },
+        "CLAVI":            { "74":85, "71":4,  "73":32, "72":55, "91":38, "93":0   },
+        "VIB./CHROM.PERC.": { "74":82, "71":4,  "73":28, "72":95, "91":58, "93":8   },
+        "ELEC.ORGAN":       { "74":88, "71":8,  "73":25, "72":35, "91":48, "93":42, "76":68, "77":62 },
+        "PIPE ORGAN":       { "74":78, "71":0,  "73":45, "72":115,"91":92, "93":8   },
+        "ACCORDION":        { "74":76, "71":0,  "73":42, "72":65, "91":42, "93":6   },
+        "ACOUS.GUITAR":     { "74":82, "71":0,  "73":36, "72":72, "91":45, "93":0   },
+        "ELEC.GUITAR":      { "74":80, "71":8,  "73":38, "72":60, "91":48, "93":8   },
+        "ACOUS.BASS":       { "74":55, "71":0,  "73":42, "72":52, "75":60, "91":25, "93":0   },
+        "ELEC.BASS":        { "74":62, "71":4,  "73":44, "72":52, "75":58, "91":18  },
+        "SYNTH-BASS":       { "74":48, "71":80, "73":40, "72":45, "75":52, "91":32  },
+        "SOLO STRINGS":     { "74":75, "71":5,  "73":70, "72":98, "91":72, "76":70, "77":62, "78":58 },
+        "STRING ENSEMBLE":  { "74":70, "71":4,  "73":78, "72":105,"91":82, "93":25  },
+        "SOLO BRASS":       { "74":85, "71":0,  "73":52, "72":65, "91":55  },
+        "BRASS ENSEMBLE":   { "74":88, "71":48, "73":48, "72":58, "91":65, "93":8   },
+        "SYNTH-BRASS":      { "74":78, "71":70, "73":48, "72":55, "91":62, "93":16  },
+        "SAX":              { "74":78, "71":5,  "73":52, "72":68, "91":55, "76":65, "77":58, "78":55 },
+        "REED":             { "74":72, "71":0,  "73":55, "72":72, "91":48  },
+        "PIPE":             { "74":80, "71":0,  "73":58, "72":68, "91":62, "76":60, "77":50, "78":58 },
+        "SYNTH-LEAD":       { "74":78, "71":75, "73":38, "72":48, "91":58, "94":25  },
+        "SYNTH-PAD":        { "74":55, "71":48, "73":95, "72":110,"91":78, "93":45, "94":18  },
+        "CHOIR":            { "74":62, "71":0,  "73":82, "72":102,"91":82, "93":22  },
+        "EDM SYNTH":        { "74":92, "71":88, "73":40, "72":44, "91":48, "94":26  },
+        "CASIO CLASSIC":    { "74":75, "71":0,  "91":42  },
+        "INDIAN":           { "74":76, "71":0,  "73":48, "72":75, "91":48, "76":68, "77":58  },
+        "INDONESIAN":       { "74":78, "71":0,  "73":32, "72":82, "91":48  },
+        "ARABIC":           { "74":74, "71":0,  "73":50, "72":72, "91":48, "76":70, "77":62  },
+        "CHINESE":          { "74":80, "71":0,  "73":38, "72":78, "91":42, "76":62, "77":52  },
+        "BRAZILIAN":        { "74":78, "71":0,  "73":36, "72":58, "91":38  },
+        "ETHNIC OTHERS":    { "74":76, "71":0,  "73":42, "72":68, "91":42  },
+        "GM TONES":         { "74":78, "71":0,  "91":42  }
     },
+    // ══════════════════════════════════════════════════════════════════════
+    //  JAZZ — Club íntimo. Calidez (cutoff más bajo), poca reverb,
+    //  decay largo en bajo, vibrato expresivo en vientos. Sonido redondo.
+    // ══════════════════════════════════════════════════════════════════════
     "Jazz": {
-        // Club de jazz — cálido (CC74 bajo), íntimo, reverb mínimo. CC71=0 en acústicos.
-        "PIANO":            { "74":52, "71":0,  "73":60, "91":18 },
-        "HARPSICHORD":      { "74":60, "71":0,  "73":52, "91":14 },
-        "ELEC.PIANO":       { "74":58, "71":10, "91":24, "93":8  },
-        "CLAVI":            { "74":62, "71":4,  "73":52, "91":14 },
-        "VIB./CHROM.PERC.": { "74":65, "71":0,  "91":28, "93":6  },
-        "ELEC.ORGAN":       { "74":62, "71":8,  "91":18, "93":52, "77":76 },
-        "PIPE ORGAN":       { "74":58, "71":0,  "91":42, "93":8  },
-        "ACCORDION":        { "74":60, "71":0,  "91":16, "93":10 },
-        "ACOUS.GUITAR":     { "74":60, "71":0,  "73":62, "91":14 },
-        "ELEC.GUITAR":      { "74":62, "71":6,  "73":60, "91":16, "93":6  },
-        "ACOUS.BASS":       { "74":44, "71":0,  "75":65, "91":6  },
-        "ELEC.BASS":        { "74":58, "71":4,  "75":62, "91":5  },
-        "SYNTH-BASS":       { "74":42, "71":72, "73":60, "75":60, "91":10 },
-        "SOLO STRINGS":     { "74":60, "71":6,  "73":70, "77":66, "78":62, "91":32 },
-        "STRING ENSEMBLE":  { "74":56, "71":4,  "73":78, "91":42, "93":16 },
-        "SOLO BRASS":       { "74":66, "71":0,  "73":60, "91":24 },
-        "BRASS ENSEMBLE":   { "74":68, "71":45, "73":58, "91":28, "93":6  },
-        "SYNTH-BRASS":      { "74":62, "71":60, "73":60, "91":28, "93":10 },
-        "SAX":              { "74":60, "71":8,  "73":60, "77":70, "91":24 },
-        "REED":             { "74":56, "71":0,  "73":60, "91":18 },
-        "PIPE":             { "74":65, "71":0,  "73":62, "78":58, "91":28 },
-        "SYNTH-LEAD":       { "74":62, "71":68, "91":32, "94":16 },
-        "SYNTH-PAD":        { "74":50, "71":42, "73":85, "91":52, "93":36, "94":12 },
-        "CHOIR":            { "74":56, "71":0,  "73":80, "72":88, "91":52, "93":16 },
-        "EDM SYNTH":        { "74":84, "71":88, "73":56, "91":38, "94":20 },
-        "CASIO CLASSIC":    { "74":60, "91":18 },
-        "INDIAN":           { "74":62, "91":28 },
-        "INDONESIAN":       { "74":62, "91":28 },
-        "ARABIC":           { "74":62, "91":28 },
-        "CHINESE":          { "74":62, "91":28 },
-        "BRAZILIAN":        { "74":62, "91":28 },
-        "ETHNIC OTHERS":    { "74":62, "91":28 },
-        "GM TONES":         { "74":60, "91":22 }
+        "PIANO":            { "74":72, "71":0,  "73":48, "72":85, "75":70, "91":15, "93":0   },
+        "HARPSICHORD":      { "74":78, "71":0,  "73":32, "72":55, "91":10, "93":0   },
+        "ELEC.PIANO":       { "74":68, "71":8,  "73":48, "72":75, "91":18, "93":6   },
+        "CLAVI":            { "74":75, "71":0,  "73":30, "72":50, "91":10, "93":0   },
+        "VIB./CHROM.PERC.": { "74":75, "71":0,  "73":28, "72":90, "91":22, "93":4   },
+        "ELEC.ORGAN":       { "74":80, "71":5,  "73":22, "72":32, "91":15, "93":48, "76":78, "77":70 },
+        "PIPE ORGAN":       { "74":68, "71":0,  "73":42, "72":88, "91":38, "93":6   },
+        "ACCORDION":        { "74":72, "71":0,  "73":40, "72":62, "91":14, "93":6   },
+        "ACOUS.GUITAR":     { "74":72, "71":0,  "73":36, "72":68, "75":62, "91":12, "93":0   },
+        "ELEC.GUITAR":      { "74":70, "71":4,  "73":40, "72":58, "91":14, "93":4   },
+        "ACOUS.BASS":       { "74":48, "71":0,  "73":42, "72":52, "75":68, "91":5,  "93":0   },
+        "ELEC.BASS":        { "74":58, "71":0,  "73":44, "72":52, "75":65, "91":4   },
+        "SYNTH-BASS":       { "74":38, "71":70, "73":42, "72":48, "75":62, "91":8   },
+        "SOLO STRINGS":     { "74":68, "71":4,  "73":68, "72":88, "91":25, "76":65, "77":55, "78":60 },
+        "STRING ENSEMBLE":  { "74":65, "71":0,  "73":75, "72":95, "91":35, "93":12  },
+        "SOLO BRASS":       { "74":78, "71":0,  "73":52, "72":62, "91":18  },
+        "BRASS ENSEMBLE":   { "74":80, "71":40, "73":48, "72":55, "91":22, "93":5   },
+        "SYNTH-BRASS":      { "74":68, "71":58, "73":48, "72":55, "91":22, "93":8   },
+        "SAX":              { "74":70, "71":5,  "73":50, "72":62, "91":18, "76":72, "77":68, "78":50 },
+        "REED":             { "74":65, "71":0,  "73":55, "72":68, "91":15  },
+        "PIPE":             { "74":72, "71":0,  "73":58, "72":65, "91":22, "76":60, "77":50, "78":58 },
+        "SYNTH-LEAD":       { "74":65, "71":65, "73":36, "72":45, "91":25, "94":12  },
+        "SYNTH-PAD":        { "74":48, "71":38, "73":90, "72":98, "91":42, "93":28, "94":10  },
+        "CHOIR":            { "74":60, "71":0,  "73":80, "72":92, "91":38, "93":12  },
+        "EDM SYNTH":        { "74":82, "71":85, "73":40, "72":44, "91":28, "94":16  },
+        "CASIO CLASSIC":    { "74":68, "71":0,  "91":12  },
+        "INDIAN":           { "74":72, "71":0,  "73":48, "72":72, "91":22, "76":68, "77":60  },
+        "INDONESIAN":       { "74":75, "71":0,  "73":32, "72":78, "91":22  },
+        "ARABIC":           { "74":70, "71":0,  "73":50, "72":70, "91":22, "76":72, "77":65  },
+        "CHINESE":          { "74":76, "71":0,  "73":38, "72":75, "91":18, "76":62, "77":52  },
+        "BRAZILIAN":        { "74":75, "71":0,  "73":35, "72":55, "91":15  },
+        "ETHNIC OTHERS":    { "74":72, "71":0,  "73":42, "72":65, "91":18  },
+        "GM TONES":         { "74":72, "71":0,  "91":15  }
     }
 };
-
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
 
 function applySmartProfile(part, category) {
@@ -1976,13 +1994,100 @@ async function sf2Init(source, name) {
         const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
 
         // Wrapper — our internal API is noteOn(channel, note, vel) / noteOff(channel, note)
-        // but sf2-player's API is noteOn(note, vel, channel) — we translate here
+        // but sf2-player's API is noteOn(note, vel, channel) — we translate here.
+        // CADENA DE AUDIO: sf2-player → filter (lowpass) → [reverb/chorus/delay sends] → master gain → destination
+        const ctx = pcPlayer.synth?.ctx || new (window.AudioContext || window.webkitAudioContext)();
+
+        // === Crear cadena de efectos propia ===
+        const masterGain = ctx.createGain();
+        masterGain.gain.value = initVol;
+        masterGain.connect(ctx.destination);
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 8000;
+        filter.Q.value = 0.8;
+        filter.connect(masterGain);
+
+        // Reverb: ConvolverNode con impulse response algorítmico
+        const rvbGain = ctx.createGain();
+        rvbGain.gain.value = 0;
+        rvbGain.connect(masterGain);
+        let rvbConvolver = null;
+        try {
+            rvbConvolver = ctx.createConvolver();
+            // Generar IR de reverb: ruido blanco decayendo exponencialmente (2s)
+            const irLen = Math.floor(ctx.sampleRate * 2);
+            const irBuf = ctx.createBuffer(2, irLen, ctx.sampleRate);
+            for (let ch = 0; ch < 2; ch++) {
+                const d = irBuf.getChannelData(ch);
+                for (let i = 0; i < irLen; i++) {
+                    d[i] = (Math.random() * 2 - 1) * Math.exp(-3.0 * i / irLen);
+                }
+            }
+            rvbConvolver.buffer = irBuf;
+            filter.connect(rvbConvolver);
+            rvbConvolver.connect(rvbGain);
+        } catch(e) { /* reverb no disponible */ }
+
+        // Chorus: delay corto modulado por LFO
+        let chorusGain = ctx.createGain();
+        chorusGain.gain.value = 0;
+        chorusGain.connect(masterGain);
+        let chorusDelay = null;
+        try {
+            chorusDelay = ctx.createDelay(0.05);
+            chorusDelay.delayTime.value = 0.012;
+            const chorusLFO = ctx.createOscillator();
+            const chorusDepth = ctx.createGain();
+            chorusLFO.frequency.value = 0.8;
+            chorusDepth.gain.value = 0.003;
+            chorusLFO.connect(chorusDepth);
+            chorusDepth.connect(chorusDelay.delayTime);
+            chorusLFO.start();
+            filter.connect(chorusDelay);
+            chorusDelay.connect(chorusGain);
+        } catch(e) { /* chorus no disponible */ }
+
+        // Delay/Echo
+        let echoGain = ctx.createGain();
+        echoGain.gain.value = 0;
+        echoGain.connect(masterGain);
+        let echoDelay = null;
+        try {
+            echoDelay = ctx.createDelay(1.0);
+            echoDelay.delayTime.value = 0.35;
+            const echoFB = ctx.createGain();
+            echoFB.gain.value = 0.3;
+            filter.connect(echoDelay);
+            echoDelay.connect(echoFB);
+            echoFB.connect(echoDelay);
+            echoDelay.connect(echoGain);
+        } catch(e) { /* delay no disponible */ }
+
+        // Desconectar salida directa del sf2-player y reconectar por nuestra cadena
+        try {
+            const synthGain = pcPlayer.synth?.gainMaster
+                || pcPlayer.synth?.masterGain
+                || pcPlayer.synth?.gain
+                || pcPlayer.synth?.gainNode;
+            if (synthGain) {
+                synthGain.disconnect();
+                synthGain.connect(filter);
+            }
+        } catch(e) {
+            console.warn('[SF2] No se pudo redirigir audio del sf2-player por la cadena de efectos');
+        }
+
         window.pcSynth = {
             _player: pcPlayer, _vol: initVol,
-            get synth() { return { ctx: pcPlayer.synth?.ctx }; },
+            _filter: filter, _master: masterGain,
+            _rvbGain: rvbGain, _chorusGain: chorusGain, _echoGain: echoGain,
+            _cutoff: 8000, _resonance: 0.8, _attack: 0.005, _release: 1.0,
+            get synth() { return { ctx: pcPlayer.synth?.ctx || ctx }; },
             noteOn(channel, note, velocity) {
-                const ctx = pcPlayer.synth?.ctx;
-                if (ctx?.state === 'suspended') ctx.resume();
+                const c = pcPlayer.synth?.ctx || ctx;
+                if (c?.state === 'suspended') c.resume();
                 const v = Math.min(127, Math.max(1, Math.round(velocity * this._vol)));
                 pcPlayer.noteOn(note, v, channel);
             },
@@ -1993,17 +2098,30 @@ async function sf2Init(source, name) {
                 if (pcPlayer.synth) pcPlayer.synth.programChange(channel, prog);
             },
             applyCC(cc, val) {
+                const t = (pcPlayer.synth?.ctx || ctx).currentTime;
                 if (cc === 7) {
                     this._vol = val / 127;
-                    // Try multiple property names for the master gain node (sf2-player internals vary)
-                    const gainNode = pcPlayer.synth?.gainMaster
-                        || pcPlayer.synth?.masterGain
-                        || pcPlayer.synth?.gain
-                        || pcPlayer.synth?.gainNode;
-                    if (gainNode?.gain) gainNode.gain.value = this._vol;
+                    this._master.gain.setTargetAtTime(this._vol, t, 0.02);
                 }
-                // CC74/71/91/73/72 no son controlables directamente en sf2-player;
-                // la BuiltInPiano los maneja. Con SF2 estos CCs se envían al teclado vía MIDI.
+                if (cc === 74) {
+                    this._cutoff = 200 + (val / 127) * 11800;
+                    this._filter.frequency.setTargetAtTime(this._cutoff, t, 0.02);
+                }
+                if (cc === 71) {
+                    this._resonance = 0.5 + (val / 127) * 18;
+                    this._filter.Q.setTargetAtTime(this._resonance, t, 0.02);
+                }
+                if (cc === 91) {
+                    this._rvbGain.gain.setTargetAtTime((val / 127) * 0.6, t, 0.05);
+                }
+                if (cc === 93) {
+                    this._chorusGain.gain.setTargetAtTime((val / 127) * 0.4, t, 0.05);
+                }
+                if (cc === 94) {
+                    this._echoGain.gain.setTargetAtTime((val / 127) * 0.5, t, 0.05);
+                }
+                if (cc === 73) this._attack = 0.001 + (val / 127) * 0.5;
+                if (cc === 72) this._release = 0.1 + (val / 127) * 3.0;
             }
         };
         window.sf2Ready = true;
