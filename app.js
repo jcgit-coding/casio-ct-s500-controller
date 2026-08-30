@@ -1488,12 +1488,98 @@ const nameEl = document.getElementById('selectedTone-' + part);
     }
 }
 
-// --- PC SYNTH (SF2 PLAYER) ---
+// --- PC SYNTH ---
+// Built-in Web Audio piano synth (zero config). SF2 upload overrides for higher quality.
 
-// --- PC SYNTH FILE LOADER ---
-window.pcSynth = null;
-window.sf2Ready = false;
+class BuiltInPiano {
+    constructor() {
+        this._ctx = null;
+        this._master = null;
+        this._active = {};
+    }
+    get synth() { return { ctx: this._ctx }; }
 
+    _audio() {
+        if (!this._ctx) {
+            this._ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this._master = this._ctx.createGain();
+            this._master.gain.value = 0.55;
+            this._master.connect(this._ctx.destination);
+        }
+        if (this._ctx.state === 'suspended') this._ctx.resume();
+        return this._ctx;
+    }
+
+    noteOn(note, velocity) {
+        const ctx = this._audio();
+        this._forceStop(note);
+        const freq  = 440 * Math.pow(2, (note - 69) / 12);
+        const vel   = Math.max(0.01, Math.min(1, (velocity || 64) / 127));
+        const now   = ctx.currentTime;
+        const env   = ctx.createGain();
+        // Fast piano-like attack → decay → sustain
+        env.gain.setValueAtTime(0, now);
+        env.gain.linearRampToValueAtTime(vel * 0.65, now + 0.005);
+        env.gain.exponentialRampToValueAtTime(vel * 0.20, now + 0.35);
+        env.connect(this._master);
+        // Overtone stack (fundamental + harmonics give piano-like timbre)
+        const partials = [
+            { r: 1,   g: 1.0  },
+            { r: 2,   g: 0.45 },
+            { r: 3,   g: 0.20 },
+            { r: 4,   g: 0.09 },
+            { r: 6,   g: 0.04 },
+            { r: 8,   g: 0.02 },
+        ];
+        const oscs = partials.map(({ r, g }) => {
+            const osc = ctx.createOscillator();
+            const gn  = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq * r;
+            gn.gain.value = g;
+            osc.connect(gn); gn.connect(env);
+            osc.start(now);
+            return osc;
+        });
+        this._active[note] = { oscs, env };
+    }
+
+    noteOff(note) {
+        this._release(note, 1.1);
+    }
+
+    _release(note, dur) {
+        const n = this._active[note];
+        if (!n || !this._ctx) return;
+        delete this._active[note];
+        const now = this._ctx.currentTime;
+        n.env.gain.cancelScheduledValues(now);
+        n.env.gain.setValueAtTime(Math.max(0.001, n.env.gain.value), now);
+        n.env.gain.exponentialRampToValueAtTime(0.001, now + dur);
+        setTimeout(() => {
+            n.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
+            try { n.env.disconnect(); } catch(e) {}
+        }, (dur + 0.15) * 1000);
+    }
+
+    _forceStop(note) {
+        const n = this._active[note];
+        if (!n) return;
+        delete this._active[note];
+        n.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
+        try { n.env.disconnect(); } catch(e) {}
+    }
+}
+
+// Initialise built-in synth immediately (no upload needed)
+window.pcSynth  = new BuiltInPiano();
+window.sf2Ready = true;
+(function() {
+    const el = document.getElementById('sf2-status');
+    if (el) el.innerHTML = '<span style="color:#4CAF50;">✓ Sintetizador incorporado listo</span>';
+})();
+
+// IndexedDB helpers for optional SF2 cache
 function sf2OpenIDB() {
     return new Promise((resolve, reject) => {
         const req = indexedDB.open('casioPcSynth', 1);
@@ -1502,68 +1588,55 @@ function sf2OpenIDB() {
         req.onerror = reject;
     });
 }
-
 async function sf2SaveCache(name, buffer) {
-    try {
-        const db = await sf2OpenIDB();
-        const tx = db.transaction('sf2cache', 'readwrite');
-        tx.objectStore('sf2cache').put({ name, buffer }, 'sf2');
-    } catch(e) { console.warn('sf2 cache save failed', e); }
+    try { const db = await sf2OpenIDB(); db.transaction('sf2cache','readwrite').objectStore('sf2cache').put({name,buffer},'sf2'); } catch(e) {}
 }
-
 async function sf2LoadCache() {
     try {
         const db = await sf2OpenIDB();
-        return await new Promise((resolve, reject) => {
-            const tx = db.transaction('sf2cache', 'readonly');
-            const req = tx.objectStore('sf2cache').get('sf2');
-            req.onsuccess = e => resolve(e.target.result || null);
-            req.onerror = reject;
+        return await new Promise((res, rej) => {
+            const r = db.transaction('sf2cache','readonly').objectStore('sf2cache').get('sf2');
+            r.onsuccess = e => res(e.target.result || null); r.onerror = rej;
         });
     } catch { return null; }
 }
 
+// Optional SF2 override (loads from cache or manual upload for higher quality)
 async function sf2Init(buffer, name) {
     const statusEl = document.getElementById('sf2-status');
-    if (!statusEl) return;
-    statusEl.innerHTML = '<span style="color:var(--accent);">Cargando motor de audio…</span>';
+    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Cargando SF2…</span>';
     try {
         const module = await import('https://unpkg.com/sf2-player');
         const SoundFont = module.default;
-        if (!window.pcSynth) window.pcSynth = new SoundFont();
-        const blob = new Blob([buffer], { type: 'audio/x-sf2' });
-        const file = new File([blob], name || 'soundfont.sf2');
-        await window.pcSynth.loadSoundFontFromFile(file);
-        window.pcSynth.bank = window.pcSynth.banks[0].id;
-        window.pcSynth.program = window.pcSynth.programs[0].id;
+        const sf2Synth = new SoundFont();
+        const file = new File([new Blob([buffer],{type:'audio/x-sf2'})], name || 'soundfont.sf2');
+        await sf2Synth.loadSoundFontFromFile(file);
+        sf2Synth.bank    = sf2Synth.banks[0].id;
+        sf2Synth.program = sf2Synth.programs[0].id;
+        // Override built-in synth with SF2
+        window.pcSynth  = sf2Synth;
         window.sf2Ready = true;
-        statusEl.innerHTML = '<span style="color:#4CAF50;">✓ Listo: ' + (name || 'soundfont.sf2') + '</span>';
-    } catch (err) {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name||'soundfont.sf2') + '</span>';
+    } catch(err) {
         console.error(err);
-        statusEl.innerHTML = '<span style="color:#F44336;">Error cargando el archivo .sf2</span>';
-        window.sf2Ready = false;
+        if (statusEl) statusEl.innerHTML = '<span style="color:#F44336;">Error SF2 — usando sintetizador incorporado</span>';
+        if (!window.pcSynth || !window.pcSynth.noteOn) window.pcSynth = new BuiltInPiano();
     }
 }
 
-// Auto-load from cache on startup
-sf2LoadCache().then(cached => {
-    if (cached) sf2Init(cached.buffer, cached.name);
-});
+// Auto-load SF2 from cache if previously uploaded
+sf2LoadCache().then(cached => { if (cached) sf2Init(cached.buffer, cached.name); });
 
-document.getElementById('sf2-file')?.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+document.getElementById('sf2-file')?.addEventListener('change', async e => {
+    const file = e.target.files[0]; if (!file) return;
     const buffer = await file.arrayBuffer();
     await sf2SaveCache(file.name, buffer);
     await sf2Init(buffer, file.name);
 });
 
-document.getElementById('sf2-vol')?.addEventListener('input', (e) => {
+document.getElementById('sf2-vol')?.addEventListener('input', e => {
     document.getElementById('sf2-vol-val').innerText = e.target.value;
 });
-
-
-
 
 
 
