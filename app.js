@@ -903,95 +903,85 @@ function initQuickControls() {
 }
 
 // ======================================================================
-//  PRESETS + AUTO-SYNC
+//  PRESETS + GITHUB STORAGE
 // ======================================================================
-const SYNC_API = 'https://jsonblob.com/api/jsonBlob';
+const GH_OWNER = 'jcgit-coding';
+const GH_REPO  = 'casio-ct-s500-controller';
+const GH_FILE  = 'presets.json';
+const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
 
-async function syncPush() {
-    const token = localStorage.getItem('casioSyncToken');
-    if (!token) return;
-    try {
-        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-        await fetch(`${SYNC_API}/${token}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(presets)
-        });
-        updateSyncStatus('✓ Sincronizado');
-    } catch { updateSyncStatus('Sin conexión'); }
-}
-
-async function syncPull(token) {
-    token = token || localStorage.getItem('casioSyncToken');
-    if (!token) return false;
-    try {
-        const res = await fetch(`${SYNC_API}/${token}`, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) return false;
-        const cloud = await res.json();
-        const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-        Object.assign(existing, cloud);
-        localStorage.setItem('casioPresets', JSON.stringify(existing));
-        renderPresets();
-        return true;
-    } catch { return false; }
-}
-
-async function syncCreateToken() {
-    try {
-        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-        const res = await fetch(SYNC_API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(presets)
-        });
-        if (!res.ok) return null;
-        const id = res.headers.get('Location').split('/').pop();
-        localStorage.setItem('casioSyncToken', id);
-        updateSyncStatus('✓ Listo');
-        return id;
-    } catch { return null; }
-}
+let ghFileSha = null; // current SHA of presets.json on GitHub (needed for PUT)
 
 function updateSyncStatus(msg) {
     const el = document.getElementById('syncAutoStatus');
     if (el) el.innerText = msg;
 }
 
-function updateSyncTokenDisplay() {
-    const token = localStorage.getItem('casioSyncToken');
-    const el = document.getElementById('syncTokenDisplay');
-    if (!el) return;
-    if (token) {
-        el.innerText = token.slice(0, 8) + '…';
-        el.title = token;
-        el.style.cursor = 'pointer';
-        el.onclick = () => {
-            navigator.clipboard.writeText(token).then(() => {
-                el.innerText = '¡Copiado!';
-                setTimeout(() => { el.innerText = token.slice(0, 8) + '…'; }, 1500);
-            });
-        };
-    } else {
-        el.innerText = '—';
+function ghToken() { return localStorage.getItem('casioGhToken') || ''; }
+
+async function syncPull() {
+    try {
+        // Public read — no auth needed
+        const res = await fetch(GH_API + '?t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) return false;
+        const json = await res.json();
+        ghFileSha = json.sha;
+        const cloud = JSON.parse(atob(json.content.replace(/\n/g, '')));
+        // Merge: cloud wins (source of truth)
+        const local = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        const merged = Object.assign({}, local, cloud);
+        localStorage.setItem('casioPresets', JSON.stringify(merged));
+        renderPresets();
+        return true;
+    } catch { return false; }
+}
+
+async function syncPush() {
+    const token = ghToken();
+    if (!token) { updateSyncStatus('Sin token GitHub'); return; }
+    try {
+        updateSyncStatus('Guardando…');
+        // Re-fetch SHA if missing (e.g. first push)
+        if (!ghFileSha) await syncPull();
+        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(presets, null, 2))));
+        const body = { message: 'Update presets', content };
+        if (ghFileSha) body.sha = ghFileSha;
+        const res = await fetch(GH_API, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || res.status);
+        }
+        const data = await res.json();
+        ghFileSha = data.content.sha;
+        updateSyncStatus('✓ Guardado en GitHub');
+    } catch(e) {
+        console.error('syncPush:', e);
+        updateSyncStatus('Error: ' + e.message);
     }
 }
 
 async function autoSyncInit() {
-    let token = localStorage.getItem('casioSyncToken');
-    updateSyncStatus('Conectando…');
-    if (token) {
-        const ok = await syncPull(token);
-        updateSyncStatus(ok ? '✓ Sincronizado' : 'Sin conexión');
+    updateSyncStatus('Cargando presets…');
+    const ok = await syncPull();
+    if (ok) {
+        updateSyncStatus(ghToken() ? '✓ GitHub conectado' : '✓ Presets cargados (solo lectura)');
     } else {
-        updateSyncStatus('Creando cuenta…');
-        token = await syncCreateToken();
-        updateSyncStatus(token ? '✓ Listo' : 'Sin conexión');
+        updateSyncStatus('Sin conexión — usando presets locales');
     }
-    updateSyncTokenDisplay();
-
-    // Populate legacy token input if present
-    const legacyEl = document.getElementById('syncToken');
-    if (legacyEl && token) legacyEl.value = token;
+    // Show token status in UI
+    const tokenEl = document.getElementById('syncTokenDisplay');
+    if (tokenEl) tokenEl.innerText = ghToken() ? '✓ Token configurado' : 'Sin token (solo lectura)';
 }
 
 function initPresets() {
@@ -1030,52 +1020,37 @@ function initPresets() {
                 localStorage.setItem('casioPresets', JSON.stringify(existing));
                 renderPresets();
                 syncPush();
-                alert(`Importados ${Object.keys(imported).length} presets.`);
-            } catch { alert('Archivo inválido — asegúrate de usar un .json exportado desde esta app.'); }
+            } catch { alert('Archivo inválido.'); }
         };
         reader.readAsText(file);
         e.target.value = '';
     });
 
-    // ── Vincular nuevo dispositivo ───────────────────────────────────────
+    // ── Configurar token GitHub ──────────────────────────────────────────
     document.getElementById('btnSyncCreate')?.addEventListener('click', async e => {
         e.preventDefault();
-        const code = prompt('Pega el código de sincronización de tu otro dispositivo:\n(Déjalo vacío para generar uno nuevo)');
-        if (code === null) return; // cancelled
-        const trimmed = code.trim();
+        const current = ghToken();
+        const t = prompt('Token de GitHub (scope: contents):\n(Déjalo vacío para borrar)', current);
+        if (t === null) return;
+        const trimmed = t.trim();
         if (trimmed) {
-            updateSyncStatus('Verificando…');
-            const ok = await syncPull(trimmed);
-            if (ok) {
-                localStorage.setItem('casioSyncToken', trimmed);
-                updateSyncTokenDisplay();
-                const legacyEl = document.getElementById('syncToken');
-                if (legacyEl) legacyEl.value = trimmed;
-                updateSyncStatus('✓ Vinculado');
-                alert('Dispositivo vinculado correctamente. Los presets se sincronizarán automáticamente.');
-            } else {
-                updateSyncStatus('Error');
-                alert('Código inválido o sin conexión.');
-            }
+            localStorage.setItem('casioGhToken', trimmed);
+            const tokenEl = document.getElementById('syncTokenDisplay');
+            if (tokenEl) tokenEl.innerText = '✓ Token configurado';
+            await syncPush();
         } else {
-            updateSyncStatus('Creando…');
-            const token = await syncCreateToken();
-            updateSyncTokenDisplay();
-            updateSyncStatus(token ? '✓ Listo' : 'Sin conexión');
-            if (token) alert(`Código de sincronización creado:\n${token}\n\nCópialo en tus otros dispositivos.`);
+            localStorage.removeItem('casioGhToken');
+            const tokenEl = document.getElementById('syncTokenDisplay');
+            if (tokenEl) tokenEl.innerText = 'Sin token (solo lectura)';
+            updateSyncStatus('Token eliminado');
         }
     });
 
-    // ── Subir manual ─────────────────────────────────────────────────────
-    document.getElementById('btnSyncPush')?.addEventListener('click', async () => {
-        await syncPush();
-        alert('Presets subidos a la nube.');
-    });
-
-    // ── Bajar manual ─────────────────────────────────────────────────────
+    // ── Subir / Bajar manual ─────────────────────────────────────────────
+    document.getElementById('btnSyncPush')?.addEventListener('click', () => syncPush());
     document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
         const ok = await syncPull();
-        alert(ok ? 'Presets bajados y combinados.' : 'Sin conexión o sin código configurado.');
+        updateSyncStatus(ok ? '✓ Presets actualizados' : 'Sin conexión');
     });
 
     renderPresets();
