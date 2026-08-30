@@ -16,9 +16,10 @@ function applyPcSustain(isSustain) {
     pcSustainOn = isSustain;
     if (!pcSustainOn) {
         for (const note in pcSustainedNotes) {
-            if (!pcActiveNotes[note]) {
+            const n = parseInt(note);
+            if (!pcActiveNotes[n]) {
                 const ch = typeof pcSustainedNotes[note] === 'number' ? pcSustainedNotes[note] : 0;
-                window.pcSynth.noteOff(ch, parseInt(note));
+                window.pcSynth.noteOff(ch, n);
             }
             delete pcSustainedNotes[note];
         }
@@ -322,15 +323,13 @@ function onMIDIMessage(e) {
     // --- PC SYNTH HOOK ---
     if (pcSynthEnabled && window.sf2Ready && window.pcSynth) {
         const cmd    = status & 0xF0;
-        const noteCh = status & 0x0F;  // MIDI channel that sent this note
-        const sfVolEl = document.getElementById('sf2-vol');
-        const vol = sfVolEl ? parseInt(sfVolEl.value) / 127 : 1.0;
+        const noteCh = status & 0x0F;
 
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
                 pcActiveNotes[d1] = noteCh;
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-                window.pcSynth.noteOn(noteCh, d1, Math.round(d2 * vol));
+                window.pcSynth.noteOn(noteCh, d1, d2); // velocidad sin escalar — el synth maneja su propio volumen
             } else {
                 const ch = pcActiveNotes[d1] ?? noteCh;
                 delete pcActiveNotes[d1];
@@ -474,7 +473,7 @@ const EQ_SECTIONS = [
         controls: [
             { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento' },
-
+            { label: 'RELEASE', cc: 72, def: 64, tip: 'Tiempo de Release (decaída final)' },
         ]
     },
     {
@@ -510,11 +509,15 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
 
 let currentEnv = 'Estudio';
-// CC74=Brillo(cutoff) CC71=Resonancia CC73=Attack CC72=Release CC91=Reverb CC93=Chorus CC77=VibRate CC78=VibDepth CC94=Detune
-// Defaults: 74→64(neutro) 71→0(sin resonancia) 73→64 72→64 91→0 93→0 77→0 78→0 94→0
+// CCs: 74=Brillo/Cutoff 71=Resonancia 73=Attack 72=Release 75=Decay 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Eco
+// Defaults GM: 74→64 71→0 73→64 72→64 75→64 91→40 93→0 76→64 77→64 78→64 94→0
+// Categorías Casio (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
+//   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
+//   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES
+// SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como categorías del Casio)
 const ENVIRONMENTS = {
     "Estudio": {
-        // Seco, preciso, mínimo color. CC71=0 (sin resonancia extra) en casi todo.
+        // Seco, preciso, mínimo color. CC71=0 en acústicos; resonancia solo en sinths/metal.
         "PIANO":            { "74":68, "71":0,  "73":55, "91":18 },
         "HARPSICHORD":      { "74":70, "71":0,  "73":45, "91":14 },
         "ELEC.PIANO":       { "74":62, "71":0,  "91":22, "93":12 },
@@ -528,17 +531,17 @@ const ENVIRONMENTS = {
         "ACOUS.BASS":       { "74":52, "71":0,  "75":55, "91":8  },
         "ELEC.BASS":        { "74":60, "71":0,  "75":58, "91":6  },
         "SYNTH-BASS":       { "74":48, "71":72, "73":50, "75":52, "91":12 },
-        "SOLO STRINGS":     { "74":62, "71":0,  "73":68, "77":62, "78":70, "91":35 },
+        "SOLO STRINGS":     { "74":62, "71":0,  "73":68, "77":62, "78":58, "91":35 },
         "STRING ENSEMBLE":  { "74":60, "71":0,  "73":72, "91":42, "93":14 },
         "SOLO BRASS":       { "74":72, "71":0,  "73":58, "91":25 },
-        "BRASS ENSEMBLE":   { "74":72, "71":55, "73":55, "91":30, "93":8  },
+        "BRASS ENSEMBLE":   { "74":72, "71":35, "73":55, "91":30, "93":8  },
         "SYNTH-BRASS":      { "74":65, "71":60, "73":58, "91":35, "93":14 },
         "SAX":              { "74":68, "71":0,  "73":58, "77":58, "91":22 },
         "REED":             { "74":62, "71":0,  "73":60, "91":20 },
-        "PIPE":             { "74":68, "71":0,  "73":62, "78":62, "91":28 },
+        "PIPE":             { "74":68, "71":0,  "73":62, "78":58, "91":28 },
         "SYNTH-LEAD":       { "74":68, "71":72, "91":38, "94":24 },
         "SYNTH-PAD":        { "74":50, "71":45, "73":88, "91":58, "93":38, "94":16 },
-        "CHOIR":            { "74":58, "71":0,  "73":80, "91":55, "93":22 },
+        "CHOIR":            { "74":58, "71":0,  "73":80, "91":38, "93":18 },
         "EDM SYNTH":        { "74":78, "71":85, "73":55, "91":32, "94":26 },
         "CASIO CLASSIC":    { "74":64, "91":18 },
         "INDIAN":           { "74":66, "91":28 },
@@ -550,31 +553,31 @@ const ENVIRONMENTS = {
         "GM TONES":         { "74":64, "91":22 }
     },
     "Vivo": {
-        // En vivo — más presencia, más reverb, más vibrato para vientos/cuerdas
-        "PIANO":            { "74":75, "71":38, "73":60, "91":50 },
-        "HARPSICHORD":      { "74":74, "71":15, "73":50, "91":30 },
+        // En vivo — más presencia, más reverb, más vibrato para vientos/cuerdas. CC71=0 en acústicos.
+        "PIANO":            { "74":75, "71":8,  "73":60, "91":50 },
+        "HARPSICHORD":      { "74":74, "71":0,  "73":50, "91":30 },
         "ELEC.PIANO":       { "74":72, "71":22, "91":48, "93":28 },
-        "CLAVI":            { "74":74, "71":18, "73":50, "91":28 },
-        "VIB./CHROM.PERC.": { "74":78, "71":18, "91":52, "93":16 },
-        "ELEC.ORGAN":       { "74":70, "71":18, "91":40, "93":58, "77":78 },
-        "PIPE ORGAN":       { "74":70, "71":18, "91":72, "93":16 },
-        "ACCORDION":        { "74":70, "71":14, "91":42 },
-        "ACOUS.GUITAR":     { "74":74, "71":8,  "73":58, "91":38 },
+        "CLAVI":            { "74":74, "71":8,  "73":50, "91":28 },
+        "VIB./CHROM.PERC.": { "74":78, "71":8,  "91":52, "93":16 },
+        "ELEC.ORGAN":       { "74":70, "71":8,  "91":40, "93":58, "77":78 },
+        "PIPE ORGAN":       { "74":70, "71":0,  "91":72, "93":16 },
+        "ACCORDION":        { "74":70, "71":0,  "91":42, "93":12 },
+        "ACOUS.GUITAR":     { "74":74, "71":0,  "73":58, "91":38 },
         "ELEC.GUITAR":      { "74":75, "71":12, "73":56, "91":42, "93":20, "94":16 },
         "ACOUS.BASS":       { "74":58, "71":0,  "75":52, "91":22 },
         "ELEC.BASS":        { "74":70, "71":8,  "75":55, "91":18 },
         "SYNTH-BASS":       { "74":60, "71":88, "73":52, "75":48, "91":30, "93":10 },
-        "SOLO STRINGS":     { "74":70, "71":12, "73":65, "72":80, "77":76, "78":66, "91":65 },
-        "STRING ENSEMBLE":  { "74":72, "71":10, "73":72, "91":70, "93":36 },
+        "SOLO STRINGS":     { "74":70, "71":8,  "73":65, "72":80, "77":76, "78":55, "91":65 },
+        "STRING ENSEMBLE":  { "74":72, "71":8,  "73":72, "91":70, "93":36 },
         "SOLO BRASS":       { "74":80, "71":8,  "73":58, "91":52 },
-        "BRASS ENSEMBLE":   { "74":82, "71":70, "73":55, "91":55, "93":16 },
+        "BRASS ENSEMBLE":   { "74":82, "71":60, "73":55, "91":55, "93":16 },
         "SYNTH-BRASS":      { "74":78, "71":75, "73":58, "91":60, "93":28 },
         "SAX":              { "74":75, "71":10, "73":58, "77":70, "91":52 },
-        "REED":             { "74":70, "71":8,  "91":45 },
-        "PIPE":             { "74":75, "71":8,  "78":60, "91":55 },
+        "REED":             { "74":70, "71":0,  "91":45 },
+        "PIPE":             { "74":75, "71":0,  "78":55, "91":55 },
         "SYNTH-LEAD":       { "74":82, "71":80, "91":62, "94":26 },
         "SYNTH-PAD":        { "74":62, "71":55, "73":85, "91":72, "93":62, "94":26 },
-        "CHOIR":            { "74":68, "71":10, "73":80, "91":72, "93":40 },
+        "CHOIR":            { "74":68, "71":0,  "73":80, "72":85, "91":72, "93":28 },
         "EDM SYNTH":        { "74":88, "71":92, "73":55, "91":55, "94":28 },
         "CASIO CLASSIC":    { "74":70, "91":35 },
         "INDIAN":           { "74":72, "91":45 },
@@ -586,31 +589,31 @@ const ENVIRONMENTS = {
         "GM TONES":         { "74":70, "91":40 }
     },
     "Sala": {
-        // Sala de conciertos — mucho reverb, CC72 (release) largo en sostenidos
-        "PIANO":            { "74":70, "71":20, "73":65, "72":88, "91":65 },
-        "HARPSICHORD":      { "74":72, "71":10, "73":52, "91":48 },
+        // Sala de conciertos — mucho reverb, CC72 (release) largo en sostenidos. CC71=0 en acústicos.
+        "PIANO":            { "74":70, "71":8,  "73":65, "72":88, "91":65 },
+        "HARPSICHORD":      { "74":72, "71":0,  "73":52, "91":48 },
         "ELEC.PIANO":       { "74":68, "71":14, "91":58, "93":16 },
-        "CLAVI":            { "74":70, "71":12, "73":52, "91":42 },
-        "VIB./CHROM.PERC.": { "74":75, "71":16, "91":58, "93":12 },
-        "ELEC.ORGAN":       { "74":68, "71":16, "91":52, "93":48, "77":70 },
-        "PIPE ORGAN":       { "74":64, "71":14, "72":112, "91":92, "93":10 },
-        "ACCORDION":        { "74":68, "71":10, "91":48 },
-        "ACOUS.GUITAR":     { "74":72, "71":6,  "73":58, "91":48 },
+        "CLAVI":            { "74":70, "71":8,  "73":52, "91":42 },
+        "VIB./CHROM.PERC.": { "74":75, "71":8,  "91":58, "93":12 },
+        "ELEC.ORGAN":       { "74":68, "71":12, "91":52, "93":48, "77":70 },
+        "PIPE ORGAN":       { "74":64, "71":0,  "72":112, "91":92, "93":10 },
+        "ACCORDION":        { "74":68, "71":0,  "91":48, "93":10 },
+        "ACOUS.GUITAR":     { "74":72, "71":0,  "73":58, "91":48 },
         "ELEC.GUITAR":      { "74":74, "71":10, "73":56, "91":52, "93":12 },
         "ACOUS.BASS":       { "74":56, "71":0,  "75":52, "91":28 },
         "ELEC.BASS":        { "74":66, "71":6,  "75":56, "91":22 },
         "SYNTH-BASS":       { "74":52, "71":80, "73":54, "75":50, "91":38 },
-        "SOLO STRINGS":     { "74":65, "71":10, "73":68, "72":92, "77":72, "78":74, "91":72 },
-        "STRING ENSEMBLE":  { "74":66, "71":8,  "73":75, "72":98, "91":82, "93":30 },
-        "SOLO BRASS":       { "74":78, "71":6,  "73":58, "91":58 },
-        "BRASS ENSEMBLE":   { "74":80, "71":65, "73":56, "91":68, "93":12 },
+        "SOLO STRINGS":     { "74":65, "71":8,  "73":68, "72":92, "77":72, "78":62, "91":72 },
+        "STRING ENSEMBLE":  { "74":66, "71":6,  "73":75, "72":98, "91":82, "93":30 },
+        "SOLO BRASS":       { "74":78, "71":0,  "73":58, "91":58 },
+        "BRASS ENSEMBLE":   { "74":80, "71":55, "73":56, "91":68, "93":12 },
         "SYNTH-BRASS":      { "74":74, "71":72, "73":58, "91":68, "93":20 },
         "SAX":              { "74":72, "71":8,  "73":58, "77":65, "91":58 },
-        "REED":             { "74":66, "71":6,  "73":58, "91":52 },
-        "PIPE":             { "74":74, "71":6,  "73":60, "78":68, "91":68 },
+        "REED":             { "74":66, "71":0,  "73":58, "91":52 },
+        "PIPE":             { "74":74, "71":0,  "73":60, "78":62, "91":68 },
         "SYNTH-LEAD":       { "74":74, "71":76, "91":62, "94":30 },
         "SYNTH-PAD":        { "74":58, "71":50, "73":90, "72":102, "91":82, "93":50, "94":20 },
-        "CHOIR":            { "74":62, "71":8,  "73":85, "72":100, "91":82, "93":36 },
+        "CHOIR":            { "74":62, "71":0,  "73":85, "72":100, "91":82, "93":28 },
         "EDM SYNTH":        { "74":82, "71":85, "73":55, "91":58, "94":30 },
         "CASIO CLASSIC":    { "74":68, "91":48 },
         "INDIAN":           { "74":70, "91":52 },
@@ -622,31 +625,31 @@ const ENVIRONMENTS = {
         "GM TONES":         { "74":68, "91":48 }
     },
     "Jazz": {
-        // Club de jazz — cálido (CC74 bajo), íntimo, reverb mínimo
-        "PIANO":            { "74":52, "71":16, "73":60, "91":18 },
-        "HARPSICHORD":      { "74":60, "71":8,  "73":52, "91":14 },
+        // Club de jazz — cálido (CC74 bajo), íntimo, reverb mínimo. CC71=0 en acústicos.
+        "PIANO":            { "74":52, "71":0,  "73":60, "91":18 },
+        "HARPSICHORD":      { "74":60, "71":0,  "73":52, "91":14 },
         "ELEC.PIANO":       { "74":58, "71":10, "91":24, "93":8  },
-        "CLAVI":            { "74":62, "71":10, "73":52, "91":14 },
-        "VIB./CHROM.PERC.": { "74":65, "71":8,  "91":28, "93":6  },
+        "CLAVI":            { "74":62, "71":4,  "73":52, "91":14 },
+        "VIB./CHROM.PERC.": { "74":65, "71":0,  "91":28, "93":6  },
         "ELEC.ORGAN":       { "74":62, "71":8,  "91":18, "93":52, "77":76 },
-        "PIPE ORGAN":       { "74":58, "71":6,  "91":42, "93":8  },
-        "ACCORDION":        { "74":60, "71":6,  "91":16, "93":10 },
-        "ACOUS.GUITAR":     { "74":60, "71":4,  "73":62, "91":14 },
+        "PIPE ORGAN":       { "74":58, "71":0,  "91":42, "93":8  },
+        "ACCORDION":        { "74":60, "71":0,  "91":16, "93":10 },
+        "ACOUS.GUITAR":     { "74":60, "71":0,  "73":62, "91":14 },
         "ELEC.GUITAR":      { "74":62, "71":6,  "73":60, "91":16, "93":6  },
         "ACOUS.BASS":       { "74":44, "71":0,  "75":65, "91":6  },
         "ELEC.BASS":        { "74":58, "71":4,  "75":62, "91":5  },
         "SYNTH-BASS":       { "74":42, "71":72, "73":60, "75":60, "91":10 },
-        "SOLO STRINGS":     { "74":60, "71":8,  "73":70, "77":66, "78":74, "91":32 },
-        "STRING ENSEMBLE":  { "74":56, "71":6,  "73":78, "91":42, "93":16 },
-        "SOLO BRASS":       { "74":66, "71":6,  "73":60, "91":24 },
-        "BRASS ENSEMBLE":   { "74":68, "71":58, "73":58, "91":28, "93":6  },
+        "SOLO STRINGS":     { "74":60, "71":6,  "73":70, "77":66, "78":62, "91":32 },
+        "STRING ENSEMBLE":  { "74":56, "71":4,  "73":78, "91":42, "93":16 },
+        "SOLO BRASS":       { "74":66, "71":0,  "73":60, "91":24 },
+        "BRASS ENSEMBLE":   { "74":68, "71":45, "73":58, "91":28, "93":6  },
         "SYNTH-BRASS":      { "74":62, "71":60, "73":60, "91":28, "93":10 },
         "SAX":              { "74":60, "71":8,  "73":60, "77":70, "91":24 },
-        "REED":             { "74":56, "71":6,  "73":60, "91":18 },
-        "PIPE":             { "74":65, "71":4,  "73":62, "78":66, "91":28 },
+        "REED":             { "74":56, "71":0,  "73":60, "91":18 },
+        "PIPE":             { "74":65, "71":0,  "73":62, "78":58, "91":28 },
         "SYNTH-LEAD":       { "74":62, "71":68, "91":32, "94":16 },
         "SYNTH-PAD":        { "74":50, "71":42, "73":85, "91":52, "93":36, "94":12 },
-        "CHOIR":            { "74":56, "71":6,  "73":80, "91":52, "93":20 },
+        "CHOIR":            { "74":56, "71":0,  "73":80, "72":88, "91":52, "93":16 },
         "EDM SYNTH":        { "74":84, "71":88, "73":56, "91":38, "94":20 },
         "CASIO CLASSIC":    { "74":60, "91":18 },
         "INDIAN":           { "74":62, "91":28 },
@@ -800,8 +803,12 @@ function buildEQ() {
                     const v = parseInt(e.target.value);
                     valSpan.innerText = formatVal(ctrl.label, v);
                     if (ctrl.cc === 7) {
-                        // Volume: master — aplica a todos los parts
+                        // Volume: master — aplica a todos los parts y sincroniza sf2-vol slider
                         ['U1','U2','L'].forEach(p => { eqState[p][7] = v; sendCC(p, 7, v); });
+                        const sfVolEl = document.getElementById('sf2-vol');
+                        if (sfVolEl) { sfVolEl.value = v; }
+                        const sfVolVal = document.getElementById('sf2-vol-val');
+                        if (sfVolVal) sfVolVal.innerText = v;
                     } else {
                         eqState[activePart][ctrl.cc] = v;
                         sendCC(activePart, ctrl.cc, v);
@@ -1569,6 +1576,7 @@ function saveAppState() {
         tuning,
         globalTranspose,
         activePart,
+        pcSynthEnabled,
         tones: {
             U1: _getSavedToneId('U1'),
             U2: _getSavedToneId('U2'),
@@ -1646,6 +1654,15 @@ const nameEl = document.getElementById('selectedTone-' + part);
                 }
             });
         }
+        // Restore PC Synth toggle state
+        if (saved.pcSynthEnabled !== undefined) {
+            pcSynthEnabled = saved.pcSynthEnabled;
+            const toggle = document.getElementById('pcSynthToggle');
+            if (toggle) toggle.checked = pcSynthEnabled;
+            const controls = document.getElementById('pcSynthControls');
+            if (controls) controls.style.display = pcSynthEnabled ? 'block' : 'none';
+        }
+
         switchEQ(activePart); // updates sliders on screen
     } catch (e) {
         console.error("Error loading app state:", e);
@@ -1653,121 +1670,256 @@ const nameEl = document.getElementById('selectedTone-' + part);
 }
 
 // --- PC SYNTH ---
-// Built-in Web Audio piano synth (zero config). SF2 upload overrides for higher quality.
+// Sintetizador Web Audio multitimbral. SF2 externo sobreescribe con mejor calidad.
 
 class BuiltInPiano {
     constructor() {
-        this._ctx    = null;
-        this._master = null;
-        this._filter = null;
+        this._ctx     = null;
+        this._master  = null;
+        this._filter  = null;
         this._rvbGain = null;
-        this._active = {};
-        // CC-controlled params
-        this.volume    = 0.55;
-        this.cutoff    = 10000;
+        this._active  = {};         // key: `${ch}_${note}` → {oscs, env, rel}
+        this._programs = {};        // ch → GM program number
+        // Parámetros CC-controlables
+        this.volume    = 0.70;
+        this.cutoff    = 8000;
         this.resonance = 0.8;
         this.attack    = 0.005;
-        this.release   = 1.1;
+        this.release   = 1.0;
         this.reverbMix = 0;
     }
+
     get synth() { return { ctx: this._ctx }; }
 
     _audio() {
         if (!this._ctx) {
-            this._ctx = new (window.AudioContext || window.webkitAudioContext)();
-            // master gain
+            this._ctx    = new (window.AudioContext || window.webkitAudioContext)();
             this._master = this._ctx.createGain();
             this._master.gain.value = this.volume;
             this._master.connect(this._ctx.destination);
-            // lowpass filter (cutoff / resonance)
+
             this._filter = this._ctx.createBiquadFilter();
             this._filter.type = 'lowpass';
             this._filter.frequency.value = this.cutoff;
             this._filter.Q.value = this.resonance;
             this._filter.connect(this._master);
-            // simple reverb: feedback delay loop
+
+            // Reverb: bucle de delay con feedback
             this._rvbDelay = this._ctx.createDelay(2.0);
-            this._rvbDelay.delayTime.value = 0.085;
-            this._rvbFB = this._ctx.createGain();
-            this._rvbFB.gain.value = 0.38;
-            this._rvbGain = this._ctx.createGain();
+            this._rvbDelay.delayTime.value = 0.08;
+            this._rvbFB    = this._ctx.createGain();
+            this._rvbFB.gain.value = 0.35;
+            this._rvbGain  = this._ctx.createGain();
             this._rvbGain.gain.value = this.reverbMix;
             this._rvbDelay.connect(this._rvbFB);
             this._rvbFB.connect(this._rvbDelay);
             this._rvbDelay.connect(this._rvbGain);
             this._rvbGain.connect(this._master);
-            // note envs route to filter, filter sends to both dry (master) and reverb
             this._filter.connect(this._rvbDelay);
         }
         if (this._ctx.state === 'suspended') this._ctx.resume();
         return this._ctx;
     }
 
-    // Called by sendCC so EQ/ambience/volume mirror to PC synth in real time
+    programChange(ch, prog) {
+        this._programs[ch] = prog;
+    }
+
+    // Devuelve tipo de síntesis según número de programa GM
+    _synthType(ch) {
+        const p = this._programs[ch] || 0;
+        if (p <= 7)   return 'piano';
+        if (p <= 15)  return 'bell';
+        if (p <= 23)  return 'organ';
+        if (p <= 31)  return 'guitar';
+        if (p <= 39)  return 'bass';
+        if (p <= 47)  return 'strings';
+        if (p <= 55)  return 'ensemble';
+        if (p <= 63)  return 'brass';
+        if (p <= 71)  return 'sax';
+        if (p <= 79)  return 'flute';
+        if (p <= 87)  return 'lead';
+        if (p <= 95)  return 'pad';
+        return 'strings';
+    }
+
     applyCC(cc, val) {
         if (!this._ctx) {
-            // Store for when audio starts; update properties
-            const map = { 7: 'volume', 74: 'cutoff', 71: 'resonance', 91: 'reverbMix', 73: 'attack', 72: 'release' };
-            if (map[cc] !== undefined) {
-                if (cc === 7)  this.volume    = (val / 127) * 0.8;
-                if (cc === 74) this.cutoff    = 80 + (val / 127) * 11920;
-                if (cc === 71) this.resonance = 0.5 + (val / 127) * 18;
-                if (cc === 91) this.reverbMix = (val / 127) * 0.65;
-                if (cc === 73) this.attack    = 0.001 + (val / 127) * 0.5;
-                if (cc === 72) this.release   = 0.1   + (val / 127) * 3.0;
-            }
+            if (cc === 7)  this.volume    = (val / 127) * 0.9;
+            if (cc === 74) this.cutoff    = 200 + (val / 127) * 11800;
+            if (cc === 71) this.resonance = 0.5 + (val / 127) * 18;
+            if (cc === 91) this.reverbMix = (val / 127) * 0.6;
+            if (cc === 73) this.attack    = 0.001 + (val / 127) * 0.5;
+            if (cc === 72) this.release   = 0.1 + (val / 127) * 3.0;
             return;
         }
         const t = this._ctx.currentTime;
-        if (cc === 7)  { this.volume    = (val/127)*0.8;          this._master.gain.setTargetAtTime(this.volume, t, 0.02); }
-        if (cc === 74) { this.cutoff    = 80+(val/127)*11920;      this._filter.frequency.setTargetAtTime(this.cutoff, t, 0.02); }
+        if (cc === 7)  { this.volume    = (val/127)*0.9;          this._master.gain.setTargetAtTime(this.volume, t, 0.02); }
+        if (cc === 74) { this.cutoff    = 200+(val/127)*11800;     this._filter.frequency.setTargetAtTime(this.cutoff, t, 0.02); }
         if (cc === 71) { this.resonance = 0.5+(val/127)*18;        this._filter.Q.setTargetAtTime(this.resonance, t, 0.02); }
-        if (cc === 91) { this.reverbMix = (val/127)*0.65;          this._rvbGain.gain.setTargetAtTime(this.reverbMix, t, 0.05); }
+        if (cc === 91) { this.reverbMix = (val/127)*0.6;           this._rvbGain.gain.setTargetAtTime(this.reverbMix, t, 0.05); }
         if (cc === 73) { this.attack    = 0.001+(val/127)*0.5; }
         if (cc === 72) { this.release   = 0.1+(val/127)*3.0; }
     }
 
-    noteOn(_channel, note, velocity) {
-        // _channel ignored — BuiltInPiano is mono-timbral
-        const ctx = this._audio();
-        this._forceStop(note);
+    noteOn(ch, note, velocity) {
+        const ctx  = this._audio();
+        const key  = `${ch}_${note}`;
+        this._forceStop(key);
         const freq = 440 * Math.pow(2, (note - 69) / 12);
-        const vel  = Math.max(0.01, Math.min(1, (velocity || 64) / 127));
+        const vel  = Math.max(0.02, Math.min(1, (velocity || 64) / 127));
         const now  = ctx.currentTime;
-        const env  = ctx.createGain();
-        env.gain.setValueAtTime(0, now);
-        env.gain.linearRampToValueAtTime(vel * 0.65, now + this.attack);
-        env.gain.exponentialRampToValueAtTime(vel * 0.20, now + this.attack + 0.35);
+        const type = this._synthType(ch);
+
+        const env = ctx.createGain();
+        env.gain.setValueAtTime(0.001, now);
         env.connect(this._filter);
-        const partials = [{r:1,g:1},{r:2,g:0.45},{r:3,g:0.20},{r:4,g:0.09},{r:6,g:0.04},{r:8,g:0.02}];
-        const oscs = partials.map(({r,g}) => {
-            const osc = ctx.createOscillator(); const gn = ctx.createGain();
-            osc.type = 'sine'; osc.frequency.value = freq * r; gn.gain.value = g;
-            osc.connect(gn); gn.connect(env); osc.start(now); return osc;
-        });
-        this._active[note] = { oscs, env };
+
+        const oscs = [];
+        let rel = this.release;
+
+        const osc = (waveType, f, gain, detuneC = 0) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.type = waveType; o.frequency.value = f;
+            if (detuneC) o.detune.value = detuneC;
+            g.gain.value = gain;
+            o.connect(g); g.connect(env); o.start(now);
+            oscs.push(o);
+        };
+
+        if (type === 'piano') {
+            // Additive sine con dos capas ligeramente desafinadas
+            [[1,1],[2,0.45],[3,0.2],[4,0.08],[6,0.03]].forEach(([r,g]) => {
+                osc('sine', freq*r, g*0.5);
+                osc('sine', freq*r, g*0.4, 4); // ligero detune
+            });
+            env.gain.linearRampToValueAtTime(vel*0.85, now + this.attack);
+            env.gain.exponentialRampToValueAtTime(vel*0.25, now + this.attack + 0.25);
+            rel = this.release;
+
+        } else if (type === 'bell') {
+            [[1,1],[2.76,0.55],[5.4,0.25],[8.93,0.09]].forEach(([r,g]) => osc('sine', freq*r, g*0.55));
+            env.gain.linearRampToValueAtTime(vel*0.9, now+0.001);
+            env.gain.exponentialRampToValueAtTime(vel*0.01, now+2.5);
+            rel = 0.4;
+
+        } else if (type === 'organ') {
+            // Drawbar Hammond — sumas de armónicos con dientes de sierra
+            [1,2,3,4,6].forEach((r,i) => {
+                const g = [0.4,0.3,0.2,0.12,0.06][i];
+                osc('sawtooth', freq*r, g);
+                osc('sawtooth', freq*r, g*0.6, 6); // chorus Leslie
+            });
+            env.gain.linearRampToValueAtTime(vel*0.8, now+0.005);
+            rel = 0.06; // órgano: apagado rápido
+
+        } else if (type === 'guitar') {
+            // Plucked: ataque rápido, decaimiento rápido
+            osc('sawtooth', freq, 0.4);
+            osc('sine', freq*2, 0.25);
+            osc('sine', freq*3, 0.1);
+            env.gain.linearRampToValueAtTime(vel*0.8, now+0.003);
+            env.gain.exponentialRampToValueAtTime(vel*0.1, now+0.35);
+            rel = 0.3;
+
+        } else if (type === 'bass') {
+            osc('triangle', freq, 0.5);
+            osc('sine', freq*2, 0.3);
+            osc('sine', freq*0.5, 0.15);
+            env.gain.linearRampToValueAtTime(vel*0.85, now+0.006);
+            env.gain.exponentialRampToValueAtTime(vel*0.35, now+0.12);
+            rel = 0.25;
+
+        } else if (type === 'strings') {
+            // Cuerdas: ataque lento, cuerpo con sawtooth+chorus
+            osc('sawtooth', freq, 0.35);
+            osc('sawtooth', freq, 0.3, -8);
+            osc('sawtooth', freq*2, 0.12);
+            const atk = Math.max(this.attack, 0.25);
+            env.gain.linearRampToValueAtTime(vel*0.75, now+atk);
+            rel = this.release * 1.2;
+
+        } else if (type === 'ensemble') {
+            // Strings+choir: múltiples capas
+            osc('sawtooth', freq, 0.3);
+            osc('sawtooth', freq, 0.25, -10);
+            osc('sawtooth', freq, 0.2, 10);
+            osc('sine', freq*2, 0.1);
+            const atk = Math.max(this.attack, 0.35);
+            env.gain.linearRampToValueAtTime(vel*0.7, now+atk);
+            rel = this.release * 1.5;
+
+        } else if (type === 'brass') {
+            osc('square', freq, 0.3);
+            osc('sawtooth', freq, 0.35);
+            osc('sawtooth', freq*2, 0.12);
+            env.gain.linearRampToValueAtTime(vel*0.85, now+0.018);
+            env.gain.exponentialRampToValueAtTime(vel*0.65, now+0.1);
+            rel = 0.18;
+
+        } else if (type === 'sax') {
+            osc('sawtooth', freq, 0.4);
+            osc('square', freq*0.5, 0.2);
+            osc('sawtooth', freq*2, 0.1);
+            env.gain.linearRampToValueAtTime(vel*0.8, now+0.012);
+            rel = 0.25;
+
+        } else if (type === 'flute') {
+            osc('triangle', freq, 0.5);
+            osc('triangle', freq*2, 0.18);
+            osc('sine', freq*3, 0.06);
+            env.gain.linearRampToValueAtTime(vel*0.75, now+0.04);
+            rel = 0.3;
+
+        } else if (type === 'lead') {
+            osc('sawtooth', freq, 0.45);
+            osc('square', freq, 0.2, -5);
+            osc('sawtooth', freq*2, 0.08);
+            env.gain.linearRampToValueAtTime(vel*0.85, now+0.004);
+            rel = 0.12;
+
+        } else if (type === 'pad') {
+            osc('sawtooth', freq, 0.3);
+            osc('sawtooth', freq, 0.25, -12);
+            osc('sawtooth', freq, 0.2, 12);
+            osc('sine', freq*2, 0.1);
+            const atk = Math.max(this.attack, 0.65);
+            env.gain.linearRampToValueAtTime(vel*0.65, now+atk);
+            rel = this.release * 2.0;
+
+        } else {
+            osc('sine', freq, 0.7);
+            env.gain.linearRampToValueAtTime(vel*0.8, now+0.01);
+        }
+
+        this._active[key] = { oscs, env, rel };
     }
 
-    noteOff(_channel, note) { this._release(note, this.release); }
+    noteOff(ch, note) {
+        const key = `${ch}_${note}`;
+        const n = this._active[key];
+        this._release(key, n ? n.rel : this.release);
+    }
 
-    _release(note, dur) {
-        const n = this._active[note];
+    _release(key, dur) {
+        const n = this._active[key];
         if (!n || !this._ctx) return;
-        delete this._active[note];
+        delete this._active[key];
         const now = this._ctx.currentTime;
         n.env.gain.cancelScheduledValues(now);
-        n.env.gain.setValueAtTime(Math.max(0.001, n.env.gain.value), now);
-        n.env.gain.exponentialRampToValueAtTime(0.001, now + dur);
+        n.env.gain.setValueAtTime(Math.max(0.0001, n.env.gain.value), now);
+        n.env.gain.exponentialRampToValueAtTime(0.0001, now + Math.max(0.05, dur));
         setTimeout(() => {
             n.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
             try { n.env.disconnect(); } catch(e) {}
-        }, (dur + 0.15) * 1000);
+        }, (Math.max(0.05, dur) + 0.1) * 1000);
     }
 
-    _forceStop(note) {
-        const n = this._active[note];
+    _forceStop(key) {
+        const n = this._active[key];
         if (!n) return;
-        delete this._active[note];
+        delete this._active[key];
         n.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
         try { n.env.disconnect(); } catch(e) {}
     }
@@ -1779,6 +1931,9 @@ window.sf2Ready = true;
 (function() {
     const el = document.getElementById('sf2-status');
     if (el) el.innerHTML = '<span style="color:#4CAF50;">✓ Sintetizador incorporado listo</span>';
+    // Sync initial volume from sf2-vol slider so master gain coincide desde el inicio
+    const initVol = parseInt(document.getElementById('sf2-vol')?.value || 100);
+    window.pcSynth.applyCC(7, initVol);
 })();
 
 // IndexedDB helpers for optional SF2 cache
@@ -1856,11 +2011,15 @@ async function sf2Init(source, name) {
             applyCC(cc, val) {
                 if (cc === 7) {
                     this._vol = val / 127;
-                    // Also scale the synth master volume directly
-                    if (pcPlayer.synth?.gainMaster) {
-                        pcPlayer.synth.gainMaster.gain.value = this._vol;
-                    }
+                    // Try multiple property names for the master gain node (sf2-player internals vary)
+                    const gainNode = pcPlayer.synth?.gainMaster
+                        || pcPlayer.synth?.masterGain
+                        || pcPlayer.synth?.gain
+                        || pcPlayer.synth?.gainNode;
+                    if (gainNode?.gain) gainNode.gain.value = this._vol;
                 }
+                // CC74/71/91/73/72 no son controlables directamente en sf2-player;
+                // la BuiltInPiano los maneja. Con SF2 estos CCs se envían al teclado vía MIDI.
             }
         };
         window.sf2Ready = true;
@@ -1898,12 +2057,18 @@ document.getElementById('sf2-file')?.addEventListener('change', async e => {
     await sf2Init(file, file.name);
 });
 
-// PC Synth volume slider (range 0-127, same as CC7)
+// PC Synth volume slider — sincroniza con EQ fader CC7 y envía al teclado
 document.getElementById('sf2-vol')?.addEventListener('input', e => {
     const val = parseInt(e.target.value);
     const valEl = document.getElementById('sf2-vol-val');
     if (valEl) valEl.innerText = val;
-    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, val);
+    // Sincronizar EQ fader CC7 UI
+    const eqFader = document.querySelector('.eq-fader[data-cc="7"]');
+    if (eqFader) eqFader.value = val;
+    const eqValEl = document.getElementById('eq-val-7');
+    if (eqValEl) eqValEl.innerText = val;
+    // Actualizar estado y enviar a teclado + PC synth (sendCC incluye applyCC para U1)
+    ['U1','U2','L'].forEach(p => { eqState[p][7] = val; sendCC(p, 7, val); });
 });
 
 // PC Synth ON/OFF toggle
