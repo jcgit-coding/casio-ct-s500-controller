@@ -263,6 +263,16 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
 
+        // CC7 = master volume: applies to all parts regardless of channel
+        if (d1 === 7) {
+            ['U1','U2','L'].forEach(p => { eqState[p][7] = d2; });
+            const fader = document.querySelector('.eq-fader[data-cc="7"]');
+            if (fader) fader.value = d2;
+            const valEl = document.getElementById('eq-val-7');
+            if (valEl) valEl.innerText = formatVal('VOLUMEN', d2);
+            return;
+        }
+
         if (!part) return;
 
         // Catch Bank Select MSB (CC0)
@@ -893,9 +903,96 @@ function initQuickControls() {
 }
 
 // ======================================================================
-//  PRESETS
+//  PRESETS + AUTO-SYNC
 // ======================================================================
 const SYNC_API = 'https://jsonblob.com/api/jsonBlob';
+
+async function syncPush() {
+    const token = localStorage.getItem('casioSyncToken');
+    if (!token) return;
+    try {
+        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        await fetch(`${SYNC_API}/${token}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(presets)
+        });
+        updateSyncStatus('✓ Sincronizado');
+    } catch { updateSyncStatus('Sin conexión'); }
+}
+
+async function syncPull(token) {
+    token = token || localStorage.getItem('casioSyncToken');
+    if (!token) return false;
+    try {
+        const res = await fetch(`${SYNC_API}/${token}`, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return false;
+        const cloud = await res.json();
+        const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        Object.assign(existing, cloud);
+        localStorage.setItem('casioPresets', JSON.stringify(existing));
+        renderPresets();
+        return true;
+    } catch { return false; }
+}
+
+async function syncCreateToken() {
+    try {
+        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        const res = await fetch(SYNC_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(presets)
+        });
+        if (!res.ok) return null;
+        const id = res.headers.get('Location').split('/').pop();
+        localStorage.setItem('casioSyncToken', id);
+        updateSyncStatus('✓ Listo');
+        return id;
+    } catch { return null; }
+}
+
+function updateSyncStatus(msg) {
+    const el = document.getElementById('syncAutoStatus');
+    if (el) el.innerText = msg;
+}
+
+function updateSyncTokenDisplay() {
+    const token = localStorage.getItem('casioSyncToken');
+    const el = document.getElementById('syncTokenDisplay');
+    if (!el) return;
+    if (token) {
+        el.innerText = token.slice(0, 8) + '…';
+        el.title = token;
+        el.style.cursor = 'pointer';
+        el.onclick = () => {
+            navigator.clipboard.writeText(token).then(() => {
+                el.innerText = '¡Copiado!';
+                setTimeout(() => { el.innerText = token.slice(0, 8) + '…'; }, 1500);
+            });
+        };
+    } else {
+        el.innerText = '—';
+    }
+}
+
+async function autoSyncInit() {
+    let token = localStorage.getItem('casioSyncToken');
+    updateSyncStatus('Conectando…');
+    if (token) {
+        const ok = await syncPull(token);
+        updateSyncStatus(ok ? '✓ Sincronizado' : 'Sin conexión');
+    } else {
+        updateSyncStatus('Creando cuenta…');
+        token = await syncCreateToken();
+        updateSyncStatus(token ? '✓ Listo' : 'Sin conexión');
+    }
+    updateSyncTokenDisplay();
+
+    // Populate legacy token input if present
+    const legacyEl = document.getElementById('syncToken');
+    if (legacyEl && token) legacyEl.value = token;
+}
 
 function initPresets() {
     document.getElementById("btnSavePreset").addEventListener("click", () => {
@@ -907,10 +1004,6 @@ function initPresets() {
         captureAndSavePreset(name);
         input.value = '';
     });
-
-    // Restaurar token guardado
-    const savedToken = localStorage.getItem('casioSyncToken');
-    if (savedToken) { const el = document.getElementById('syncToken'); if (el) el.value = savedToken; }
 
     // ── Exportar a archivo JSON ──────────────────────────────────────────
     document.getElementById('btnExportPresets')?.addEventListener('click', () => {
@@ -936,6 +1029,7 @@ function initPresets() {
                 Object.assign(existing, imported);
                 localStorage.setItem('casioPresets', JSON.stringify(existing));
                 renderPresets();
+                syncPush();
                 alert(`Importados ${Object.keys(imported).length} presets.`);
             } catch { alert('Archivo inválido — asegúrate de usar un .json exportado desde esta app.'); }
         };
@@ -943,61 +1037,49 @@ function initPresets() {
         e.target.value = '';
     });
 
-    // ── Crear token de nube (JSONBlob) ───────────────────────────────────
+    // ── Vincular nuevo dispositivo ───────────────────────────────────────
     document.getElementById('btnSyncCreate')?.addEventListener('click', async e => {
         e.preventDefault();
-        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-        try {
-            const res = await fetch(SYNC_API, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify(presets)
-            });
-            if (!res.ok) throw new Error();
-            const id = res.headers.get('Location').split('/').pop();
-            document.getElementById('syncToken').value = id;
-            localStorage.setItem('casioSyncToken', id);
-            alert(`Token creado: ${id}\n\nCópialo en tus otros dispositivos para sincronizar.`);
-        } catch { alert('Error al crear token. Comprueba tu conexión.'); }
+        const code = prompt('Pega el código de sincronización de tu otro dispositivo:\n(Déjalo vacío para generar uno nuevo)');
+        if (code === null) return; // cancelled
+        const trimmed = code.trim();
+        if (trimmed) {
+            updateSyncStatus('Verificando…');
+            const ok = await syncPull(trimmed);
+            if (ok) {
+                localStorage.setItem('casioSyncToken', trimmed);
+                updateSyncTokenDisplay();
+                const legacyEl = document.getElementById('syncToken');
+                if (legacyEl) legacyEl.value = trimmed;
+                updateSyncStatus('✓ Vinculado');
+                alert('Dispositivo vinculado correctamente. Los presets se sincronizarán automáticamente.');
+            } else {
+                updateSyncStatus('Error');
+                alert('Código inválido o sin conexión.');
+            }
+        } else {
+            updateSyncStatus('Creando…');
+            const token = await syncCreateToken();
+            updateSyncTokenDisplay();
+            updateSyncStatus(token ? '✓ Listo' : 'Sin conexión');
+            if (token) alert(`Código de sincronización creado:\n${token}\n\nCópialo en tus otros dispositivos.`);
+        }
     });
 
-    // ── Subir a la nube ─────────────────────────────────────────────────
+    // ── Subir manual ─────────────────────────────────────────────────────
     document.getElementById('btnSyncPush')?.addEventListener('click', async () => {
-        const token = document.getElementById('syncToken')?.value.trim();
-        if (!token) { alert('Pega un Token de sincronización primero.'); return; }
-        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-        try {
-            const res = await fetch(`${SYNC_API}/${token}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify(presets)
-            });
-            if (!res.ok) throw new Error();
-            localStorage.setItem('casioSyncToken', token);
-            alert('Presets subidos a la nube correctamente.');
-        } catch { alert('Error al subir. Verifica el Token y tu conexión.'); }
+        await syncPush();
+        alert('Presets subidos a la nube.');
     });
 
-    // ── Bajar de la nube ────────────────────────────────────────────────
+    // ── Bajar manual ─────────────────────────────────────────────────────
     document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
-        const token = document.getElementById('syncToken')?.value.trim();
-        if (!token) { alert('Pega un Token de sincronización primero.'); return; }
-        try {
-            const res = await fetch(`${SYNC_API}/${token}`, {
-                headers: { 'Accept': 'application/json' }
-            });
-            if (!res.ok) throw new Error();
-            const cloud = await res.json();
-            const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-            Object.assign(existing, cloud);
-            localStorage.setItem('casioPresets', JSON.stringify(existing));
-            localStorage.setItem('casioSyncToken', token);
-            renderPresets();
-            alert(`Bajados ${Object.keys(cloud).length} presets de la nube.`);
-        } catch { alert('Error al bajar. Token inválido o sin conexión.'); }
+        const ok = await syncPull();
+        alert(ok ? 'Presets bajados y combinados.' : 'Sin conexión o sin código configurado.');
     });
 
     renderPresets();
+    autoSyncInit();
 }
 
 function captureAndSavePreset(name) {
@@ -1015,6 +1097,7 @@ function captureAndSavePreset(name) {
     presets[name] = data;
     localStorage.setItem("casioPresets", JSON.stringify(presets));
     renderPresets();
+    syncPush();
 }
 
 function loadPreset(data) {
@@ -1099,6 +1182,7 @@ function renderPresets() {
             delete p[name];
             localStorage.setItem("casioPresets", JSON.stringify(p));
             renderPresets();
+            syncPush();
         };
 
         actions.appendChild(loadBtn);
@@ -1410,29 +1494,68 @@ const nameEl = document.getElementById('selectedTone-' + part);
 window.pcSynth = null;
 window.sf2Ready = false;
 
-document.getElementById('sf2-file')?.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+function sf2OpenIDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open('casioPcSynth', 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore('sf2cache');
+        req.onsuccess = e => resolve(e.target.result);
+        req.onerror = reject;
+    });
+}
 
+async function sf2SaveCache(name, buffer) {
+    try {
+        const db = await sf2OpenIDB();
+        const tx = db.transaction('sf2cache', 'readwrite');
+        tx.objectStore('sf2cache').put({ name, buffer }, 'sf2');
+    } catch(e) { console.warn('sf2 cache save failed', e); }
+}
+
+async function sf2LoadCache() {
+    try {
+        const db = await sf2OpenIDB();
+        return await new Promise((resolve, reject) => {
+            const tx = db.transaction('sf2cache', 'readonly');
+            const req = tx.objectStore('sf2cache').get('sf2');
+            req.onsuccess = e => resolve(e.target.result || null);
+            req.onerror = reject;
+        });
+    } catch { return null; }
+}
+
+async function sf2Init(buffer, name) {
     const statusEl = document.getElementById('sf2-status');
-    statusEl.innerHTML = '<span style="color:var(--accent);">Cargando motor de audio y archivo...</span>';
-
+    if (!statusEl) return;
+    statusEl.innerHTML = '<span style="color:var(--accent);">Cargando motor de audio…</span>';
     try {
         const module = await import('https://unpkg.com/sf2-player');
         const SoundFont = module.default;
         if (!window.pcSynth) window.pcSynth = new SoundFont();
-        
+        const blob = new Blob([buffer], { type: 'audio/x-sf2' });
+        const file = new File([blob], name || 'soundfont.sf2');
         await window.pcSynth.loadSoundFontFromFile(file);
         window.pcSynth.bank = window.pcSynth.banks[0].id;
         window.pcSynth.program = window.pcSynth.programs[0].id;
-        
         window.sf2Ready = true;
-        statusEl.innerHTML = '<span style="color:#4CAF50;"> Listo: ' + file.name + '</span>';
+        statusEl.innerHTML = '<span style="color:#4CAF50;">✓ Listo: ' + (name || 'soundfont.sf2') + '</span>';
     } catch (err) {
         console.error(err);
         statusEl.innerHTML = '<span style="color:#F44336;">Error cargando el archivo .sf2</span>';
         window.sf2Ready = false;
     }
+}
+
+// Auto-load from cache on startup
+sf2LoadCache().then(cached => {
+    if (cached) sf2Init(cached.buffer, cached.name);
+});
+
+document.getElementById('sf2-file')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const buffer = await file.arrayBuffer();
+    await sf2SaveCache(file.name, buffer);
+    await sf2Init(buffer, file.name);
 });
 
 document.getElementById('sf2-vol')?.addEventListener('input', (e) => {
