@@ -1646,8 +1646,26 @@ async function sf2Init(buffer, name) {
     }
 }
 
-// Auto-load SF2 from cache if previously uploaded
-sf2LoadCache().then(cached => { if (cached) sf2Init(cached.buffer, cached.name); });
+// Auto-load SF2: try IndexedDB cache first, then fetch from repo
+(async () => {
+    const cached = await sf2LoadCache();
+    if (cached) {
+        sf2Init(cached.buffer, cached.name);
+        return;
+    }
+    // Try to load bundled soundfont from GitHub Pages
+    const statusEl = document.getElementById('sf2-status');
+    try {
+        if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Descargando soundfont…</span>';
+        const res = await fetch('./soundfont.sf2');
+        if (!res.ok) throw new Error('not found');
+        const buffer = await res.arrayBuffer();
+        await sf2SaveCache('soundfont.sf2', buffer);
+        await sf2Init(buffer, 'soundfont.sf2');
+    } catch {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#4CAF50;">✓ Sintetizador incorporado listo</span>';
+    }
+})();
 
 document.getElementById('sf2-file')?.addEventListener('change', async e => {
     const file = e.target.files[0]; if (!file) return;
