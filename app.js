@@ -253,19 +253,6 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
 
-        // CC7 (Volume) — capture from ANY channel (physical knob sends on active part's channel)
-        if (d1 === 7) {
-            ['U1','U2','L'].forEach(p => {
-                eqState[p][7] = d2;
-                if (p === activePart) {
-                    const f = document.querySelector(`.eq-fader[data-cc="7"]`);
-                    if (f) f.value = d2;
-                    const valEl = document.getElementById('eq-val-7');
-                    if (valEl) valEl.innerText = d2;
-                }
-            });
-        }
-
         if (!part) return;
 
         // Catch Bank Select MSB (CC0)
@@ -898,6 +885,8 @@ function initQuickControls() {
 // ======================================================================
 //  PRESETS
 // ======================================================================
+const SYNC_API = 'https://jsonblob.com/api/jsonBlob';
+
 function initPresets() {
     document.getElementById("btnSavePreset").addEventListener("click", () => {
         const input = document.getElementById("presetName");
@@ -908,6 +897,96 @@ function initPresets() {
         captureAndSavePreset(name);
         input.value = '';
     });
+
+    // Restaurar token guardado
+    const savedToken = localStorage.getItem('casioSyncToken');
+    if (savedToken) { const el = document.getElementById('syncToken'); if (el) el.value = savedToken; }
+
+    // ── Exportar a archivo JSON ──────────────────────────────────────────
+    document.getElementById('btnExportPresets')?.addEventListener('click', () => {
+        const json = localStorage.getItem('casioPresets') || '{}';
+        const blob = new Blob([json], { type: 'application/json' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = 'casio-presets.json'; a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    // ── Importar desde archivo JSON ──────────────────────────────────────
+    document.getElementById('btnImportPresets')?.addEventListener('click', () => {
+        document.getElementById('fileImportPresets')?.click();
+    });
+    document.getElementById('fileImportPresets')?.addEventListener('change', e => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            try {
+                const imported = JSON.parse(ev.target.result);
+                const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+                Object.assign(existing, imported);
+                localStorage.setItem('casioPresets', JSON.stringify(existing));
+                renderPresets();
+                alert(`Importados ${Object.keys(imported).length} presets.`);
+            } catch { alert('Archivo inválido — asegúrate de usar un .json exportado desde esta app.'); }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+    });
+
+    // ── Crear token de nube (JSONBlob) ───────────────────────────────────
+    document.getElementById('btnSyncCreate')?.addEventListener('click', async e => {
+        e.preventDefault();
+        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        try {
+            const res = await fetch(SYNC_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(presets)
+            });
+            if (!res.ok) throw new Error();
+            const id = res.headers.get('Location').split('/').pop();
+            document.getElementById('syncToken').value = id;
+            localStorage.setItem('casioSyncToken', id);
+            alert(`Token creado: ${id}\n\nCópialo en tus otros dispositivos para sincronizar.`);
+        } catch { alert('Error al crear token. Comprueba tu conexión.'); }
+    });
+
+    // ── Subir a la nube ─────────────────────────────────────────────────
+    document.getElementById('btnSyncPush')?.addEventListener('click', async () => {
+        const token = document.getElementById('syncToken')?.value.trim();
+        if (!token) { alert('Pega un Token de sincronización primero.'); return; }
+        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        try {
+            const res = await fetch(`${SYNC_API}/${token}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(presets)
+            });
+            if (!res.ok) throw new Error();
+            localStorage.setItem('casioSyncToken', token);
+            alert('Presets subidos a la nube correctamente.');
+        } catch { alert('Error al subir. Verifica el Token y tu conexión.'); }
+    });
+
+    // ── Bajar de la nube ────────────────────────────────────────────────
+    document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
+        const token = document.getElementById('syncToken')?.value.trim();
+        if (!token) { alert('Pega un Token de sincronización primero.'); return; }
+        try {
+            const res = await fetch(`${SYNC_API}/${token}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!res.ok) throw new Error();
+            const cloud = await res.json();
+            const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+            Object.assign(existing, cloud);
+            localStorage.setItem('casioPresets', JSON.stringify(existing));
+            localStorage.setItem('casioSyncToken', token);
+            renderPresets();
+            alert(`Bajados ${Object.keys(cloud).length} presets de la nube.`);
+        } catch { alert('Error al bajar. Token inválido o sin conexión.'); }
+    });
+
     renderPresets();
 }
 
