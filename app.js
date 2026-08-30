@@ -6,9 +6,10 @@ let midiInput   = null;
 let midiOutput  = null;
 
 // PC Synth Sustain Buffer
-const pcActiveNotes = {};
-const pcSustainedNotes = {};
+const pcActiveNotes = {};     // note → MIDI channel that sent it
+const pcSustainedNotes = {};  // note → MIDI channel for deferred noteOff
 let pcSustainOn = false;
+let pcSynthEnabled = false;   // OFF by default — user must toggle on
 
 function applyPcSustain(isSustain) {
     if (!window.pcSynth) return;
@@ -16,11 +17,93 @@ function applyPcSustain(isSustain) {
     if (!pcSustainOn) {
         for (const note in pcSustainedNotes) {
             if (!pcActiveNotes[note]) {
-                window.pcSynth.noteOff(parseInt(note), 0, 0);
+                const ch = typeof pcSustainedNotes[note] === 'number' ? pcSustainedNotes[note] : 0;
+                window.pcSynth.noteOff(ch, parseInt(note));
             }
             delete pcSustainedNotes[note];
         }
     }
+}
+
+// 128 GM instruments organised by category for the instrument picker
+const GM_INSTRUMENTS = [
+    { name: 'Piano', programs: [
+        [0,'Grand Piano'],[1,'Bright Piano'],[2,'Electric Grand'],[3,'Honky-tonk'],
+        [4,'Electric Piano 1'],[5,'Electric Piano 2'],[6,'Harpsichord'],[7,'Clavinet'] ]},
+    { name: 'Perc. Cromática', programs: [
+        [8,'Celesta'],[9,'Glockenspiel'],[10,'Music Box'],[11,'Vibraphone'],
+        [12,'Marimba'],[13,'Xylophone'],[14,'Campanas'],[15,'Dulcimer'] ]},
+    { name: 'Órgano', programs: [
+        [16,'Órgano Drawbar'],[17,'Órgano Percusivo'],[18,'Rock Organ'],[19,'Órgano Iglesia'],
+        [20,'Reed Organ'],[21,'Acordeón'],[22,'Harmónica'],[23,'Tangó Acordeón'] ]},
+    { name: 'Guitarra', programs: [
+        [24,'Guitarra Nylon'],[25,'Guitarra Steel'],[26,'Jazz Guitar'],[27,'Clean Guitar'],
+        [28,'Muted Guitar'],[29,'Overdriven'],[30,'Distortion'],[31,'Guitar Harmonics'] ]},
+    { name: 'Bajo', programs: [
+        [32,'Acoustic Bass'],[33,'Elec. Bass Finger'],[34,'Elec. Bass Pick'],[35,'Fretless Bass'],
+        [36,'Slap Bass 1'],[37,'Slap Bass 2'],[38,'Synth Bass 1'],[39,'Synth Bass 2'] ]},
+    { name: 'Cuerdas', programs: [
+        [40,'Violín'],[41,'Viola'],[42,'Cello'],[43,'Contrabajo'],
+        [44,'Tremolo Strings'],[45,'Pizzicato Strings'],[46,'Arpa'],[47,'Timbal'] ]},
+    { name: 'Ensemble', programs: [
+        [48,'String Ensemble 1'],[49,'String Ensemble 2'],[50,'Synth Strings 1'],[51,'Synth Strings 2'],
+        [52,'Choir Aahs'],[53,'Voice Oohs'],[54,'Synth Voice'],[55,'Orchestra Hit'] ]},
+    { name: 'Metales', programs: [
+        [56,'Trompeta'],[57,'Trombón'],[58,'Tuba'],[59,'Trompeta Sord.'],
+        [60,'French Horn'],[61,'Brass Section'],[62,'Synth Brass 1'],[63,'Synth Brass 2'] ]},
+    { name: 'Caña', programs: [
+        [64,'Soprano Sax'],[65,'Alto Sax'],[66,'Tenor Sax'],[67,'Baritone Sax'],
+        [68,'Oboe'],[69,'English Horn'],[70,'Fagot'],[71,'Clarinete'] ]},
+    { name: 'Viento', programs: [
+        [72,'Piccolo'],[73,'Flauta'],[74,'Recorder'],[75,'Pan Flute'],
+        [76,'Blown Bottle'],[77,'Shakuhachi'],[78,'Whistle'],[79,'Ocarina'] ]},
+    { name: 'Synth Lead', programs: [
+        [80,'Lead Square'],[81,'Lead Sawtooth'],[82,'Lead Calliope'],[83,'Lead Chiff'],
+        [84,'Lead Charang'],[85,'Lead Voice'],[86,'Lead Fifths'],[87,'Lead Bass+Lead'] ]},
+    { name: 'Synth Pad', programs: [
+        [88,'Pad New Age'],[89,'Pad Warm'],[90,'Pad Polysynth'],[91,'Pad Choir'],
+        [92,'Pad Bowed'],[93,'Pad Metallic'],[94,'Pad Halo'],[95,'Pad Sweep'] ]},
+    { name: 'Synth FX', programs: [
+        [96,'FX Rain'],[97,'FX Soundtrack'],[98,'FX Crystal'],[99,'FX Atmosphere'],
+        [100,'FX Brightness'],[101,'FX Goblins'],[102,'FX Echoes'],[103,'FX Sci-fi'] ]},
+    { name: 'Étnico', programs: [
+        [104,'Sitar'],[105,'Banjo'],[106,'Shamisen'],[107,'Koto'],
+        [108,'Kalimba'],[109,'Bag Pipe'],[110,'Fiddle'],[111,'Shanai'] ]},
+    { name: 'Percusivo', programs: [
+        [112,'Tinkle Bell'],[113,'Agogo'],[114,'Steel Drums'],[115,'Woodblock'],
+        [116,'Taiko'],[117,'Melodic Tom'],[118,'Synth Drum'],[119,'Rev. Cymbal'] ]},
+    { name: 'Efectos', programs: [
+        [120,'Guitar Noise'],[121,'Breath Noise'],[122,'Seashore'],[123,'Bird Tweet'],
+        [124,'Telephone'],[125,'Helicopter'],[126,'Applause'],[127,'Gunshot'] ]},
+];
+
+// Per-part selected GM program for PC synth (independent of keyboard tone)
+const pcPartProgram = { U1: 0, U2: 0, L: 0 };
+
+function buildGMSelectors() {
+    ['U1','U2','L'].forEach(part => {
+        const sel = document.getElementById('sf2-prog-' + part);
+        if (!sel) return;
+        GM_INSTRUMENTS.forEach(cat => {
+            const grp = document.createElement('optgroup');
+            grp.label = cat.name;
+            cat.programs.forEach(([prog, name]) => {
+                const opt = document.createElement('option');
+                opt.value = prog;
+                opt.textContent = prog + ' – ' + name;
+                if (prog === pcPartProgram[part]) opt.selected = true;
+                grp.appendChild(opt);
+            });
+            sel.appendChild(grp);
+        });
+        sel.addEventListener('change', () => {
+            const prog = parseInt(sel.value);
+            pcPartProgram[part] = prog;
+            if (window.pcSynth && window.pcSynth.programChange) {
+                window.pcSynth.programChange(CHANNEL[part], prog);
+            }
+        });
+    });
 }
 
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
@@ -237,24 +320,28 @@ function onMIDIMessage(e) {
     const [status, d1, d2] = e.data;
     
     // --- PC SYNTH HOOK ---
-    if (window.sf2Ready && window.pcSynth) {
-        const cmd = status & 0xF0;
-        const vol = (document.getElementById('sf2-vol') ? parseInt(document.getElementById('sf2-vol').value) : 100) / 100;
-        
+    if (pcSynthEnabled && window.sf2Ready && window.pcSynth) {
+        const cmd    = status & 0xF0;
+        const noteCh = status & 0x0F;  // MIDI channel that sent this note
+        const sfVolEl = document.getElementById('sf2-vol');
+        const vol = sfVolEl ? parseInt(sfVolEl.value) / 127 : 1.0;
+
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
-                pcActiveNotes[d1] = true;
-                if (window.pcSynth.synth && window.pcSynth.synth.ctx && window.pcSynth.synth.ctx.state === 'suspended') { window.pcSynth.synth.ctx.resume(); } 
-                window.pcSynth.noteOn(d1, Math.round(d2 * vol), 0);
+                pcActiveNotes[d1] = noteCh;
+                if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
+                window.pcSynth.noteOn(noteCh, d1, Math.round(d2 * vol));
             } else {
-                pcActiveNotes[d1] = false;
-                if (pcSustainOn) pcSustainedNotes[d1] = true;
-                else window.pcSynth.noteOff(d1, 0, 0);
+                const ch = pcActiveNotes[d1] ?? noteCh;
+                delete pcActiveNotes[d1];
+                if (pcSustainOn) pcSustainedNotes[d1] = ch;
+                else window.pcSynth.noteOff(ch, d1);
             }
         } else if (cmd === 0x80) { // Note Off
-            pcActiveNotes[d1] = false;
-            if (pcSustainOn) pcSustainedNotes[d1] = true;
-            else window.pcSynth.noteOff(d1, d2, 0);
+            const ch = pcActiveNotes[d1] ?? noteCh;
+            delete pcActiveNotes[d1];
+            if (pcSustainOn) pcSustainedNotes[d1] = ch;
+            else window.pcSynth.noteOff(ch, d1);
         } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal
             applyPcSustain(d2 >= 64);
         }
@@ -272,6 +359,13 @@ function onMIDIMessage(e) {
             if (fader) fader.value = d2;
             const valEl = document.getElementById('eq-val-7');
             if (valEl) valEl.innerText = formatVal('VOLUMEN', d2);
+            // Sync PC Synth volume slider (0-127 range, same as CC7)
+            const sfVol = document.getElementById('sf2-vol');
+            if (sfVol) {
+                sfVol.value = d2;
+                const sfVolVal = document.getElementById('sf2-vol-val');
+                if (sfVolVal) sfVolVal.innerText = d2;
+            }
             if (window.pcSynth && window.pcSynth.applyCC) window.pcSynth.applyCC(7, d2);
             return;
         }
@@ -321,9 +415,13 @@ function onMIDIMessage(e) {
         const ch = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
-        // Mirror program to SF2 synth so PC sound matches keyboard tone (U1 only)
-        if (part === 'U1' && window.pcSynth && window.pcSynth.programChange) {
-            window.pcSynth.programChange(d1);
+        // Mirror program to SF2 synth so PC sound matches keyboard tone
+        if (window.pcSynth && window.pcSynth.programChange) {
+            window.pcSynth.programChange(ch, d1);
+            // Also update instrument picker UI for this part
+            const sel = document.getElementById('sf2-prog-' + part);
+            if (sel) sel.value = d1;
+            pcPartProgram[part] = d1;
         }
 
         const pc = d1;
@@ -1629,7 +1727,8 @@ class BuiltInPiano {
         if (cc === 72) { this.release   = 0.1+(val/127)*3.0; }
     }
 
-    noteOn(note, velocity) {
+    noteOn(_channel, note, velocity) {
+        // _channel ignored — BuiltInPiano is mono-timbral
         const ctx = this._audio();
         this._forceStop(note);
         const freq = 440 * Math.pow(2, (note - 69) / 12);
@@ -1649,7 +1748,7 @@ class BuiltInPiano {
         this._active[note] = { oscs, env };
     }
 
-    noteOff(note) { this._release(note, this.release); }
+    noteOff(_channel, note) { this._release(note, this.release); }
 
     _release(note, dur) {
         const n = this._active[note];
@@ -1720,20 +1819,19 @@ async function sf2Init(buffer, name) {
         const loadResult = sf2.load(buffer);
         if (loadResult && typeof loadResult.then === 'function') await loadResult;
 
-        // Wrapper: normalises interface so noteOn(note, vel) / noteOff(note) / applyCC / programChange work
-        const initVol = (eqState && eqState['U1'] && eqState['U1'][7] !== undefined)
-            ? eqState['U1'][7] / 127 : 1.0;
+        // Wrapper — interface: noteOn(channel, note, vel), noteOff(channel, note), programChange(channel, prog)
+        const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
         window.pcSynth = {
-            _sf2: sf2, _ctx: ctx, _vol: initVol, _prog: 0,
+            _sf2: sf2, _ctx: ctx, _vol: initVol,
             get synth() { return { ctx: this._ctx }; },
-            noteOn(note, velocity) {
+            noteOn(channel, note, velocity) {
+                if (this._ctx.state === 'suspended') this._ctx.resume();
                 const v = Math.min(127, Math.max(1, Math.round(velocity * this._vol)));
-                sf2.noteOn(0, note, v);
+                sf2.noteOn(channel, note, v);
             },
-            noteOff(note) { sf2.noteOff(0, note); },
-            programChange(prog) {
-                this._prog = prog;
-                if (sf2.programChange) sf2.programChange(0, prog);
+            noteOff(channel, note) { sf2.noteOff(channel, note); },
+            programChange(channel, prog) {
+                if (sf2.programChange) sf2.programChange(channel, prog);
             },
             applyCC(cc, val) {
                 if (cc === 7) this._vol = val / 127;
@@ -1776,9 +1874,32 @@ document.getElementById('sf2-file')?.addEventListener('change', async e => {
     await sf2Init(buffer, file.name);
 });
 
+// PC Synth volume slider (range 0-127, same as CC7)
 document.getElementById('sf2-vol')?.addEventListener('input', e => {
-    document.getElementById('sf2-vol-val').innerText = e.target.value;
+    const val = parseInt(e.target.value);
+    const valEl = document.getElementById('sf2-vol-val');
+    if (valEl) valEl.innerText = val;
+    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, val);
 });
+
+// PC Synth ON/OFF toggle
+document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
+    pcSynthEnabled = e.target.checked;
+    const controls = document.getElementById('pcSynthControls');
+    if (controls) controls.style.display = pcSynthEnabled ? 'block' : 'none';
+    // Stop any currently sounding notes when toggling off
+    if (!pcSynthEnabled && window.pcSynth) {
+        for (const note in pcActiveNotes) {
+            const ch = typeof pcActiveNotes[note] === 'number' ? pcActiveNotes[note] : 0;
+            try { window.pcSynth.noteOff(ch, parseInt(note)); } catch(e) {}
+        }
+        for (const k in pcActiveNotes) delete pcActiveNotes[k];
+        for (const k in pcSustainedNotes) delete pcSustainedNotes[k];
+    }
+});
+
+// Build GM instrument selectors (after DOM is ready — DOMContentLoaded already fired)
+buildGMSelectors();
 
 
 

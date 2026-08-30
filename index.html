@@ -330,28 +330,48 @@
         <!-- VIEW: PC SYNTH -->
         <div class="app-view" id="view-synth">
             <div class="panel">
-                <div class="panel-header">
-                    <h2>Módulo de Sonido de PC (SoundFonts)</h2>
-                </div>
-                <div style="padding: 1rem; ">
-                    <p>Usa tu Casio como teclado controlador con sonido directo en tu PC. <strong>Listo para usar</strong> — el sintetizador incorporado funciona sin archivos. Para mayor calidad puedes cargar un archivo <strong>.sf2</strong> opcional.</p>
-
-                    <p id="sf2-status" style="margin: 0.5rem 0 1rem; font-size: 13px;">Iniciando…</p>
-
-                    <div style="margin: 1rem 0; padding: 1rem; background: var(--card-bg); border: 1px solid var(--panel-border); border-radius: 8px; text-align: center;">
-                        <p style="font-size: 12px; color: var(--muted); margin-bottom: 0.75rem;">Opcional: reemplaza el sintetizador incorporado con un archivo .sf2 de alta calidad</p>
-                        <input type="file" id="sf2-file" accept=".sf2,audio/*,application/*,*/*" style="display: none;">
-                        <label for="sf2-file" style="background: var(--surface2); border: 1px solid var(--panel-border); padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px;">
-                            <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 4px; font-size: 16px;">upload_file</span> Cargar .sf2 (opcional)
+                <div class="panel-header" style="flex-wrap:wrap; gap:8px;">
+                    <h2>PC Synth</h2>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                        <span id="sf2-status" style="font-size:11px;color:var(--muted);">Cargando…</span>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:bold;background:var(--surface2);border:1px solid var(--panel-border);border-radius:6px;padding:5px 10px;">
+                            <input type="checkbox" id="pcSynthToggle" style="cursor:pointer;">
+                            ACTIVAR SONIDO PC
                         </label>
                     </div>
-
-                    <div class="eq-row">
-                        <div class="slider-group">
-                            <label>Volumen PC Synth</label>
-                            <input type="range" id="sf2-vol" style="width:100%; margin: 15px 0;" min="0" max="100" value="100">
-                            <div class="val-display" id="sf2-vol-val">100</div>
+                </div>
+                <div style="padding:1rem;">
+                    <!-- Per-part instrument selectors -->
+                    <div id="pcSynthControls" style="display:none;">
+                        <p style="font-size:11px;color:var(--muted);margin-bottom:8px;">Selecciona instrumento GM por parte:</p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem;">
+                            <div>
+                                <div style="font-size:10px;font-weight:bold;color:var(--accent);margin-bottom:3px;">UPPER 1</div>
+                                <select id="sf2-prog-U1" class="search-input" style="width:100%;font-size:11px;padding:4px;"></select>
+                            </div>
+                            <div>
+                                <div style="font-size:10px;font-weight:bold;color:var(--accent);margin-bottom:3px;">UPPER 2</div>
+                                <select id="sf2-prog-U2" class="search-input" style="width:100%;font-size:11px;padding:4px;"></select>
+                            </div>
+                            <div>
+                                <div style="font-size:10px;font-weight:bold;color:var(--accent);margin-bottom:3px;">LOWER</div>
+                                <select id="sf2-prog-L" class="search-input" style="width:100%;font-size:11px;padding:4px;"></select>
+                            </div>
                         </div>
+                    </div>
+                    <!-- Volume (syncs with physical CC7 knob) -->
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+                        <span style="font-size:11px;font-weight:bold;min-width:64px;">VOLUMEN</span>
+                        <input type="range" id="sf2-vol" style="flex:1;" min="0" max="127" value="100">
+                        <span id="sf2-vol-val" style="font-size:12px;min-width:28px;text-align:right;">100</span>
+                    </div>
+                    <!-- Optional SF2 file -->
+                    <div style="border-top:1px solid var(--panel-border);padding-top:0.75rem;">
+                        <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Soundfont cargado automáticamente. Para reemplazar con uno propio:</p>
+                        <input type="file" id="sf2-file" accept=".sf2" style="display:none;">
+                        <label for="sf2-file" style="background:var(--surface2);border:1px solid var(--panel-border);padding:5px 12px;border-radius:4px;cursor:pointer;font-size:12px;">
+                            <span class="material-symbols-outlined" style="vertical-align:middle;font-size:14px;margin-right:4px;">upload_file</span> Cargar .sf2 alternativo
+                        </label>
                     </div>
                 </div>
             </div>
@@ -361,6 +381,6 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="app.js?v=104"></script>
+    <script src="app.js?v=105"></script>
 </body>
 </html>
