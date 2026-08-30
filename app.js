@@ -177,19 +177,25 @@ function scanAndConnect() {
     midiInput  = null;
     midiOutput = null;
 
-    // Prefer CASIO / CT-S, fallback to first available port
-    for (let o of midiAccess.outputs.values()) {
+    const allOuts = [...midiAccess.outputs.values()];
+    const allIns  = [...midiAccess.inputs.values()];
+    console.log('[MIDI] outputs:', allOuts.map(o => o.name + ' state=' + o.state + ' conn=' + o.connection));
+    console.log('[MIDI] inputs:', allIns.map(i => i.name + ' state=' + i.state + ' conn=' + i.connection));
+
+    // Prefer CASIO / CT-S, fallback to first available port (skip THROUGH ports)
+    for (let o of allOuts) {
         if (o.state !== 'connected') continue;
         const n = o.name.toUpperCase();
-        if (n.includes("THROUGH")) continue; // Ignore Android's internal dummy port
+        if (n.includes("THROUGH")) continue;
         if (!midiOutput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH") || n.includes("USB") || n.includes("MIDI")) midiOutput = o;
     }
-    for (let i of midiAccess.inputs.values()) {
+    for (let i of allIns) {
         if (i.state !== 'connected') continue;
         const n = i.name.toUpperCase();
-        if (n.includes("THROUGH")) continue; // Ignore Android's internal dummy port
+        if (n.includes("THROUGH")) continue;
         if (!midiInput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH") || n.includes("USB") || n.includes("MIDI")) midiInput = i;
     }
+    console.log('[MIDI] selected output:', midiOutput?.name, '| selected input:', midiInput?.name);
 
     if (midiOutput) {
         midiOutput.open().catch(console.error);
