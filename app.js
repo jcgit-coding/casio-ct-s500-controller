@@ -514,8 +514,8 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
 
 let currentEnv = 'Estudio';
-// CCs: 74=Brillo/Cutoff 71=Resonancia 73=Attack 72=Release 75=Decay 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Eco
-// Defaults GM: 74→64 71→0 73→64 72→64 75→64 91→40 93→0 76→64 77→64 78→64 94→0
+// CCs: 74=Brillo/Cutoff 71=Resonancia 73=Ataque 75=Decay 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Eco
+// CC72 (Release) eliminado del EQ — el teclado lo maneja internamente por instrumento
 // Categorías Casio (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
 //   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
 //   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES
@@ -698,6 +698,8 @@ function applySmartProfile(part, category) {
             eqState[part][cc] = val;
         }
     }
+    // Ensure CC72 (Release) is never in eqState — send a neutral value to keyboard instead
+    delete eqState[part][72]; delete eqState[part]['72'];
 
     // 3. Apply Part Mix Rules
     if (part === 'U1') eqState[part][7] = 100;
@@ -1608,7 +1610,11 @@ function loadAppState() {
         const saved = JSON.parse(localStorage.getItem('casioAppState'));
         if (!saved) return;
         
-        if (saved.eqState) Object.assign(eqState, saved.eqState);
+        if (saved.eqState) {
+            Object.assign(eqState, saved.eqState);
+            // Purge CC72 (Release) — eliminado del EQ, nunca debe aplicarse desde estado guardado
+            ['U1','U2','L'].forEach(p => { delete eqState[p][72]; delete eqState[p]['72']; });
+        }
         if (saved.tuning) Object.assign(tuning, saved.tuning);
         if (saved.globalTranspose !== undefined) {
             globalTranspose = saved.globalTranspose;
