@@ -1191,3 +1191,39 @@ header h1 {
     height: 30px; /* Fixed height so the bottom of the blocks look uniform */
     overflow: hidden;
 }
+
+/* ── VIRTUAL KEYBOARD ──────────────────────────────── */
+.virtual-keyboard {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    min-height: 108px;
+}
+.vk-white {
+    transition: background 0.05s;
+}
+.vk-white:hover {
+    background: #e0eeff !important;
+}
+.vk-white.vk-active {
+    background: var(--accent-dim) !important;
+    border-color: var(--accent) !important;
+}
+.vk-black {
+    transition: background 0.05s;
+}
+.vk-black:hover {
+    background: #3a3a3a !important;
+}
+.vk-black.vk-active {
+    background: var(--accent) !important;
+}
+
+[data-theme="light"] .vk-white {
+    background: #fff;
+    border-color: #aaa;
+}
+[data-theme="light"] .vk-white:hover {
+    background: #e8f4ff !important;
+}
