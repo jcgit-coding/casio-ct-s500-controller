@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=94">
+    <link rel="stylesheet" href="style.css?v=95">
 </head>
 <body>
 
@@ -49,6 +49,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Buscando MIDI…</span>
                 </div>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v95</span>
             </div>
         </div>
 
@@ -351,6 +352,16 @@
                     Usa el fader <b>VOLUMEN</b> en el Mixer para controlar el volumen. El teclado virtual envía notas al PC Synth y al Casio vía MIDI.
                 </p>
             </div>
+
+            
+                <!-- AVISO SONIDO PC -->
+                <div id="pcSoundWarning" style="display: none; background: rgba(255, 234, 0, 0.1); border: 1px solid #FFEA00; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; align-items: center; gap: 10px;">
+                    <span class="material-symbols-outlined" style="color: #FFEA00; font-size: 24px;">warning</span>
+                    <div>
+                        <strong style="color: #FFEA00; font-size: 13px;">ESTÁS ESCUCHANDO EL SINTETIZADOR WEB (CALIDAD BÁSICA)</strong>
+                        <p style="margin: 3px 0 0 0; font-size: 11px; color: var(--text-muted);">Para el sonido real (Motor AiX), apaga el "Sonido PC" y conecta tu teclado físico por USB.</p>
+                    </div>
+                </div>
 
             <!-- Instrument cards: U1 / U2 / L -->
             <div class="tracks-row" style="margin-top:0;">
