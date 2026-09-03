@@ -308,7 +308,7 @@ function scanAndConnect() {
 }
 
 function setStatus(text, connected) {
-    document.getElementById("statusText").innerText = text;
+    document.getElementById("statusText").innerText = text + " (v111)";
     document.getElementById("statusIndicator").classList.toggle("connected", connected);
 }
 
