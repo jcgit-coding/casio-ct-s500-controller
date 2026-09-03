@@ -49,7 +49,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Buscando MIDI…</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v113</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v114</span>
             </div>
         </div>
 
@@ -82,6 +82,7 @@
                                 <button class="step-btn" data-part="U1" data-action="oct-">-</button>
                                 <span class="step-val" id="oct-U1">0</span>
                                 <button class="step-btn" data-part="U1" data-action="oct+">+</button>
+                                <button class="btn-reset-small" data-part="U1" data-action="oct-reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Reset</button>
                             </div>
                         </div>
                         <div class="quick-group">
@@ -116,6 +117,7 @@
                                 <button class="step-btn" data-part="U2" data-action="oct-">-</button>
                                 <span class="step-val" id="oct-U2">0</span>
                                 <button class="step-btn" data-part="U2" data-action="oct+">+</button>
+                                <button class="btn-reset-small" data-part="U2" data-action="oct-reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Reset</button>
                             </div>
                         </div>
                         <div class="quick-group">
@@ -150,6 +152,7 @@
                                 <button class="step-btn" data-part="L" data-action="oct-">-</button>
                                 <span class="step-val" id="oct-L">0</span>
                                 <button class="step-btn" data-part="L" data-action="oct+">+</button>
+                                <button class="btn-reset-small" data-part="L" data-action="oct-reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Reset</button>
                             </div>
                         </div>
                         <div class="quick-group">
@@ -389,6 +392,7 @@
                                 <button class="step-btn" data-part="U1" data-mctrl-oct="-1">-</button>
                                 <span class="step-val" id="mctrl-oct-U1">0</span>
                                 <button class="step-btn" data-part="U1" data-mctrl-oct="1">+</button>
+                                <button class="btn-reset-small" data-part="U1" data-mctrl-oct="reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Rst</button>
                             </div>
                         </div>
                     </div>
@@ -415,6 +419,7 @@
                                 <button class="step-btn" data-part="U2" data-mctrl-oct="-1">-</button>
                                 <span class="step-val" id="mctrl-oct-U2">0</span>
                                 <button class="step-btn" data-part="U2" data-mctrl-oct="1">+</button>
+                                <button class="btn-reset-small" data-part="U2" data-mctrl-oct="reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Rst</button>
                             </div>
                         </div>
                     </div>
@@ -441,6 +446,7 @@
                                 <button class="step-btn" data-part="L" data-mctrl-oct="-1">-</button>
                                 <span class="step-val" id="mctrl-oct-L">0</span>
                                 <button class="step-btn" data-part="L" data-mctrl-oct="1">+</button>
+                                <button class="btn-reset-small" data-part="L" data-mctrl-oct="reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Rst</button>
                             </div>
                         </div>
                     </div>
@@ -464,6 +470,7 @@
                                 <button class="step-btn" id="vk-oct-minus">-</button>
                                 <span class="step-val" id="vk-oct-val">4</span>
                                 <button class="step-btn" id="vk-oct-plus">+</button>
+                                <button class="btn-reset-small" id="vk-oct-reset" style="margin-left:5px; padding:2px 5px; font-size:10px;">Reset</button>
                             </div>
                         </div>
                         <div class="vk-tool-group">

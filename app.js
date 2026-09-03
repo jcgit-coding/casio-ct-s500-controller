@@ -16,10 +16,11 @@ function applyPcSustain(isSustain) {
     pcSustainOn = isSustain;
     if (!pcSustainOn) {
         for (const note in pcSustainedNotes) {
-            const n = parseInt(note);
-            if (!pcActiveNotes[n]) {
-                const ch = typeof pcSustainedNotes[note] === 'number' ? pcSustainedNotes[note] : 0;
-                window.pcSynth.noteOff(ch, n);
+            const info = pcSustainedNotes[note];
+            if (!pcActiveNotes[note]) {
+                const ch = info && info.ch !== undefined ? info.ch : (typeof info === 'number' ? info : 0);
+                const sn = info && info.shiftedNote !== undefined ? info.shiftedNote : parseInt(note);
+                window.pcSynth.noteOff(ch, sn);
             }
             delete pcSustainedNotes[note];
         }
@@ -327,20 +328,29 @@ function onMIDIMessage(e) {
 
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
-                pcActiveNotes[d1] = noteCh;
+                const partKey = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
+                const octOffset = partKey && tuning[partKey] ? tuning[partKey].oct * 12 : 0;
+                const shift = globalTranspose + octOffset;
+                const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
+                
+                pcActiveNotes[d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-                window.pcSynth.noteOn(noteCh, d1, d2); // velocidad sin escalar — el synth maneja su propio volumen
+                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // velocidad sin escalar — el synth maneja su propio volumen
             } else {
-                const ch = pcActiveNotes[d1] ?? noteCh;
-                delete pcActiveNotes[d1];
-                if (pcSustainOn) pcSustainedNotes[d1] = ch;
-                else window.pcSynth.noteOff(ch, d1);
+                const info = pcActiveNotes[d1];
+                if (info) {
+                    delete pcActiveNotes[d1];
+                    if (pcSustainOn) pcSustainedNotes[d1] = info;
+                    else window.pcSynth.noteOff(info.ch, info.shiftedNote);
+                }
             }
         } else if (cmd === 0x80) { // Note Off
-            const ch = pcActiveNotes[d1] ?? noteCh;
-            delete pcActiveNotes[d1];
-            if (pcSustainOn) pcSustainedNotes[d1] = ch;
-            else window.pcSynth.noteOff(ch, d1);
+            const info = pcActiveNotes[d1];
+            if (info) {
+                delete pcActiveNotes[d1];
+                if (pcSustainOn) pcSustainedNotes[d1] = info;
+                else window.pcSynth.noteOff(info.ch, info.shiftedNote);
+            }
         } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal
             applyPcSustain(d2 >= 64);
         }
@@ -1076,6 +1086,7 @@ function initQuickControls() {
 
             if (action === 'oct+' && tuning[part].oct < 3)  tuning[part].oct++;
             if (action === 'oct-' && tuning[part].oct > -3) tuning[part].oct--;
+            if (action === 'oct-reset') tuning[part].oct = 0;
 
             const octEl = document.getElementById('oct-' + part);
             if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
@@ -2254,8 +2265,13 @@ function initMidiController() {
         // Per-part octave (controller octave, separate from mixer)
         document.querySelectorAll(`[data-part="${part}"][data-mctrl-oct]`).forEach(btn => {
             btn.addEventListener('click', () => {
-                const dir = parseInt(btn.dataset.mctrlOct);
-                mctrlOct[part] = Math.max(-3, Math.min(3, mctrlOct[part] + dir));
+                const action = btn.dataset.mctrlOct;
+                if (action === 'reset') {
+                    mctrlOct[part] = 0;
+                } else {
+                    const dir = parseInt(action);
+                    mctrlOct[part] = Math.max(-3, Math.min(3, mctrlOct[part] + dir));
+                }
                 const el = document.getElementById('mctrl-oct-' + part);
                 if (el) el.innerText = mctrlOct[part] > 0 ? '+' + mctrlOct[part] : mctrlOct[part];
             });
@@ -2288,6 +2304,10 @@ function initMidiController() {
     });
     document.getElementById('vk-oct-plus')?.addEventListener('click', () => {
         vkOctave = Math.min(7, vkOctave + 1);
+        document.getElementById('vk-oct-val').innerText = vkOctave;
+    });
+    document.getElementById('vk-oct-reset')?.addEventListener('click', () => {
+        vkOctave = 4;
         document.getElementById('vk-oct-val').innerText = vkOctave;
     });
 
