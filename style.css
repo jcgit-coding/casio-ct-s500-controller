@@ -1328,12 +1328,3 @@ button {
     letter-spacing: 1px;
 }
 
-/* Warnings and Badges */
-.status-badge {
-    background: #1e222b;
-    border: 1px solid var(--border-light);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-}
