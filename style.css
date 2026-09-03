@@ -110,7 +110,7 @@ input, button, select, textarea, optgroup, option {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 11px;
     transition: all 0.1s;
     flex-shrink: 0;
 }
@@ -134,7 +134,7 @@ input, button, select, textarea, optgroup, option {
 }
 
 .selected-cat {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--text-muted);
     font-weight: 800;
     text-transform: uppercase;
@@ -218,7 +218,7 @@ header h1 {
     max-width: 340px;
 }
 .global-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     color: #93c5fd;
     text-transform: uppercase;
@@ -527,7 +527,7 @@ header h1 {
     gap: 5px;
 }
 .device-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -629,7 +629,7 @@ header h1 {
 .tone-list optgroup {
     background: #1e1e2d;
     color: var(--text-muted);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     font-style: normal;
     letter-spacing: 1px;
@@ -783,19 +783,19 @@ header h1 {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    min-width: 50px;
+    min-width: 60px;
     flex-shrink: 0;
     justify-content: flex-start;
 }
 .fader-label {
-    font-size: 9.5px !important;
+    font-size: 11px !important;
     font-weight: 800;
     color: var(--fader-label) !important;
     text-transform: uppercase;
     letter-spacing: 0px;
     text-align: center;
     white-space: normal;
-    width: 50px; /* Constrain label width */
+    width: 60px; /* Constrain label width */
     line-height: 1.1;
     height: 24px; /* Fixed height for labels */
     display: flex;
@@ -815,7 +815,7 @@ header h1 {
 }
 
 .fader-section-title {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--cat-color);
     text-transform: uppercase;
@@ -1148,7 +1148,7 @@ input[type="range"].eq-fader:active::-moz-range-thumb {
 
 /* Fix values and labels for better contrast and size */
 .fader-value {
-    font-size: 10px !important;
+    font-size: 11px !important;
     font-weight: bold;
     color: var(--fader-val-text);
     background: var(--fader-val-bg);
@@ -1446,7 +1446,7 @@ button {
     flex: 1;
 }
 .rc-fader-group span:first-child {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     color: var(--text-muted);
 }
@@ -1467,7 +1467,7 @@ button {
     gap: 8px;
 }
 .rc-step-group span:first-child {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     color: var(--text-muted);
 }
@@ -1497,7 +1497,7 @@ button {
     gap: 12px;
 }
 .vk-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     color: var(--text-muted);
     letter-spacing: 1px;
