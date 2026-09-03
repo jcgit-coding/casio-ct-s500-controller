@@ -328,151 +328,161 @@
         </div>
 
 
+        
         <!-- VIEW: MIDI CTRL -->
         <div class="app-view" id="view-synth">
-
-            <!-- Header row: status + toggle -->
-            <div class="panel" style="padding:14px 20px;">
-                <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:space-between;">
-                    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                        <h2 style="font-size:15px; margin:0;"><span class="material-symbols-outlined" style="vertical-align:middle;margin-right:6px;font-size:18px;">piano</span>Controlador MIDI</h2>
-                        <span id="sf2-status" style="font-size:11px;color:var(--muted);">Cargando…</span>
+            
+            <div class="synth-rack">
+                <!-- RACK HEADER -->
+                <div class="rack-unit rack-header">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">piano</span>
+                        <div>
+                            <h2 style="margin:0; font-size:16px; letter-spacing:1px;">SYNTH MODULE</h2>
+                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Cargando…</span>
+                        </div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:bold;background:var(--surface2);border:1px solid var(--panel-border);border-radius:6px;padding:5px 10px;">
-                            <input type="checkbox" id="pcSynthToggle" style="cursor:pointer;"> ACTIVAR SONIDO PC
+                    
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <label class="rack-btn-toggle">
+                            <input type="checkbox" id="pcSynthToggle" style="display:none;">
+                            <span class="rack-btn-label">POWER</span>
                         </label>
-                        <label for="sf2-file" style="background:var(--surface2);border:1px solid var(--panel-border);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;">
-                            <span class="material-symbols-outlined" style="vertical-align:middle;font-size:13px;margin-right:3px;">upload_file</span>SF2 alternativo
+                        <label for="sf2-file" class="rack-btn">
+                            <span class="material-symbols-outlined" style="font-size:16px;">upload</span> SF2
                         </label>
                         <input type="file" id="sf2-file" accept=".sf2" style="display:none;">
                     </div>
                 </div>
-                <p style="font-size:10px;color:var(--muted);margin:8px 0 0 0;line-height:1.4;">
-                    Usa el fader <b>VOLUMEN</b> en el Mixer para controlar el volumen. El teclado virtual envía notas al PC Synth y al Casio vía MIDI.
-                </p>
-            </div>
 
-            
                 <!-- AVISO SONIDO PC -->
-                <div id="pcSoundWarning" style="display: none; background: rgba(255, 234, 0, 0.1); border: 1px solid #FFEA00; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; align-items: center; gap: 10px;">
-                    <span class="material-symbols-outlined" style="color: #FFEA00; font-size: 24px;">warning</span>
+                <div id="pcSoundWarning" style="display: none; background: rgba(255, 234, 0, 0.05); border-left: 4px solid #FFEA00; padding: 12px 16px; margin-bottom: 16px; align-items: center; gap: 12px; border-radius: 4px;">
+                    <span class="material-symbols-outlined" style="color: #FFEA00; font-size: 20px;">warning</span>
                     <div>
-                        <strong style="color: #FFEA00; font-size: 13px;">ESTÁS ESCUCHANDO EL SINTETIZADOR WEB (CALIDAD BÁSICA)</strong>
-                        <p style="margin: 3px 0 0 0; font-size: 11px; color: var(--text-muted);">Para el sonido real (Motor AiX), apaga el "Sonido PC" y conecta tu teclado físico por USB.</p>
+                        <strong style="color: #FFEA00; font-size: 12px; letter-spacing:0.5px;">MODO FALLBACK (SONIDO WEB) ACTIVO</strong>
+                        <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">La calidad de audio es básica. Para usar el motor AiX, apaga el POWER y usa el hardware.</p>
                     </div>
                 </div>
 
-            <!-- Instrument cards: U1 / U2 / L -->
-            <div class="tracks-row" style="margin-top:0;">
+                <!-- RACK CHANNELS -->
+                <div class="rack-channels">
+                    
+                    <!-- U1 -->
+                    <div class="rack-channel" id="mctrl-card-U1" style="border-left-color: var(--color-u1);">
+                        <div class="rc-label" style="color: var(--color-u1);">UPPER 1</div>
+                        <div class="rc-lcd">
+                            <select id="sf2-prog-U1" class="lcd-select"></select>
+                        </div>
+                        <div class="rc-controls">
+                            <div class="rc-fader-group">
+                                <span>VOL</span>
+                                <input type="range" id="mctrl-vol-U1" class="eq-fader rc-fader" min="0" max="127" value="100">
+                                <span id="mctrl-vol-U1-val" class="rc-val">100</span>
+                            </div>
+                            <div class="rc-fader-group">
+                                <span>RVB</span>
+                                <input type="range" id="mctrl-rvb-U1" class="eq-fader rc-fader" min="0" max="127" value="20">
+                                <span id="mctrl-rvb-U1-val" class="rc-val">20</span>
+                            </div>
+                            <div class="rc-step-group">
+                                <span>OCT</span>
+                                <button class="step-btn" data-part="U1" data-mctrl-oct="-1">-</button>
+                                <span class="step-val" id="mctrl-oct-U1">0</span>
+                                <button class="step-btn" data-part="U1" data-mctrl-oct="1">+</button>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- UPPER 1 -->
-                <div class="track-card active-track" id="mctrl-card-U1">
-                    <div class="track-label">UPPER 1</div>
-                    <div style="font-size:9px;font-weight:bold;color:var(--accent);margin-bottom:2px;">INSTRUMENTO GM</div>
-                    <select id="sf2-prog-U1" class="search-input" style="width:100%;font-size:11px;padding:4px;"></select>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);min-width:32px;">VOL</span>
-                        <input type="range" id="mctrl-vol-U1" class="eq-fader" min="0" max="127" value="100" style="flex:1;height:20px;">
-                        <span id="mctrl-vol-U1-val" style="font-size:10px;min-width:24px;text-align:right;">100</span>
+                    <!-- U2 -->
+                    <div class="rack-channel" id="mctrl-card-U2" style="border-left-color: var(--color-u2);">
+                        <div class="rc-label" style="color: var(--color-u2);">UPPER 2</div>
+                        <div class="rc-lcd">
+                            <select id="sf2-prog-U2" class="lcd-select"></select>
+                        </div>
+                        <div class="rc-controls">
+                            <div class="rc-fader-group">
+                                <span>VOL</span>
+                                <input type="range" id="mctrl-vol-U2" class="eq-fader rc-fader" min="0" max="127" value="80">
+                                <span id="mctrl-vol-U2-val" class="rc-val">80</span>
+                            </div>
+                            <div class="rc-fader-group">
+                                <span>RVB</span>
+                                <input type="range" id="mctrl-rvb-U2" class="eq-fader rc-fader" min="0" max="127" value="20">
+                                <span id="mctrl-rvb-U2-val" class="rc-val">20</span>
+                            </div>
+                            <div class="rc-step-group">
+                                <span>OCT</span>
+                                <button class="step-btn" data-part="U2" data-mctrl-oct="-1">-</button>
+                                <span class="step-val" id="mctrl-oct-U2">0</span>
+                                <button class="step-btn" data-part="U2" data-mctrl-oct="1">+</button>
+                            </div>
+                        </div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);min-width:32px;">RVB</span>
-                        <input type="range" id="mctrl-rvb-U1" class="eq-fader" min="0" max="127" value="20" style="flex:1;height:20px;">
-                        <span id="mctrl-rvb-U1-val" style="font-size:10px;min-width:24px;text-align:right;">20</span>
+
+                    <!-- L -->
+                    <div class="rack-channel" id="mctrl-card-L" style="border-left-color: var(--color-l);">
+                        <div class="rc-label" style="color: var(--color-l);">LOWER</div>
+                        <div class="rc-lcd">
+                            <select id="sf2-prog-L" class="lcd-select"></select>
+                        </div>
+                        <div class="rc-controls">
+                            <div class="rc-fader-group">
+                                <span>VOL</span>
+                                <input type="range" id="mctrl-vol-L" class="eq-fader rc-fader" min="0" max="127" value="100">
+                                <span id="mctrl-vol-L-val" class="rc-val">100</span>
+                            </div>
+                            <div class="rc-fader-group">
+                                <span>RVB</span>
+                                <input type="range" id="mctrl-rvb-L" class="eq-fader rc-fader" min="0" max="127" value="20">
+                                <span id="mctrl-rvb-L-val" class="rc-val">20</span>
+                            </div>
+                            <div class="rc-step-group">
+                                <span>OCT</span>
+                                <button class="step-btn" data-part="L" data-mctrl-oct="-1">-</button>
+                                <span class="step-val" id="mctrl-oct-L">0</span>
+                                <button class="step-btn" data-part="L" data-mctrl-oct="1">+</button>
+                            </div>
+                        </div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);">OCT</span>
-                        <button class="step-btn" data-part="U1" data-mctrl-oct="-1">-</button>
-                        <span class="step-val" id="mctrl-oct-U1" style="min-width:22px;font-size:11px;">0</span>
-                        <button class="step-btn" data-part="U1" data-mctrl-oct="1">+</button>
-                    </div>
+
                 </div>
 
-                <!-- UPPER 2 -->
-                <div class="track-card" id="mctrl-card-U2">
-                    <div class="track-label">UPPER 2 <span class="dim">Layer</span></div>
-                    <div style="font-size:9px;font-weight:bold;color:var(--accent);margin-bottom:2px;">INSTRUMENTO GM</div>
-                    <select id="sf2-prog-U2" class="search-input" style="width:100%;font-size:11px;padding:4px;"></select>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);min-width:32px;">VOL</span>
-                        <input type="range" id="mctrl-vol-U2" class="eq-fader" min="0" max="127" value="80" style="flex:1;height:20px;">
-                        <span id="mctrl-vol-U2-val" style="font-size:10px;min-width:24px;text-align:right;">80</span>
+                <!-- KEYBOARD CONTROLLER -->
+                <div class="vk-module">
+                    <div class="vk-toolbar">
+                        <div class="vk-tool-group">
+                            <span class="vk-label">PART</span>
+                            <div class="vk-radio-group">
+                                <button class="vk-radio sus-btn sus-on" id="vk-part-U1" data-vk-part="U1">U1</button>
+                                <button class="vk-radio sus-btn" id="vk-part-U2" data-vk-part="U2">U2</button>
+                                <button class="vk-radio sus-btn" id="vk-part-L" data-vk-part="L">L</button>
+                            </div>
+                        </div>
+                        <div class="vk-tool-group">
+                            <span class="vk-label">OCTAVE</span>
+                            <div class="step-btns">
+                                <button class="step-btn" id="vk-oct-minus">-</button>
+                                <span class="step-val" id="vk-oct-val">4</span>
+                                <button class="step-btn" id="vk-oct-plus">+</button>
+                            </div>
+                        </div>
+                        <div class="vk-tool-group">
+                            <span class="vk-label">VELOCITY</span>
+                            <div class="rc-lcd" style="min-width: 80px;">
+                                <select id="vk-velocity" class="lcd-select">
+                                    <option value="40">PP (40)</option>
+                                    <option value="64">MP (64)</option>
+                                    <option value="90" selected>MF (90)</option>
+                                    <option value="110">F (110)</option>
+                                    <option value="127">FF (127)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);min-width:32px;">RVB</span>
-                        <input type="range" id="mctrl-rvb-U2" class="eq-fader" min="0" max="127" value="20" style="flex:1;height:20px;">
-                        <span id="mctrl-rvb-U2-val" style="font-size:10px;min-width:24px;text-align:right;">20</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);">OCT</span>
-                        <button class="step-btn" data-part="U2" data-mctrl-oct="-1">-</button>
-                        <span class="step-val" id="mctrl-oct-U2" style="min-width:22px;font-size:11px;">0</span>
-                        <button class="step-btn" data-part="U2" data-mctrl-oct="1">+</button>
-                    </div>
+                    <div id="virtualKeyboard" class="virtual-keyboard"></div>
                 </div>
 
-                <!-- LOWER -->
-                <div class="track-card" id="mctrl-card-L">
-                    <div class="track-label">LOWER <span class="dim">Split</span></div>
-                    <div style="font-size:9px;font-weight:bold;color:var(--accent);margin-bottom:2px;">INSTRUMENTO GM</div>
-                    <select id="sf2-prog-L" class="search-input" style="width:100%;font-size:11px;padding:4px;"></select>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);min-width:32px;">VOL</span>
-                        <input type="range" id="mctrl-vol-L" class="eq-fader" min="0" max="127" value="100" style="flex:1;height:20px;">
-                        <span id="mctrl-vol-L-val" style="font-size:10px;min-width:24px;text-align:right;">100</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);min-width:32px;">RVB</span>
-                        <input type="range" id="mctrl-rvb-L" class="eq-fader" min="0" max="127" value="20" style="flex:1;height:20px;">
-                        <span id="mctrl-rvb-L-val" style="font-size:10px;min-width:24px;text-align:right;">20</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                        <span style="font-size:9px;font-weight:bold;color:var(--text-muted);">OCT</span>
-                        <button class="step-btn" data-part="L" data-mctrl-oct="-1">-</button>
-                        <span class="step-val" id="mctrl-oct-L" style="min-width:22px;font-size:11px;">0</span>
-                        <button class="step-btn" data-part="L" data-mctrl-oct="1">+</button>
-                    </div>
-                </div>
-            </div><!-- /tracks-row -->
-
-            <!-- Virtual Keyboard Panel -->
-            <div class="panel" style="margin-top:0;">
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
-                    <div class="panel-title" style="margin:0; border:none; padding:0;">
-                        <span class="material-symbols-outlined" style="vertical-align:middle;margin-right:4px;font-size:16px;">piano</span>
-                        Teclado Virtual
-                    </div>
-                    <!-- Part selector -->
-                    <div style="display:flex;align-items:center;gap:6px;">
-                        <span style="font-size:10px;color:var(--text-muted);font-weight:bold;">PARTE:</span>
-                        <button class="sus-btn sus-on" id="vk-part-U1" data-vk-part="U1" style="padding:3px 10px;font-size:10px;">U1</button>
-                        <button class="sus-btn" id="vk-part-U2" data-vk-part="U2" style="padding:3px 10px;font-size:10px;">U2</button>
-                        <button class="sus-btn" id="vk-part-L" data-vk-part="L" style="padding:3px 10px;font-size:10px;">L</button>
-                    </div>
-                    <!-- Octave control -->
-                    <div style="display:flex;align-items:center;gap:6px;">
-                        <span style="font-size:10px;color:var(--text-muted);font-weight:bold;">OCT:</span>
-                        <button class="step-btn" id="vk-oct-minus" style="width:28px;height:28px;font-size:16px;">-</button>
-                        <span class="step-val" id="vk-oct-val" style="min-width:24px;font-size:12px;">4</span>
-                        <button class="step-btn" id="vk-oct-plus" style="width:28px;height:28px;font-size:16px;">+</button>
-                    </div>
-                    <!-- Velocity -->
-                    <div style="display:flex;align-items:center;gap:6px;">
-                        <span style="font-size:10px;color:var(--text-muted);font-weight:bold;">VEL:</span>
-                        <select id="vk-velocity" class="search-input" style="min-height:28px;font-size:11px;padding:2px 6px;width:auto;">
-                            <option value="40">PP (40)</option>
-                            <option value="64">MP (64)</option>
-                            <option value="90" selected>MF (90)</option>
-                            <option value="110">F (110)</option>
-                            <option value="127">FF (127)</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- Piano keys container -->
-                <div id="virtualKeyboard" class="virtual-keyboard"></div>
             </div>
-
         </div>
 
     </div><!-- /main-console -->
