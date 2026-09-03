@@ -2176,7 +2176,7 @@ async function sf2Init(source, name) {
         if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
     } catch(err) {
         console.error('SF2 init error:', err);
-        if (statusEl) statusEl.innerHTML = '<span style="color:#F44336;">Error SF2 — sintetizador incorporado activo</span>';
+        if (statusEl) statusEl.innerHTML = '<span style="color:var(--text-muted);">Motor Web Básico activo</span>';
         // BuiltInPiano stays as window.pcSynth — no override needed
     }
 }
@@ -2206,6 +2206,7 @@ async function sf2Init(source, name) {
         } catch { /* try next */ }
     }
     // All failed — WebAudioFontSynth already active
+    if (statusEl && !statusEl.dataset.sf2loaded) statusEl.innerHTML = '<span style="color:var(--text-muted);">Motor Web Básico activo</span>';
 })();
 
 document.getElementById('sf2-file')?.addEventListener('change', async e => {
