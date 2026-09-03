@@ -1333,8 +1333,8 @@ button {
 .synth-rack {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 16px 0;
+    gap: 10px;
+    padding: 10px 0;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -1342,8 +1342,8 @@ button {
 .rack-unit {
     background: var(--card-bg);
     border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 16px 20px;
+    border-radius: 6px;
+    padding: 10px 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     display: flex;
     justify-content: space-between;
@@ -1369,7 +1369,7 @@ button {
     background: var(--panel-bg);
     border: 1px solid var(--border-light);
     color: var(--text);
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 800;
@@ -1384,7 +1384,7 @@ button {
 .rack-channels {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .rack-channel {
@@ -1392,10 +1392,10 @@ button {
     border: 1px solid var(--border-light);
     border-left-width: 4px; /* Color accent */
     border-radius: 6px;
-    padding: 12px 16px;
+    padding: 8px 14px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 14px;
     box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
 }
 
@@ -1434,7 +1434,7 @@ button {
 
 .rc-controls {
     display: flex;
-    gap: 24px;
+    gap: 16px;
     align-items: center;
     flex: 2;
 }
@@ -1484,11 +1484,11 @@ button {
 
 .vk-toolbar {
     background: #14161b;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-bottom: 1px solid var(--border-light);
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 16px;
 }
 
 .vk-tool-group {
