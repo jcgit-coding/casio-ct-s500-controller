@@ -2471,3 +2471,13 @@ buildGMSelectors();
         }
     }, { once: false, passive: true });
 });
+// FORCE web audio OFF on load to defeat browser checkbox caching
+window.addEventListener('DOMContentLoaded', () => {
+    const pcToggle = document.getElementById('pcSynthToggle');
+    if (pcToggle) pcToggle.checked = false;
+    const pcWarning = document.getElementById('pcSoundWarning');
+    if (pcWarning) pcWarning.style.display = 'none';
+    const pcControls = document.getElementById('pcSynthControls');
+    if (pcControls) pcControls.style.display = 'none';
+    pcSynthEnabled = false;
+});
