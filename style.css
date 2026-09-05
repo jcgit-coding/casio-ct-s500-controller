@@ -1603,3 +1603,52 @@ input[type="range"].rc-fader:active::-webkit-slider-thumb {
 input[type="range"].rc-fader:active::-moz-range-thumb {
     transform: scale(1.15);
 }
+/* UI/UX Improvements for Rack Channels */
+.rack-channel {
+    background: linear-gradient(90deg, #181b21 0%, #20242c 100%);
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+}
+.rc-label {
+    font-size: 15px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.rc-lcd {
+    background: #000;
+    border: 1px solid #333;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,1);
+    border-radius: 6px;
+    padding: 6px 10px;
+}
+.lcd-select {
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+.rc-controls {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+input[type="range"].rc-fader::-webkit-slider-runnable-track {
+    height: 10px;
+    border-radius: 5px;
+}
+input[type="range"].rc-fader::-moz-range-track {
+    height: 10px;
+    border-radius: 5px;
+}
+input[type="range"].rc-fader::-webkit-slider-thumb {
+    height: 22px;
+    width: 22px;
+    margin-top: -7px;
+}
+input[type="range"].rc-fader::-moz-range-thumb {
+    height: 22px;
+    width: 22px;
+}
+.step-btn {
+    border-radius: 5px;
+    font-weight: bold;
+}

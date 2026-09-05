@@ -1694,13 +1694,7 @@ const nameEl = document.getElementById('selectedTone-' + part);
             });
         }
         // Restore PC Synth toggle state
-        if (saved.pcSynthEnabled !== undefined) {
-            pcSynthEnabled = saved.pcSynthEnabled;
-            const toggle = document.getElementById('pcSynthToggle');
-            if (toggle) toggle.checked = pcSynthEnabled;
-            const controls = document.getElementById('pcSynthControls');
-            if (controls) controls.style.display = pcSynthEnabled ? 'block' : 'none';
-        }
+        
 
         switchEQ(activePart); // updates sliders on screen
     } catch (e) {
