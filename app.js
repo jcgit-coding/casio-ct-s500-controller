@@ -1705,15 +1705,8 @@ const nameEl = document.getElementById('selectedTone-' + part);
 // --- PC SYNTH — WebAudioFontSynth: muestras reales (CDN) + osciladores de respaldo ---
 // Inicializar sintetizador e iniciar descarga de muestras WebAudioFont
 window.pcSynth = null;
-window.sf2Ready = true;
-(function() {
-    const el = document.getElementById('sf2-status');
-    if (el) el.innerHTML = '<span style="color:var(--accent);">Cargando muestras de instrumentos…</span>';
-    const initVol = parseInt(document.getElementById('sf2-vol')?.value || 100);
-    window.pcSynth.applyCC(7, initVol);
-    // Arrancar descarga de WebAudioFont en background
-    // no startwaf
-})();
+window.sf2Ready = false;
+
 
 // IndexedDB helpers for optional SF2 cache
 function sf2OpenIDB() {
@@ -1937,7 +1930,7 @@ async function sf2Init(source, name) {
                 if (cc === 72) this._release = 0.1 + (val / 127) * 3.0;
             }
         };
-        window.sf2Ready = true;
+        window.sf2Ready = false;
         if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
     } catch(err) {
         console.error('SF2 init error:', err);
