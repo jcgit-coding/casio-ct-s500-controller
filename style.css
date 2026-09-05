@@ -1057,7 +1057,6 @@ header h1 {
     }
     .main-console {
         padding: 10px;
-        overflow-x: hidden;
         width: 100%;
     }
 }
@@ -1474,6 +1473,9 @@ button {
 
 /* VK Module */
 .vk-module {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
     background: var(--card-bg);
     border: 1px solid var(--border-light);
     border-radius: 8px;
@@ -1514,15 +1516,37 @@ button {
 
 @media (max-width: 800px) {
     .rack-channel {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px 10px;
+    }
+    .rc-label {
+        width: 100%;
+        text-align: center;
+        font-size: 13px;
+        margin-bottom: -4px;
+    }
+    .rc-lcd {
+        flex: 1 1 100%;
+        max-width: none;
     }
     .rc-controls {
+        flex: 1 1 100%;
         flex-wrap: wrap;
+        gap: 8px;
+        justify-content: space-between;
+    }
+    .rc-fader-group {
+        flex: 1 1 45%;
+    }
+    .rc-step-group {
+        flex: 1 1 100%;
+        justify-content: center;
     }
     .vk-toolbar {
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 12px;
+        justify-content: center;
     }
 }
