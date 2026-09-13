@@ -721,6 +721,11 @@ header h1 {
     align-items: center;
     gap: 12px;
 }
+.oct-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
 .step-btn {
     width: 28px; height: 28px;
     background: rgba(255,255,255,0.07);
