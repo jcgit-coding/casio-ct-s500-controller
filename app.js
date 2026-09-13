@@ -839,8 +839,9 @@ function buildEQ() {
                     const v = parseInt(e.target.value);
                     valSpan.innerText = formatVal(ctrl.label, v);
                     if (ctrl.cc === 7) {
-                        // Volume: master — aplica a todos los parts y sincroniza sf2-vol slider
-                        ['U1','U2','L'].forEach(p => { eqState[p][7] = v; sendCC(p, 7, v); });
+                        // Volume: solo al part activo
+                        eqState[activePart][7] = v;
+                        sendCC(activePart, 7, v);
                         const sfVolEl = document.getElementById('sf2-vol');
                         if (sfVolEl) { sfVolEl.value = v; }
                         const sfVolVal = document.getElementById('sf2-vol-val');
@@ -1078,7 +1079,7 @@ function initGlobalTranspose() {
 //  PER-PART QUICK CONTROLS (Octave, Sustain)
 // ======================================================================
 function initQuickControls() {
-    document.querySelectorAll('.step-btn').forEach(btn => {
+    document.querySelectorAll('.step-btn, .btn-reset-small[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
             const part   = btn.dataset.part;
             const action = btn.dataset.action;
@@ -1537,8 +1538,8 @@ function initArranger() {
 // ======================================================================
 function sendCC(part, cc, value) {
     if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
-    // Mirror todos los CCs de EQ al PC Synth (volumen, cutoff, resonancia, reverb, etc.)
-    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value);
+    // Mirror CCs al PC Synth solo para el part activo
+    if (window.pcSynth?.applyCC && part === activePart) window.pcSynth.applyCC(cc, value);
 }
 
 function changeTone(part, msb, lsb, pc) {
