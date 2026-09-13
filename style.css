@@ -239,6 +239,7 @@ header h1 {
 .btn-reset-small:hover { background: rgba(255,255,255,0.15); color: var(--text); }
 .global-bar .btn-reset-small { color: var(--accent); }
 .global-bar .btn-reset-small:hover { color: var(--text); }
+.quick-group--row .btn-reset-small { align-self: flex-end; }
 
 .status-badge {
     display: flex; align-items: center; gap: 8px;
