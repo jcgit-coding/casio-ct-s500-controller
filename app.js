@@ -1930,7 +1930,7 @@ async function sf2Init(source, name) {
                 if (cc === 72) this._release = 0.1 + (val / 127) * 3.0;
             }
         };
-        window.sf2Ready = false;
+        window.sf2Ready = true;
         if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
     } catch(err) {
         console.error('SF2 init error:', err);
@@ -2158,14 +2158,15 @@ function getMidiNote(keyEl) {
 
 function attachKeyEvents(el, k) {
     const getNote = () => (vkOctave + k.oct) * 12 + k.n;
+    let heldNote = null;
 
-    el.addEventListener('mousedown', (e) => { e.preventDefault(); vkNoteOn(getNote()); el.classList.add('vk-active'); });
-    el.addEventListener('mouseup',   () => { vkNoteOff(getNote()); el.classList.remove('vk-active'); });
-    el.addEventListener('mouseleave',() => { if (vkActiveKeys[getNote()]) { vkNoteOff(getNote()); el.classList.remove('vk-active'); } });
+    el.addEventListener('mousedown', (e) => { e.preventDefault(); heldNote = getNote(); vkNoteOn(heldNote); el.classList.add('vk-active'); });
+    el.addEventListener('mouseup',   () => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); });
+    el.addEventListener('mouseleave',() => { if (heldNote !== null && vkActiveKeys[heldNote]) { vkNoteOff(heldNote); heldNote = null; el.classList.remove('vk-active'); } });
 
-    el.addEventListener('touchstart', (e) => { e.preventDefault(); vkNoteOn(getNote()); el.classList.add('vk-active'); }, { passive: false });
-    el.addEventListener('touchend',   (e) => { e.preventDefault(); vkNoteOff(getNote()); el.classList.remove('vk-active'); }, { passive: false });
-    el.addEventListener('touchcancel',() => { vkNoteOff(getNote()); el.classList.remove('vk-active'); });
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); heldNote = getNote(); vkNoteOn(heldNote); el.classList.add('vk-active'); }, { passive: false });
+    el.addEventListener('touchend',   (e) => { e.preventDefault(); if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); }, { passive: false });
+    el.addEventListener('touchcancel',() => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); });
 }
 
 // Initialize MIDI controller (DOM already ready — script is at bottom of body)
@@ -2197,8 +2198,10 @@ document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
     // Stop any currently sounding notes when toggling off
     if (!pcSynthEnabled && window.pcSynth) {
         for (const note in pcActiveNotes) {
-            const ch = typeof pcActiveNotes[note] === 'number' ? pcActiveNotes[note] : 0;
-            try { window.pcSynth.noteOff(ch, parseInt(note)); } catch(e) {}
+            const entry = pcActiveNotes[note];
+            const ch = entry?.ch ?? 0;
+            const n  = entry?.shiftedNote ?? parseInt(note);
+            try { window.pcSynth.noteOff(ch, n); } catch(e) {}
         }
         for (const k in pcActiveNotes) delete pcActiveNotes[k];
         for (const k in pcSustainedNotes) delete pcSustainedNotes[k];
