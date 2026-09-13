@@ -224,8 +224,8 @@ header h1 {
     white-space: nowrap;
 }
 .btn-reset-small {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
+    background: transparent;
+    border: none;
     color: var(--text-muted);
     border-radius: 6px;
     padding: 5px 14px;
@@ -949,10 +949,10 @@ header h1 {
 [data-theme="light"] .cat-nav-btn { background: #f3f4f6; border-color: #d1d5db; color: var(--text-muted); }
 [data-theme="light"] .cat-nav-btn:hover { background: #e5e7eb; color: var(--text); }
 [data-theme="light"] .global-bar { background: #eff6ff; border-color: #bfdbfe; }
-[data-theme="light"] .btn-reset-small { background: #f1f5f9; border-color: #cbd5e1; color: #475569; }
-[data-theme="light"] .btn-reset-small:hover { background: #e2e8f0; color: #1e293b; }
-[data-theme="light"] .global-bar .btn-reset-small { background: transparent; border-color: #93c5fd; color: #1d4ed8; }
-[data-theme="light"] .global-bar .btn-reset-small:hover { background: #dbeafe; }
+[data-theme="light"] .btn-reset-small { background: transparent; border: none; color: #475569; }
+[data-theme="light"] .btn-reset-small:hover { color: #1e293b; }
+[data-theme="light"] .global-bar .btn-reset-small { color: #1d4ed8; }
+[data-theme="light"] .global-bar .btn-reset-small:hover { color: #1e40af; }
 [data-theme="light"] .global-label { color: #1d4ed8; }
 [data-theme="light"] .btn-start { background: #eff6ff; border-color: #93c5fd; color: #1e3a8a; }
 [data-theme="light"] .btn-start:hover { background: #dbeafe; }
