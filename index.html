@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +29,7 @@
     <div class="main-console">
 
 
-        <!-- ═══════════ VIEW: MIXER (PISTAS & EQ) ═══════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â• VIEW: MIXER (PISTAS & EQ) â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="app-view active" id="view-mixer">
 
         <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
@@ -47,29 +47,29 @@
                 <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
                 <div class="status-badge" id="btnConnectMidi">
                     <div class="status-indicator" id="statusIndicator"></div>
-                    <span id="statusText">Buscando MIDI…</span>
+                    <span id="statusText">Buscando MIDIâ€¦</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v118</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="VersiÃ³n de la App">v118</span>
             </div>
         </div>
 
 
 
-            <!-- PISTAS (U1, U2, L) — Octava y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) â€” Octava y Sustain POR PISTA -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
                 <div class="track-card active-track" id="card-U1" data-part="U1">
                     <div class="track-label">UPPER 1</div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">arrow_left</span></button>
-                        <div class="selected-cat" id="selectedCat-U1">CATEGORÍA</div>
-                        <button class="cat-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></button>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-cat" id="selectedCat-U1">CATEGORÃA</div>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">arrow_left</span></button>
-                        <div class="selected-tone" id="selectedTone-U1">– sin instrumento –</div>
-                        <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></button>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-tone" id="selectedTone-U1">â€“ sin instrumento â€“</div>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
                         <input type="text" class="search-input tone-search" id="search-U1" placeholder="Buscar instrumento..." autocomplete="off">
@@ -94,21 +94,21 @@
                             <button class="sus-btn" id="sus-U1" data-part="U1">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U1">EDITAR EQ ↓</button>
+                    <button class="btn btn-eq" data-part="U1">EDITAR EQ â†“</button>
                 </div>
 
                 <!-- UPPER 2 -->
                 <div class="track-card" id="card-U2" data-part="U2">
                     <div class="track-label">UPPER 2 <span class="dim">Layer</span></div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">arrow_left</span></button>
-                        <div class="selected-cat" id="selectedCat-U2">CATEGORÍA</div>
-                        <button class="cat-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></button>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-cat" id="selectedCat-U2">CATEGORÃA</div>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">arrow_left</span></button>
-                        <div class="selected-tone" id="selectedTone-U2">– sin instrumento –</div>
-                        <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></button>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-tone" id="selectedTone-U2">â€“ sin instrumento â€“</div>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
                         <input type="text" class="search-input tone-search" id="search-U2" placeholder="Buscar instrumento..." autocomplete="off">
@@ -133,21 +133,21 @@
                             <button class="sus-btn" id="sus-U2" data-part="U2">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U2">EDITAR EQ ↓</button>
+                    <button class="btn btn-eq" data-part="U2">EDITAR EQ â†“</button>
                 </div>
 
                 <!-- LOWER -->
                 <div class="track-card" id="card-L" data-part="L">
                     <div class="track-label">LOWER <span class="dim">Split</span></div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
-                        <button class="cat-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">arrow_left</span></button>
-                        <div class="selected-cat" id="selectedCat-L">CATEGORÍA</div>
-                        <button class="cat-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></button>
+                        <button class="cat-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-cat" id="selectedCat-L">CATEGORÃA</div>
+                        <button class="cat-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-display-row">
-                        <button class="tone-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">arrow_left</span></button>
-                        <div class="selected-tone" id="selectedTone-L">– sin instrumento –</div>
-                        <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></button>
+                        <button class="tone-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-tone" id="selectedTone-L">â€“ sin instrumento â€“</div>
+                        <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
                         <input type="text" class="search-input tone-search" id="search-L" placeholder="Buscar instrumento..." autocomplete="off">
@@ -172,29 +172,29 @@
                             <button class="sus-btn" id="sus-L" data-part="L">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="L">EDITAR EQ ↓</button>
+                    <button class="btn btn-eq" data-part="L">EDITAR EQ â†“</button>
                 </div>
 
             </div><!-- /tracks-row -->
 
-            <!-- ECUALIZADOR DINÁMICO ÚNICO -->
+            <!-- ECUALIZADOR DINÃMICO ÃšNICO -->
             <div class="panel eq-panel">
                 <div class="panel-title">
                     <span>Ecualizador &amp; Efectos</span>
                     <div style="display:flex;gap:8px;align-items:center;">
-                        <button class="btn-reset-small" id="btnResetEQ">↺ Reset</button>
+                        <button class="btn-reset-small" id="btnResetEQ">â†º Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
                     </div>
                 </div>
                 <div style="margin: 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size:12px; color:var(--muted); font-weight:bold;">Perfil Acústico:</span>
+                    <span style="font-size:12px; color:var(--muted); font-weight:bold;">Perfil AcÃºstico:</span>
                     <div class="env-selector-wrap" style="margin-right: 0; display: flex; align-items: center; gap: 8px;">
             <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent);">stadium</span>
             <select id="envSelector" class="search-input" style="min-height: 30px; font-size: 11px; font-weight: bold; padding: 4px 10px; width: auto; cursor: pointer; text-transform: uppercase;">
                 <option value="Estudio">Estudio (Seco)</option>
                 <option value="Vivo">En Vivo (Brillante)</option>
                 <option value="Sala">Sala de Conciertos</option>
-                <option value="Jazz">Jazz Club (Íntimo)</option>
+                <option value="Jazz">Jazz Club (Ãntimo)</option>
             </select>
         </div>
                 </div>
@@ -203,12 +203,12 @@
 
         </div><!-- /view-mixer -->
 
-        <!-- ═══════════ VIEW: ARRANGER ═══════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â• VIEW: ARRANGER â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="app-view" id="view-arranger">
 
             <!-- Rhythm Browser -->
             <div class="panel">
-                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el número en el teclado)</span></div>
+                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el nÃºmero en el teclado)</span></div>
                 <div class="arranger-search-row">
                     <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
                     <input type="text" id="rhythmSearch" class="search-input" placeholder="Buscar ritmo..." autocomplete="off">
@@ -226,7 +226,7 @@
                 <div class="arranger-row" style="margin-bottom:16px;">
                     <span class="arranger-label">TEMPO</span>
                     <div class="step-btns">
-                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">−</button>
+                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">âˆ’</button>
                         <span class="step-val" id="bpmVal" style="min-width:72px;font-size:20px;">120</span>
                         <button class="step-btn" id="bpmPlus" style="width:44px;height:44px;font-size:22px;">+</button>
                     </div>
@@ -246,7 +246,7 @@
                 <!-- Transport buttons -->
                 <div class="arranger-transport">
                     <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></div>
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></div>
                         <div class="text">START / STOP</div>
                     </button>
                     <button class="btn-giant" id="btnSyncStart">
@@ -255,7 +255,7 @@
                     </button>
                     <button class="btn-giant" id="btnAccomp">
                         <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:5px;">piano</span></div>
-                        <div class="text">ACOMPAÑ.</div>
+                        <div class="text">ACOMPAÃ‘.</div>
                     </button>
                 </div>
 
@@ -281,23 +281,23 @@
 
         </div>
 
-        <!-- ═══════════ VIEW: SETTINGS & PRESETS ═══════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â• VIEW: SETTINGS & PRESETS â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="app-view" id="view-settings">
 
             <!-- MIDI Connection row -->
             <div class="panel">
-                <div class="panel-title">Conexión MIDI</div>
+                <div class="panel-title">ConexiÃ³n MIDI</div>
                 <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                     <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
                         Si no detecta el teclado en Android:<br>
                         1. Usa <b>cable USB-OTG</b> (el adaptador Bluetooth WU-BT10 no es visible para Chrome Android).<br>
-                        2. Abre la página por <b>HTTPS</b>.<br>
-                        3. Si negaste el permiso antes: toca el candado junto a la dirección &rarr; Permisos &rarr; <b>MIDI &rarr; Permitir</b>.
+                        2. Abre la pÃ¡gina por <b>HTTPS</b>.<br>
+                        3. Si negaste el permiso antes: toca el candado junto a la direcciÃ³n &rarr; Permisos &rarr; <b>MIDI &rarr; Permitir</b>.
                     </p>
                     <div id="midiPermissionWarn" style="display:none; margin-top:12px; padding:14px 16px; background:rgba(255,51,102,0.12); border:1px solid rgba(255,51,102,0.45); border-radius:10px; font-size:14px; line-height:1.6;">
                         <b style="color:#ff3366;">Permiso MIDI bloqueado</b><br>
-                        Chrome recordó tu negativa anterior y ya no muestra el aviso. Para restablecerlo:<br>
-                        1. Toca el <b>candado / ⓘ</b> junto a la dirección del sitio.<br>
+                        Chrome recordÃ³ tu negativa anterior y ya no muestra el aviso. Para restablecerlo:<br>
+                        1. Toca el <b>candado / â“˜</b> junto a la direcciÃ³n del sitio.<br>
                         2. Entra en <b>Permisos</b> y activa <b>Dispositivos MIDI &rarr; Permitir</b>.<br>
                         3. Si no aparece, usa <b>Restablecer permisos</b>, recarga y acepta el aviso.
                     </div>
@@ -311,8 +311,8 @@
                   <div class="panel-title" style="font-size:13px; margin-bottom:12px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">cloud_sync</span> Presets en GitHub</div>
                   <div style="display:flex; flex-direction:column; gap:10px;">
                       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                          <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Cargando…</span>
-                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">—</span>
+                          <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Cargandoâ€¦</span>
+                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">â€”</span>
                           <a href="#" id="btnSyncCreate" style="font-size:11.5px; color:var(--cat-color); font-weight:bold; text-decoration:none; margin-left:auto;">Configurar token</a>
                       </div>
                       <div style="display:flex; gap:8px;">
@@ -320,7 +320,7 @@
                           <button class="btn btn-accent" id="btnSyncPull" style="font-size:11px; padding:4px 10px;">Refrescar</button>
                           <button class="btn" id="btnSyncPush" style="font-size:11px; padding:4px 10px;">Guardar ahora</button>
                       </div>
-                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Los presets se leen automáticamente desde GitHub al abrir la app. Para guardar cambios necesitas un <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">token de GitHub</a> (scope: <code>public_repo</code>) — configúralo una vez por dispositivo.</p>
+                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Los presets se leen automÃ¡ticamente desde GitHub al abrir la app. Para guardar cambios necesitas un <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">token de GitHub</a> (scope: <code>public_repo</code>) â€” configÃºralo una vez por dispositivo.</p>
                   </div>
               </div>
 
@@ -354,7 +354,7 @@
                         <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">piano</span>
                         <div>
                             <h2 style="margin:0; font-size:16px; letter-spacing:1px;">SYNTH MODULE</h2>
-                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Cargando…</span>
+                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Cargandoâ€¦</span>
                         </div>
                     </div>
                     
@@ -505,3 +505,5 @@
     <script src="app.js?v=116"></script>
 </body>
 </html>
+
+
