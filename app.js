@@ -1246,11 +1246,16 @@ function initPresets() {
         reader.onload = ev => {
             try {
                 const imported = JSON.parse(ev.target.result);
+                if (typeof imported !== 'object' || Array.isArray(imported)) throw new Error();
                 const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+                const collisions = Object.keys(imported).filter(k => k in existing);
+                if (collisions.length > 0) {
+                    if (!confirm(`Importar sobreescribirá ${collisions.length} preset(s) existente(s): ${collisions.join(', ')}. ¿Continuar?`)) return;
+                }
                 Object.assign(existing, imported);
                 localStorage.setItem('casioPresets', JSON.stringify(existing));
                 renderPresets();
-                syncPush();
+                // No llamar syncPush aquí: syncPull dentro de syncPush puede pisar los datos importados
             } catch { alert('Archivo inválido.'); }
         };
         reader.readAsText(file);
@@ -1290,9 +1295,10 @@ function initPresets() {
 
 function captureAndSavePreset(name) {
     const data = {
-        eqState:         JSON.parse(JSON.stringify(eqState)),
-        tuning:          JSON.parse(JSON.stringify(tuning)),
-        globalTranspose: globalTranspose,
+        eqState:          JSON.parse(JSON.stringify(eqState)),
+        tuning:           JSON.parse(JSON.stringify(tuning)),
+        globalTranspose:  globalTranspose,
+        activeCategories: JSON.parse(JSON.stringify(activeCategories)),
         tones: {
             U1: (() => { const l = document.getElementById('list-U1'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
             U2: (() => { const l = document.getElementById('list-U2'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
@@ -1307,6 +1313,7 @@ function captureAndSavePreset(name) {
 }
 
 function loadPreset(data) {
+    if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
     ['U1','U2','L'].forEach(part => {
         if (data.eqState?.[part])  Object.assign(eqState[part], data.eqState[part]);
         if (data.tuning?.[part]) {
@@ -1507,7 +1514,7 @@ function initArranger() {
     // ── SYNC START ───────────────────────────────────
     document.getElementById('btnSyncStart')?.addEventListener('click', () => {
         if (!midiOutput) return;
-        midiOutput.send([0xFB]); // MIDI Continue
+        midiOutput.send([0xFA]); // MIDI Start (Synchro Start)
     });
 
     // ── ACCOMP (toggle via SysEx-like approach using CC) ─
@@ -2228,13 +2235,12 @@ buildGMSelectors();
         }
     }, { once: false, passive: true });
 });
-// FORCE web audio OFF on load to defeat browser checkbox caching
-window.addEventListener('DOMContentLoaded', () => {
+// Sync checkbox UI with pcSynthEnabled initial state (script runs after DOM)
+(function syncPcSynthUI() {
     const pcToggle = document.getElementById('pcSynthToggle');
-    if (pcToggle) pcToggle.checked = true;
+    if (pcToggle) pcToggle.checked = pcSynthEnabled;
     const pcWarning = document.getElementById('pcSoundWarning');
-    if (pcWarning) pcWarning.style.display = 'none';
+    if (pcWarning) pcWarning.style.display = pcSynthEnabled ? 'none' : '';
     const pcControls = document.getElementById('pcSynthControls');
-    if (pcControls) pcControls.style.display = 'block';
-    pcSynthEnabled = true;
-});
+    if (pcControls) pcControls.style.display = pcSynthEnabled ? 'block' : 'none';
+})();
