@@ -1315,7 +1315,10 @@ function captureAndSavePreset(name) {
 function loadPreset(data) {
     if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
     ['U1','U2','L'].forEach(part => {
-        if (data.eqState?.[part])  Object.assign(eqState[part], data.eqState[part]);
+        if (data.eqState?.[part]) {
+            Object.assign(eqState[part], data.eqState[part]);
+            delete eqState[part][72]; // CC72 no está en EQ_CONTROLS, no enviar al hardware
+        }
         if (data.tuning?.[part]) {
             tuning[part].oct = data.tuning[part].oct || 0;
             tuning[part].sus = data.tuning[part].sus || false;
@@ -2191,8 +2194,11 @@ document.getElementById('sf2-vol')?.addEventListener('input', e => {
     if (eqFader) eqFader.value = val;
     const eqValEl = document.getElementById('eq-val-7');
     if (eqValEl) eqValEl.innerText = val;
-    // Actualizar estado y enviar a teclado + PC synth (sendCC incluye applyCC para U1)
-    ['U1','U2','L'].forEach(p => { eqState[p][7] = val; sendCC(p, 7, val); });
+    // Respetar balance U2=60: escalar proporcionalmente al valor maestro
+    const u2Vol = Math.round(val * 60 / 100);
+    eqState['U1'][7] = val;     sendCC('U1', 7, val);
+    eqState['U2'][7] = u2Vol;   sendCC('U2', 7, u2Vol);
+    eqState['L'][7]  = val;     sendCC('L',  7, val);
 });
 
 // PC Synth ON/OFF toggle
