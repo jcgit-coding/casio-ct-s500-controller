@@ -114,7 +114,7 @@ const pendingBank = { U1: 0, U2: 0, L: 0 };
 
 // Per-part state (octave and sustain are independent per channel)
 const tuning = {
-    U1: { oct: 0, sus: false },
+    U1: { oct: -1, sus: false },
     U2: { oct: 0, sus: false },
     L:  { oct: 0, sus: false }
 };
@@ -1086,7 +1086,7 @@ function initQuickControls() {
 
             if (action === 'oct+' && tuning[part].oct < 3)  tuning[part].oct++;
             if (action === 'oct-' && tuning[part].oct > -3) tuning[part].oct--;
-            if (action === 'oct-reset') tuning[part].oct = 0;
+            if (action === 'oct-reset') tuning[part].oct = (part === 'U1') ? -1 : 0;
 
             const octEl = document.getElementById('oct-' + part);
             if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
