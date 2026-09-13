@@ -239,6 +239,12 @@ header h1 {
     min-height: 28px;
 }
 .btn-reset-small:hover { background: rgba(255,255,255,0.15); color: var(--text); }
+.global-bar .btn-reset-small {
+    background: transparent;
+    border: 1px solid rgba(59,130,246,0.4);
+    color: var(--accent);
+}
+.global-bar .btn-reset-small:hover { background: rgba(59,130,246,0.12); }
 
 .status-badge {
     display: flex; align-items: center; gap: 8px;
