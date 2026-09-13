@@ -695,9 +695,9 @@ header h1 {
 }
 /* Octave group: label+buttons column, Reset inline to the right */
 .quick-group--row {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     flex: none;
 }
 .quick-inner {
