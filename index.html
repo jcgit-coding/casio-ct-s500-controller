@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -49,13 +49,13 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Buscando MIDI…</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versi�n de la App">v118</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v118</span>
             </div>
         </div>
 
 
 
-            <!-- PISTAS (U1, U2, L) �?" Octava y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) – Octava y Sustain POR PISTA -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
@@ -176,7 +176,7 @@
                 <div class="panel-title">
                     <span>Ecualizador &amp; Efectos</span>
                     <div style="display:flex;gap:8px;align-items:center;">
-                        <button class="btn-reset-small" id="btnResetEQ">�?� Reset</button>
+                        <button class="btn-reset-small" id="btnResetEQ">↺ Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
                     </div>
                 </div>
@@ -220,7 +220,7 @@
                 <div class="arranger-row" style="margin-bottom:16px;">
                     <span class="arranger-label">TEMPO</span>
                     <div class="step-btns">
-                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">�^'</button>
+                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">−</button>
                         <span class="step-val" id="bpmVal" style="min-width:72px;font-size:20px;">120</span>
                         <button class="step-btn" id="bpmPlus" style="width:44px;height:44px;font-size:22px;">+</button>
                     </div>
@@ -249,7 +249,7 @@
                     </button>
                     <button class="btn-giant" id="btnAccomp">
                         <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:5px;">piano</span></div>
-                        <div class="text">ACOMPA�'.</div>
+                        <div class="text">ACOMPAÑAMIENTO</div>
                     </button>
                 </div>
 
@@ -305,8 +305,8 @@
                   <div class="panel-title" style="font-size:13px; margin-bottom:12px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">cloud_sync</span> Presets en GitHub</div>
                   <div style="display:flex; flex-direction:column; gap:10px;">
                       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                          <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Cargando�?�</span>
-                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">�?"</span>
+                          <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Cargando…</span>
+                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">–</span>
                           <a href="#" id="btnSyncCreate" style="font-size:11.5px; color:var(--cat-color); font-weight:bold; text-decoration:none; margin-left:auto;">Configurar token</a>
                       </div>
                       <div style="display:flex; gap:8px;">
@@ -314,7 +314,7 @@
                           <button class="btn btn-accent" id="btnSyncPull" style="font-size:11px; padding:4px 10px;">Refrescar</button>
                           <button class="btn" id="btnSyncPush" style="font-size:11px; padding:4px 10px;">Guardar ahora</button>
                       </div>
-                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Los presets se leen automáticamente desde GitHub al abrir la app. Para guardar cambios necesitas un <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">token de GitHub</a> (scope: <code>public_repo</code>) �?" configúralo una vez por dispositivo.</p>
+                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Los presets se leen automáticamente desde GitHub al abrir la app. Para guardar cambios necesitas un <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">token de GitHub</a> (scope: <code>public_repo</code>) – configúralo una vez por dispositivo.</p>
                   </div>
               </div>
 
@@ -348,7 +348,7 @@
                         <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">piano</span>
                         <div>
                             <h2 style="margin:0; font-size:16px; letter-spacing:1px;">SYNTH MODULE</h2>
-                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Cargando�?�</span>
+                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Cargando…</span>
                         </div>
                     </div>
                     
