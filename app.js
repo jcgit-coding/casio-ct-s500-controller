@@ -1713,13 +1713,11 @@ const nameEl = document.getElementById('selectedTone-' + part);
     }
 }
 
-// --- PC SYNTH — WebAudioFontSynth: muestras reales (CDN) + osciladores de respaldo ---
-// Inicializar sintetizador e iniciar descarga de muestras WebAudioFont
+// --- PC SYNTH — SpessaSynth: AudioWorklet (thread separado), SF2 nativo ---
 window.pcSynth = null;
 window.sf2Ready = false;
 
-
-// IndexedDB helpers for optional SF2 cache
+// IndexedDB helpers for SF2 cache
 function sf2OpenIDB() {
     return new Promise((resolve, reject) => {
         const req = indexedDB.open('casioPcSynth', 1);
@@ -1741,204 +1739,66 @@ async function sf2LoadCache() {
     } catch { return null; }
 }
 
-// Single sf2-player instance (reused across reloads / file changes)
-let pcPlayer = null;
-
-// Real API (from esm.sh/sf2-player source):
-//   constructor()                           — no args
-//   bootSynth(arrayBuffer)                  — load SF2 from ArrayBuffer
-//   loadSoundFontFromFile(File)             — load from File object
-//   loadSoundFontFromURL(url)               — load from URL string
-//   noteOn(note, velocity=127, channel?)    — note FIRST, then vel, then optional channel
-//   noteOff(note, velocity=127, channel?)
-//   player.synth.programChange(ch, prog)   — inner synth instance
+// Reusable AudioContext + WorkletSynthesizer instance
+let spessaCtx = null;
+let spessaSynth = null;
 
 async function sf2Init(source, name) {
     const statusEl = document.getElementById('sf2-status');
-    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Cargando SF2…</span>';
+    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Cargando SpessaSynth…</span>';
     try {
-        const mod = await import('https://esm.sh/sf2-player');
-        const SoundFontPlayer = mod.default;
-        if (typeof SoundFontPlayer !== 'function') throw new Error('sf2-player: default export not a constructor');
+        const { WorkletSynthesizer } = await import('https://esm.sh/spessasynth_lib@4.3.14');
 
-        if (!pcPlayer) pcPlayer = new SoundFontPlayer();
+        if (!spessaCtx) spessaCtx = new (window.AudioContext || window.webkitAudioContext)();
+        await spessaCtx.audioWorklet.addModule('./spessasynth_processor.min.js');
 
-        if (typeof source === 'string') {
-            await pcPlayer.loadSoundFontFromURL(source);
+        if (!spessaSynth) spessaSynth = new WorkletSynthesizer(spessaCtx);
+
+        // Load SF2 buffer
+        let sf2Buffer;
+        if (source instanceof ArrayBuffer) {
+            sf2Buffer = source;
         } else if (source instanceof File) {
-            await pcPlayer.loadSoundFontFromFile(source);
+            sf2Buffer = await source.arrayBuffer();
         } else {
-            // ArrayBuffer path (from IndexedDB cache or manual fetch)
-            await pcPlayer.bootSynth(source);
+            const res = await fetch(source);
+            if (!res.ok) throw new Error('SF2 fetch failed: ' + source);
+            sf2Buffer = await res.arrayBuffer();
         }
+
+        await spessaSynth.soundBankManager.addSoundBank(sf2Buffer, 'main');
+        await spessaSynth.isReady;
 
         const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
 
-        // Wrapper — our internal API is noteOn(channel, note, vel) / noteOff(channel, note)
-        // but sf2-player's API is noteOn(note, vel, channel) — we translate here.
-        // CADENA DE AUDIO: sf2-player → filter (lowpass) → [reverb/chorus/delay sends] → master gain → destination
-        const ctx = pcPlayer.synth?.ctx || new (window.AudioContext || window.webkitAudioContext)();
-
-        // === Crear cadena de efectos propia ===
-        const masterGain = ctx.createGain();
+        // Master gain para control de volumen rápido
+        const masterGain = spessaCtx.createGain();
         masterGain.gain.value = initVol;
-
-        const eqLow = ctx.createBiquadFilter();
-        eqLow.type = 'lowshelf';
-        eqLow.frequency.value = 200;
-        eqLow.gain.value = 0;
-
-        const eqMid = ctx.createBiquadFilter();
-        eqMid.type = 'peaking';
-        eqMid.frequency.value = 1000;
-        eqMid.Q.value = 1.0;
-        eqMid.gain.value = 0;
-
-        const eqHigh = ctx.createBiquadFilter();
-        eqHigh.type = 'highshelf';
-        eqHigh.frequency.value = 4000;
-        eqHigh.gain.value = 0;
-
-        masterGain.connect(eqLow);
-        eqLow.connect(eqMid);
-        eqMid.connect(eqHigh);
-        eqHigh.connect(ctx.destination);
-
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = 8000;
-        filter.Q.value = 0.8;
-        filter.connect(masterGain);
-
-        // Reverb: ConvolverNode con impulse response algorítmico
-        const rvbGain = ctx.createGain();
-        rvbGain.gain.value = 0;
-        rvbGain.connect(masterGain);
-        let rvbConvolver = null;
-        try {
-            rvbConvolver = ctx.createConvolver();
-            // Generar IR de reverb: ruido blanco decayendo exponencialmente (2s)
-            const irLen = Math.floor(ctx.sampleRate * 2);
-            const irBuf = ctx.createBuffer(2, irLen, ctx.sampleRate);
-            for (let ch = 0; ch < 2; ch++) {
-                const d = irBuf.getChannelData(ch);
-                for (let i = 0; i < irLen; i++) {
-                    d[i] = (Math.random() * 2 - 1) * Math.exp(-3.0 * i / irLen);
-                }
-            }
-            rvbConvolver.buffer = irBuf;
-            filter.connect(rvbConvolver);
-            rvbConvolver.connect(rvbGain);
-        } catch(e) { /* reverb no disponible */ }
-
-        // Chorus: delay corto modulado por LFO
-        let chorusGain = ctx.createGain();
-        chorusGain.gain.value = 0;
-        chorusGain.connect(masterGain);
-        let chorusDelay = null;
-        try {
-            chorusDelay = ctx.createDelay(0.05);
-            chorusDelay.delayTime.value = 0.012;
-            const chorusLFO = ctx.createOscillator();
-            const chorusDepth = ctx.createGain();
-            chorusLFO.frequency.value = 0.8;
-            chorusDepth.gain.value = 0.003;
-            chorusLFO.connect(chorusDepth);
-            chorusDepth.connect(chorusDelay.delayTime);
-            chorusLFO.start();
-            filter.connect(chorusDelay);
-            chorusDelay.connect(chorusGain);
-        } catch(e) { /* chorus no disponible */ }
-
-        // Delay/Echo
-        let echoGain = ctx.createGain();
-        echoGain.gain.value = 0;
-        echoGain.connect(masterGain);
-        let echoDelay = null;
-        try {
-            echoDelay = ctx.createDelay(1.0);
-            echoDelay.delayTime.value = 0.35;
-            const echoFB = ctx.createGain();
-            echoFB.gain.value = 0.3;
-            filter.connect(echoDelay);
-            echoDelay.connect(echoFB);
-            echoFB.connect(echoDelay);
-            echoDelay.connect(echoGain);
-        } catch(e) { /* delay no disponible */ }
-
-        // Desconectar salida directa del sf2-player y reconectar por nuestra cadena
-        try {
-            const synthGain = pcPlayer.synth?.gainMaster
-                || pcPlayer.synth?.masterGain
-                || pcPlayer.synth?.gain
-                || pcPlayer.synth?.gainNode;
-            if (synthGain) {
-                synthGain.disconnect();
-                synthGain.connect(filter);
-            }
-        } catch(e) {
-            console.warn('[SF2] No se pudo redirigir audio del sf2-player por la cadena de efectos');
-        }
+        spessaSynth.connect(masterGain);
+        masterGain.connect(spessaCtx.destination);
 
         window.pcSynth = {
-            _player: pcPlayer, _vol: initVol,
-            _filter: filter, _master: masterGain,
-            _eqLow: eqLow, _eqMid: eqMid, _eqHigh: eqHigh,
-            _rvbGain: rvbGain, _chorusGain: chorusGain, _echoGain: echoGain,
-            _cutoff: 8000, _resonance: 0.8, _attack: 0.005, _release: 1.0,
-            get synth() { return { ctx: pcPlayer.synth?.ctx || ctx }; },
+            _synth: spessaSynth, _ctx: spessaCtx, _vol: initVol,
+            _master: masterGain,
+            get synth() { return { ctx: spessaCtx }; },
             noteOn(channel, note, velocity) {
-                const c = pcPlayer.synth?.ctx || ctx;
-                if (c?.state === 'suspended') c.resume();
-                const v = Math.min(127, Math.max(1, Math.round(velocity * this._vol)));
-                pcPlayer.noteOn(note, v, channel);
+                if (spessaCtx.state === 'suspended') spessaCtx.resume();
+                spessaSynth.noteOn(channel, note, Math.min(127, Math.max(1, velocity)));
             },
             noteOff(channel, note) {
-                pcPlayer.noteOff(note, 64, channel);
+                spessaSynth.noteOff(channel, note);
             },
             programChange(channel, prog) {
-                if (pcPlayer.synth) pcPlayer.synth.programChange(channel, prog);
+                spessaSynth.programChange(channel, prog);
             },
-            applyCC(cc, val) {
-                const t = (pcPlayer.synth?.ctx || ctx).currentTime;
+            applyCC(cc, val, channel) {
                 if (cc === 7) {
                     this._vol = val / 127;
-                    this._master.gain.setTargetAtTime(this._vol, t, 0.02);
+                    this._master.gain.setTargetAtTime(this._vol, spessaCtx.currentTime, 0.02);
+                } else {
+                    const ch = channel !== undefined ? channel : CHANNEL[activePart];
+                    spessaSynth.controllerChange(ch, cc, val);
                 }
-                if (cc === 74) {
-                    this._cutoff = 200 + (val / 127) * 11800;
-                    this._filter.frequency.setTargetAtTime(this._cutoff, t, 0.02);
-                }
-                if (cc === 71) {
-                    this._resonance = 0.5 + (val / 127) * 18;
-                    this._filter.Q.setTargetAtTime(this._resonance, t, 0.02);
-                }
-                if (cc === 91) {
-                    this._rvbGain.gain.setTargetAtTime((val / 127) * 0.6, t, 0.05);
-                }
-                if (cc === 93) {
-                    this._chorusGain.gain.setTargetAtTime((val / 127) * 0.4, t, 0.05);
-                }
-                if (cc === 94) {
-                    this._echoGain.gain.setTargetAtTime((val / 127) * 0.5, t, 0.05);
-                }
-                if (cc === 104) {
-                    // CC 104: Low EQ (-15dB to +15dB, 64 is 0dB)
-                    const db = (val - 64) * (15 / 64);
-                    this._eqLow.gain.setTargetAtTime(db, t, 0.05);
-                }
-                if (cc === 103) {
-                    // CC 103: Mid EQ (-15dB to +15dB, 64 is 0dB)
-                    const db = (val - 64) * (15 / 64);
-                    this._eqMid.gain.setTargetAtTime(db, t, 0.05);
-                }
-                if (cc === 102) {
-                    // CC 102: High EQ (-15dB to +15dB, 64 is 0dB)
-                    const db = (val - 64) * (15 / 64);
-                    this._eqHigh.gain.setTargetAtTime(db, t, 0.05);
-                }
-                if (cc === 73) this._attack = 0.001 + (val / 127) * 0.5;
-                if (cc === 72) this._release = 0.1 + (val / 127) * 3.0;
             }
         };
         window.sf2Ready = true;
@@ -1946,11 +1806,10 @@ async function sf2Init(source, name) {
     } catch(err) {
         console.error('SF2 init error:', err);
         if (statusEl) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: No se pudo cargar SF2</span>';
-        // BuiltInPiano stays as window.pcSynth — no override needed
     }
 }
 
-// Auto-load SF2: try IndexedDB cache first, then GeneralUser GS from CDN, then local
+// Auto-load SF2: IndexedDB cache → GeneralUser GS CDN → local fallback
 (async () => {
     const statusEl = document.getElementById('sf2-status');
     const cached = await sf2LoadCache();
@@ -1958,9 +1817,7 @@ async function sf2Init(source, name) {
         await sf2Init(cached.buffer, cached.name);
         return;
     }
-    // Priority 1: GeneralUser GS from jsDelivr (high quality GM soundfont)
     const GUGS_URL = 'https://cdn.jsdelivr.net/gh/mrbumpy409/GeneralUser-GS@main/GeneralUser-GS.sf2';
-    // Priority 2: local soundfont.sf2 (fallback)
     const LOCAL_URL = './soundfont.sf2';
 
     for (const [url, name] of [[GUGS_URL, 'GeneralUser GS'], [LOCAL_URL, 'soundfont.sf2']]) {
@@ -1969,18 +1826,17 @@ async function sf2Init(source, name) {
             const res = await fetch(url);
             if (!res.ok) throw new Error('not found');
             const buffer = await res.arrayBuffer();
-            sf2SaveCache(name, buffer); // cache for next visit
+            sf2SaveCache(name, buffer);
             await sf2Init(buffer, name);
             return;
         } catch { /* try next */ }
     }
-    // All failed — WebAudioFontSynth already active
     if (statusEl && !statusEl.dataset.sf2loaded) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: No se pudo cargar SF2</span>';
 })();
 
 document.getElementById('sf2-file')?.addEventListener('change', async e => {
     const file = e.target.files[0]; if (!file) return;
-    sf2SaveCache(file.name, await file.arrayBuffer()); // cache for next visit
+    sf2SaveCache(file.name, await file.arrayBuffer());
     await sf2Init(file, file.name);
 });
 
