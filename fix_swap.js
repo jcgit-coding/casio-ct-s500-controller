@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const swapBtns = document.querySelectorAll('.btn-swap');
     
+    // Almacenar el nombre original (con el spam dim opcional) basado en su order
+    const titlesByOrder = {
+        '1': 'INSTRUMENTO 1',
+        '2': 'INSTRUMENTO 2 <span class="dim">Layer</span>',
+        '3': 'INSTRUMENTO 3 <span class="dim">Split</span>'
+    };
+
     swapBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetPart = btn.getAttribute('data-target'); // e.g., 'U2'
@@ -8,38 +15,29 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (targetPart === currentPart) return;
 
-            // The user wants to SWAP the instruments/searches between currentPart and targetPart
-            
-            const searchCurr = document.getElementById('search-' + currentPart);
-            const listCurr = document.getElementById('list-' + currentPart);
-            
-            const searchTarg = document.getElementById('search-' + targetPart);
-            const listTarg = document.getElementById('list-' + targetPart);
+            const cardCurrent = document.getElementById(`card-${currentPart}`);
+            const cardTarget = document.getElementById(`card-${targetPart}`);
 
-            if (!searchCurr || !searchTarg || !listCurr || !listTarg) return;
+            if (cardCurrent && cardTarget) {
+                // Swap flex order
+                const currentOrder = cardCurrent.style.order || getComputedStyle(cardCurrent).order;
+                const targetOrder = cardTarget.style.order || getComputedStyle(cardTarget).order;
 
-            // Save state
-            const valCurr = searchCurr.value;
-            const valTarg = searchTarg.value;
-            
-            const selCurr = listCurr.selectedIndex >= 0 ? listCurr.options[listCurr.selectedIndex].value : null;
-            const selTarg = listTarg.selectedIndex >= 0 ? listTarg.options[listTarg.selectedIndex].value : null;
+                cardCurrent.style.order = targetOrder;
+                cardTarget.style.order = currentOrder;
+                
+                // Swap the column titles so "Instrumento X" stays physically fixed
+                const titleCurrent = cardCurrent.querySelector('.inst-title');
+                const titleTarget = cardTarget.querySelector('.inst-title');
+                
+                if (titleCurrent && titlesByOrder[targetOrder]) {
+                    titleCurrent.innerHTML = titlesByOrder[targetOrder];
+                }
+                if (titleTarget && titlesByOrder[currentOrder]) {
+                    titleTarget.innerHTML = titlesByOrder[currentOrder];
+                }
 
-            // Swap searches
-            searchCurr.value = valTarg;
-            searchTarg.value = valCurr;
-            
-            searchCurr.dispatchEvent(new Event('input'));
-            searchTarg.dispatchEvent(new Event('input'));
-
-            // Reselect options
-            if (selTarg) {
-                Array.from(listCurr.options).forEach((opt, i) => { if (opt.value === selTarg) listCurr.selectedIndex = i; });
-                listCurr.dispatchEvent(new Event('change'));
-            }
-            if (selCurr) {
-                Array.from(listTarg.options).forEach((opt, i) => { if (opt.value === selCurr) listTarg.selectedIndex = i; });
-                listTarg.dispatchEvent(new Event('change'));
+                // The active button always stays the same as data-part because the card carries its own buttons.
             }
         });
     });
