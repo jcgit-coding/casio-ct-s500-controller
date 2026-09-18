@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     const harmKeySelect = document.getElementById('harm-key');
     const harmModeSelect = document.getElementById('harm-mode');
     const chordsContainer = document.getElementById('harm-chords-container');
 
     const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-    // Funciones de utilidad para teoría musical
+    // Funciones de utilidad para teoria musical
     function getNoteIndex(note) {
         return NOTES.indexOf(note);
     }
@@ -22,37 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Determinar las distancias de semitonos para la escala
         const scaleIntervals = mode === 'mayor' 
-            ? [0, 2, 4, 5, 7, 9, 11]  // Mayor (Jónica)
-            : [0, 2, 3, 5, 7, 8, 10]; // Menor (Eólica)
+            ? [0, 2, 4, 5, 7, 9, 11]  // Major (Ionian)
+            : [0, 2, 3, 5, 7, 8, 10]; // Minor (Aeolian)
 
-        // Tipos de acordes diatónicos según el grado (1 a 7)
+        // Tipos de acordes diatonic by degree (1 a 7)
         let qualities = [];
         let degreeNames = [];
         
         if (mode === 'mayor') {
             qualities = ['Maj', 'm', 'm', 'Maj', 'Dom', 'm', 'dim'];
-            degreeNames = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'];
+            degreeNames = ['I', 'ii&deg;, 'ii&deg;', 'IV', 'V', 'vi', 'vii&deg;];
             extensions = [
                 ['Maj7', 'Maj9', 'add9', 'sus2', 'sus4'],   // I
-                ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // ii
-                ['m7', 'm11', 'sus4'],                      // iii
+                ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // ii&deg;
+                ['m7', 'm11', 'sus4'],                      // ii&deg;
                 ['Maj7', 'Maj9', '#11', 'sus2'],            // IV
                 ['7', '9', '13', 'sus2', 'sus4'],           // V
                 ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // vi
-                ['m7b5 (half-dim)']                         // vii°
+                ['m7b5 (half-dim)']                         // vii&deg;
             ];
         } else {
             // Natural minor scale
             qualities = ['m', 'dim', 'Maj', 'm', 'm', 'Maj', 'Dom'];
-            degreeNames = ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII'];
+            degreeNames = ['i', 'ii&deg;', 'ii&deg;', 'iv', 'v', 'VI', 'vii&deg;;
             extensions = [
                 ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // i
-                ['m7b5 (half-dim)'],                        // ii°
-                ['Maj7', 'Maj9', 'add9', 'sus2', 'sus4'],   // III
+                ['m7b5 (half-dim)'],                        // ii&deg;
+                ['Maj7', 'Maj9', 'add9', 'sus2', 'sus4'],   // ii&deg;
                 ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // iv
                 ['m7', 'm11', 'sus4'],                      // v
                 ['Maj7', 'Maj9', '#11', 'sus2'],            // VI
-                ['7', '9', '13', 'sus2', 'sus4']            // VII
+                ['7', '9', '13', 'sus2', 'sus4']            // vii&deg;deg;
             ];
         }
 

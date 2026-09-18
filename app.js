@@ -37,7 +37,7 @@ const GM_INSTRUMENTS = [
         [12,'Marimba'],[13,'Xylophone'],[14,'Campanas'],[15,'Dulcimer'] ]},
     { name: 'Organ', programs: [
         [16,'Organ Drawbar'],[17,'Organ Percusivo'],[18,'Rock Organ'],[19,'Organ Iglesia'],
-        [20,'Reed Organ'],[21,'Accordion'],[22,'Harmonica'],[23,'Tangó Accordion'] ]},
+        [20,'Reed Organ'],[21,'Accordion'],[22,'Harmonica'],[23,'Tango Accordion'] ]},
     { name: 'Guitarra', programs: [
         [24,'Guitarra Nylon'],[25,'Guitarra Steel'],[26,'Jazz Guitar'],[27,'Clean Guitar'],
         [28,'Muted Guitar'],[29,'Overdriven'],[30,'Distortion'],[31,'Guitar Harmonics'] ]},
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAppState();
     setInterval(saveAppState, 1000);
 
-    // Android Chrome necesita un gesto de usuario para mostrar el diálogo de
+    // Android Chrome necesita un gesto de usuario para mostrar el dialog de
     // permisos MIDI. Esperamos el primer click en cualquier lugar de la pantalla.
     let midiInitAttempted = false;
     document.addEventListener("click", () => {
@@ -335,7 +335,7 @@ function onMIDIMessage(e) {
                 
                 pcActiveNotes[d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // velocidad sin esReedr — el synth maneja su propio Volume
+                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // unscaled velocity — el synth maneja su propio Volume
             } else {
                 const info = pcActiveNotes[d1];
                 if (info) {
@@ -580,7 +580,7 @@ const ENVIRONMENTS = {
     },
     // ══════════════════════════════════════════════════════════════════════
     //  VIVO — Sala mediana/grande. Presencia, pegada y amplitud.
-    //  Ataques más rápidos, resonancia extra, efectos estéreo (Chorus/Delay).
+    //  Ataques faster, extra resonance, stereo effects (Chorus/Delay).
     // ══════════════════════════════════════════════════════════════════════
     "Vivo": {
         "PIANO":            { "74":68, "73":62, "75":62, "91":35, "104":72, "103":68, "102":70 },
@@ -618,7 +618,7 @@ const ENVIRONMENTS = {
         "GM TONES":         { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 }
     },
     // ══════════════════════════════════════════════════════════════════════
-    //  SALA — Concierto/Catedral. Sinfónico, majestuoso.
+    //  SALA — Concierto/Catedral. Symphonic, majestuoso.
     //  Ataques lentos (swells), decaimientos largos, vibrato emotivo retrasado.
     // ══════════════════════════════════════════════════════════════════════
     "Sala": {
@@ -657,8 +657,8 @@ const ENVIRONMENTS = {
         "GM TONES":         { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 }
     },
     // ══════════════════════════════════════════════════════════════════════
-    //  JAZZ — Club íntimo. Tono cálido, redondo (dark) y expresivo.
-    //  Filtro cerrado para calidez, decay acústico, vibrato profundo en vientos.
+    //  JAZZ — Club Intimate. Tono warm, redondo (dark) y expresivo.
+    //  Filtro cerrado para calidez, decay acoustic, vibrato profundo en vientos.
     // ══════════════════════════════════════════════════════════════════════
     "Jazz": {
         "PIANO":            { "74":58, "73":64, "75":64, "91":18, "104":72, "103":70, "102":56 },
@@ -1255,7 +1255,7 @@ function initPresets() {
                 Object.assign(existing, imported);
                 localStorage.setItem('casioPresets', JSON.stringify(existing));
                 renderPresets();
-                // No llamar syncPush aquí: syncPull dentro de syncPush puede pisar los datos importados
+                // Do not call syncPush here: syncPull dentro de syncPush puede pisar los datos importados
             } catch { alert('Invalid file.'); }
         };
         reader.readAsText(file);
@@ -1317,7 +1317,7 @@ function loadPreset(data) {
     ['U1','U2','L'].forEach(part => {
         if (data.eqState?.[part]) {
             Object.assign(eqState[part], data.eqState[part]);
-            delete eqState[part][72]; // CC72 no está en EQ_CONTROLS, no enviar al hardware
+            delete eqState[part][72]; // CC72 not in EQ_CONTROLS, no sendsr al hardware
         }
         if (data.tuning?.[part]) {
             tuning[part].oct = data.tuning[part].oct || 0;
@@ -1387,13 +1387,13 @@ function renderPresets() {
 
         const overBtn = document.createElement('button');
         overBtn.innerText = 'Save'; overBtn.title = 'Overwrite with current state';
-        overBtn.onclick = () => { if (confirm(`¿Sobrescribir "${name}"?`)) captureAndSavePreset(name); };
+        overBtn.onclick = () => { if (confirm(`Overwrite "${name}"?`)) captureAndSavePreset(name); };
 
         const delBtn = document.createElement('button');
         delBtn.innerText = 'Delete'; delBtn.title = 'Delete preset';
         delBtn.className   = 'del-btn';
         delBtn.onclick = () => {
-            if (!confirm(`¿Eliminar "${name}"?`)) return;
+            if (!confirm(`Delete "${name}"?`)) return;
             const p = JSON.parse(localStorage.getItem("casioPresets") || "{}");
             delete p[name];
             localStorage.setItem("casioPresets", JSON.stringify(p));
@@ -1563,7 +1563,7 @@ function changeTone(part, msb, lsb, pc) {
 window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
-    // Octave contributes ±12 semitones, global transpose is additional offset.
+    // Octave contributes +/-12 semitones, global transpose is additional offset.
     const total = Math.min(127, Math.max(0, 64 + tuning[part].oct * 12 + globalTranspose));
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
@@ -1771,7 +1771,7 @@ async function sf2Init(source, name) {
 
         const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
 
-        // Master gain para control de Volume rápido
+        // Master gain para control de Volume fast
         const masterGain = spessaCtx.createGain();
         masterGain.gain.value = initVol;
         spessaSynth.connect(masterGain);
@@ -2040,7 +2040,7 @@ function attachKeyEvents(el, k) {
 initMidiController();
 
 
-// PC Synth volume slider — sincroniza con EQ fader CC7 y envía al teclado
+// PC Synth volume slider — sincroniza con EQ fader CC7 y sends al teclado
 document.getElementById('sf2-vol')?.addEventListener('input', e => {
     const val = parseInt(e.target.value);
     const valEl = document.getElementById('sf2-vol-val');

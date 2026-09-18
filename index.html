@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
                 <button class="nav-tab active" data-target="view-mixer"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:5px;">tune</span> MIXER</button>
                 <button class="nav-tab" data-target="view-arranger"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> ARRANGER</button>
                 <button class="nav-tab" data-target="view-settings"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">settings</span> PRESETS</button>
-                <button class="nav-tab" data-target="view-harmony"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">music_note</span> ARMONÍA</button>
+                <button class="nav-tab" data-target="view-harmony"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">music_note</span> HARMONY</button>
                 <button class="nav-tab" data-target="view-synth"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">piano</span> MIDI CTRL</button>
             </div>
         </div>
@@ -50,13 +50,13 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v128</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v128</span>
             </div>
         </div>
 
 
 
-            <!-- PISTAS (U1, U2, L) – Octave y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) â€“ Octave y Sustain POR PISTA -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
@@ -71,12 +71,12 @@
                     </div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
                         <button class="cat-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-cat" id="selectedCat-U1">CATEGORÍA</div>
+                        <div class="selected-cat" id="selectedCat-U1">CATEGORY</div>
                         <button class="cat-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-display-row">
                         <button class="tone-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-tone" id="selectedTone-U1">– sin instrumento –</div>
+                        <div class="selected-tone" id="selectedTone-U1">â€“ sin instrumento â€“</div>
                         <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
@@ -100,7 +100,7 @@
                             <button class="sus-btn" id="sus-U1" data-part="U1">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U1">EDIT EQ ?</button>
+                    <button class="btn btn-eq" data-part="U1">EDIT EQ &darr;</button>
                 </div>
 
                 <!-- UPPER 2 -->
@@ -115,12 +115,12 @@
                     </div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
                         <button class="cat-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-cat" id="selectedCat-U2">CATEGORÍA</div>
+                        <div class="selected-cat" id="selectedCat-U2">CATEGORY</div>
                         <button class="cat-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-display-row">
                         <button class="tone-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-tone" id="selectedTone-U2">– sin instrumento –</div>
+                        <div class="selected-tone" id="selectedTone-U2">â€“ sin instrumento â€“</div>
                         <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
@@ -144,7 +144,7 @@
                             <button class="sus-btn" id="sus-U2" data-part="U2">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U2">EDIT EQ ?</button>
+                    <button class="btn btn-eq" data-part="U2">EDIT EQ &darr;</button>
                 </div>
 
                 <!-- LOWER -->
@@ -159,12 +159,12 @@
                     </div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
                         <button class="cat-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-cat" id="selectedCat-L">CATEGORÍA</div>
+                        <div class="selected-cat" id="selectedCat-L">CATEGORY</div>
                         <button class="cat-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-display-row">
                         <button class="tone-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-tone" id="selectedTone-L">– sin instrumento –</div>
+                        <div class="selected-tone" id="selectedTone-L">â€“ sin instrumento â€“</div>
                         <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
@@ -188,17 +188,17 @@
                             <button class="sus-btn" id="sus-L" data-part="L">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="L">EDIT EQ ?</button>
+                    <button class="btn btn-eq" data-part="L">EDIT EQ &darr;</button>
                 </div>
 
             </div><!-- /tracks-row -->
 
-            <!-- ECUALIZADOR DINÁMICO ÚNICO -->
+            <!-- UNIQUE DYNAMIC EQUALIZER -->
             <div class="panel eq-panel">
                 <div class="panel-title">
                     <span>EQ &amp; Effects</span>
                     <div style="display:flex;gap:8px;align-items:center;">
-                        <button class="btn-reset-small" id="btnResetEQ">? Reset</button>
+                        <button class="btn-reset-small" id="btnResetEQ">&#8634; Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
 
             <!-- Rhythm Browser -->
             <div class="panel">
-                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> Lista de Ritmos <span style="font-weight:400;color:var(--muted);font-size:10px;">(selecciona el número en el teclado)</span></div>
+                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> Rhythm List <span style="font-weight:400;color:var(--muted);font-size:10px;">(select the number on the keyboard)</span></div>
                 <div class="arranger-search-row">
                     <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
                     <input type="text" id="rhythmSearch" class="search-input" placeholder="Search rhythm..." autocomplete="off">
@@ -271,7 +271,7 @@
                     </button>
                     <button class="btn-giant" id="btnAccomp">
                         <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:5px;">piano</span></div>
-                        <div class="text">ACOMPAÑAMIENTO</div>
+                        <div class="text">ACCOMPANIMENT</div>
                     </button>
                 </div>
 
@@ -302,18 +302,18 @@
 
             <!-- MIDI Connection row -->
             <div class="panel">
-                <div class="panel-title">Conexión MIDI</div>
+                <div class="panel-title">MIDI Connection</div>
                 <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                     <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
                         Si no detecta el teclado en Android:<br>
                         1. Usa <b>cable USB-OTG</b> (el adaptador Bluetooth WU-BT10 no es visible para Chrome Android).<br>
-                        2. Abre la página por <b>HTTPS</b>.<br>
-                        3. Si negaste el permiso antes: toca el candado junto a la dirección &rarr; Permisos &rarr; <b>MIDI &rarr; Permitir</b>.
+                        2. Abre la page por <b>HTTPS</b>.<br>
+                        3. Si negaste el permiso antes: toca el candado junto a la direction &rarr; Permisos &rarr; <b>MIDI &rarr; Permitir</b>.
                     </p>
                     <div id="midiPermissionWarn" style="display:none; margin-top:12px; padding:14px 16px; background:rgba(255,51,102,0.12); border:1px solid rgba(255,51,102,0.45); border-radius:10px; font-size:14px; line-height:1.6;">
                         <b style="color:#ff3366;">Permiso MIDI bloqueado</b><br>
-                        Chrome recordó tu negativa anterior y ya no muestra el aviso. Para restablecerlo:<br>
-                        1. Toca el <b>candado / ??</b> junto a la dirección del sitio.<br>
+                        Chrome recorded tu negativa anterior y ya no muestra el aviso. Para restablecerlo:<br>
+                        1. Toca el <b>lock</b> junto a la direction del sitio.<br>
                         2. Entra en <b>Permisos</b> y activa <b>Dispositivos MIDI &rarr; Permitir</b>.<br>
                         3. Si no aparece, usa <b>Restablecer permisos</b>, recarga y acepta el aviso.
                     </div>
@@ -328,7 +328,7 @@
                   <div style="display:flex; flex-direction:column; gap:10px;">
                       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                           <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Loading...
-                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">–</span>
+                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">â€“</span>
                           <a href="#" id="btnSyncCreate" style="font-size:11.5px; color:var(--cat-color); font-weight:bold; text-decoration:none; margin-left:auto;">Configure token</a>
                       </div>
                       <div style="display:flex; gap:8px;">
@@ -336,7 +336,7 @@
                           <button class="btn btn-accent" id="btnSyncPull" style="font-size:11px; padding:4px 10px;">Refresh</button>
                           <button class="btn" id="btnSyncPush" style="font-size:11px; padding:4px 10px;">Save now</button>
                       </div>
-                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Presets are automatically loaded from GitHub upon opening the app. To save changes you need a <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">GitHub token</a> (scope: <code>public_repo</code>) — configure it once per device.</p>
+                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Presets are automatically loaded from GitHub upon opening the app. To save changes you need a <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">GitHub token</a> (scope: <code>public_repo</code>) â€” configure it once per device.</p>
                   </div>
               </div>
 
