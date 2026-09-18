@@ -1171,9 +1171,9 @@ async function syncPull() {
 
 async function syncPush() {
     const token = ghToken();
-    if (!token) { updateSyncStatus('Sin token GitHub'); return; }
+    if (!token) { updateSyncStatus('No GitHub token'); return; }
     try {
-        updateSyncStatus('Guardando…');
+        updateSyncStatus('Saving...');
         // Re-fetch SHA if missing (e.g. first push)
         if (!ghFileSha) await syncPull();
         const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
@@ -1203,7 +1203,7 @@ async function syncPush() {
 }
 
 async function autoSyncInit() {
-    updateSyncStatus('Cargando presets…');
+    updateSyncStatus('Loading presets...');
     const ok = await syncPull();
     if (ok) {
         updateSyncStatus(ghToken() ? '✓ GitHub connected' : '✓ Presets loaded (read only)');
@@ -1212,7 +1212,7 @@ async function autoSyncInit() {
     }
     // Show token status in UI
     const tokenEl = document.getElementById('syncTokenDisplay');
-    if (tokenEl) tokenEl.innerText = ghToken() ? '✓ Token configurado' : 'Sin token (solo lectura)';
+    if (tokenEl) tokenEl.innerText = ghToken() ? '✓ Token configurado' : 'No token (read only)';
 }
 
 function initPresets() {
@@ -1221,7 +1221,7 @@ function initPresets() {
         const name  = input.value.trim();
         if (!name) { alert("Escribe un nombre para el preset."); return; }
         const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
-        if (presets[name] && !confirm(`"${name}" ya existe. ¿Sobrescribir?`)) return;
+        if (presets[name] && !confirm(`"${name}" already exists. Overwrite?`)) return;
         captureAndSavePreset(name);
         input.value = '';
     });
@@ -1250,13 +1250,13 @@ function initPresets() {
                 const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
                 const collisions = Object.keys(imported).filter(k => k in existing);
                 if (collisions.length > 0) {
-                    if (!confirm(`Importar sobreescribirá ${collisions.length} preset(s) existente(s): ${collisions.join(', ')}. ¿Continuar?`)) return;
+                    if (!confirm(`Import will overwrite ${collisions.length} existing preset(s): ${collisions.join(',')} Continue?`)) return;
                 }
                 Object.assign(existing, imported);
                 localStorage.setItem('casioPresets', JSON.stringify(existing));
                 renderPresets();
                 // No llamar syncPush aquí: syncPull dentro de syncPush puede pisar los datos importados
-            } catch { alert('Archivo inválido.'); }
+            } catch { alert('Invalid file.'); }
         };
         reader.readAsText(file);
         e.target.value = '';
@@ -1266,7 +1266,7 @@ function initPresets() {
     document.getElementById('btnSyncCreate')?.addEventListener('click', async e => {
         e.preventDefault();
         const current = ghToken();
-        const t = prompt('Token de GitHub (scope: contents):\n(Déjalo vacío para borrar)', current);
+        const t = prompt('GitHub Token (scope: contents):\n(Leave empty to clear)', current);
         if (t === null) return;
         const trimmed = t.trim();
         if (trimmed) {
@@ -1277,7 +1277,7 @@ function initPresets() {
         } else {
             localStorage.removeItem('casioGhToken');
             const tokenEl = document.getElementById('syncTokenDisplay');
-            if (tokenEl) tokenEl.innerText = 'Sin token (solo lectura)';
+            if (tokenEl) tokenEl.innerText = 'No token (read only)';
             updateSyncStatus('Token eliminado');
         }
     });
@@ -1286,7 +1286,7 @@ function initPresets() {
     document.getElementById('btnSyncPush')?.addEventListener('click', () => syncPush());
     document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
         const ok = await syncPull();
-        updateSyncStatus(ok ? '✓ Presets actualizados' : 'Sin conexión');
+        updateSyncStatus(ok ? '✓ Presets actualizados' : 'Offline');
     });
 
     renderPresets();
@@ -1386,11 +1386,11 @@ function renderPresets() {
         loadBtn.onclick = () => loadPreset(data);
 
         const overBtn = document.createElement('button');
-        overBtn.innerText = 'Guardar'; overBtn.title = 'Sobrescribir con el estado actual';
+        overBtn.innerText = 'Save'; overBtn.title = 'Overwrite with current state';
         overBtn.onclick = () => { if (confirm(`¿Sobrescribir "${name}"?`)) captureAndSavePreset(name); };
 
         const delBtn = document.createElement('button');
-        delBtn.innerText = 'Borrar'; delBtn.title = 'Eliminar preset';
+        delBtn.innerText = 'Delete'; delBtn.title = 'Delete preset';
         delBtn.className   = 'del-btn';
         delBtn.onclick = () => {
             if (!confirm(`¿Eliminar "${name}"?`)) return;
@@ -1598,7 +1598,7 @@ try {
 
 
 function debugMidiPorts() {
-    if (!midiAccess) { alert('MIDI aún no inicializado. Toca la pantalla y reintenta.'); return; }
+    if (!midiAccess) { alert('MIDI not yet initialized. Touch screen to retry.'); return; }
     let msg = 'Entradas:\n';
     for (let i of midiAccess.inputs.values()) msg += '- ' + i.name + ' (' + i.state + ')\n';
     msg += '\nSalidas:\n';
@@ -1745,7 +1745,7 @@ let spessaSynth = null;
 
 async function sf2Init(source, name) {
     const statusEl = document.getElementById('sf2-status');
-    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Cargando SpessaSynth…</span>';
+    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Loading SpessaSynth…</span>';
     try {
         const { WorkletSynthesizer } = await import('https://esm.sh/spessasynth_lib@4.3.14');
 
@@ -1822,7 +1822,7 @@ async function sf2Init(source, name) {
 
     for (const [url, name] of [[GUGS_URL, 'GeneralUser GS'], [LOCAL_URL, 'soundfont.sf2']]) {
         try {
-            if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent);">Descargando ${name}…</span>`;
+            if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent);">Downloading ${name}…</span>`;
             const res = await fetch(url);
             if (!res.ok) throw new Error('not found');
             const buffer = await res.arrayBuffer();
