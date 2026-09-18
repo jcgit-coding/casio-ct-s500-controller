@@ -8,32 +8,39 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (targetPart === currentPart) return;
 
-            const cardCurrent = document.getElementById(`card-${currentPart}`);
-            const cardTarget = document.getElementById(`card-${targetPart}`);
+            // The user wants to SWAP the instruments/searches between currentPart and targetPart
+            
+            const searchCurr = document.getElementById('search-' + currentPart);
+            const listCurr = document.getElementById('list-' + currentPart);
+            
+            const searchTarg = document.getElementById('search-' + targetPart);
+            const listTarg = document.getElementById('list-' + targetPart);
 
-            if (cardCurrent && cardTarget) {
-                // Swap flex order
-                const currentOrder = cardCurrent.style.order || getComputedStyle(cardCurrent).order;
-                const targetOrder = cardTarget.style.order || getComputedStyle(cardTarget).order;
+            if (!searchCurr || !searchTarg || !listCurr || !listTarg) return;
 
-                cardCurrent.style.order = targetOrder;
-                cardTarget.style.order = currentOrder;
+            // Save state
+            const valCurr = searchCurr.value;
+            const valTarg = searchTarg.value;
+            
+            const selCurr = listCurr.selectedIndex >= 0 ? listCurr.options[listCurr.selectedIndex].value : null;
+            const selTarg = listTarg.selectedIndex >= 0 ? listTarg.options[listTarg.selectedIndex].value : null;
 
-                // Update active state of buttons in BOTH cards
-                updateSwapBtnsActive(cardCurrent, currentPart);
-                updateSwapBtnsActive(cardTarget, targetPart);
+            // Swap searches
+            searchCurr.value = valTarg;
+            searchTarg.value = valCurr;
+            
+            searchCurr.dispatchEvent(new Event('input'));
+            searchTarg.dispatchEvent(new Event('input'));
+
+            // Reselect options
+            if (selTarg) {
+                Array.from(listCurr.options).forEach((opt, i) => { if (opt.value === selTarg) listCurr.selectedIndex = i; });
+                listCurr.dispatchEvent(new Event('change'));
+            }
+            if (selCurr) {
+                Array.from(listTarg.options).forEach((opt, i) => { if (opt.value === selCurr) listTarg.selectedIndex = i; });
+                listTarg.dispatchEvent(new Event('change'));
             }
         });
     });
-
-    function updateSwapBtnsActive(card, activeTarget) {
-        const btns = card.querySelectorAll('.btn-swap');
-        btns.forEach(b => {
-            if (b.getAttribute('data-target') === activeTarget) {
-                b.classList.add('active');
-            } else {
-                b.classList.remove('active');
-            }
-        });
-    }
 });
