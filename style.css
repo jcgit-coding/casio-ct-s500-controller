@@ -1674,3 +1674,29 @@ input[type="range"].rc-fader::-moz-range-thumb {
     border-radius: 5px;
     font-weight: bold;
 }
+
+.btn-swap {
+    background: var(--input-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.btn-swap:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+.btn-swap.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+[data-part="U2"] .btn-swap.active {
+    background: var(--color-u2);
+    border-color: var(--color-u2);
+}
+[data-part="L"] .btn-swap.active {
+    background: var(--color-l);
+    border-color: var(--color-l);
+}

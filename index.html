@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=116">
+    <link rel="stylesheet" href="style.css?v=117">
 </head>
 <body>
 
@@ -49,7 +49,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Buscando MIDI…</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v120</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-dim); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="Versión de la App">v121</span>
             </div>
         </div>
 
@@ -59,8 +59,15 @@
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
-                <div class="track-card active-track" id="card-U1" data-part="U1">
-                    <div class="track-label">UPPER 1</div>
+                <div class="track-card active-track" id="card-U1" data-part="U1" style="order: 1;">
+                    <div class="track-label" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>UPPER 1</span>
+                        <div class="part-swap-btns" style="display: flex; gap: 2px;">
+                            <button class="btn-swap active" data-part="U1" data-target="U1" style="font-size:10px; padding:2px 5px; cursor:pointer;">U1</button>
+                            <button class="btn-swap" data-part="U1" data-target="U2" style="font-size:10px; padding:2px 5px; cursor:pointer;">U2</button>
+                            <button class="btn-swap" data-part="U1" data-target="L" style="font-size:10px; padding:2px 5px; cursor:pointer;">L</button>
+                        </div>
+                    </div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
                         <button class="cat-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
                         <div class="selected-cat" id="selectedCat-U1">CATEGORÍA</div>
@@ -96,8 +103,15 @@
                 </div>
 
                 <!-- UPPER 2 -->
-                <div class="track-card" id="card-U2" data-part="U2">
-                    <div class="track-label">UPPER 2 <span class="dim">Layer</span></div>
+                <div class="track-card" id="card-U2" data-part="U2" style="order: 2;">
+                    <div class="track-label" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>UPPER 2 <span class="dim">Layer</span></span>
+                        <div class="part-swap-btns" style="display: flex; gap: 2px;">
+                            <button class="btn-swap" data-part="U2" data-target="U1" style="font-size:10px; padding:2px 5px; cursor:pointer;">U1</button>
+                            <button class="btn-swap active" data-part="U2" data-target="U2" style="font-size:10px; padding:2px 5px; cursor:pointer;">U2</button>
+                            <button class="btn-swap" data-part="U2" data-target="L" style="font-size:10px; padding:2px 5px; cursor:pointer;">L</button>
+                        </div>
+                    </div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
                         <button class="cat-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
                         <div class="selected-cat" id="selectedCat-U2">CATEGORÍA</div>
@@ -133,8 +147,15 @@
                 </div>
 
                 <!-- LOWER -->
-                <div class="track-card" id="card-L" data-part="L">
-                    <div class="track-label">LOWER <span class="dim">Split</span></div>
+                <div class="track-card" id="card-L" data-part="L" style="order: 3;">
+                    <div class="track-label" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>LOWER <span class="dim">Split</span></span>
+                        <div class="part-swap-btns" style="display: flex; gap: 2px;">
+                            <button class="btn-swap" data-part="L" data-target="U1" style="font-size:10px; padding:2px 5px; cursor:pointer;">U1</button>
+                            <button class="btn-swap" data-part="L" data-target="U2" style="font-size:10px; padding:2px 5px; cursor:pointer;">U2</button>
+                            <button class="btn-swap active" data-part="L" data-target="L" style="font-size:10px; padding:2px 5px; cursor:pointer;">L</button>
+                        </div>
+                    </div>
                     <div class="tone-display-row" style="margin-bottom:4px;">
                         <button class="cat-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
                         <div class="selected-cat" id="selectedCat-L">CATEGORÍA</div>
@@ -498,6 +519,7 @@
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
     <script src="app.js?v=117"></script>
+    <script src="fix_swap.js"></script>
 </body>
 </html>
 
