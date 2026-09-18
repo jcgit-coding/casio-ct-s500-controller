@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Almacenar el nombre original (con el spam dim opcional) basado en su order
     const titlesByOrder = {
         '1': 'INSTRUMENTO 1',
-        '2': 'INSTRUMENTO 2 <span class="dim">Layer</span>',
-        '3': 'INSTRUMENTO 3 <span class="dim">Split</span>'
+        '2': 'INSTRUMENTO 2',
+        '3': 'INSTRUMENTO 3'
     };
 
     swapBtns.forEach(btn => {
