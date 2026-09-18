@@ -1,4 +1,4 @@
-// ======================================================================
+﻿// ======================================================================
 //  MIDI state
 // ======================================================================
 let midiAccess  = null;
@@ -32,12 +32,12 @@ const GM_INSTRUMENTS = [
     { name: 'Piano', programs: [
         [0,'Grand Piano'],[1,'Bright Piano'],[2,'Electric Grand'],[3,'Honky-tonk'],
         [4,'Electric Piano 1'],[5,'Electric Piano 2'],[6,'Harpsichord'],[7,'Clavinet'] ]},
-    { name: 'Perc. Cromática', programs: [
+    { name: 'Chrom. Percussion', programs: [
         [8,'Celesta'],[9,'Glockenspiel'],[10,'Music Box'],[11,'Vibraphone'],
         [12,'Marimba'],[13,'Xylophone'],[14,'Campanas'],[15,'Dulcimer'] ]},
-    { name: 'Órgano', programs: [
-        [16,'Órgano Drawbar'],[17,'Órgano Percusivo'],[18,'Rock Organ'],[19,'Órgano Iglesia'],
-        [20,'Reed Organ'],[21,'Acordeón'],[22,'Harmónica'],[23,'Tangó Acordeón'] ]},
+    { name: 'Organ', programs: [
+        [16,'Organ Drawbar'],[17,'Organ Percusivo'],[18,'Rock Organ'],[19,'Organ Iglesia'],
+        [20,'Reed Organ'],[21,'Accordion'],[22,'Harmonica'],[23,'Tangó Accordion'] ]},
     { name: 'Guitarra', programs: [
         [24,'Guitarra Nylon'],[25,'Guitarra Steel'],[26,'Jazz Guitar'],[27,'Clean Guitar'],
         [28,'Muted Guitar'],[29,'Overdriven'],[30,'Distortion'],[31,'Guitar Harmonics'] ]},
@@ -45,15 +45,15 @@ const GM_INSTRUMENTS = [
         [32,'Acoustic Bass'],[33,'Elec. Bass Finger'],[34,'Elec. Bass Pick'],[35,'Fretless Bass'],
         [36,'Slap Bass 1'],[37,'Slap Bass 2'],[38,'Synth Bass 1'],[39,'Synth Bass 2'] ]},
     { name: 'Cuerdas', programs: [
-        [40,'Violín'],[41,'Viola'],[42,'Cello'],[43,'Contrabajo'],
+        [40,'Violin'],[41,'Viola'],[42,'Cello'],[43,'Contrabajo'],
         [44,'Tremolo Strings'],[45,'Pizzicato Strings'],[46,'Arpa'],[47,'Timbal'] ]},
     { name: 'Ensemble', programs: [
         [48,'String Ensemble 1'],[49,'String Ensemble 2'],[50,'Synth Strings 1'],[51,'Synth Strings 2'],
         [52,'Choir Aahs'],[53,'Voice Oohs'],[54,'Synth Voice'],[55,'Orchestra Hit'] ]},
     { name: 'Metales', programs: [
-        [56,'Trompeta'],[57,'Trombón'],[58,'Tuba'],[59,'Trompeta Sord.'],
+        [56,'Trompeta'],[57,'Trombone'],[58,'Tuba'],[59,'Muted Trumpet'],
         [60,'French Horn'],[61,'Brass Section'],[62,'Synth Brass 1'],[63,'Synth Brass 2'] ]},
-    { name: 'Caña', programs: [
+    { name: 'Reed', programs: [
         [64,'Soprano Sax'],[65,'Alto Sax'],[66,'Tenor Sax'],[67,'Baritone Sax'],
         [68,'Oboe'],[69,'English Horn'],[70,'Fagot'],[71,'Clarinete'] ]},
     { name: 'Viento', programs: [
@@ -68,7 +68,7 @@ const GM_INSTRUMENTS = [
     { name: 'Synth FX', programs: [
         [96,'FX Rain'],[97,'FX Soundtrack'],[98,'FX Crystal'],[99,'FX Atmosphere'],
         [100,'FX Brightness'],[101,'FX Goblins'],[102,'FX Echoes'],[103,'FX Sci-fi'] ]},
-    { name: 'Étnico', programs: [
+    { name: 'Ethnic', programs: [
         [104,'Sitar'],[105,'Banjo'],[106,'Shamisen'],[107,'Koto'],
         [108,'Kalimba'],[109,'Bag Pipe'],[110,'Fiddle'],[111,'Shanai'] ]},
     { name: 'Percusivo', programs: [
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
 
     document.getElementById("connectBtn").addEventListener("click", () => {
-        if (midiAccess) scanAndConnect(); else initMIDI();
+        if (midiAccess) sReedndConnect(); else initMIDI();
     });
 
     
@@ -238,21 +238,21 @@ document.addEventListener("DOMContentLoaded", () => {
 // ======================================================================
 function initMIDI() {
     if (!navigator.requestMIDIAccess) {
-        setStatus("Web MIDI no soportado (Usa Chrome o Edge)", false);
+        setStatus("Web MIDI not supported (Use Chrome or Edge)", false);
         return;
     }
-    setStatus("Conectando...", false);
+    setStatus("Connecting...", false);
     navigator.requestMIDIAccess({ sysex: true }).then(access => {
         midiAccess = access;
-        access.onstatechange = () => scanAndConnect();
-        scanAndConnect();
+        access.onstatechange = () => sReedndConnect();
+        sReedndConnect();
     }, err => {
         console.error(err);
         
         if (err.name === 'SecurityError' || err.name === 'NotAllowedError') {
-            setStatus("MIDI bloqueado: Toca 'Reconectar' o da permisos en Chrome", false);
+            setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
         } else {
-            setStatus("Error MIDI: " + err.message, false);
+            setStatus("MIDI Error: " + err.message, false);
         }
     
         const warn = document.getElementById('midiPermissionWarn');
@@ -260,7 +260,7 @@ function initMIDI() {
     });
 }
 
-function scanAndConnect() {
+function sReedndConnect() {
     midiInput  = null;
     midiOutput = null;
 
@@ -294,17 +294,17 @@ function scanAndConnect() {
 
     if (midiInput) {
         const name = (midiOutput || midiInput).name;
-        const label = midiOutput ? "✓ " + name : "✓ " + name + " (solo entrada)";
+        const label = midiOutput ? "✓ " + name : "✓ " + name + " (input only)";
         setStatus(label, true);
-        document.getElementById("connectBtn").innerText = "Reconectar";
+        document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
         if (midiOutput) pushAllToKeyboard(true);
     } else {
         const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
         const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
-        setStatus("Sin dispositivos MIDI (" + ins + " ent. / " + outs + " sal.)", false);
-        document.getElementById("connectBtn").innerText = "Conectar";
+        setStatus("No MIDI devices (" + ins + " in / " + outs + " out)", false);
+        document.getElementById("connectBtn").innerText = "Connect";
     }
 }
 
@@ -335,7 +335,7 @@ function onMIDIMessage(e) {
                 
                 pcActiveNotes[d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // velocidad sin escalar — el synth maneja su propio volumen
+                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // velocidad sin esReedr — el synth maneja su propio Volume
             } else {
                 const info = pcActiveNotes[d1];
                 if (info) {
@@ -470,59 +470,59 @@ function onMIDIMessage(e) {
 // EQ sections — grouped logically with readable titles
 const EQ_SECTIONS = [
     {
-        title: 'Volumen & Panorámica',
+        title: 'Volume & Panning',
         controls: [
-            { label: 'VOLUMEN',  cc: 7,  def: 100, tip: 'Volumen' },
-            { label: 'EXPRESIÓN',  cc: 11, def: 127, tip: 'Expresión (dinámica)' },
-            { label: 'PANORAMA',  cc: 10, def: 64,  tip: 'Panorámica (izq/der)' },
+            { label: 'Volume',  cc: 7,  def: 100, tip: 'Volume' },
+            { label: 'EXPRESSION',  cc: 11, def: 127, tip: 'EXPRESSION (dynamics)' },
+            { label: 'PAN',  cc: 10, def: 64,  tip: 'Pan (left/right)' },
         ]
     },
     {
-        title: 'Ecualizador Maestro',
+        title: 'Master EQ',
         controls: [
-            { label: 'GRAVES',   cc: 104, def: 64, tip: 'Filtro Low Shelf (Cuerpo/Bajos)' },
-            { label: 'MEDIOS',   cc: 103, def: 64, tip: 'Filtro Peaking (Presencia/Medios)' },
-            { label: 'AGUDOS',   cc: 102, def: 64, tip: 'Filtro High Shelf (Brillo/Aire)' },
+            { label: 'LOWS',   cc: 104, def: 64, tip: 'Low Shelf Filter (Body/Bass)' },
+            { label: 'MIDS',   cc: 103, def: 64, tip: 'Peaking Filter (Presence/Mids)' },
+            { label: 'HIGHS',   cc: 102, def: 64, tip: 'High Shelf Filter (Brightness/Air)' },
         ]
     },
     {
-        title: 'Filtros',
+        title: 'Filters',
         controls: [
-            { label: 'CUTOFF', cc: 74, def: 64, tip: 'Frecuencia de Corte del Filtro' },
-            { label: 'RESONANCIA',   cc: 71, def: 64, tip: 'Resonancia del Filtro' },
+            { label: 'CUTOFF', cc: 74, def: 64, tip: 'Filter Cutoff Frequency' },
+            { label: 'RESONANCE',   cc: 71, def: 64, tip: 'Filter Resonance' },
         ]
     },
     {
-        title: 'Envolvente',
+        title: 'Envelope',
         controls: [
-            { label: 'ATAQUE',  cc: 73, def: 64, tip: 'Tiempo de Ataque (ADSR)' },
-            { label: 'DECAY',   cc: 75, def: 64, tip: 'Tiempo de Decaimiento (ADSR)' },
+            { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (ADSR)' },
+            { label: 'DECAY',   cc: 75, def: 64, tip: 'Decay Time (ADSR)' },
         ]
     },
     {
         title: 'Vibrato (LFO)',
         controls: [
-            { label: 'RATE',  cc: 76, def: 64, tip: 'Velocidad del Vibrato' },
-            { label: 'DEPTH', cc: 77, def: 64, tip: 'Profundidad del Vibrato' },
-            { label: 'DELAY', cc: 78, def: 64, tip: 'Retraso del inicio del Vibrato' },
+            { label: 'RATE',  cc: 76, def: 64, tip: 'Vibrato Rate' },
+            { label: 'DEPTH', cc: 77, def: 64, tip: 'Vibrato Depth' },
+            { label: 'DELAY', cc: 78, def: 64, tip: 'Vibrato Delay' },
         ]
     },
     {
-        title: 'Efectos Espaciales',
+        title: 'Spatial Effects',
         controls: [
-            { label: 'REVERB', cc: 91, def: 40, tip: 'Envío de Reverb (eco de sala)' },
-            { label: 'CHORUS', cc: 93, def: 0,  tip: 'Envío de Chorus (engrosamiento)' },
-            { label: 'ECO',    cc: 94, def: 0,  tip: 'Envío de Delay (repetición)' },
+            { label: 'REVERB', cc: 91, def: 40, tip: 'Reverb Send' },
+            { label: 'CHORUS', cc: 93, def: 0,  tip: 'Chorus Send' },
+            { label: 'ECHO',    cc: 94, def: 0,  tip: 'Delay Send' },
         ]
     },
     {
-        title: 'Modulación & Pedales',
+        title: 'Modulation & Pedals',
         controls: [
-            { label: 'MODULACIÓN',       cc: 1,  def: 0, tip: 'Rueda de Modulación' },
+            { label: 'MODULATION',       cc: 1,  def: 0, tip: 'Rueda de MODULATION' },
             { label: 'PORTAMENTO', cc: 65, def: 0, tip: 'Portamento On/Off', type: 'switch' },
-            { label: 'TIEMPO PORT.', cc: 5,  def: 0, tip: 'Tiempo de Portamento (glide)' },
-            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Pedal Sostenuto (solo notas activas)', type: 'switch' },
-            { label: 'SOFT',      cc: 67, def: 0, tip: 'Pedal Suave (reduce volumen)', type: 'switch' },
+            { label: 'PORT. TIME', cc: 5,  def: 0, tip: 'Portamento Time (glide)' },
+            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
+            { label: 'SOFT',      cc: 67, def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
         ]
     },
 ];
@@ -534,10 +534,10 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 let currentEnv = 'Estudio';
 // CCs: 74=Brillo/Cutoff 71=Resonancia 73=Ataque 75=Decay 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Eco
 // CC72 (Release) eliminado del EQ — el teclado lo maneja internamente por instrumento
-// Categorías Casio (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
+// Casio Categories (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
 //   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
 //   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES
-// SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como categorías del Casio)
+// SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como Casio categories)
 const ENVIRONMENTS = {
     // ══════════════════════════════════════════════════════════════════════
     //  ESTUDIO — Respuesta plana y realista. Sala controlada.
@@ -911,7 +911,7 @@ function resetEQ() {
 }
 
 function formatVal(label, val) {
-    if (label === 'PANORAMA') {
+    if (label === 'PAN') {
         if (val === 64) return 'C';
         return val < 64 ? 'L' + (64 - val) : 'R' + (val - 64);
     }
@@ -1206,7 +1206,7 @@ async function autoSyncInit() {
     updateSyncStatus('Cargando presets…');
     const ok = await syncPull();
     if (ok) {
-        updateSyncStatus(ghToken() ? '✓ GitHub conectado' : '✓ Presets cargados (solo lectura)');
+        updateSyncStatus(ghToken() ? '✓ GitHub connected' : '✓ Presets loaded (read only)');
     } else {
         updateSyncStatus('Sin conexión — usando presets locales');
     }
@@ -1606,7 +1606,7 @@ function debugMidiPorts() {
     alert(msg || 'Sin puertos MIDI.');
 }
 document.querySelector('.status-badge')?.addEventListener('click', () => {
-    if (midiAccess) scanAndConnect(); else initMIDI();
+    if (midiAccess) sReedndConnect(); else initMIDI();
 });
 function _getSavedToneId(part) {
     const list = document.getElementById('list-' + part);
@@ -1771,7 +1771,7 @@ async function sf2Init(source, name) {
 
         const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
 
-        // Master gain para control de volumen rápido
+        // Master gain para control de Volume rápido
         const masterGain = spessaCtx.createGain();
         masterGain.gain.value = initVol;
         spessaSynth.connect(masterGain);
@@ -1805,7 +1805,7 @@ async function sf2Init(source, name) {
         if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
     } catch(err) {
         console.error('SF2 init error:', err);
-        if (statusEl) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: No se pudo cargar SF2</span>';
+        if (statusEl) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: Could not load SF2</span>';
     }
 }
 
@@ -1831,7 +1831,7 @@ async function sf2Init(source, name) {
             return;
         } catch { /* try next */ }
     }
-    if (statusEl && !statusEl.dataset.sf2loaded) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: No se pudo cargar SF2</span>';
+    if (statusEl && !statusEl.dataset.sf2loaded) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: Could not load SF2</span>';
 })();
 
 document.getElementById('sf2-file')?.addEventListener('change', async e => {
@@ -2050,7 +2050,7 @@ document.getElementById('sf2-vol')?.addEventListener('input', e => {
     if (eqFader) eqFader.value = val;
     const eqValEl = document.getElementById('eq-val-7');
     if (eqValEl) eqValEl.innerText = val;
-    // Respetar balance U2=60: escalar proporcionalmente al valor maestro
+    // Respetar balance U2=60: esReedr proporcionalmente al valor maestro
     const u2Vol = Math.round(val * 60 / 100);
     eqState['U1'][7] = val;     sendCC('U1', 7, val);
     eqState['U2'][7] = u2Vol;   sendCC('U2', 7, u2Vol);

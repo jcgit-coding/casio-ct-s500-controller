@@ -45,7 +45,7 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 10px;">
-                <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Cambiar Tema"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
+                <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Toggle Theme"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
                 <div class="status-badge" id="btnConnectMidi">
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Buscando MIDI…</span>
@@ -56,13 +56,13 @@
 
 
 
-            <!-- PISTAS (U1, U2, L) – Octava y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) – Octave y Sustain POR PISTA -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
                 <div class="track-card active-track" id="card-U1" data-part="U1" style="order: 1;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="inst-title">INSTRUMENTO 1</span>
+                        <span class="inst-title">INSTRUMENT 1</span>
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap active" data-part="U1" data-target="U1">U1</button>
                             <button class="btn-swap" data-part="U1" data-target="U2">U2</button>
@@ -80,13 +80,13 @@
                         <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="Search instrument..." autocomplete="off">
                         <select class="tone-list" id="list-U1" size="6"></select>
                     </div>
                     <div class="track-quick">
                         <div class="quick-group quick-group--row">
                             <div class="quick-inner">
-                                <span class="quick-label">Octava</span>
+                                <span class="quick-label">Octave</span>
                                 <div class="step-btns">
                                     <button class="step-btn" data-part="U1" data-action="oct-">-</button>
                                     <span class="step-val" id="oct-U1">-1</span>
@@ -100,13 +100,13 @@
                             <button class="sus-btn" id="sus-U1" data-part="U1">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U1">EDITAR EQ ↓</button>
+                    <button class="btn btn-eq" data-part="U1">EDIT EQ ↓</button>
                 </div>
 
                 <!-- UPPER 2 -->
                 <div class="track-card" id="card-U2" data-part="U2" style="order: 2;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="inst-title">INSTRUMENTO 2</span>
+                        <span class="inst-title">INSTRUMENT 2</span>
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap" data-part="U2" data-target="U1">U1</button>
                             <button class="btn-swap active" data-part="U2" data-target="U2">U2</button>
@@ -124,13 +124,13 @@
                         <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="Search instrument..." autocomplete="off">
                         <select class="tone-list" id="list-U2" size="6"></select>
                     </div>
                     <div class="track-quick">
                         <div class="quick-group quick-group--row">
                             <div class="quick-inner">
-                                <span class="quick-label">Octava</span>
+                                <span class="quick-label">Octave</span>
                                 <div class="step-btns">
                                     <button class="step-btn" data-part="U2" data-action="oct-">-</button>
                                     <span class="step-val" id="oct-U2">0</span>
@@ -144,13 +144,13 @@
                             <button class="sus-btn" id="sus-U2" data-part="U2">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="U2">EDITAR EQ ↓</button>
+                    <button class="btn btn-eq" data-part="U2">EDIT EQ ↓</button>
                 </div>
 
                 <!-- LOWER -->
                 <div class="track-card" id="card-L" data-part="L" style="order: 3;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="inst-title">INSTRUMENTO 3</span>
+                        <span class="inst-title">INSTRUMENT 3</span>
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap" data-part="L" data-target="U1">U1</button>
                             <button class="btn-swap" data-part="L" data-target="U2">U2</button>
@@ -168,13 +168,13 @@
                         <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
-                        <input type="text" class="search-input tone-search" id="search-L" placeholder="Buscar instrumento..." autocomplete="off">
+                        <input type="text" class="search-input tone-search" id="search-L" placeholder="Search instrument..." autocomplete="off">
                         <select class="tone-list" id="list-L" size="6"></select>
                     </div>
                     <div class="track-quick">
                         <div class="quick-group quick-group--row">
                             <div class="quick-inner">
-                                <span class="quick-label">Octava</span>
+                                <span class="quick-label">Octave</span>
                                 <div class="step-btns">
                                     <button class="step-btn" data-part="L" data-action="oct-">-</button>
                                     <span class="step-val" id="oct-L">0</span>
@@ -188,7 +188,7 @@
                             <button class="sus-btn" id="sus-L" data-part="L">OFF</button>
                         </div>
                     </div>
-                    <button class="btn btn-eq" data-part="L">EDITAR EQ ↓</button>
+                    <button class="btn btn-eq" data-part="L">EDIT EQ ↓</button>
                 </div>
 
             </div><!-- /tracks-row -->
@@ -196,7 +196,7 @@
             <!-- ECUALIZADOR DINÁMICO ÚNICO -->
             <div class="panel eq-panel">
                 <div class="panel-title">
-                    <span>Ecualizador &amp; Efectos</span>
+                    <span>EQ &amp; Effects</span>
                     <div style="display:flex;gap:8px;align-items:center;">
                         <button class="btn-reset-small" id="btnResetEQ">↺ Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
@@ -520,7 +520,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                     <h2>Círculo Armónico</h2>
                     <div style="display:flex; gap:10px; align-items:center;">
-                        <span class="dim">Tonalidad:</span>
+                        <span class="dim">Key:</span>
                         <select id="harm-key" class="search-input" style="width:80px; font-weight:bold;">
                             <option value="C">C</option>
                             <option value="C#">C# / Db</option>
@@ -536,8 +536,8 @@
                             <option value="B">B</option>
                         </select>
                         <select id="harm-mode" class="search-input" style="width:100px;">
-                            <option value="mayor">Mayor</option>
-                            <option value="menor">Menor</option>
+                            <option value="mayor">Major</option>
+                            <option value="menor">Minor</option>
                         </select>
                     </div>
                 </div>

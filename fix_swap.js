@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Almacenar el nombre original (con el spam dim opcional) basado en su order
     const titlesByOrder = {
-        '1': 'INSTRUMENTO 1',
-        '2': 'INSTRUMENTO 2',
-        '3': 'INSTRUMENTO 3'
+        '1': 'INSTRUMENT 1',
+        '2': 'INSTRUMENT 2',
+        '3': 'INSTRUMENT 3'
     };
 
     swapBtns.forEach(btn => {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cardCurrent.style.order = targetOrder;
                 cardTarget.style.order = currentOrder;
                 
-                // 3. Swap the column titles so "Instrumento X" stays physically fixed
+                // 3. Swap the column titles so "INSTRUMENT X" stays physically fixed
                 const titleCurrent = cardCurrent.querySelector('.inst-title');
                 const titleTarget = cardTarget.querySelector('.inst-title');
                 

@@ -39,15 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 ['Maj7', 'Maj9', '#11', 'sus2'],            // IV
                 ['7', '9', '13', 'sus2', 'sus4'],           // V
                 ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // vi
-                ['m7b5 (semi-dim)']                         // vii°
+                ['m7b5 (half-dim)']                         // vii°
             ];
         } else {
-            // Escala menor natural
+            // Natural minor scale
             qualities = ['m', 'dim', 'Maj', 'm', 'm', 'Maj', 'Dom'];
             degreeNames = ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII'];
             extensions = [
                 ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // i
-                ['m7b5 (semi-dim)'],                        // ii°
+                ['m7b5 (half-dim)'],                        // ii°
                 ['Maj7', 'Maj9', 'add9', 'sus2', 'sus4'],   // III
                 ['m7', 'm9', 'm11', 'sus2', 'sus4'],        // iv
                 ['m7', 'm11', 'sus4'],                      // v
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.appendChild(header);
 
             const extTitle = document.createElement('div');
-            extTitle.textContent = 'Extensiones sugeridas:';
+            extTitle.textContent = 'Suggested extensions:';
             extTitle.style.fontSize = '12px';
             extTitle.style.color = 'var(--text-dim)';
             extTitle.style.marginTop = '4px';
