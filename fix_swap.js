@@ -63,6 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     listTarg.dispatchEvent(new Event('change'));
                 }
 
+                // Asegurar que las octavas correspondientes a cada canal (U1=-1, U2=0) se fuercen
+                // y se envíen al hardware tras el cambio.
+                const resetCurr = cardCurrent.querySelector('.btn-reset-small[data-action="oct-reset"]');
+                const resetTarg = cardTarget.querySelector('.btn-reset-small[data-action="oct-reset"]');
+                setTimeout(() => {
+                    if (resetCurr) resetCurr.click();
+                    if (resetTarg) resetTarg.click();
+                    
+                    if (window.sendCoarseTuning) {
+                        window.sendCoarseTuning(currentPart);
+                        window.sendCoarseTuning(targetPart);
+                    }
+                }, 150);
             }
         });
     });

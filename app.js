@@ -1560,7 +1560,7 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xC0 | ch, pc]);
 }
 
-function sendCoarseTuning(part) {
+window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
     // Octave contributes ±12 semitones, global transpose is additional offset.
