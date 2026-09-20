@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v133
+# Casio CT-S500 Pro Controller — v134
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -81,6 +81,12 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 ---
 
 ## 7. Historial de Versiones (reciente)
+
+### v134
+- **Fix MIDI CTRL estructura HTML:** `</div>` extra cerraba `.synth-rack` prematuramente — canales y teclado virtual quedaban fuera del contenedor flex, perdiendo el layout y el max-width centrado.
+- **Fix HTML:** `<span id="sf2-status">` sin cerrar — corregido.
+- **MIDI CTRL OFF por defecto:** `mctrlEnabled` ahora inicia en `false`; toggle empieza sin `checked`. El usuario activa cuando lo necesite.
+- **CSS light mode:** `.rc-controls` ahora tiene override `rgba(0,0,0,0.04)` en modo claro — ya no aparece con fondo grisáceo oscuro sobre blanco.
 
 ### v133
 - **Fix harmony.js:** Errores de sintaxis fatales (strings sin cerrar en líneas 34 y 47) que impedían que el script parseara. Variable `extensions` ahora declarada con `const`. Nombres de grados corregidos: mayor `['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']`, menor `['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII']`. Grado VII menor corregido a `Maj` (no `Dom`). Reemplazado `var(--text-dim)` (inexistente) por `var(--text-muted)`.

@@ -1469,6 +1469,7 @@ button {
 }
 .rack-btn:hover { background: #252830; }
 [data-theme="light"] .rack-btn:hover { background: #e5e7eb; }
+[data-theme="light"] .rc-controls { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
 
 .rack-channels {
     display: flex;
