@@ -606,6 +606,7 @@ header h1 {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    margin-bottom: 6px;
 }
 
 .search-preset-btn {
