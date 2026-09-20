@@ -241,7 +241,7 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    navigator.requestMIDIAccess({ sysex: true }).then(access => {
+    navigator.requestMIDIAccess({ sysex: false }).then(access => {
         midiAccess = access;
         access.onstatechange = () => sReedndConnect();
         sReedndConnect();
@@ -2105,7 +2105,7 @@ document.getElementById('mctrlToggle')?.addEventListener('change', e => {
             if (window.pcSynth) try { window.pcSynth.noteOff(ch, parseInt(note)); } catch(e) {}
         }
         for (const k in vkActiveKeys) delete vkActiveKeys[k];
-        document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('vk-active'));
+        document.querySelectorAll('.vk-white, .vk-black').forEach(k => k.classList.remove('vk-active'));
     }
 });
 
