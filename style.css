@@ -856,8 +856,8 @@ header h1 {
     flex-direction: row;
     align-items: stretch;
     justify-content: flex-start; /* Prevent overflow cropping on the left */
-    overflow-x: auto; 
-    overflow-y: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
     flex-wrap: nowrap !important; /* FORCE SINGLE ROW */
     scrollbar-width: thin;
     padding: 15px;
@@ -1277,14 +1277,13 @@ input[type="range"].eq-fader:active::-moz-range-thumb {
     font-size: 8.5px;
     color: var(--text-muted);
     text-align: center;
-    line-height: 1.1;
+    line-height: 1.2;
     margin-top: 6px;
-    width: 50px; /* Fixed width for text wrap */
+    width: 50px;
     white-space: normal;
     word-wrap: break-word;
     opacity: 0.7;
-    height: 30px; /* Fixed height so the bottom of the blocks look uniform */
-    overflow: hidden;
+    min-height: 30px;
 }
 
 /* ── VIRTUAL KEYBOARD ──────────────────────────────── */

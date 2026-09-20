@@ -716,7 +716,7 @@ function applySmartProfile(part, category) {
 
     // 3. Apply Part Mix Rules
     if (part === 'U1') eqState[part][7] = 100;
-    if (part === 'U2') eqState[part][7] = 60;
+    if (part === 'U2') eqState[part][7] = 75;
     if (part === 'L')  eqState[part][7] = 100;
     
     // 4. Send to keyboard and update UI
@@ -746,7 +746,7 @@ function buildEQ() {
     ['U1','U2','L'].forEach(part => {
         EQ_CONTROLS.forEach(ctrl => { 
             let defVal = ctrl.def;
-            if (part === 'U2' && ctrl.cc === 7) defVal = 60;
+            if (part === 'U2' && ctrl.cc === 7) defVal = 75;
             eqState[part][ctrl.cc] = defVal; 
         });
     });
