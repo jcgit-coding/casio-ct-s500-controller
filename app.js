@@ -241,7 +241,7 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    navigator.requestMIDIAccess({ sysex: false }).then(access => {
+    navigator.requestMIDIAccess({ sysex: true }).then(access => {
         midiAccess = access;
         access.onstatechange = () => sReedndConnect();
         sReedndConnect();
