@@ -350,8 +350,9 @@ function onMIDIMessage(e) {
                 if (pcSustainOn) pcSustainedNotes[d1] = info;
                 else window.pcSynth.noteOff(info.ch, info.shiftedNote);
             }
-        } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal
-            applyPcSustain(d2 >= 64);
+        } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal — only apply to PC synth if channel matches
+            const pcPart = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
+            if (pcPart) applyPcSustain(d2 >= 64);
         }
     }
     
@@ -1100,35 +1101,35 @@ function initQuickControls() {
         btn.addEventListener('click', () => {
             const part = btn.dataset.part;
             tuning[part].sus = !tuning[part].sus;
-            const val = tuning[part].sus ? 127 : 0;
-            btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-            btn.classList.toggle('sus-on', tuning[part].sus);
-            
-            // Sync PC Synth sustain for this part
-            applyPcSustain(tuning[part].sus);
-            
-            sendCC(part, 64, val);
-              if (val === 0) {
-                  // Casio CT-S500 sometimes ignores a single CC64=0 if the buffer is busy.
-                  // Send it again after 20ms, and also clear Sostenuto (CC 66)
-                  setTimeout(() => {
-                      sendCC(part, 64, 0);
-                      sendCC(part, 66, 0);
-                      
-                      // Also sync the UI to reflect that Sostenuto was cleared
-                      if (eqState[part] && eqState[part][66] !== 0) {
-                          eqState[part][66] = 0;
-                          if (activePart === part) {
-                              const sosBtn = document.querySelector('.eq-switch[data-cc="66"]');
-                              if (sosBtn) {
-                                  sosBtn.innerText = 'OFF';
-                                  sosBtn.classList.remove('sus-on');
-                              }
-                          }
-                      }
-                  }, 20);
-              }
+            const isOn = tuning[part].sus;
+            btn.innerText = isOn ? 'ON' : 'OFF';
+            btn.classList.toggle('sus-on', isOn);
 
+            if (pcSynthEnabled) applyPcSustain(isOn);
+
+            sendCC(part, 64, isOn ? 127 : 0);
+
+            if (!isOn) {
+                // Capture the toggle timestamp to detect rapid re-press
+                const toggledAt = Date.now();
+                // Casio CT-S500 sometimes ignores a single CC64=0 if the buffer is busy.
+                // Send again after 20ms, but only if sustain is still OFF.
+                setTimeout(() => {
+                    if (!tuning[part].sus) {
+                        sendCC(part, 64, 0);
+                        sendCC(part, 66, 0);
+
+                        // Sync Sostenuto UI
+                        if (eqState[part]?.[66] !== 0) {
+                            eqState[part][66] = 0;
+                            if (activePart === part) {
+                                const sosBtn = document.querySelector('.eq-switch[data-cc="66"]');
+                                if (sosBtn) { sosBtn.innerText = 'OFF'; sosBtn.classList.remove('sus-on'); }
+                            }
+                        }
+                    }
+                }, 20);
+            }
         });
     });
 }
