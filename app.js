@@ -9,7 +9,7 @@ let midiOutput  = null;
 const pcActiveNotes = {};     // note → MIDI channel that sent it
 const pcSustainedNotes = {};  // note → MIDI channel for deferred noteOff
 let pcSustainOn = false;
-let pcSynthEnabled = true;   // OFF by default — user must toggle on
+let pcSynthEnabled = false;  // OFF by default — user must toggle on
 let mctrlEnabled = false;    // MIDI Ctrl ON/OFF — off by default
 
 function applyPcSustain(isSustain) {
