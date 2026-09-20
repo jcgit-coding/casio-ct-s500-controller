@@ -16,14 +16,12 @@ function applyPcSustain(isSustain) {
     if (!window.pcSynth) return;
     pcSustainOn = isSustain;
     if (!pcSustainOn) {
-        for (const note in pcSustainedNotes) {
-            const info = pcSustainedNotes[note];
-            if (!pcActiveNotes[note]) {
-                const ch = info && info.ch !== undefined ? info.ch : (typeof info === 'number' ? info : 0);
-                const sn = info && info.shiftedNote !== undefined ? info.shiftedNote : parseInt(note);
-                window.pcSynth.noteOff(ch, sn);
-            }
-            delete pcSustainedNotes[note];
+        const held = Object.entries(pcSustainedNotes);
+        for (const k in pcSustainedNotes) delete pcSustainedNotes[k];
+        for (const [, info] of held) {
+            const ch = info?.ch ?? 0;
+            const sn = info?.shiftedNote ?? 0;
+            window.pcSynth.noteOff(ch, sn);
         }
     }
 }
@@ -393,7 +391,7 @@ function onMIDIMessage(e) {
             pendingBank[part] = d2;
         }
 
-        // Sustain from physical pedal → sync button UI
+        // Sustain from physical pedal → sync button UI + PC synth
         if (d1 === 64) {
             tuning[part].sus = d2 >= 64;
             const btn = document.getElementById('sus-' + part);
@@ -401,6 +399,7 @@ function onMIDIMessage(e) {
                 btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
                 btn.classList.toggle('sus-on', tuning[part].sus);
             }
+            if (pcSynthEnabled && window.pcSynth) applyPcSustain(tuning[part].sus);
         }
 
         // Update EQ memory (exclude CC 64 — sustain is tracked separately in tuning[part].sus)
@@ -1105,8 +1104,8 @@ function initQuickControls() {
             btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
             btn.classList.toggle('sus-on', tuning[part].sus);
             
-            // Sync PC Synth sustain if manipulating Upper 1
-            if (part === 'U1') applyPcSustain(tuning[part].sus);
+            // Sync PC Synth sustain for this part
+            applyPcSustain(tuning[part].sus);
             
             sendCC(part, 64, val);
               if (val === 0) {
