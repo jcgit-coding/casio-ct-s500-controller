@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller - Documentación Técnica Detallada
+# Casio CT-S500 Pro Controller — v132
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -75,6 +75,26 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 - El script lee líneas del tipo `1 STAGE PIANO 0 1 0/64` utilizando Expresiones Regulares (`RegEx`).
 - Extrae el ID, Nombre, Program Change (PC) y Controladores de Banco (MSB/LSB).
 - Construye menús `<select>` anidados (`<optgroup>`) clasificados automáticamente por categoría, permitiendo a la app buscar, iterar e inyectar atributos `data-` a una velocidad excepcionalmente rápida.
+
+---
+
+---
+
+## 7. Historial de Versiones (reciente)
+
+### v132
+- **Fix:** `loadAppState`, `loadPreset` y `onMIDIMessage` (Program Change) ahora resetean el filtro de búsqueda antes de buscar el tono guardado — ya no fallaban si el tono estaba fuera del filtro activo.
+- **Fix:** `pcSynthEnabled` ahora se restaura correctamente desde `loadAppState` y sincroniza el checkbox de UI.
+- **Fix:** `CC0` (Bank Select) ya no se almacenaba incorrectamente en `eqState`.
+- **CSS dark mode:** Variables `--danger`, `--danger-glow`, `--blue`, `--border-light`, `--border-strong` y otras ahora definidas en `:root` — el indicador de estado MIDI (punto rojo) ya es visible en modo oscuro.
+- **CSS light mode:** Overrides para Arranger (`.btn-giant`, `.rhythm-item`, `.clock-toggle`), Rack/MIDI CTRL (`.rack-header`, `.rack-channel`, `.vk-toolbar`, `.rack-btn`), swap buttons y scrollbars.
+- **Cleanup:** Eliminadas referencias a elementos HTML removidos (`sf2-vol`, `pcSoundWarning`, `pcSynthControls`). Eliminado selector CSS fantasma `[data-theme="light"] [data-theme="light"]`.
+- **Mixer:** Altura de listados de tones aumentada (`size=8`). Chips de búsqueda ahora incluyen: Reed, Pipe, EDM, World; removido Synth duplicado.
+- **Search fix:** Los chips de búsqueda ahora buscan en nombre **y** categoría (lógica OR con `|`).
+
+### v131
+- Chips de búsqueda en selector de tones del Mixer movidos a la parte superior de la tarjeta.
+- Simplificación de chips: removido E.Piano, añadidos Reed/Clavi/Perc.
 
 ---
 

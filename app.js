@@ -374,13 +374,6 @@ function onMIDIMessage(e) {
                 if (valEl) valEl.innerText = formatVal(ctrl.label, d2);
             }
             
-            // Sync PC Synth volume slider (0-127 range, same as CC7)
-            const sfVol = document.getElementById('sf2-vol');
-            if (sfVol) {
-                sfVol.value = d2;
-                const sfVolVal = document.getElementById('sf2-vol-val');
-                if (sfVolVal) sfVolVal.innerText = d2;
-            }
             if (window.pcSynth && window.pcSynth.applyCC) window.pcSynth.applyCC(7, d2);
             return;
         }
@@ -403,8 +396,8 @@ function onMIDIMessage(e) {
             if (pcSynthEnabled && window.pcSynth) applyPcSustain(tuning[part].sus);
         }
 
-        // Update EQ memory (exclude CC 64 — sustain is tracked separately in tuning[part].sus)
-        if (d1 !== 64) eqState[part][d1] = d2;
+        // Update EQ memory (exclude CC64=sustain and CC0=bank-select — handled separately)
+        if (d1 !== 64 && d1 !== 0) eqState[part][d1] = d2;
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
@@ -445,6 +438,10 @@ function onMIDIMessage(e) {
 
         const listEl = document.getElementById('list-' + part);
         if (listEl) {
+            // Show all tones so search filter doesn't hide the target tone
+            if (window.toneSearch?.[part]) {
+                window.toneSearch[part].populateList(window.toneSearch[part].allTones);
+            }
             for (let i = 0; i < listEl.options.length; i++) {
                 try {
                     const data = JSON.parse(listEl.options[i].value);
@@ -843,10 +840,6 @@ function buildEQ() {
                         // Volume: solo al part activo
                         eqState[activePart][7] = v;
                         sendCC(activePart, 7, v);
-                        const sfVolEl = document.getElementById('sf2-vol');
-                        if (sfVolEl) { sfVolEl.value = v; }
-                        const sfVolVal = document.getElementById('sf2-vol-val');
-                        if (sfVolVal) sfVolVal.innerText = v;
                     } else {
                         eqState[activePart][ctrl.cc] = v;
                         sendCC(activePart, ctrl.cc, v);
@@ -926,6 +919,10 @@ function formatVal(label, val) {
 // ======================================================================
 //  TONE SEARCH (filterable select)
 // ======================================================================
+// Per-part tone search refs — used by loadAppState / loadPreset / onMIDIMessage
+// to reset the filter before searching the full tone list.
+window.toneSearch = {};
+
 function initToneSearch() {
     if (typeof db === 'undefined') return;
 
@@ -971,9 +968,11 @@ function initToneSearch() {
 
         searchEl.addEventListener('input', () => {
             const q = searchEl.value.trim().toLowerCase();
-            populateList(q ? allTones.filter(t =>
-                t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)
-            ) : allTones);
+            populateList(q ? allTones.filter(t => {
+                const name = t.name.toLowerCase();
+                const cat  = t.category.toLowerCase();
+                return q.split('|').some(k => name.includes(k.trim()) || cat.includes(k.trim()));
+            }) : allTones);
             if (listEl.options.length > 0) listEl.selectedIndex = -1;
             // Sync active chip
             const chips = document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`);
@@ -985,11 +984,14 @@ function initToneSearch() {
             btn.addEventListener('click', () => {
                 searchEl.value = btn.dataset.q;
                 searchEl.dispatchEvent(new Event('input'));
-                searchEl.focus();
+                searchEl.blur();
             });
         });
 
         searchEl.dispatchEvent(new Event('input'));
+
+        // Expose refs so loadAppState / loadPreset / onMIDIMessage can show all tones
+        window.toneSearch[part] = { allTones, populateList, searchEl };
 
         listEl.addEventListener('change', () => {
             const opt = listEl.options[listEl.selectedIndex];
@@ -1349,6 +1351,10 @@ function loadPreset(data) {
         if (data.tones?.[part]) {
             const listEl = document.getElementById('list-' + part);
             if (listEl) {
+                // Show all tones so filter doesn't hide the target
+                if (window.toneSearch?.[part]) {
+                    window.toneSearch[part].populateList(window.toneSearch[part].allTones);
+                }
                 for (let i = 0; i < listEl.options.length; i++) {
                     if (listEl.options[i].text === data.tones[part]) {
                         listEl.selectedIndex = i;
@@ -1671,6 +1677,10 @@ function loadAppState() {
             ['U1', 'U2', 'L'].forEach(part => {
                 const list = document.getElementById('list-' + part);
                 if (list && saved.tones[part] !== undefined) {
+                    // Show all tones so the filter doesn't hide the saved tone
+                    if (window.toneSearch?.[part]) {
+                        window.toneSearch[part].populateList(window.toneSearch[part].allTones);
+                    }
                     // Find the option by ID
                     let targetIndex = -1;
                     const savedId = saved.tones[part];
@@ -1719,6 +1729,11 @@ const nameEl = document.getElementById('selectedTone-' + part);
             });
         }
         if (saved.mctrlEnabled !== undefined) mctrlEnabled = saved.mctrlEnabled;
+        if (saved.pcSynthEnabled !== undefined) {
+            pcSynthEnabled = saved.pcSynthEnabled;
+            const pcToggle = document.getElementById('pcSynthToggle');
+            if (pcToggle) pcToggle.checked = pcSynthEnabled;
+        }
 
         switchEQ(activePart); // updates sliders on screen
     } catch (e) {
@@ -2056,31 +2071,9 @@ function attachKeyEvents(el, k) {
 initMidiController();
 
 
-// PC Synth volume slider — sincroniza con EQ fader CC7 y sends al teclado
-document.getElementById('sf2-vol')?.addEventListener('input', e => {
-    const val = parseInt(e.target.value);
-    const valEl = document.getElementById('sf2-vol-val');
-    if (valEl) valEl.innerText = val;
-    // Sincronizar EQ fader CC7 UI
-    const eqFader = document.querySelector('.eq-fader[data-cc="7"]');
-    if (eqFader) eqFader.value = val;
-    const eqValEl = document.getElementById('eq-val-7');
-    if (eqValEl) eqValEl.innerText = val;
-    // Respetar balance U2=60: esReedr proporcionalmente al valor maestro
-    const u2Vol = Math.round(val * 60 / 100);
-    eqState['U1'][7] = val;     sendCC('U1', 7, val);
-    eqState['U2'][7] = u2Vol;   sendCC('U2', 7, u2Vol);
-    eqState['L'][7]  = val;     sendCC('L',  7, val);
-});
-
 // PC Synth ON/OFF toggle
 document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
     pcSynthEnabled = e.target.checked;
-    const warning = document.getElementById('pcSoundWarning');
-    if (warning) warning.style.display = pcSynthEnabled ? 'flex' : 'none';
-
-    const controls = document.getElementById('pcSynthControls');
-    if (controls) controls.style.display = pcSynthEnabled ? 'block' : 'none';
     // Stop any currently sounding notes when toggling off
     if (!pcSynthEnabled && window.pcSynth) {
         for (const note in pcActiveNotes) {
@@ -2142,8 +2135,4 @@ buildGMSelectors();
 (function syncPcSynthUI() {
     const pcToggle = document.getElementById('pcSynthToggle');
     if (pcToggle) pcToggle.checked = pcSynthEnabled;
-    const pcWarning = document.getElementById('pcSoundWarning');
-    if (pcWarning) pcWarning.style.display = pcSynthEnabled ? 'none' : '';
-    const pcControls = document.getElementById('pcSynthControls');
-    if (pcControls) pcControls.style.display = pcSynthEnabled ? 'block' : 'none';
 })();

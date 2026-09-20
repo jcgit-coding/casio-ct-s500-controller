@@ -17,19 +17,35 @@ body, input, button, select, textarea, optgroup, option, div, span, p, h1, h2, h
     --accent: #00E5FF;
     --accent-glow: rgba(0, 229, 255, 0.25);
     --accent-dim: rgba(0, 229, 255, 0.15);
-    
+
     --color-u1: #00E5FF;
     --color-u2: #FF007F;
     --color-l: #00E676;
-    
+
     --text: #f3f4f6;
     --text-muted: #828a99;
-    
+
     --fader-track: #090a0c;
     --card-bg: #181b21;
     --card-active: #1e222b;
+    --card-border-active: rgba(0,229,255,0.3);
     --shadow-color: rgba(0,0,0,0.5);
     --cat-color: #00E5FF;
+
+    /* These must be defined in :root so dark mode works correctly */
+    --danger: #ff3366;
+    --danger-glow: rgba(255, 51, 102, 0.35);
+    --blue: #3b82f6;
+    --blue-glow: rgba(59, 130, 246, 0.2);
+    --border-light: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.12);
+    --fader-label: #828a99;
+    --fader-val-bg: transparent;
+    --fader-val-text: #f3f4f6;
+    --input-bg: rgba(255,255,255,0.05);
+    --muted: #828a99;
+    --border: rgba(255,255,255,0.12);
+    --surface-hover: rgba(255,255,255,0.1);
 }
 
 * {
@@ -344,6 +360,9 @@ header h1 {
 }
 .rhythm-item:last-child { border-bottom: none; }
 .rhythm-item:hover { background: rgba(255,255,255,0.05); }
+[data-theme="light"] .rhythm-list-wrap::-webkit-scrollbar-thumb { background: #c0c4cc; }
+[data-theme="light"] .rhythm-item { border-bottom-color: #e5e7eb; }
+[data-theme="light"] .rhythm-item:hover { background: #f1f3f5; }
 .rhythm-item.active {
     background: var(--accent-dim);
     border-left: 3px solid var(--accent);
@@ -397,6 +416,7 @@ header h1 {
     border-radius: 8px;
     user-select: none;
 }
+[data-theme="light"] .clock-toggle { border-color: #d1d5db; }
 .clock-toggle input { accent-color: var(--accent); width: 20px; height: 20px; }
 .arranger-transport {
     display: flex;
@@ -422,6 +442,10 @@ header h1 {
 .arranger-huge-grid.four-cols {
     grid-template-columns: repeat(4, 1fr);
 }
+[data-theme="light"] .btn-giant { background: #f1f3f5; border-color: #d1d5db; }
+[data-theme="light"] .btn-giant:hover { background: #e5e7eb; }
+[data-theme="light"] .btn-giant.btn-start { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+[data-theme="light"] .btn-giant.btn-start:hover { background: #dbeafe; }
 .btn-giant {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
@@ -844,6 +868,7 @@ header h1 {
 .eq-faders::-webkit-scrollbar { height: 8px; }
 .eq-faders::-webkit-scrollbar-track { background: transparent; }
 .eq-faders::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+[data-theme="light"] .eq-faders::-webkit-scrollbar-thumb { background: #c0c4cc; }
 
 .fader-group {
     display: flex;
@@ -1136,8 +1161,6 @@ header h1 {
 
 
 
-[data-theme="light"] [data-theme="light"] 
-
 .fader-wrapper {
     /* No absolute wrapper needed for flow, just keep it as a structural flex container */
     display: flex;
@@ -1424,6 +1447,7 @@ button {
     background: linear-gradient(180deg, #222630 0%, #1a1d24 100%);
     border-bottom: 2px solid var(--border-light);
 }
+[data-theme="light"] .rack-header { background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%); }
 
 .rack-btn-toggle {
     display: inline-flex;
@@ -1450,6 +1474,7 @@ button {
     gap: 6px;
 }
 .rack-btn:hover { background: #252830; }
+[data-theme="light"] .rack-btn:hover { background: #e5e7eb; }
 
 .rack-channels {
     display: flex;
@@ -1468,6 +1493,7 @@ button {
     gap: 14px;
     box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
 }
+[data-theme="light"] .rack-channel { background: #f8f9fa; }
 
 .rc-label {
     font-weight: 900;
@@ -1485,6 +1511,7 @@ button {
     max-width: 300px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
 }
+/* LCD keeps dark look in light mode intentionally — screen look */
 
 .lcd-select {
     background: transparent;
@@ -1563,6 +1590,7 @@ button {
     align-items: center;
     gap: 16px;
 }
+[data-theme="light"] .vk-toolbar { background: #f1f3f5; }
 
 .vk-tool-group {
     display: flex;
@@ -1724,6 +1752,8 @@ input[type="range"].rc-fader::-moz-range-thumb {
     font-weight: bold;
 }
 
+[data-theme="light"] .btn-swap { background: #f1f3f5; color: var(--text-muted); border-color: #d1d5db; }
+[data-theme="light"] .btn-swap:hover { background: #e5e7eb; color: var(--text); }
 .btn-swap {
     background: var(--input-bg);
     color: var(--muted);
