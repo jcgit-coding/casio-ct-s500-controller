@@ -82,6 +82,9 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 
 ## 7. Historial de Versiones (reciente)
 
+### v142
+- **Fix:** Botón "↑ Top" del EQ ahora scrollea al inicio del Mixer (tarjetas de instrumentos), no al panel EQ mismo.
+
 ### v141
 - **UX EQ:** Secciones del EQ compactadas para caber en una sola fila — reducidos padding, gap, tamaño de fader (200→160px) y valor numérico. `flex-wrap: nowrap` con `overflow-x: auto` como fallback.
 

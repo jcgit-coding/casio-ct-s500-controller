@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // EQ Reset Button
     document.getElementById('btnResetEQ')?.addEventListener('click', () => resetEQ());
     document.getElementById('btnScrollEQ')?.addEventListener('click', () => {
-        const el = document.querySelector('.eq-panel');
+        const el = document.querySelector('#view-mixer');
         if (!el) return;
         const top = el.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({ top, behavior: 'smooth' });
