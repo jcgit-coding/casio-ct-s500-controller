@@ -177,6 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // EQ Reset Button
     document.getElementById('btnResetEQ')?.addEventListener('click', () => resetEQ());
+    document.getElementById('btnScrollEQ')?.addEventListener('click', () => {
+        document.querySelector('.eq-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
     // View Navigation Logic
     document.querySelectorAll('.nav-tab').forEach(tab => {

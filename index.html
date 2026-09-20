@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=138">
+    <link rel="stylesheet" href="style.css?v=139">
 </head>
 <body>
 
@@ -50,13 +50,13 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v138</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v139</span>
             </div>
         </div>
 
 
 
-            <!-- PISTAS (U1, U2, L) – Octave y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) ï¿½ Octave y Sustain POR PISTA -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
@@ -97,7 +97,7 @@
                     </div>
                     <div class="tone-display-row">
                         <button class="tone-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-tone" id="selectedTone-U1">– sin instrumento –</div>
+                        <div class="selected-tone" id="selectedTone-U1">ï¿½ sin instrumento ï¿½</div>
                         <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
@@ -162,7 +162,7 @@
                     </div>
                     <div class="tone-display-row">
                         <button class="tone-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-tone" id="selectedTone-U2">– sin instrumento –</div>
+                        <div class="selected-tone" id="selectedTone-U2">ï¿½ sin instrumento ï¿½</div>
                         <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
@@ -227,7 +227,7 @@
                     </div>
                     <div class="tone-display-row">
                         <button class="tone-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
-                        <div class="selected-tone" id="selectedTone-L">– sin instrumento –</div>
+                        <div class="selected-tone" id="selectedTone-L">ï¿½ sin instrumento ï¿½</div>
                         <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
                     </div>
                     <div class="tone-picker">
@@ -261,6 +261,7 @@
                 <div class="panel-title">
                     <span>EQ &amp; Effects</span>
                     <div style="display:flex;gap:8px;align-items:center;">
+                        <button class="btn-reset-small" id="btnScrollEQ" title="Scroll EQ to top">&#8593; Top</button>
                         <button class="btn-reset-small" id="btnResetEQ">&#8634; Reset</button>
                         <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
                     </div>
@@ -391,7 +392,7 @@
                   <div style="display:flex; flex-direction:column; gap:10px;">
                       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                           <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Loading...</span>
-                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">–</span>
+                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">ï¿½</span>
                           <a href="#" id="btnSyncCreate" style="font-size:11.5px; color:var(--cat-color); font-weight:bold; text-decoration:none; margin-left:auto;">Configure token</a>
                       </div>
                       <div style="display:flex; gap:8px;">
@@ -399,7 +400,7 @@
                           <button class="btn btn-accent" id="btnSyncPull" style="font-size:11px; padding:4px 10px;">Refresh</button>
                           <button class="btn" id="btnSyncPush" style="font-size:11px; padding:4px 10px;">Save now</button>
                       </div>
-                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Presets are automatically loaded from GitHub upon opening the app. To save changes you need a <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">GitHub token</a> (scope: <code>public_repo</code>) — configure it once per device.</p>
+                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Presets are automatically loaded from GitHub upon opening the app. To save changes you need a <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">GitHub token</a> (scope: <code>public_repo</code>) ï¿½ configure it once per device.</p>
                   </div>
               </div>
 
@@ -618,8 +619,8 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v=138"></script>
+    <script src="app.js?v=139"></script>
     <script src="fix_swap.js?v=136"></script>
-    <script src="harmony.js?v=138"></script>
+    <script src="harmony.js?v=139"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v138
+# Casio CT-S500 Pro Controller — v139
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -81,6 +81,9 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 ---
 
 ## 7. Historial de Versiones (reciente)
+
+### v139
+- **UX:** Botón "↑ Top" en el panel EQ & Effects — hace scroll para que el EQ quede en la parte superior del viewport.
 
 ### v138
 - **UX:** Botones "EDIT EQ ↓" hacen scroll automático a la sección "EQ & Effects" al ser presionados.
