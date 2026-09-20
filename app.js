@@ -10,6 +10,7 @@ const pcActiveNotes = {};     // note → MIDI channel that sent it
 const pcSustainedNotes = {};  // note → MIDI channel for deferred noteOff
 let pcSustainOn = false;
 let pcSynthEnabled = true;   // OFF by default — user must toggle on
+let mctrlEnabled = true;     // MIDI Ctrl ON/OFF
 
 function applyPcSustain(isSustain) {
     if (!window.pcSynth) return;
@@ -1623,6 +1624,7 @@ function saveAppState() {
         globalTranspose,
         activePart,
         pcSynthEnabled,
+        mctrlEnabled,
         tones: {
             U1: _getSavedToneId('U1'),
             U2: _getSavedToneId('U2'),
@@ -1704,8 +1706,7 @@ const nameEl = document.getElementById('selectedTone-' + part);
                 }
             });
         }
-        // Restore PC Synth toggle state
-        
+        if (saved.mctrlEnabled !== undefined) mctrlEnabled = saved.mctrlEnabled;
 
         switchEQ(activePart); // updates sliders on screen
     } catch (e) {
@@ -1859,6 +1860,7 @@ function initMidiController() {
             volSlider.addEventListener('input', () => {
                 const v = parseInt(volSlider.value);
                 if (volVal) volVal.innerText = v;
+                if (!mctrlEnabled) return;
                 // Send CC7 on this part's channel
                 if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, v]);
                 if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, v);
@@ -1871,6 +1873,7 @@ function initMidiController() {
             rvbSlider.addEventListener('input', () => {
                 const v = parseInt(rvbSlider.value);
                 if (rvbVal) rvbVal.innerText = v;
+                if (!mctrlEnabled) return;
                 if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 91, v]);
                 if (window.pcSynth?.applyCC) window.pcSynth.applyCC(91, v);
             });
@@ -1996,6 +1999,7 @@ function buildVirtualKeyboard() {
 }
 
 function vkNoteOn(midiNote) {
+    if (!mctrlEnabled) return;
     if (vkActiveKeys[midiNote]) return;
     vkActiveKeys[midiNote] = true;
     const vel = parseInt(document.getElementById('vk-velocity')?.value || 90);
@@ -2083,6 +2087,23 @@ document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
     }
 });
 
+// MIDI Ctrl ON/OFF toggle
+document.getElementById('mctrlToggle')?.addEventListener('change', e => {
+    mctrlEnabled = e.target.checked;
+    const rack = document.getElementById('mctrl-rack-content');
+    if (rack) rack.style.opacity = mctrlEnabled ? '' : '0.4';
+    if (!mctrlEnabled) {
+        // Stop any held virtual keyboard notes
+        for (const note in vkActiveKeys) {
+            const ch = CHANNEL[vkActivePart];
+            if (midiOutput) try { midiOutput.send([0x80 | ch, parseInt(note), 0]); } catch(e) {}
+            if (window.pcSynth) try { window.pcSynth.noteOff(ch, parseInt(note)); } catch(e) {}
+        }
+        for (const k in vkActiveKeys) delete vkActiveKeys[k];
+        document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('vk-active'));
+    }
+});
+
 // Build GM instrument selectors (after DOM is ready — DOMContentLoaded already fired)
 buildGMSelectors();
 
@@ -2097,6 +2118,14 @@ buildGMSelectors();
         }
     }, { once: false, passive: true });
 });
+// Sync MIDI Ctrl toggle UI with initial state
+(function syncMctrlUI() {
+    const t = document.getElementById('mctrlToggle');
+    if (t) t.checked = mctrlEnabled;
+    const rack = document.getElementById('mctrl-rack-content');
+    if (rack) rack.style.opacity = mctrlEnabled ? '' : '0.4';
+})();
+
 // Sync checkbox UI with pcSynthEnabled initial state (script runs after DOM)
 (function syncPcSynthUI() {
     const pcToggle = document.getElementById('pcSynthToggle');

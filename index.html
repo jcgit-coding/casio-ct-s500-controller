@@ -376,6 +376,10 @@
                     
                     <div style="display:flex; align-items:center; gap:12px;">
                         <label class="rack-btn-toggle">
+                            <input type="checkbox" id="mctrlToggle" checked style="display:none;" autocomplete="off">
+                            <span class="rack-btn-label">MIDI CTRL</span>
+                        </label>
+                        <label class="rack-btn-toggle">
                             <input type="checkbox" id="pcSynthToggle" style="display:none;" autocomplete="off">
                             <span class="rack-btn-label">PC SYNTH</span>
                         </label>
@@ -390,7 +394,7 @@
                 </div>
 
                 <!-- RACK CHANNELS -->
-                <div class="rack-channels">
+                <div id="mctrl-rack-content"><div class="rack-channels">
                     
                     <!-- U1 -->
                     <div class="rack-channel" id="mctrl-card-U1" style="border-left-color: var(--color-u1);">
@@ -510,6 +514,7 @@
                     </div>
                     <div id="virtualKeyboard" class="virtual-keyboard"></div>
                 </div>
+                </div><!-- /mctrl-rack-content -->
 
             </div>
         </div>
