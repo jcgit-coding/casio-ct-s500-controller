@@ -82,6 +82,9 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 
 ## 7. Historial de Versiones (reciente)
 
+### v143
+- **Fix:** Botón "↑ Top" usa `window.scrollTo({ top: 0 })` — scroll al inicio absoluto de la página.
+
 ### v142
 - **Fix:** Botón "↑ Top" del EQ ahora scrollea al inicio del Mixer (tarjetas de instrumentos), no al panel EQ mismo.
 
