@@ -241,22 +241,26 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    navigator.requestMIDIAccess({ sysex: true }).then(access => {
+    const tryMidi = (sysex) => navigator.requestMIDIAccess({ sysex }).then(access => {
         midiAccess = access;
         access.onstatechange = () => sReedndConnect();
         sReedndConnect();
     }, err => {
+        if (sysex && (err.name === 'NotSupportedError' || err.message?.includes('platform'))) {
+            // Android/mobile: sysex:true fails at OS level — retry without it
+            tryMidi(false);
+            return;
+        }
         console.error(err);
-        
         if (err.name === 'SecurityError' || err.name === 'NotAllowedError') {
             setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
         } else {
             setStatus("MIDI Error: " + err.message, false);
         }
-    
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'block';
     });
+    tryMidi(true);
 }
 
 function sReedndConnect() {
