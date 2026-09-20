@@ -241,18 +241,15 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    const tryMidi = (sysex) => navigator.requestMIDIAccess({ sysex }).then(access => {
+    // Android requires sysex:false — sysex:true triggers platform init failure, and async
+    // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
+    const sysex = !/android/i.test(navigator.userAgent);
+    navigator.requestMIDIAccess({ sysex }).then(access => {
         midiAccess = access;
         access.onstatechange = () => sReedndConnect();
         sReedndConnect();
     }, err => {
         const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
-        if (sysex && !permDenied) {
-            // sysex:true failed for platform reasons (common on Android) — retry without
-            console.warn('[MIDI] sysex:true failed (' + err.name + '), retrying sysex:false');
-            tryMidi(false);
-            return;
-        }
         console.error('[MIDI] error:', err.name, err.message);
         if (permDenied) {
             setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
@@ -262,7 +259,6 @@ function initMIDI() {
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'block';
     });
-    tryMidi(true);
 }
 
 function sReedndConnect() {
