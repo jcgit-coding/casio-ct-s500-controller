@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.btn-eq').forEach(btn => {
         btn.addEventListener('click', (e) => {
             switchEQ(e.currentTarget.dataset.part);
+            document.querySelector('.eq-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
