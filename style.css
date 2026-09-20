@@ -854,16 +854,14 @@ header h1 {
 .eq-faders {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
-    justify-content: flex-start; /* Prevent overflow cropping on the left */
-    overflow-x: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: visible;
     overflow-y: visible;
-    flex-wrap: nowrap !important; /* FORCE SINGLE ROW */
-    scrollbar-width: thin;
+    flex-wrap: wrap;
     padding: 15px;
     gap: 15px;
     width: 100%;
-    -webkit-overflow-scrolling: touch;
 }
 .eq-faders::-webkit-scrollbar { height: 8px; }
 .eq-faders::-webkit-scrollbar-track { background: transparent; }
@@ -1149,9 +1147,6 @@ header h1 {
     }
     .eq-faders {
         padding-bottom: 25px;
-        overflow-x: auto; 
-        flex-wrap: nowrap !important;
-        justify-content: flex-start;
     }
     .main-console {
         padding: 10px;
