@@ -602,6 +602,52 @@ header h1 {
     width: 100%;
 }
 
+.search-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.search-preset-btn {
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+}
+.search-preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+    border-color: rgba(255,255,255,0.25);
+}
+.search-preset-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+}
+
+[data-theme="light"] .search-preset-btn {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: #6b7280;
+}
+[data-theme="light"] .search-preset-btn:hover {
+    background: #e5e7eb;
+    color: var(--text);
+    border-color: #9ca3af;
+}
+[data-theme="light"] .search-preset-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
 .tone-list {
     width: 100%;
     background: #151520; /* Solid dark background */

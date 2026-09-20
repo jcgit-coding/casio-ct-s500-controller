@@ -975,8 +975,20 @@ function initToneSearch() {
                 t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)
             ) : allTones);
             if (listEl.options.length > 0) listEl.selectedIndex = -1;
+            // Sync active chip
+            const chips = document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`);
+            chips.forEach(c => c.classList.toggle('active', c.dataset.q.toLowerCase() === searchEl.value.trim().toLowerCase()));
         });
-        
+
+        // Search preset chips
+        document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`).forEach(btn => {
+            btn.addEventListener('click', () => {
+                searchEl.value = btn.dataset.q;
+                searchEl.dispatchEvent(new Event('input'));
+                searchEl.focus();
+            });
+        });
+
         searchEl.dispatchEvent(new Event('input'));
 
         listEl.addEventListener('change', () => {
