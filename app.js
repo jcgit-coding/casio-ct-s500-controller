@@ -164,7 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.btn-eq').forEach(btn => {
         btn.addEventListener('click', (e) => {
             switchEQ(e.currentTarget.dataset.part);
-            document.querySelector('.eq-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const eqEl = document.querySelector('.eq-panel');
+            if (eqEl) window.scrollTo({ top: eqEl.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
         });
     });
 
@@ -178,7 +179,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // EQ Reset Button
     document.getElementById('btnResetEQ')?.addEventListener('click', () => resetEQ());
     document.getElementById('btnScrollEQ')?.addEventListener('click', () => {
-        document.querySelector('.eq-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const el = document.querySelector('.eq-panel');
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: 'smooth' });
     });
 
     // View Navigation Logic
