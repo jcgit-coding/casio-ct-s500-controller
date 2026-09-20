@@ -246,13 +246,15 @@ function initMIDI() {
         access.onstatechange = () => sReedndConnect();
         sReedndConnect();
     }, err => {
-        if (sysex && (err.name === 'NotSupportedError' || err.message?.includes('platform'))) {
-            // Android/mobile: sysex:true fails at OS level — retry without it
+        const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
+        if (sysex && !permDenied) {
+            // sysex:true failed for platform reasons (common on Android) — retry without
+            console.warn('[MIDI] sysex:true failed (' + err.name + '), retrying sysex:false');
             tryMidi(false);
             return;
         }
-        console.error(err);
-        if (err.name === 'SecurityError' || err.name === 'NotAllowedError') {
+        console.error('[MIDI] error:', err.name, err.message);
+        if (permDenied) {
             setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
         } else {
             setStatus("MIDI Error: " + err.message, false);
