@@ -109,13 +109,14 @@ function buildGMSelectors() {
 
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
 let globalTranspose = 0;
+let globalOctave = -1;
 const pendingBank = { U1: 0, U2: 0, L: 0 };
 
 // Per-part state (octave and sustain are independent per channel)
 const tuning = {
-    U1: { oct: -1, sus: false },
-    U2: { oct: 0, sus: false },
-    L:  { oct: 0, sus: false }
+    U1: { sus: false },
+    U2: { sus: false },
+    L:  { sus: false }
 };
 
 // MIDI channel per part
@@ -138,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buildEQ();          // also seeds eqState defaults
     initToneSearch();
     initQuickControls();
-    initGlobalTranspose();
+    initGlobalTuning();
     initPresets();
     initArranger();
 
@@ -378,7 +379,7 @@ function onMIDIMessage(e) {
                 const fader = document.querySelector('.eq-fader[data-cc="7"]');
                 if (fader) fader.value = d2;
                 const valEl = document.getElementById('eq-val-7');
-                if (valEl) valEl.innerText = formatVal(ctrl.label, d2);
+                if (valEl) valElTrn.innerText = formatVal(ctrl.label, d2);
             }
             
             if (window.pcSynth && window.pcSynth.applyCC) window.pcSynth.applyCC(7, d2);
@@ -421,7 +422,7 @@ function onMIDIMessage(e) {
                     if (fader) fader.value = d2;
                 }
                 const valEl = document.getElementById('eq-val-' + d1);
-                if (valEl) valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
+                if (valEl) valElTrn.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
             }
         }
     }
@@ -742,7 +743,7 @@ function applySmartProfile(part, category) {
                 const valEl = document.getElementById('eq-val-' + ctrl.cc);
                 if (f && valEl) {
                     f.value = val;
-                    valEl.innerText = formatVal(ctrl.label, val);
+                    valElTrn.innerText = formatVal(ctrl.label, val);
                 }
             }
         }
@@ -903,7 +904,7 @@ function switchEQ(part) {
             if (fader) fader.value = val;
             
             const valEl = document.getElementById('eq-val-' + ctrl.cc);
-            if (valEl) valEl.innerText = formatVal(ctrl.label, val);
+            if (valEl) valElTrn.innerText = formatVal(ctrl.label, val);
         }
     });
 }
@@ -970,7 +971,7 @@ function initToneSearch() {
         }
 
         if (part === 'U1') searchEl.value = 'Piano';
-        if (part === 'U2') searchEl.value = 'Pad ';
+        if (part === 'U2') searchEl.value = 'Pad';
         if (part === 'L')  searchEl.value = 'String';
 
         searchEl.addEventListener('input', () => {
@@ -1076,14 +1077,14 @@ function initToneSearch() {
 }
 
 // ======================================================================
-//  GLOBAL TRANSPOSE
+//  GLOBAL TRANSPOSE & OCTAVE
 // ======================================================================
 function initGlobalTranspose() {
     const valEl = document.getElementById('gTrnVal');
 
     function updateGlobalTranspose(delta) {
         globalTranspose = Math.max(-12, Math.min(12, globalTranspose + delta));
-        valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+        valElTrn.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
         // Send to ALL channels via RPN Coarse Tuning
         ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
     }
@@ -1092,7 +1093,7 @@ function initGlobalTranspose() {
     document.getElementById('gTrnMinus').addEventListener('click', () => updateGlobalTranspose(-1));
     document.getElementById('gTrnReset').addEventListener('click', () => {
         globalTranspose = 0;
-        valEl.innerText = '0';
+        valElTrn.innerText = '0';
         ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
     });
 }
@@ -1320,6 +1321,7 @@ function captureAndSavePreset(name) {
         eqState:          JSON.parse(JSON.stringify(eqState)),
         tuning:           JSON.parse(JSON.stringify(tuning)),
         globalTranspose:  globalTranspose,
+        globalOctave:     globalOctave,
         activeCategories: JSON.parse(JSON.stringify(activeCategories)),
         tones: {
             U1: (() => { const l = document.getElementById('list-U1'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
@@ -1383,7 +1385,7 @@ function loadPreset(data) {
     if (data.globalTranspose !== undefined) {
         globalTranspose = data.globalTranspose;
         const valEl = document.getElementById('gTrnVal');
-        if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+        if (valEl) valElTrn.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
     }
 
     switchEQ(activePart);
@@ -1590,7 +1592,7 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
     // Octave contributes +/-12 semitones, global transpose is additional offset.
-    const total = Math.min(127, Math.max(0, 64 + tuning[part].oct * 12 + globalTranspose));
+    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose));
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
     midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
@@ -1605,7 +1607,7 @@ function pushAllToKeyboard(skipTones = false) {
             sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
         });
         sendCoarseTuning(part);
-        sendCC(part, 64, tuning[part].sus ? 127 : 0);
+        sendCC(part, 72, tuning[part].sus ? 100 : 64);
         
         const listEl = document.getElementById('list-' + part);
         if (listEl && listEl.selectedIndex >= 0) {
@@ -1727,7 +1729,7 @@ const nameEl = document.getElementById('selectedTone-' + part);
                     }
                 }
                 // Update tuning UI
-                document.getElementById('oct-' + part).innerText = (tuning[part].oct>0?'+':'')+tuning[part].oct;
+
                 const susBtn = document.getElementById('sus-' + part);
                 if (susBtn) {
                     susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';

@@ -34,15 +34,7 @@
         <div class="app-view active" id="view-mixer">
 
         <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
-            <div class="global-bar">
-                <span class="global-label">TRANSPOSE GLOBAL</span>
-                <div class="step-btns">
-                    <button class="step-btn" id="gTrnMinus">-</button>
-                    <span class="step-val" id="gTrnVal">0</span>
-                    <button class="step-btn" id="gTrnPlus">+</button>
-                </div>
-                <button class="btn-reset-small" id="gTrnReset">Reset</button>
-            </div>
+            <div style="display: flex; gap: 20px;">                <div class="global-bar">                    <span class="global-label">TRANSPOSE</span>                    <div class="step-btns">                        <button class="step-btn" id="gTrnMinus">-</button>                        <span class="step-val" id="gTrnVal">0</span>                        <button class="step-btn" id="gTrnPlus">+</button>                    </div>                    <button class="btn-reset-small" id="gTrnReset">Reset</button>                </div>                <div class="global-bar">                    <span class="global-label">OCTAVE</span>                    <div class="step-btns">                        <button class="step-btn" id="gOctMinus">-</button>                        <span class="step-val" id="gOctVal">-1</span>                        <button class="step-btn" id="gOctPlus">+</button>                    </div>                    <button class="btn-reset-small" id="gOctReset">Reset</button>                </div>            </div>
 
             <div style="display: flex; align-items: center; gap: 10px;">
                 <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Toggle Theme"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
@@ -50,7 +42,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v143</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v144</span>
             </div>
         </div>
 
@@ -105,17 +97,6 @@
                         <select class="tone-list" id="list-U1" size="8"></select>
                     </div>
                     <div class="track-quick">
-                        <div class="quick-group quick-group--row">
-                            <div class="quick-inner">
-                                <span class="quick-label">Octave</span>
-                                <div class="step-btns">
-                                    <button class="step-btn" data-part="U1" data-action="oct-">-</button>
-                                    <span class="step-val" id="oct-U1">-1</span>
-                                    <button class="step-btn" data-part="U1" data-action="oct+">+</button>
-                                </div>
-                            </div>
-                            <button class="btn-reset-small" data-part="U1" data-action="oct-reset">Reset</button>
-                        </div>
                         <div class="quick-group">
                             <span class="quick-label">Sustain</span>
                             <button class="sus-btn" id="sus-U1" data-part="U1">OFF</button>
@@ -170,17 +151,6 @@
                         <select class="tone-list" id="list-U2" size="8"></select>
                     </div>
                     <div class="track-quick">
-                        <div class="quick-group quick-group--row">
-                            <div class="quick-inner">
-                                <span class="quick-label">Octave</span>
-                                <div class="step-btns">
-                                    <button class="step-btn" data-part="U2" data-action="oct-">-</button>
-                                    <span class="step-val" id="oct-U2">0</span>
-                                    <button class="step-btn" data-part="U2" data-action="oct+">+</button>
-                                </div>
-                            </div>
-                            <button class="btn-reset-small" data-part="U2" data-action="oct-reset">Reset</button>
-                        </div>
                         <div class="quick-group">
                             <span class="quick-label">Sustain</span>
                             <button class="sus-btn" id="sus-U2" data-part="U2">OFF</button>
@@ -235,17 +205,6 @@
                         <select class="tone-list" id="list-L" size="8"></select>
                     </div>
                     <div class="track-quick">
-                        <div class="quick-group quick-group--row">
-                            <div class="quick-inner">
-                                <span class="quick-label">Octave</span>
-                                <div class="step-btns">
-                                    <button class="step-btn" data-part="L" data-action="oct-">-</button>
-                                    <span class="step-val" id="oct-L">0</span>
-                                    <button class="step-btn" data-part="L" data-action="oct+">+</button>
-                                </div>
-                            </div>
-                            <button class="btn-reset-small" data-part="L" data-action="oct-reset">Reset</button>
-                        </div>
                         <div class="quick-group">
                             <span class="quick-label">Sustain</span>
                             <button class="sus-btn" id="sus-L" data-part="L">OFF</button>
