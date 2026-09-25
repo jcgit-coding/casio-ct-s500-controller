@@ -379,7 +379,7 @@ function onMIDIMessage(e) {
                 const fader = document.querySelector('.eq-fader[data-cc="7"]');
                 if (fader) fader.value = d2;
                 const valEl = document.getElementById('eq-val-7');
-                if (valEl) valElTrn.innerText = formatVal(ctrl.label, d2);
+                if (valEl) valEl.innerText = formatVal(ctrl.label, d2);
             }
             
             if (window.pcSynth && window.pcSynth.applyCC) window.pcSynth.applyCC(7, d2);
@@ -422,7 +422,7 @@ function onMIDIMessage(e) {
                     if (fader) fader.value = d2;
                 }
                 const valEl = document.getElementById('eq-val-' + d1);
-                if (valEl) valElTrn.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
+                if (valEl) valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
             }
         }
     }
@@ -743,7 +743,7 @@ function applySmartProfile(part, category) {
                 const valEl = document.getElementById('eq-val-' + ctrl.cc);
                 if (f && valEl) {
                     f.value = val;
-                    valElTrn.innerText = formatVal(ctrl.label, val);
+                    valEl.innerText = formatVal(ctrl.label, val);
                 }
             }
         }
@@ -904,7 +904,7 @@ function switchEQ(part) {
             if (fader) fader.value = val;
             
             const valEl = document.getElementById('eq-val-' + ctrl.cc);
-            if (valEl) valElTrn.innerText = formatVal(ctrl.label, val);
+            if (valEl) valEl.innerText = formatVal(ctrl.label, val);
         }
     });
 }
@@ -1079,27 +1079,47 @@ function initToneSearch() {
 // ======================================================================
 //  GLOBAL TRANSPOSE & OCTAVE
 // ======================================================================
-function initGlobalTranspose() {
-    const valEl = document.getElementById('gTrnVal');
+function initGlobalTuning() {
+    const valElTrn = document.getElementById('gTrnVal');
+    const valElOct = document.getElementById('gOctVal');
 
     function updateGlobalTranspose(delta) {
         globalTranspose = Math.max(-12, Math.min(12, globalTranspose + delta));
-        valElTrn.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
-        // Send to ALL channels via RPN Coarse Tuning
+        if (valElTrn) valElTrn.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
         ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
     }
 
-    document.getElementById('gTrnPlus' ).addEventListener('click', () => updateGlobalTranspose(+1));
-    document.getElementById('gTrnMinus').addEventListener('click', () => updateGlobalTranspose(-1));
-    document.getElementById('gTrnReset').addEventListener('click', () => {
+    function updateGlobalOctave(delta) {
+        globalOctave = Math.max(-3, Math.min(3, globalOctave + delta));
+        if (valElOct) valElOct.innerText = globalOctave > 0 ? '+' + globalOctave : globalOctave;
+        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
+    }
+
+    const tp = document.getElementById('gTrnPlus');
+    if (tp) tp.addEventListener('click', () => updateGlobalTranspose(+1));
+    const tm = document.getElementById('gTrnMinus');
+    if (tm) tm.addEventListener('click', () => updateGlobalTranspose(-1));
+    const tr = document.getElementById('gTrnReset');
+    if (tr) tr.addEventListener('click', () => {
         globalTranspose = 0;
-        valElTrn.innerText = '0';
+        if (valElTrn) valElTrn.innerText = '0';
+        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
+    });
+
+    const op = document.getElementById('gOctPlus');
+    if (op) op.addEventListener('click', () => updateGlobalOctave(+1));
+    const om = document.getElementById('gOctMinus');
+    if (om) om.addEventListener('click', () => updateGlobalOctave(-1));
+    const or = document.getElementById('gOctReset');
+    if (or) or.addEventListener('click', () => {
+        globalOctave = -1;
+        if (valElOct) valElOct.innerText = '-1';
         ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
     });
 }
 
 // ======================================================================
-//  PER-PART QUICK CONTROLS (Octave, Sustain)
+//  PER-PART QUICK CONTROLS
 // ======================================================================
 function initQuickControls() {
     document.querySelectorAll('.step-btn, .btn-reset-small[data-action]').forEach(btn => {
@@ -1385,7 +1405,13 @@ function loadPreset(data) {
     if (data.globalTranspose !== undefined) {
         globalTranspose = data.globalTranspose;
         const valEl = document.getElementById('gTrnVal');
-        if (valEl) valElTrn.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+        if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+    }
+
+    if (data.globalOctave !== undefined) {
+        globalOctave = data.globalOctave;
+        const octEl = document.getElementById('gOctVal');
+        if (octEl) octEl.innerText = globalOctave > 0 ? '+' + globalOctave : globalOctave;
     }
 
     switchEQ(activePart);
@@ -1649,6 +1675,7 @@ function saveAppState() {
         eqState,
         tuning,
         globalTranspose,
+        globalOctave,
         activePart,
         pcSynthEnabled,
         mctrlEnabled,
@@ -1674,8 +1701,16 @@ function loadAppState() {
         if (saved.tuning) Object.assign(tuning, saved.tuning);
         if (saved.globalTranspose !== undefined) {
             globalTranspose = saved.globalTranspose;
-            document.getElementById('gTrnVal').innerText = (globalTranspose>0?'+':'')+globalTranspose;
+            const trnEl = document.getElementById('gTrnVal');
+            if (trnEl) trnEl.innerText = (globalTranspose>0?'+':'')+globalTranspose;
         }
+
+        if (saved.globalOctave !== undefined) {
+            globalOctave = saved.globalOctave;
+            const octEl = document.getElementById('gOctVal');
+            if (octEl) octEl.innerText = (globalOctave>0?'+':'')+globalOctave;
+        }
+
         if (saved.activePart) {
             activePart = saved.activePart;
             // Update UI buttons
