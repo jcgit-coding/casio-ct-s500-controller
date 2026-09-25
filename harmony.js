@@ -200,6 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
+                flex: 0 0 auto;
+                min-width: 150px;
+                scroll-snap-align: start;
             `;
 
             const header = document.createElement('div');
