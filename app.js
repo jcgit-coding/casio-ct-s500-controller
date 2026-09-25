@@ -1251,7 +1251,7 @@ async function autoSyncInit() {
     if (ok) {
         updateSyncStatus(ghToken() ? '✓ GitHub connected' : '✓ Presets loaded (read only)');
     } else {
-        updateSyncStatus('Sin conexión — usando presets locales');
+        updateSyncStatus('Offline — using local presets');
     }
     // Show token status in UI
     const tokenEl = document.getElementById('syncTokenDisplay');
@@ -1262,7 +1262,7 @@ function initPresets() {
     document.getElementById("btnSavePreset").addEventListener("click", () => {
         const input = document.getElementById("presetName");
         const name  = input.value.trim();
-        if (!name) { alert("Escribe un nombre para el preset."); return; }
+        if (!name) { alert("Enter a name for the preset."); return; }
         const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
         if (presets[name] && !confirm(`"${name}" already exists. Overwrite?`)) return;
         captureAndSavePreset(name);
@@ -1329,7 +1329,7 @@ function initPresets() {
     document.getElementById('btnSyncPush')?.addEventListener('click', () => syncPush());
     document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
         const ok = await syncPull();
-        updateSyncStatus(ok ? '✓ Presets actualizados' : 'Offline');
+        updateSyncStatus(ok ? '✓ Presets updated' : 'Offline');
     });
 
     renderPresets();
@@ -1436,7 +1436,7 @@ function renderPresets() {
         actions.className = 'preset-actions';
 
         const loadBtn = document.createElement('button');
-        loadBtn.innerText = 'Cargar'; loadBtn.title = 'Cargar preset';
+        loadBtn.innerText = 'Load'; loadBtn.title = 'Load preset';
         loadBtn.onclick = () => loadPreset(data);
 
         const overBtn = document.createElement('button');

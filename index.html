@@ -259,7 +259,7 @@
 
             <!-- Transport + Tempo + Volume -->
             <div class="panel">
-                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">tune</span> Control de Ritmo</div>
+                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">tune</span> Rhythm Control</div>
 
                 <!-- Tempo row -->
                 <div class="arranger-row" style="margin-bottom:16px;">
@@ -270,7 +270,7 @@
                         <button class="step-btn" id="bpmPlus" style="width:44px;height:44px;font-size:22px;">+</button>
                     </div>
                     <span style="font-size:13px;color:var(--muted);">BPM</span>
-                    <label class="clock-toggle" title="Enviar MIDI Clock al teclado">
+                    <label class="clock-toggle" title="Send MIDI Clock to keyboard">
                         <input type="checkbox" id="chkMidiClock"> CLOCK
                     </label>
                 </div>
@@ -328,19 +328,19 @@
                 <div class="panel-title">MIDI Connection</div>
                 <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                     <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
-                        Si no detecta el teclado en Android:<br>
-                        1. Usa <b>cable USB-OTG</b> (el adaptador Bluetooth WU-BT10 no es visible para Chrome Android).<br>
-                        2. Abre la page por <b>HTTPS</b>.<br>
-                        3. Si negaste el permiso antes: toca el candado junto a la direction &rarr; Permisos &rarr; <b>MIDI &rarr; Permitir</b>.
+                        If keyboard is not detected on Android:<br>
+                        1. Use a <b>USB-OTG cable</b> (the WU-BT10 Bluetooth adapter is not visible to Chrome Android).<br>
+                        2. Open the page via <b>HTTPS</b>.<br>
+                        3. If you denied permission before: tap the lock icon next to the URL &rarr; Permissions &rarr; <b>MIDI &rarr; Allow</b>.
                     </p>
                     <div id="midiPermissionWarn" style="display:none; margin-top:12px; padding:14px 16px; background:rgba(255,51,102,0.12); border:1px solid rgba(255,51,102,0.45); border-radius:10px; font-size:14px; line-height:1.6;">
-                        <b style="color:#ff3366;">Permiso MIDI bloqueado</b><br>
-                        Chrome recorded tu negativa anterior y ya no muestra el aviso. Para restablecerlo:<br>
-                        1. Toca el <b>lock</b> junto a la direction del sitio.<br>
-                        2. Entra en <b>Permisos</b> y activa <b>Dispositivos MIDI &rarr; Permitir</b>.<br>
-                        3. Si no aparece, usa <b>Restablecer permisos</b>, recarga y acepta el aviso.
+                        <b style="color:#ff3366;">MIDI Permission Blocked</b><br>
+                        Chrome saved your previous denial. To reset it:<br>
+                        1. Tap the <b>lock</b> icon next to the site URL.<br>
+                        2. Go to <b>Permissions</b> and enable <b>MIDI Devices &rarr; Allow</b>.<br>
+                        3. If it does not appear, use <b>Reset permissions</b>, reload and accept the prompt.
                     </div>
-                    <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconectar MIDI</button>
+                    <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconnect MIDI</button>
                 </div>
             </div>
 
@@ -561,8 +561,8 @@
                             <option value="B">B</option>
                         </select>
                         <select id="harm-mode" class="search-input" style="width:100px;">
-                            <option value="mayor">Major</option>
-                            <option value="menor">Minor</option>
+                            <option value="major">Major</option>
+                            <option value="minor">Minor</option>
                         </select>
                     </div>
                 </div>

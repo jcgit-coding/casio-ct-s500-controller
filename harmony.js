@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Diatonic chord data per mode
     const MODES = {
-        mayor: {
+        major: {
             intervals:   [0, 2, 4, 5, 7, 9, 11],
             qualities:   ['Maj', 'm', 'm', 'Maj', 'Dom', 'm', 'dim'],
             degrees:     ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'],
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ['m7b5']                                       // vii°
             ]
         },
-        menor: {
+        minor: {
             intervals:   [0, 2, 3, 5, 7, 8, 10],
             qualities:   ['m', 'dim', 'Maj', 'm', 'm', 'Maj', 'Maj'],
             degrees:     ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII'],
