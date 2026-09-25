@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.cssText = `
                 background: var(--panel-bg);
                 border-radius: 8px;
-                padding: 15px;
+                padding: 10px;
                 border: 1px solid var(--border);
                 display: flex;
                 flex-direction: column;
