@@ -1773,9 +1773,10 @@ input[type="range"].rc-fader::-moz-range-thumb {
     background: var(--color-l);
     border-color: var(--color-l);
 }
-\n.harmony-grid {
+.harmony-grid {
     display: flex !important;
     flex-direction: row !important;
+    flex-wrap: nowrap !important;
     overflow-x: auto !important;
     gap: 10px;
     padding-bottom: 15px;
@@ -1796,4 +1797,3 @@ input[type="range"].rc-fader::-moz-range-thumb {
     background: var(--border);
     border-radius: 4px;
 }
-\n
