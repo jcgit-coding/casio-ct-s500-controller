@@ -1773,4 +1773,27 @@ input[type="range"].rc-fader::-moz-range-thumb {
     background: var(--color-l);
     border-color: var(--color-l);
 }
-\n.harmony-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }\n@media (max-width: 1100px) { .harmony-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); } }\n
+\n.harmony-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 10px;
+    padding-bottom: 15px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.harmony-grid > div {
+    flex: 0 0 auto !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    scroll-snap-align: start;
+}
+.harmony-grid::-webkit-scrollbar {
+    height: 8px;
+}
+.harmony-grid::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+\n
