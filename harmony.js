@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const blackKeys = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22];
         const noteToWhiteIdx = { 1:1, 3:2, 6:4, 8:5, 10:6, 13:8, 15:9, 18:11, 20:12, 22:13 };
 
-        let svg = `<svg width="100%" viewBox="0 0 336 100" style="max-width:380px; display:block; margin: 0 auto;">`;
+        let svg = `<svg width="100%" viewBox="0 0 336 100" style="max-width:550px; display:block; margin: 0 auto;">`;
         
         whiteKeys.forEach((note, i) => {
             const isActive = activeNotes.has(note);
