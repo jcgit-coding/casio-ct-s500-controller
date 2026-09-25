@@ -37,6 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return intervals.map(iv => getNoteOffset(rootNote, iv)).join('-');
     }
 
+
+    function formatChordName(root, qual, ext) {
+        if (!ext) {
+            if (qual === 'm') return root + 'm';
+            if (qual === 'dim') return root + 'dim';
+            return root; 
+        }
+        if (ext === 'sus2' || ext === 'sus4') return root + ' ' + ext; 
+        if (ext === '#11') return root + 'Maj7#11'; 
+        if (ext.startsWith('m') || ext.startsWith('Maj') || ext === '7' || ext === '9' || ext === '13') return root + ext; 
+        return root + ' ' + ext;
+    }
+
     const MODES = {
         major: {
             intervals:   [0, 2, 4, 5, 7, 9, 11],
@@ -245,7 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const intervals = EXT_INTERVALS[ext] || [];
                     const notesStr = getChordNotes(rootNote, ext);
-                    renderMasterKeyboard(rootNote, intervals, chordName + ' ' + ext, notesStr);
+                    const formattedTitle = formatChordName(rootNote, qual, ext);
+                    renderMasterKeyboard(rootNote, intervals, formattedTitle, notesStr);
                 });
 
                 tagsContainer.appendChild(tag);
