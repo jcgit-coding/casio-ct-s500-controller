@@ -1772,7 +1772,7 @@ const nameEl = document.getElementById('selectedTone-' + part);
                 }
             });
         }
-        if (saved.mctrlEnabled !== undefined) mctrlEnabled = saved.mctrlEnabled;
+
         if (saved.pcSynthEnabled !== undefined) {
             pcSynthEnabled = saved.pcSynthEnabled;
             const pcToggle = document.getElementById('pcSynthToggle');
