@@ -175,7 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderChords() {
         const key = harmKeySelect.value;
-        const modeData = MODES[harmModeSelect.value];
+        const modeId = harmModeSelect.value;
+        const modeData = MODES[modeId];
+
+        const infoDiv = document.getElementById('harm-mode-info');
+        if (infoDiv && modeData.desc) {
+            infoDiv.innerHTML = modeData.desc;
+            infoDiv.style.display = 'block';
+        } else if (infoDiv) {
+            infoDiv.style.display = 'none';
+        }
 
         chordsContainer.innerHTML = '';
         renderMasterKeyboard(null, [], 'Select a chord or extension to view fingering', '');
