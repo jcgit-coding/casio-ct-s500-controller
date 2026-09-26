@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=149">
+    <link rel="stylesheet" href="style.css?v=150">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v149</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v150</span>
             </div>
         </div>
 
@@ -397,163 +397,28 @@
         
         <!-- VIEW: MIDI CTRL -->
         <div class="app-view" id="view-synth">
-            
-            <div class="synth-rack">
-                <!-- RACK HEADER -->
-                <div class="rack-unit rack-header">
-                    <div style="display:flex;align-items:center;gap:12px;">
-                        <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">piano</span>
-                        <div>
-                            <h2 style="margin:0; font-size:16px; letter-spacing:1px;">SYNTH MODULE</h2>
-                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Loading...</span>
-                        </div>
-                    </div>
-
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <label class="rack-btn-toggle">
-                            <input type="checkbox" id="mctrlToggle" style="display:none;" autocomplete="off">
-                            <span class="rack-btn-label" style="min-width:110px;">MIDI CTRL: OFF</span>
-                        </label>
-                        <label class="rack-btn-toggle">
-                            <input type="checkbox" id="pcSynthToggle" style="display:none;" autocomplete="off">
-                            <span class="rack-btn-label" style="min-width:110px;">PC SYNTH: OFF</span>
-                        </label>
-                        <label for="sf2-file" class="rack-btn">
-                            <span class="material-symbols-outlined" style="font-size:16px;">upload</span> SF2
-                        </label>
-                        <input type="file" id="sf2-file" accept=".sf2" style="display:none;">
-                    </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h2>MIDI Controller & Synth</h2>
                 </div>
 
-                <!-- RACK CHANNELS -->
-                <div id="mctrl-rack-content"><div class="rack-channels">
-                    
-                    <!-- U1 -->
-                    <div class="rack-channel" id="mctrl-card-U1" style="border-left-color: var(--color-u1);">
-                        <div class="rc-label" style="color: var(--color-u1);">UPPER 1</div>
-                        <div class="rc-lcd">
-                            <select id="sf2-prog-U1" class="lcd-select"></select>
-                        </div>
-                        <div class="rc-controls">
-                            <div class="rc-fader-group">
-                                <span>VOL</span>
-                                <input type="range" id="mctrl-vol-U1" class="rc-fader" min="0" max="127" value="100">
-                                <span id="mctrl-vol-U1-val" class="rc-val">100</span>
-                            </div>
-                            <div class="rc-fader-group">
-                                <span>RVB</span>
-                                <input type="range" id="mctrl-rvb-U1" class="rc-fader" min="0" max="127" value="20">
-                                <span id="mctrl-rvb-U1-val" class="rc-val">20</span>
-                            </div>
-                            <div class="rc-step-group">
-                                <span>OCT</span>
-                                <button class="step-btn" data-part="U1" data-mctrl-oct="-1">-</button>
-                                <span class="step-val" id="mctrl-oct-U1">0</span>
-                                <button class="step-btn" data-part="U1" data-mctrl-oct="1">+</button>
-                                <button class="btn-reset-small" data-part="U1" data-mctrl-oct="reset">Rst</button>
-                            </div>
-                        </div>
+                <!-- PROFESSIONAL DAW ROUTING PANEL -->
+                <div class="pro-routing-panel" style="background: linear-gradient(135deg, rgba(30,34,42,0.9), rgba(20,22,28,0.9)); border: 1px solid var(--accent); border-radius: 8px; padding: 18px; margin-bottom: 20px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <div style="display:flex; align-items:center; gap: 10px; margin-bottom: 10px;">
+                        <span class="material-symbols-outlined" style="color:var(--accent); font-size:24px;">podcasts</span>
+                        <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">Pro Video-Call Routing (Zero Latency & Realistic VSTs)</h3>
                     </div>
-
-                    <!-- U2 -->
-                    <div class="rack-channel" id="mctrl-card-U2" style="border-left-color: var(--color-u2);">
-                        <div class="rc-label" style="color: var(--color-u2);">UPPER 2</div>
-                        <div class="rc-lcd">
-                            <select id="sf2-prog-U2" class="lcd-select"></select>
-                        </div>
-                        <div class="rc-controls">
-                            <div class="rc-fader-group">
-                                <span>VOL</span>
-                                <input type="range" id="mctrl-vol-U2" class="rc-fader" min="0" max="127" value="80">
-                                <span id="mctrl-vol-U2-val" class="rc-val">80</span>
-                            </div>
-                            <div class="rc-fader-group">
-                                <span>RVB</span>
-                                <input type="range" id="mctrl-rvb-U2" class="rc-fader" min="0" max="127" value="20">
-                                <span id="mctrl-rvb-U2-val" class="rc-val">20</span>
-                            </div>
-                            <div class="rc-step-group">
-                                <span>OCT</span>
-                                <button class="step-btn" data-part="U2" data-mctrl-oct="-1">-</button>
-                                <span class="step-val" id="mctrl-oct-U2">0</span>
-                                <button class="step-btn" data-part="U2" data-mctrl-oct="1">+</button>
-                                <button class="btn-reset-small" data-part="U2" data-mctrl-oct="reset">Rst</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- L -->
-                    <div class="rack-channel" id="mctrl-card-L" style="border-left-color: var(--color-l);">
-                        <div class="rc-label" style="color: var(--color-l);">LOWER</div>
-                        <div class="rc-lcd">
-                            <select id="sf2-prog-L" class="lcd-select"></select>
-                        </div>
-                        <div class="rc-controls">
-                            <div class="rc-fader-group">
-                                <span>VOL</span>
-                                <input type="range" id="mctrl-vol-L" class="rc-fader" min="0" max="127" value="100">
-                                <span id="mctrl-vol-L-val" class="rc-val">100</span>
-                            </div>
-                            <div class="rc-fader-group">
-                                <span>RVB</span>
-                                <input type="range" id="mctrl-rvb-L" class="rc-fader" min="0" max="127" value="20">
-                                <span id="mctrl-rvb-L-val" class="rc-val">20</span>
-                            </div>
-                            <div class="rc-step-group">
-                                <span>OCT</span>
-                                <button class="step-btn" data-part="L" data-mctrl-oct="-1">-</button>
-                                <span class="step-val" id="mctrl-oct-L">0</span>
-                                <button class="step-btn" data-part="L" data-mctrl-oct="1">+</button>
-                                <button class="btn-reset-small" data-part="L" data-mctrl-oct="reset">Rst</button>
-                            </div>
-                        </div>
-                    </div>
-
+                    <p style="font-size: 13px; line-height: 1.5; color: #aaa; margin-bottom: 12px; font-weight:400;">
+                        To play in Zoom/OBS with <b>ultra-realistic sounds</b> (like Keyscape, Kontakt, or Spitfire) and <b>no lag</b>, avoid using the built-in browser PC Synth. Instead, use a professional DAW workflow:
+                    </p>
+                    <ol style="font-size: 13px; line-height: 1.6; color: #ccc; margin: 0 0 0 20px; padding: 0; font-weight:500;">
+                        <li>Install a Virtual MIDI Cable (<b>LoopMIDI</b> on Windows or <b>IAC Driver</b> on Mac).</li>
+                        <li>In this app, select the Virtual MIDI port in the MIDI Connection output.</li>
+                        <li>Open your DAW (Ableton, Logic) and load your high-end VSTs, receiving from the Virtual MIDI port.</li>
+                        <li>Route your DAW's ASIO audio to your video call using a virtual audio patch (e.g. <b>Voicemeeter</b> or <b>BlackHole</b>).</li>
+                    </ol>
                 </div>
 
-                <!-- KEYBOARD CONTROLLER -->
-                <div class="vk-module">
-                    <div class="vk-toolbar">
-                        <div class="vk-tool-group">
-                            <span class="vk-label">PART</span>
-                            <div class="vk-radio-group">
-                                <button class="vk-radio sus-btn sus-on" id="vk-part-U1" data-vk-part="U1">U1</button>
-                                <button class="vk-radio sus-btn" id="vk-part-U2" data-vk-part="U2">U2</button>
-                                <button class="vk-radio sus-btn" id="vk-part-L" data-vk-part="L">L</button>
-                            </div>
-                        </div>
-                        <div class="vk-tool-group">
-                            <span class="vk-label">OCTAVE</span>
-                            <div class="step-btns">
-                                <button class="step-btn" id="vk-oct-minus">-</button>
-                                <span class="step-val" id="vk-oct-val">4</span>
-                                <button class="step-btn" id="vk-oct-plus">+</button>
-                                <button class="btn-reset-small" id="vk-oct-reset">Reset</button>
-                            </div>
-                        </div>
-                        <div class="vk-tool-group">
-                            <span class="vk-label">VELOCITY</span>
-                            <div class="rc-lcd" style="min-width: 80px;">
-                                <select id="vk-velocity" class="lcd-select">
-                                    <option value="40">PP (40)</option>
-                                    <option value="64">MP (64)</option>
-                                    <option value="90" selected>MF (90)</option>
-                                    <option value="110">F (110)</option>
-                                    <option value="127">FF (127)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="virtualKeyboard" class="virtual-keyboard"></div>
-                </div>
-                </div><!-- /mctrl-rack-content -->
-
-            </div>
-        </div>
-
-        <!-- =========== VIEW: HARMONY =========== -->
-        <div class="app-view" id="view-harmony">
-            <div class="panel">
+                <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                     <h2>Harmonic Circle</h2>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -604,8 +469,8 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v=149"></script>
+    <script src="app.js?v=150"></script>
     <script src="fix_swap.js?v=136"></script>
-    <script src="harmony.js?v=149"></script>
+    <script src="harmony.js?v=150"></script>
 </body>
 </html>
