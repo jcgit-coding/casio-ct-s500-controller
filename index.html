@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=148">
+    <link rel="stylesheet" href="style.css?v=149">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v148</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v149</span>
             </div>
         </div>
 
@@ -584,15 +584,17 @@
                     </div>
                 </div>
 
-                <div id="harm-mode-info" style="margin-bottom:20px; padding:15px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border); border-left:4px solid var(--accent); display:none; font-size:13px; line-height:1.5;"></div>
-
-                <div id="harm-chords-container" class="harmony-grid">
+                <div id="harm-chords-container" class="harmony-grid" style="margin-bottom:20px;">
                     <!-- Chords will be injected here by JS -->
                 </div>
 
-                <div id="harm-master-keyboard" style="margin-top:20px; padding:20px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column; align-items:center;">
-                    <div id="harm-keyboard-title" style="font-size:18px; font-weight:bold; margin-bottom:15px; color:var(--text-muted);">Select a chord or extension to view fingering</div>
-                    <div id="harm-keyboard-svg" style="width:100%; display:flex; justify-content:center;"></div>
+                <div id="harm-bottom-section" style="display:flex; gap:20px; flex-wrap:wrap; align-items: stretch;">
+                    <div id="harm-master-keyboard" style="flex:1.5; min-width:350px; padding:20px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div id="harm-keyboard-title" style="font-size:18px; font-weight:bold; margin-bottom:15px; color:var(--text-muted); text-align:center;">Select a chord or extension to view fingering</div>
+                        <div id="harm-keyboard-svg" style="width:100%; display:flex; justify-content:center;"></div>
+                    </div>
+                    
+                    <div id="harm-mode-info" style="flex:1; min-width:300px; padding:20px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border); border-left:4px solid var(--accent); display:none; font-size:14px; line-height:1.6; color:var(--text);"></div>
                 </div>
             </div>
         </div>
@@ -602,8 +604,8 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v=148"></script>
+    <script src="app.js?v=149"></script>
     <script src="fix_swap.js?v=136"></script>
-    <script src="harmony.js?v=148"></script>
+    <script src="harmony.js?v=149"></script>
 </body>
 </html>
