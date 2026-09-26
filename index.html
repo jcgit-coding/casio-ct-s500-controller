@@ -6,7 +6,31 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v=153">
+    <link rel="stylesheet" href="style.css?v154">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mctrlToggle = document.getElementById('mctrlToggle');
+            const synthToggle = document.getElementById('pcSynthToggle');
+            const mctrlLabel = document.getElementById('mctrlLabel');
+            const synthLabel = document.getElementById('synthLabel');
+
+            if (mctrlToggle && mctrlLabel) {
+                mctrlToggle.addEventListener('change', e => {
+                    mctrlLabel.innerText = e.target.checked ? 'EXT MIDI: ON' : 'EXT MIDI: OFF';
+                });
+                // Initialize
+                mctrlLabel.innerText = mctrlToggle.checked ? 'EXT MIDI: ON' : 'EXT MIDI: OFF';
+            }
+            if (synthToggle && synthLabel) {
+                synthToggle.addEventListener('change', e => {
+                    synthLabel.innerText = e.target.checked ? 'WEB AUDIO: ON' : 'WEB AUDIO: OFF';
+                });
+                // Initialize
+                synthLabel.innerText = synthToggle.checked ? 'WEB AUDIO: ON' : 'WEB AUDIO: OFF';
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -42,7 +66,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v153</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v154</span>
             </div>
         </div>
 
@@ -430,11 +454,11 @@
                     <div style="display:flex; align-items:center; gap:12px;">
                         <label class="rack-btn-toggle">
                             <input type="checkbox" id="mctrlToggle" style="display:none;" autocomplete="off">
-                            <span class="rack-btn-label" style="min-width:110px;">MIDI CTRL: OFF</span>
+                            <span class="rack-btn-label" id="mctrlLabel" style="min-width:110px;">EXT MIDI: OFF</span>
                         </label>
                         <label class="rack-btn-toggle">
                             <input type="checkbox" id="pcSynthToggle" style="display:none;" autocomplete="off">
-                            <span class="rack-btn-label" style="min-width:110px;">PC SYNTH: OFF</span>
+                            <span class="rack-btn-label" id="synthLabel" style="min-width:110px;">WEB AUDIO: OFF</span>
                         </label>
                         <label for="sf2-file" class="rack-btn">
                             <span class="material-symbols-outlined" style="font-size:16px;">upload</span> SF2
@@ -622,8 +646,8 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v=153"></script>
+    <script src="app.js?v154"></script>
     <script src="fix_swap.js?v=136"></script>
-    <script src="harmony.js?v=153"></script>
+    <script src="harmony.js?v154"></script>
 </body>
 </html>
