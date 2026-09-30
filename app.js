@@ -124,6 +124,36 @@ const CHANNEL = { U1: 0, U2: 1, L: 2 };
 // In-memory EQ values per part
 const eqState = { U1: {}, U2: {}, L: {} };
 
+// Per-tone+environment EQ overrides: toneEQ[toneId][environment] = { cc: val, ... }
+// Saved to localStorage 'casioToneEQ'. When set, overrides the category profile.
+let toneEQ = {};
+
+function saveToneEQ() {
+    try { localStorage.setItem('casioToneEQ', JSON.stringify(toneEQ)); } catch(e) {}
+}
+function loadToneEQ() {
+    try { toneEQ = JSON.parse(localStorage.getItem('casioToneEQ') || '{}'); } catch(e) { toneEQ = {}; }
+}
+
+// Save current eqState for the active part's tone+environment
+function saveToneEQForPart(part) {
+    const tone = currentTone[part];
+    if (!tone) return;
+    const id = tone.id;
+    if (!toneEQ[id]) toneEQ[id] = {};
+    toneEQ[id][currentEnv] = Object.assign({}, eqState[part]);
+    saveToneEQ();
+}
+
+// Delete saved profile for a tone+environment (reset to category default)
+function resetToneEQForPart(part) {
+    const tone = currentTone[part];
+    if (!tone) return;
+    const id = tone.id;
+    if (toneEQ[id]) { delete toneEQ[id][currentEnv]; if (!Object.keys(toneEQ[id]).length) delete toneEQ[id]; }
+    saveToneEQ();
+}
+
 // Which part the EQ panel is editing
 let activePart = 'U1';
 
@@ -141,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Load saved settings if any, then start auto-save
     // First run (no saved state): apply the category profile of the default tones
+    loadToneEQ();
     if (!loadAppState()) ['U1','U2','L'].forEach(part => applySmartProfile(part));
     setInterval(saveAppState, 1000);
 
@@ -154,6 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
 
     document.getElementById("connectBtn").addEventListener("click", () => {
+        midiInitAttempted = true; // avoid a second requestMIDIAccess from the document click
         if (midiAccess) sReedndConnect(); else initMIDI();
     });
 
@@ -177,7 +209,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // EQ Reset Button
     document.getElementById('btnResetEQ')?.addEventListener('click', () => resetEQ());
     document.getElementById('btnScrollEQ')?.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const card = document.getElementById('card-U1');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // View Navigation Logic
@@ -209,12 +243,12 @@ document.addEventListener("DOMContentLoaded", () => {
         envSel.addEventListener('change', (e) => {
             currentEnv = e.target.value;
             localStorage.setItem('casioEnv', currentEnv);
-            // Reapply profiles to all parts that have a category
+            // Reapply profiles to all parts (applySmartProfile already sends the CCs —
+            // no pushAllToKeyboard here: it would re-send Program Changes and force the tones)
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
             switchEQ(activePart);
-            pushAllToKeyboard(); // Update hardware
         });
     }
 
@@ -273,19 +307,22 @@ function sReedndConnect() {
     console.log('[MIDI] outputs:', allOuts.map(o => o.name + ' state=' + o.state + ' conn=' + o.connection));
     console.log('[MIDI] inputs:', allIns.map(i => i.name + ' state=' + i.state + ' conn=' + i.connection));
 
-    // Prefer CASIO / CT-S, fallback to first available port (skip THROUGH ports)
-    for (let o of allOuts) {
-        if (o.state !== 'connected') continue;
-        const n = o.name.toUpperCase();
-        if (n.includes("THROUGH")) continue;
-        if (!midiOutput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH") || n.includes("USB") || n.includes("MIDI")) midiOutput = o;
-    }
-    for (let i of allIns) {
-        if (i.state !== 'connected') continue;
-        const n = i.name.toUpperCase();
-        if (n.includes("THROUGH")) continue;
-        if (!midiInput || n.includes("CASIO") || n.includes("CT-S") || n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH") || n.includes("USB") || n.includes("MIDI")) midiInput = i;
-    }
+    // Pick the best port by priority: CASIO/CT-S > Bluetooth adapter > USB > generic MIDI > any.
+    // Virtual ports (loopMIDI, rtpMIDI...) contain "MIDI" too, so they must never outrank the Casio.
+    const portScore = p => {
+        const n = p.name.toUpperCase();
+        if (n.includes("CASIO") || n.includes("CT-S")) return 5;
+        if (n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) return 4;
+        if (n.includes("LOOPMIDI") || n.includes("RTPMIDI") || n.includes("VIRTUAL")) return 1;
+        if (n.includes("USB")) return 3;
+        if (n.includes("MIDI")) return 2;
+        return 1;
+    };
+    const pickPort = ports => ports
+        .filter(p => p.state === 'connected' && !p.name.toUpperCase().includes("THROUGH"))
+        .reduce((best, p) => (!best || portScore(p) > portScore(best)) ? p : best, null);
+    midiOutput = pickPort(allOuts);
+    midiInput  = pickPort(allIns);
     console.log('[MIDI] selected output:', midiOutput?.name, '| selected input:', midiInput?.name);
 
     if (midiOutput) {
@@ -334,7 +371,8 @@ function onMIDIMessage(e) {
             if (d2 > 0) {
                 const partKey = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
                 const octOffset = (partKey && tuning[partKey]?.oct) ? tuning[partKey].oct * 12 : 0;
-                const shift = globalTranspose + octOffset;
+                // Same shift the Casio gets via RPN Coarse Tuning (global octave + transpose)
+                const shift = globalTranspose + globalOctave * 12 + octOffset;
                 const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
 
                 pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
@@ -356,24 +394,10 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
 
-        // CC7 = master volume: applies to all parts regardless of channel
-        if (d1 === 7) {
-            ['U1','U2','L'].forEach(p => { eqState[p][7] = d2; });
-            
-            // Update UI for the currently active part's fader (consistent with other CCs)
-            const ctrl = EQ_CONTROLS.find(c => c && c.cc === 7);
-            if (ctrl) {
-                const fader = document.querySelector('.eq-fader[data-cc="7"]');
-                if (fader) fader.value = d2;
-                const valEl = document.getElementById('eq-val-7');
-                if (valEl) valEl.innerText = formatVal(ctrl.label, d2);
-            }
-            
-            if (window.pcSynth?.applyCC) Object.values(CHANNEL).forEach(c => window.pcSynth.applyCC(7, d2, c));
-            return;
-        }
-
         if (!part) return;
+
+        // CC7 is a per-channel (per-part) volume — mirror it to that part's PC synth channel
+        if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
 
         // Catch Bank Select MSB (CC0)
         if (d1 === 0) {
@@ -420,8 +444,9 @@ function onMIDIMessage(e) {
         const pc = d1;
         const bank = pendingBank[part] || 0;
 
-        // Update UI only (don't dispatch change to avoid loop)
+        // Update UI and apply EQ profile for the new tone's category
         selectToneInList(part, d => d.bank === bank && d.program === pc);
+        applySmartProfile(part);
     }
 }
 
@@ -662,27 +687,37 @@ const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
 function applySmartProfile(part, category) {
     if (category) activeCategories[part] = category;
     const cat = activeCategories[part];
-    
+
     // 1. Reset everything to generic default first
     EQ_CONTROLS.forEach(ctrl => {
         eqState[part][ctrl.cc] = ctrl.def;
     });
 
-    // 2. Apply Category Sound Profile
-    if (ENVIRONMENTS[currentEnv] && ENVIRONMENTS[currentEnv][cat]) {
-        for (const [cc, val] of Object.entries(ENVIRONMENTS[currentEnv][cat])) {
+    // 2a. Per-tone+environment override (user-saved) — takes priority over category profile
+    const toneId = currentTone[part]?.id;
+    const savedProfile = toneId != null && toneEQ[toneId]?.[currentEnv];
+    if (savedProfile) {
+        for (const [cc, val] of Object.entries(savedProfile)) {
             eqState[part][cc] = val;
         }
+    } else {
+        // 2b. Category Sound Profile (fallback)
+        if (ENVIRONMENTS[currentEnv] && ENVIRONMENTS[currentEnv][cat]) {
+            for (const [cc, val] of Object.entries(ENVIRONMENTS[currentEnv][cat])) {
+                eqState[part][cc] = val;
+            }
+        }
+        // 3. Apply Part Mix Rules only when using category defaults (user profile may intentionally override volume)
+        if (part === 'U1') eqState[part][7] = 100;
+        if (part === 'U2') eqState[part][7] = 75;
+        if (part === 'L')  eqState[part][7] = 100;
     }
+
     // Ensure CC72 (Release) is never in eqState — send a neutral value to keyboard instead
     delete eqState[part][72]; delete eqState[part]['72'];
-
-    // 3. Apply Part Mix Rules
-    if (part === 'U1') eqState[part][7] = 100;
-    if (part === 'U2') eqState[part][7] = 75;
-    if (part === 'L')  eqState[part][7] = 100;
     
-    // 4. Send to keyboard and update UI
+    // 4. Send to keyboard and update UI (re-send sustain release: a tone change must not drop it)
+    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
     EQ_CONTROLS.forEach(ctrl => {
         const val = eqState[part][ctrl.cc];
         sendCC(part, ctrl.cc, val);
@@ -768,6 +803,7 @@ function buildEQ() {
                     btn.innerText = newVal > 63 ? 'ON' : 'OFF';
                     btn.classList.toggle('sus-on', newVal > 63);
                     sendCC(activePart, ctrl.cc, newVal);
+                    saveToneEQForPart(activePart);
                     if (typeof saveAppState === 'function') saveAppState();
                 });
                 
@@ -809,6 +845,7 @@ function buildEQ() {
                     }
                 });
                 fader.addEventListener('change', () => {
+                    saveToneEQForPart(activePart);
                     if (typeof saveAppState === 'function') saveAppState();
                 });
     
@@ -864,6 +901,7 @@ function switchEQ(part) {
     });
 }
 function resetEQ() {
+    resetToneEQForPart(activePart);
     applySmartProfile(activePart);
 }
 
@@ -885,6 +923,10 @@ function formatVal(label, val) {
 // Per-part tone search refs — used by loadAppState / loadPreset / onMIDIMessage
 // to reset the filter before searching the full tone list.
 window.toneSearch = {};
+
+// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push —
+// the list's selectedIndex is only a view and is -1 whenever the filter hides the tone.
+const currentTone = { U1: null, U2: null, L: null };
 
 function initToneSearch() {
     if (typeof db === 'undefined') return;
@@ -936,7 +978,9 @@ function initToneSearch() {
                 const cat  = t.category.toLowerCase();
                 return q.split('|').some(k => name.includes(k.trim()) || cat.includes(k.trim()));
             }) : allTones);
-            if (listEl.options.length > 0) listEl.selectedIndex = -1;
+            // Keep the applied tone highlighted if it's in the filtered list (filtering must not "lose" it)
+            const cur = currentTone[part];
+            listEl.selectedIndex = cur ? [...listEl.options].findIndex(o => JSON.parse(o.value).id === cur.id) : -1;
             // Sync active chip
             const chips = document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`);
             chips.forEach(c => c.classList.toggle('active', c.dataset.q.toLowerCase() === searchEl.value.trim().toLowerCase()));
@@ -960,8 +1004,9 @@ function initToneSearch() {
             const opt = listEl.options[listEl.selectedIndex];
             if (!opt) return;
             const data = JSON.parse(opt.value);
+            currentTone[part] = { ...data, text: opt.text };
             changeTone(part, data.bank, data.lsb, data.program);
-            
+
             // Extract category and apply smart acoustic profile
             let catName = 'PIANO';
             if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
@@ -1050,6 +1095,7 @@ function selectToneInList(part, match, keepFilter = false) {
     if (idx < 0) return null;
     listEl.selectedIndex = idx;
     const opt = listEl.options[idx];
+    currentTone[part] = { ...JSON.parse(opt.value), text: opt.text };
     const nameEl = document.getElementById('selectedTone-' + part);
     if (nameEl) nameEl.innerText = opt.text;
     if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
@@ -1314,9 +1360,9 @@ function captureAndSavePreset(name) {
         globalOctave:     globalOctave,
         activeCategories: JSON.parse(JSON.stringify(activeCategories)),
         tones: {
-            U1: (() => { const l = document.getElementById('list-U1'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
-            U2: (() => { const l = document.getElementById('list-U2'); return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
-            L:  (() => { const l = document.getElementById('list-L');  return l && l.selectedIndex >= 0 ? l.options[l.selectedIndex].text : ''; })(),
+            U1: currentTone.U1?.text || '',
+            U2: currentTone.U2?.text || '',
+            L:  currentTone.L?.text  || '',
         }
     };
     const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
@@ -1330,6 +1376,8 @@ function loadPreset(data) {
     if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
     ['U1','U2','L'].forEach(part => {
         if (data.eqState?.[part]) {
+            // Start from defaults so CCs missing in older presets don't keep the previous values
+            EQ_CONTROLS.forEach(ctrl => { eqState[part][ctrl.cc] = ctrl.def; });
             Object.assign(eqState[part], data.eqState[part]);
             delete eqState[part][72]; // CC72 not in EQ_CONTROLS, no sendsr al hardware
         }
@@ -1578,27 +1626,23 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     midiOutput.send([0xB0 | ch, 100, 0x7F]);
 }
 function pushAllToKeyboard(skipTones = false) {
-    ['U1','U2','L'].forEach(part => {
-        EQ_CONTROLS.forEach(ctrl => {
-            if (!ctrl) return;
-            sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
+    // Tones first, CCs after a delay: a burst of CCs before/around the Program Change
+    // overflows the Casio's MIDI buffer and makes it drop the tone change.
+    if (!skipTones) {
+        ['U1','U2','L'].forEach(part => {
+            const t = currentTone[part];
+            if (t) changeTone(part, t.bank, t.lsb, t.program);
         });
-        sendCoarseTuning(part);
-        sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
-        
-        const listEl = document.getElementById('list-' + part);
-        if (listEl && listEl.selectedIndex >= 0) {
-            const opt = listEl.options[listEl.selectedIndex];
-            if (opt && opt.value) {
-                
-try {
-    const data = JSON.parse(opt.value);
-    if (!skipTones) changeTone(part, data.bank, data.lsb, data.program);
-} catch(e) {}
-
-            }
-        }
-    });
+    }
+    setTimeout(() => {
+        ['U1','U2','L'].forEach(part => {
+            EQ_CONTROLS.forEach(ctrl => {
+                sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
+            });
+            sendCoarseTuning(part);
+            sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
+        });
+    }, skipTones ? 0 : 150);
 }
 
 
@@ -1614,11 +1658,7 @@ document.querySelector('.status-badge')?.addEventListener('click', () => {
     if (midiAccess) sReedndConnect(); else initMIDI();
 });
 function _getSavedToneId(part) {
-    const list = document.getElementById('list-' + part);
-    if (!list || list.selectedIndex < 0) return 0;
-    try {
-        return JSON.parse(list.options[list.selectedIndex].value).id;
-    } catch(e) { return 0; }
+    return currentTone[part]?.id ?? 0;
 }
 
 function saveAppState() {

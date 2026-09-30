@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v141
+# Casio CT-S500 Pro Controller — v162
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -80,7 +80,27 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 
 ---
 
-## 7. Historial de Versiones (reciente)
+## 7. Regla de Versioning
+
+**Cada vez que se modifica `app.js` o `style.css`, se debe actualizar el query string de cache busting en `index.html`:**
+
+```html
+<script src="app.js?v162"></script>   <!-- incrementar el número -->
+<link rel="stylesheet" href="style.css?v162">
+```
+
+Sin este paso, los navegadores (especialmente móviles) sirven la versión anterior en caché y los cambios no se ven.  
+El número debe coincidir con la versión del README.
+
+---
+
+## 8. Historial de Versiones (reciente)
+
+### v162
+- **UX Mixer:** Lista de tones reducida de `size=8` a `size=5`.
+- **Fix:** Botón "↑ Top" ahora hace scroll al tope de la tarjeta Instrument 1 (`card-U1`), no al tope absoluto de la página.
+- **feat:** EQ por tono+ambiente — al mover cualquier fader o switch, se guarda automáticamente el perfil para ese tono en ese ambiente (Studio/Live/Hall/Jazz). Cambiar de tono o ambiente carga el perfil guardado; si no existe, usa el perfil de categoría. Botón Reset borra el perfil guardado y vuelve al default de categoría.
+- **feat:** Al recibir un Program Change del Casio físico, se aplica automáticamente `applySmartProfile` para la nueva categoría del tono.
 
 ### v143
 - **Fix:** Botón "↑ Top" usa `window.scrollTo({ top: 0 })` — scroll al inicio absoluto de la página.
