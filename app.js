@@ -992,6 +992,12 @@ function initToneSearch() {
                 searchEl.value = btn.dataset.q;
                 searchEl.dispatchEvent(new Event('input'));
                 searchEl.blur();
+                // If current tone is not visible in the new filter, select the first tone in the list
+                const cur = currentTone[part];
+                const inList = cur && [...listEl.options].some(o => {
+                    try { return JSON.parse(o.value).id === cur.id; } catch(e) { return false; }
+                });
+                if (!inList) selectToneInList(part, () => true, true);
             });
         });
 
@@ -1068,12 +1074,8 @@ function initToneSearch() {
             });
         });
         
-        // Default selection = first tone of the default filter (Piano / Pad / String).
-        // Prefer a tone whose category AND name match (e.g. SYNTH-PAD › SUPER SAW PAD, not PIANO PAD).
-        // Labels only: EQ profile is applied at boot only when there is no saved state.
-        const q = searchEl.value.toLowerCase();
-        selectToneInList(part, (d, o) => o.parentElement.label.toLowerCase().includes(q) && o.text.toLowerCase().includes(q), true)
-            || selectToneInList(part, () => true);
+        // Default selection = first tone in the default filter (Piano / Pad / String).
+        selectToneInList(part, () => true, true);
     });
 }
 
