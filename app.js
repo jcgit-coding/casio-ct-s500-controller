@@ -340,7 +340,7 @@ function sReedndConnect() {
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
-        if (midiOutput) pushAllToKeyboard(true);
+        if (midiOutput) pushAllToKeyboard();
     } else {
         const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
         const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
@@ -1682,7 +1682,7 @@ function saveAppState() {
 function loadAppState() {
     try {
         const saved = JSON.parse(localStorage.getItem('casioAppState'));
-        if (!saved) return;
+        if (!saved) return false;
         
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
