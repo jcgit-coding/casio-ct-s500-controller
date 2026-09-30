@@ -715,9 +715,9 @@ function applySmartProfile(part, category) {
 
     // Ensure CC72 (Release) is never in eqState — send a neutral value to keyboard instead
     delete eqState[part][72]; delete eqState[part]['72'];
-    
-    // 4. Send to keyboard and update UI (re-send sustain release: a tone change must not drop it)
-    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
+
+    // 4. Send to keyboard and update UI
+    // CC72 sent LAST so it isn't overwritten by the EQ burst or Casio's internal PC reset
     EQ_CONTROLS.forEach(ctrl => {
         const val = eqState[part][ctrl.cc];
         sendCC(part, ctrl.cc, val);
@@ -738,6 +738,8 @@ function applySmartProfile(part, category) {
             }
         }
     });
+    // Sustain (CC72) sent after all EQ CCs so a tone change never drops it
+    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
 }
 
 function buildEQ() {
@@ -1025,8 +1027,8 @@ function initToneSearch() {
                 applySmartProfile(part, catName);
                 
                 
-            }, 100);
-            
+            }, 150);
+
             // Update the name shown in the card header
             const nameEl = document.getElementById('selectedTone-' + part);
             if (nameEl) nameEl.innerText = opt.text;
