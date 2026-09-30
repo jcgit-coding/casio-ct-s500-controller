@@ -1669,7 +1669,6 @@ function saveAppState() {
         globalOctave,
         activePart,
         pcSynthEnabled,
-        mctrlEnabled,
         tones: {
             U1: _getSavedToneId('U1'),
             U2: _getSavedToneId('U2'),
