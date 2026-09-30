@@ -66,7 +66,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v165 · mié 30 sep · 13:07 COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v166 · mié 30 sep · 13:07 COT</span>
             </div>
         </div>
 
@@ -79,7 +79,7 @@
                 <div class="track-card active-track" id="card-U1" data-part="U1" style="order: 1;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                         <span class="inst-title">INSTRUMENT 1</span>
-                        <button class="sus-btn" id="sus-U1" data-part="U1" style="font-size:10px; padding:2px 8px;">OFF</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.5px;line-height:1">SUSTAIN</span><button class="sus-btn" id="sus-U1" data-part="U1" style="font-size:11px;padding:3px 12px;">OFF</button></div>
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap active" data-part="U1" data-target="U1">U1</button>
                             <button class="btn-swap" data-part="U1" data-target="U2">U2</button>
@@ -132,7 +132,7 @@
                 <div class="track-card" id="card-U2" data-part="U2" style="order: 2;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                         <span class="inst-title">INSTRUMENT 2</span>
-                        <button class="sus-btn" id="sus-U2" data-part="U2" style="font-size:10px; padding:2px 8px;">OFF</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.5px;line-height:1">SUSTAIN</span><button class="sus-btn" id="sus-U2" data-part="U2" style="font-size:11px;padding:3px 12px;">OFF</button></div>
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap" data-part="U2" data-target="U1">U1</button>
                             <button class="btn-swap active" data-part="U2" data-target="U2">U2</button>
@@ -185,7 +185,7 @@
                 <div class="track-card" id="card-L" data-part="L" style="order: 3;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                         <span class="inst-title">INSTRUMENT 3</span>
-                        <button class="sus-btn" id="sus-L" data-part="L" style="font-size:10px; padding:2px 8px;">OFF</button>
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.5px;line-height:1">SUSTAIN</span><button class="sus-btn" id="sus-L" data-part="L" style="font-size:11px;padding:3px 12px;">OFF</button></div>
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap" data-part="L" data-target="U1">U1</button>
                             <button class="btn-swap" data-part="L" data-target="U2">U2</button>
@@ -644,7 +644,7 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v165"></script>
+    <script src="app.js?v166"></script>
     <script src="fix_swap.js?v=136"></script>
     <script src="harmony.js?v156"></script>
 </body>
