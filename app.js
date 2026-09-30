@@ -5,25 +5,21 @@ let midiAccess  = null;
 let midiInput   = null;
 let midiOutput  = null;
 
-// PC Synth Sustain Buffer
-const pcActiveNotes = {};     // note → MIDI channel that sent it
-const pcSustainedNotes = {};  // note → MIDI channel for deferred noteOff
-let pcSustainOn = false;
+// PC Synth active notes. Sustain pedal (CC64) is handled natively by SpessaSynth per channel.
+const pcActiveNotes = {};     // "ch:note" → { ch, shiftedNote }
 let pcSynthEnabled = false;  // OFF by default — user must toggle on
 let mctrlEnabled = false;    // MIDI Ctrl ON/OFF — off by default
 
-function applyPcSustain(isSustain) {
-    if (!window.pcSynth) return;
-    pcSustainOn = isSustain;
-    if (!pcSustainOn) {
-        const held = Object.entries(pcSustainedNotes);
-        for (const k in pcSustainedNotes) delete pcSustainedNotes[k];
-        for (const [, info] of held) {
-            const ch = info?.ch ?? 0;
-            const sn = info?.shiftedNote ?? 0;
-            window.pcSynth.noteOff(ch, sn);
-        }
-    }
+// App SUSTAIN button emulates the Casio panel SUSTAIN (long release, notes fade out
+// naturally) via CC72 Release Time — NOT a damper hold (CC64 is left to the physical pedal).
+const SUS_RELEASE = 100;
+const RELEASE_NEUTRAL = 64;
+
+function pcNoteOff(ch, note) {
+    const info = pcActiveNotes[ch + ':' + note];
+    if (!info) return;
+    delete pcActiveNotes[ch + ':' + note];
+    window.pcSynth.noteOff(info.ch, info.shiftedNote);
 }
 
 // 128 GM instruments organised by category for the instrument picker
@@ -144,7 +140,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initArranger();
 
     // Load saved settings if any, then start auto-save
-    loadAppState();
+    // First run (no saved state): apply the category profile of the default tones
+    if (!loadAppState()) ['U1','U2','L'].forEach(part => applySmartProfile(part));
     setInterval(saveAppState, 1000);
 
     // Android Chrome necesita un gesto de usuario para mostrar el dialog de
@@ -336,31 +333,21 @@ function onMIDIMessage(e) {
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
                 const partKey = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
-                const octOffset = partKey && tuning[partKey] ? tuning[partKey].oct * 12 : 0;
+                const octOffset = (partKey && tuning[partKey]?.oct) ? tuning[partKey].oct * 12 : 0;
                 const shift = globalTranspose + octOffset;
                 const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
-                
-                pcActiveNotes[d1] = { ch: noteCh, shiftedNote: shiftedNote };
+
+                pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
                 window.pcSynth.noteOn(noteCh, shiftedNote, d2); // unscaled velocity — el synth maneja su propio Volume
             } else {
-                const info = pcActiveNotes[d1];
-                if (info) {
-                    delete pcActiveNotes[d1];
-                    if (pcSustainOn) pcSustainedNotes[d1] = info;
-                    else window.pcSynth.noteOff(info.ch, info.shiftedNote);
-                }
+                pcNoteOff(noteCh, d1);
             }
         } else if (cmd === 0x80) { // Note Off
-            const info = pcActiveNotes[d1];
-            if (info) {
-                delete pcActiveNotes[d1];
-                if (pcSustainOn) pcSustainedNotes[d1] = info;
-                else window.pcSynth.noteOff(info.ch, info.shiftedNote);
-            }
-        } else if (cmd === 0xB0 && d1 === 64) { // Sustain pedal — only apply to PC synth if channel matches
-            const pcPart = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
-            if (pcPart) applyPcSustain(d2 >= 64);
+            pcNoteOff(noteCh, d1);
+        } else if (cmd === 0xB0 && d1 === 64) {
+            // Physical damper pedal is global on the Casio → hold all 3 PC synth parts (native CC64)
+            Object.values(CHANNEL).forEach(ch => window.pcSynth.applyCC(64, d2, ch));
         }
     }
     
@@ -382,7 +369,7 @@ function onMIDIMessage(e) {
                 if (valEl) valEl.innerText = formatVal(ctrl.label, d2);
             }
             
-            if (window.pcSynth && window.pcSynth.applyCC) window.pcSynth.applyCC(7, d2);
+            if (window.pcSynth?.applyCC) Object.values(CHANNEL).forEach(c => window.pcSynth.applyCC(7, d2, c));
             return;
         }
 
@@ -393,19 +380,8 @@ function onMIDIMessage(e) {
             pendingBank[part] = d2;
         }
 
-        // Sustain from physical pedal → sync button UI + PC synth
-        if (d1 === 64) {
-            tuning[part].sus = d2 >= 64;
-            const btn = document.getElementById('sus-' + part);
-            if (btn) {
-                btn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-                btn.classList.toggle('sus-on', tuning[part].sus);
-            }
-            if (pcSynthEnabled && window.pcSynth) applyPcSustain(tuning[part].sus);
-        }
-
-        // Update EQ memory (exclude CC64=sustain and CC0=bank-select — handled separately)
-        if (d1 !== 64 && d1 !== 0) eqState[part][d1] = d2;
+        // Update EQ memory (exclude CC64=damper pedal, CC72=app sustain and CC0=bank-select)
+        if (d1 !== 64 && d1 !== 72 && d1 !== 0) eqState[part][d1] = d2;
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
@@ -444,29 +420,8 @@ function onMIDIMessage(e) {
         const pc = d1;
         const bank = pendingBank[part] || 0;
 
-        const listEl = document.getElementById('list-' + part);
-        if (listEl) {
-            // Show all tones so search filter doesn't hide the target tone
-            if (window.toneSearch?.[part]) {
-                window.toneSearch[part].populateList(window.toneSearch[part].allTones);
-            }
-            for (let i = 0; i < listEl.options.length; i++) {
-                try {
-                    const data = JSON.parse(listEl.options[i].value);
-                    if (data.bank === bank && data.program === pc) {
-                        listEl.selectedIndex = i;
-                        // update UI elements manually (don't dispatch change to avoid loop)
-                        const nameEl = document.getElementById('selectedTone-' + part);
-                        if (nameEl) nameEl.innerText = listEl.options[i].text;
-                        const catEl = document.getElementById('selectedCat-' + part);
-                        if (catEl && listEl.options[i].parentElement && listEl.options[i].parentElement.tagName === 'OPTGROUP') {
-                            catEl.innerText = listEl.options[i].parentElement.label;
-                        }
-                        break;
-                    }
-                } catch(e) {}
-            }
-        }
+        // Update UI only (don't dispatch change to avoid loop)
+        selectToneInList(part, d => d.bank === bank && d.program === pc);
     }
 }
 
@@ -551,30 +506,30 @@ const ENVIRONMENTS = {
     // ══════════════════════════════════════════════════════════════════════
     "Estudio": {
         "PIANO":            { "73":64, "75":64, "91":12, "104":64, "103":64, "102":64 },
-        "HARPSICHORD":      { "73":62, "75":62, "91":10, "104":64, "103":64, "102":64 },
+        "HARPSICHORD":      { "73":62, "75":64, "91":10, "104":64, "103":64, "102":64 },
         "ELEC.PIANO":       { "73":64, "75":64, "91":15, "93":15, "104":64, "103":64, "102":64 },
-        "CLAVI":            { "73":60, "75":62, "91":10, "104":64, "103":64, "102":64 },
+        "CLAVI":            { "73":60, "75":64, "91":10, "104":64, "103":64, "102":64 },
         "VIB./CHROM.PERC.": { "73":62, "75":64, "91":18, "104":64, "103":64, "102":64 },
         "ELEC.ORGAN":       { "73":60, "75":64, "91":15, "93":20, "104":64, "103":64, "102":64 },
         "PIPE ORGAN":       { "73":66, "75":64, "91":25, "104":64, "103":64, "102":64 },
         "ACCORDION":        { "73":64, "75":64, "91":15, "93":10, "104":64, "103":64, "102":64 },
-        "ACOUS.GUITAR":     { "73":62, "75":60, "91":12, "104":64, "103":64, "102":64 },
-        "ELEC.GUITAR":      { "73":62, "75":60, "91":15, "104":64, "103":64, "102":64 },
-        "ACOUS.BASS":       { "73":60, "75":60, "91":8, "104":64, "103":64, "102":64 },
-        "ELEC.BASS":        { "73":60, "75":60, "91":8, "104":64, "103":64, "102":64 },
-        "SYNTH-BASS":       { "73":58, "75":58, "91":8, "104":64, "103":64, "102":64 },
+        "ACOUS.GUITAR":     { "73":62, "75":64, "91":12, "104":64, "103":64, "102":64 },
+        "ELEC.GUITAR":      { "73":62, "75":64, "91":15, "104":64, "103":64, "102":64 },
+        "ACOUS.BASS":       { "73":60, "75":64, "91":8, "104":64, "103":64, "102":64 },
+        "ELEC.BASS":        { "73":60, "75":64, "91":8, "104":64, "103":64, "102":64 },
+        "SYNTH-BASS":       { "73":58, "75":64, "91":8, "104":64, "103":64, "102":64 },
         "SOLO STRINGS":     { "73":66, "75":66, "91":20, "76":66, "77":66, "78":68, "104":64, "103":64, "102":64 },
         "STRING ENSEMBLE":  { "73":68, "75":68, "91":25, "93":15, "76":66, "77":64, "104":64, "103":64, "102":64 },
         "SOLO BRASS":       { "73":64, "75":64, "91":18, "76":66, "77":64, "78":68, "104":64, "103":64, "102":64 },
         "BRASS ENSEMBLE":   { "73":64, "75":64, "91":22, "93":10, "104":64, "103":64, "102":64 },
-        "SYNTH-BRASS":      { "73":62, "75":62, "91":20, "93":15, "104":64, "103":64, "102":64 },
+        "SYNTH-BRASS":      { "73":62, "75":64, "91":20, "93":15, "104":64, "103":64, "102":64 },
         "SAX":              { "73":64, "75":64, "91":18, "76":66, "77":64, "78":68, "104":64, "103":64, "102":64 },
         "REED":             { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
         "PIPE":             { "73":64, "75":64, "91":18, "76":66, "77":64, "104":64, "103":64, "102":64 },
-        "SYNTH-LEAD":       { "74":66, "71":68, "73":60, "75":60, "91":25, "94":15, "104":64, "103":64, "102":64 },
+        "SYNTH-LEAD":       { "74":66, "71":68, "73":60, "75":64, "91":25, "94":15, "104":64, "103":64, "102":64 },
         "SYNTH-PAD":        { "73":72, "75":72, "91":35, "93":25, "104":64, "103":64, "102":64 },
         "CHOIR":            { "73":70, "75":70, "91":30, "93":15, "104":64, "103":64, "102":64 },
-        "EDM SYNTH":        { "73":58, "75":60, "91":20, "94":15, "104":64, "103":64, "102":64 },
+        "EDM SYNTH":        { "73":58, "75":64, "91":20, "94":15, "104":64, "103":64, "102":64 },
         "CASIO CLASSIC":    { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
         "INDIAN":           { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
         "INDONESIAN":       { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
@@ -589,39 +544,39 @@ const ENVIRONMENTS = {
     //  Ataques faster, extra resonance, stereo effects (Chorus/Delay).
     // ══════════════════════════════════════════════════════════════════════
     "Vivo": {
-        "PIANO":            { "74":68, "73":62, "75":62, "91":35, "104":72, "103":68, "102":70 },
-        "HARPSICHORD":      { "74":70, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "ELEC.PIANO":       { "74":68, "73":62, "75":62, "91":35, "93":40, "104":72, "103":68, "102":70 },
-        "CLAVI":            { "74":70, "73":58, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "VIB./CHROM.PERC.": { "74":68, "73":60, "75":60, "91":40, "104":72, "103":68, "102":70 },
-        "ELEC.ORGAN":       { "74":70, "71":68, "73":58, "75":60, "91":35, "93":45, "76":72, "77":68, "104":72, "103":68, "102":70 },
-        "PIPE ORGAN":       { "74":68, "73":64, "75":62, "91":50, "104":72, "103":68, "102":70 },
-        "ACCORDION":        { "74":68, "73":62, "75":62, "91":30, "93":20, "104":72, "103":68, "102":70 },
-        "ACOUS.GUITAR":     { "74":68, "73":60, "75":58, "91":30, "93":10, "104":72, "103":68, "102":70 },
-        "ELEC.GUITAR":      { "74":68, "73":60, "75":58, "91":30, "93":20, "104":72, "103":68, "102":70 },
-        "ACOUS.BASS":       { "74":68, "73":58, "75":58, "91":15, "104":72, "103":68, "102":70 },
-        "ELEC.BASS":        { "74":68, "73":58, "75":58, "91":15, "104":72, "103":68, "102":70 },
-        "SYNTH-BASS":       { "74":72, "71":70, "73":56, "75":56, "91":15, "104":72, "103":68, "102":70 },
+        "PIANO":            { "74":68, "73":62, "75":64, "91":35, "104":72, "103":68, "102":70 },
+        "HARPSICHORD":      { "74":70, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "ELEC.PIANO":       { "74":68, "73":62, "75":64, "91":35, "93":40, "104":72, "103":68, "102":70 },
+        "CLAVI":            { "74":70, "73":58, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "VIB./CHROM.PERC.": { "74":68, "73":60, "75":64, "91":40, "104":72, "103":68, "102":70 },
+        "ELEC.ORGAN":       { "74":70, "71":68, "73":58, "75":64, "91":35, "93":45, "76":72, "77":68, "104":72, "103":68, "102":70 },
+        "PIPE ORGAN":       { "74":68, "73":64, "75":64, "91":50, "104":72, "103":68, "102":70 },
+        "ACCORDION":        { "74":68, "73":62, "75":64, "91":30, "93":20, "104":72, "103":68, "102":70 },
+        "ACOUS.GUITAR":     { "74":68, "73":60, "75":64, "91":30, "93":10, "104":72, "103":68, "102":70 },
+        "ELEC.GUITAR":      { "74":68, "73":60, "75":64, "91":30, "93":20, "104":72, "103":68, "102":70 },
+        "ACOUS.BASS":       { "74":68, "73":58, "75":64, "91":15, "104":72, "103":68, "102":70 },
+        "ELEC.BASS":        { "74":68, "73":58, "75":64, "91":15, "104":72, "103":68, "102":70 },
+        "SYNTH-BASS":       { "74":72, "71":70, "73":56, "75":64, "91":15, "104":72, "103":68, "102":70 },
         "SOLO STRINGS":     { "74":68, "73":62, "75":64, "91":45, "93":10, "76":68, "77":68, "104":72, "103":68, "102":70 },
         "STRING ENSEMBLE":  { "74":68, "73":64, "75":64, "91":45, "93":25, "76":68, "77":66, "104":72, "103":68, "102":70 },
-        "SOLO BRASS":       { "74":70, "71":68, "73":60, "75":62, "91":40, "76":70, "77":68, "104":72, "103":68, "102":70 },
-        "BRASS ENSEMBLE":   { "74":70, "71":68, "73":60, "75":62, "91":45, "93":20, "104":72, "103":68, "102":70 },
-        "SYNTH-BRASS":      { "74":72, "71":70, "73":58, "75":60, "91":45, "93":25, "104":72, "103":68, "102":70 },
-        "SAX":              { "74":70, "71":68, "73":60, "75":62, "91":40, "76":70, "77":68, "104":72, "103":68, "102":70 },
-        "REED":             { "74":68, "73":60, "75":62, "91":35, "104":72, "103":68, "102":70 },
-        "PIPE":             { "74":68, "73":60, "75":62, "91":40, "76":68, "77":66, "104":72, "103":68, "102":70 },
-        "SYNTH-LEAD":       { "74":72, "71":72, "73":58, "75":58, "91":45, "93":15, "94":30, "104":72, "103":68, "102":70 },
+        "SOLO BRASS":       { "74":70, "71":68, "73":60, "75":64, "91":40, "76":70, "77":68, "104":72, "103":68, "102":70 },
+        "BRASS ENSEMBLE":   { "74":70, "71":68, "73":60, "75":64, "91":45, "93":20, "104":72, "103":68, "102":70 },
+        "SYNTH-BRASS":      { "74":72, "71":70, "73":58, "75":64, "91":45, "93":25, "104":72, "103":68, "102":70 },
+        "SAX":              { "74":70, "71":68, "73":60, "75":64, "91":40, "76":70, "77":68, "104":72, "103":68, "102":70 },
+        "REED":             { "74":68, "73":60, "75":64, "91":35, "104":72, "103":68, "102":70 },
+        "PIPE":             { "74":68, "73":60, "75":64, "91":40, "76":68, "77":66, "104":72, "103":68, "102":70 },
+        "SYNTH-LEAD":       { "74":72, "71":72, "73":58, "75":64, "91":45, "93":15, "94":30, "104":72, "103":68, "102":70 },
         "SYNTH-PAD":        { "74":68, "71":68, "73":66, "75":66, "91":50, "93":40, "104":72, "103":68, "102":70 },
         "CHOIR":            { "74":68, "73":66, "75":66, "91":50, "93":25, "104":72, "103":68, "102":70 },
-        "EDM SYNTH":        { "74":72, "71":72, "73":56, "75":56, "91":40, "94":25, "104":72, "103":68, "102":70 },
-        "CASIO CLASSIC":    { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "INDIAN":           { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "INDONESIAN":       { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "ARABIC":           { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "CHINESE":          { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "BRAZILIAN":        { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "ETHNIC OTHERS":    { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 },
-        "GM TONES":         { "74":68, "73":60, "75":60, "91":30, "104":72, "103":68, "102":70 }
+        "EDM SYNTH":        { "74":72, "71":72, "73":56, "75":64, "91":40, "94":25, "104":72, "103":68, "102":70 },
+        "CASIO CLASSIC":    { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "INDIAN":           { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "INDONESIAN":       { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "ARABIC":           { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "CHINESE":          { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "BRAZILIAN":        { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "ETHNIC OTHERS":    { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "GM TONES":         { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 }
     },
     // ══════════════════════════════════════════════════════════════════════
     //  SALA — Concierto/Catedral. Symphonic, majestuoso.
@@ -650,7 +605,7 @@ const ENVIRONMENTS = {
         "REED":             { "74":60, "73":66, "75":66, "91":65, "104":70, "103":60, "102":66 },
         "PIPE":             { "74":60, "73":66, "75":66, "91":70, "76":64, "77":68, "78":70, "104":70, "103":60, "102":66 },
         "SYNTH-LEAD":       { "74":64, "71":66, "73":62, "75":64, "91":75, "94":40, "104":70, "103":60, "102":66 },
-        "SYNTH-PAD":        { "74":58, "71":62, "73":82, "75":82, "91":90, "93":35, "104":70, "103":60, "102":66 },
+        "SYNTH-PAD":        { "74":60, "71":62, "73":82, "75":82, "91":90, "93":35, "104":70, "103":60, "102":66 },
         "CHOIR":            { "74":60, "73":78, "75":78, "91":90, "93":30, "104":70, "103":60, "102":66 },
         "EDM SYNTH":        { "74":62, "73":62, "75":64, "91":70, "94":35, "104":70, "103":60, "102":66 },
         "CASIO CLASSIC":    { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
@@ -667,39 +622,39 @@ const ENVIRONMENTS = {
     //  Filtro cerrado para calidez, decay acoustic, vibrato profundo en vientos.
     // ══════════════════════════════════════════════════════════════════════
     "Jazz": {
-        "PIANO":            { "74":58, "73":64, "75":64, "91":18, "104":72, "103":70, "102":56 },
+        "PIANO":            { "74":60, "73":64, "75":64, "91":18, "104":72, "103":70, "102":56 },
         "HARPSICHORD":      { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "ELEC.PIANO":       { "74":56, "73":64, "75":64, "91":18, "93":10, "104":72, "103":70, "102":56 },
+        "ELEC.PIANO":       { "74":60, "73":64, "75":64, "91":18, "93":10, "104":72, "103":70, "102":56 },
         "CLAVI":            { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "VIB./CHROM.PERC.": { "74":58, "73":64, "75":66, "91":20, "76":66, "77":68, "104":72, "103":70, "102":56 },
-        "ELEC.ORGAN":       { "74":58, "73":60, "75":64, "91":18, "93":35, "76":68, "77":72, "104":72, "103":70, "102":56 },
+        "VIB./CHROM.PERC.": { "74":60, "73":64, "75":66, "91":20, "76":66, "77":68, "104":72, "103":70, "102":56 },
+        "ELEC.ORGAN":       { "74":60, "73":60, "75":64, "91":18, "93":35, "76":68, "77":72, "104":72, "103":70, "102":56 },
         "PIPE ORGAN":       { "74":60, "73":64, "75":64, "91":35, "104":72, "103":70, "102":56 },
-        "ACCORDION":        { "74":58, "73":64, "75":64, "91":15, "93":10, "104":72, "103":70, "102":56 },
-        "ACOUS.GUITAR":     { "74":58, "73":62, "75":62, "91":15, "93":5, "104":72, "103":70, "102":56 },
-        "ELEC.GUITAR":      { "74":56, "73":62, "75":62, "91":15, "93":10, "104":72, "103":70, "102":56 },
-        "ACOUS.BASS":       { "74":54, "73":62, "75":66, "91":12, "104":72, "103":70, "102":56 },
-        "ELEC.BASS":        { "74":56, "73":62, "75":64, "91":12, "104":72, "103":70, "102":56 },
-        "SYNTH-BASS":       { "74":58, "73":62, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "SOLO STRINGS":     { "74":58, "73":66, "75":64, "91":25, "76":66, "77":68, "78":66, "104":72, "103":70, "102":56 },
-        "STRING ENSEMBLE":  { "74":58, "73":68, "75":66, "91":25, "93":10, "76":66, "77":68, "104":72, "103":70, "102":56 },
-        "SOLO BRASS":       { "74":58, "73":64, "75":64, "91":20, "76":68, "77":72, "78":66, "104":72, "103":70, "102":56 },
-        "BRASS ENSEMBLE":   { "74":58, "73":66, "75":64, "91":20, "93":10, "104":72, "103":70, "102":56 },
-        "SYNTH-BRASS":      { "74":58, "73":64, "75":64, "91":20, "93":10, "104":72, "103":70, "102":56 },
-        "SAX":              { "74":56, "73":64, "75":64, "91":20, "76":68, "77":72, "78":66, "104":72, "103":70, "102":56 },
-        "REED":             { "74":58, "73":64, "75":64, "91":18, "104":72, "103":70, "102":56 },
-        "PIPE":             { "74":58, "73":64, "75":64, "91":20, "76":66, "77":70, "78":66, "104":72, "103":70, "102":56 },
+        "ACCORDION":        { "74":60, "73":64, "75":64, "91":15, "93":10, "104":72, "103":70, "102":56 },
+        "ACOUS.GUITAR":     { "74":60, "73":62, "75":64, "91":15, "93":5, "104":72, "103":70, "102":56 },
+        "ELEC.GUITAR":      { "74":60, "73":62, "75":64, "91":15, "93":10, "104":72, "103":70, "102":56 },
+        "ACOUS.BASS":       { "74":60, "73":62, "75":66, "91":12, "104":72, "103":70, "102":56 },
+        "ELEC.BASS":        { "74":60, "73":62, "75":64, "91":12, "104":72, "103":70, "102":56 },
+        "SYNTH-BASS":       { "74":60, "73":62, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "SOLO STRINGS":     { "74":60, "73":66, "75":64, "91":25, "76":66, "77":68, "78":66, "104":72, "103":70, "102":56 },
+        "STRING ENSEMBLE":  { "74":60, "73":68, "75":66, "91":25, "93":10, "76":66, "77":68, "104":72, "103":70, "102":56 },
+        "SOLO BRASS":       { "74":60, "73":64, "75":64, "91":20, "76":68, "77":72, "78":66, "104":72, "103":70, "102":56 },
+        "BRASS ENSEMBLE":   { "74":60, "73":66, "75":64, "91":20, "93":10, "104":72, "103":70, "102":56 },
+        "SYNTH-BRASS":      { "74":60, "73":64, "75":64, "91":20, "93":10, "104":72, "103":70, "102":56 },
+        "SAX":              { "74":60, "73":64, "75":64, "91":20, "76":68, "77":72, "78":66, "104":72, "103":70, "102":56 },
+        "REED":             { "74":60, "73":64, "75":64, "91":18, "104":72, "103":70, "102":56 },
+        "PIPE":             { "74":60, "73":64, "75":64, "91":20, "76":66, "77":70, "78":66, "104":72, "103":70, "102":56 },
         "SYNTH-LEAD":       { "74":60, "71":64, "73":62, "75":64, "91":25, "94":10, "104":72, "103":70, "102":56 },
-        "SYNTH-PAD":        { "74":54, "71":64, "73":72, "75":70, "91":30, "93":20, "104":72, "103":70, "102":56 },
-        "CHOIR":            { "74":58, "73":72, "75":70, "91":25, "104":72, "103":70, "102":56 },
+        "SYNTH-PAD":        { "74":60, "71":64, "73":72, "75":70, "91":30, "93":20, "104":72, "103":70, "102":56 },
+        "CHOIR":            { "74":60, "73":72, "75":70, "91":25, "104":72, "103":70, "102":56 },
         "EDM SYNTH":        { "74":60, "73":64, "75":64, "91":20, "94":10, "104":72, "103":70, "102":56 },
-        "CASIO CLASSIC":    { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "INDIAN":           { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "INDONESIAN":       { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "ARABIC":           { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "CHINESE":          { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "BRAZILIAN":        { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "ETHNIC OTHERS":    { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "GM TONES":         { "74":58, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 }
+        "CASIO CLASSIC":    { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "INDIAN":           { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "INDONESIAN":       { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "ARABIC":           { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "CHINESE":          { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "BRAZILIAN":        { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "ETHNIC OTHERS":    { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "GM TONES":         { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 }
     }
 };
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
@@ -1068,12 +1023,41 @@ function initToneSearch() {
             });
         });
         
-        // Ensure category label is initialized
-        if (listEl.options.length > 0) {
-            listEl.selectedIndex = 0;
-            listEl.dispatchEvent(new Event('change'));
-        }
+        // Default selection = first tone of the default filter (Piano / Pad / String).
+        // Prefer a tone whose category AND name match (e.g. SYNTH-PAD › SUPER SAW PAD, not PIANO PAD).
+        // Labels only: EQ profile is applied at boot only when there is no saved state.
+        const q = searchEl.value.toLowerCase();
+        selectToneInList(part, (d, o) => o.parentElement.label.toLowerCase().includes(q) && o.text.toLowerCase().includes(q), true)
+            || selectToneInList(part, () => true);
     });
+}
+
+// Select a tone in the part's list keeping the current search filter when the tone is in it;
+// otherwise the search is cleared so the tone is visible. Updates card labels and category.
+function selectToneInList(part, match, keepFilter = false) {
+    const listEl = document.getElementById('list-' + part);
+    if (!listEl) return null;
+    const find = () => [...listEl.options].findIndex(o => {
+        try { return match(JSON.parse(o.value), o); } catch(e) { return false; }
+    });
+    let idx = find();
+    const ts = window.toneSearch?.[part];
+    if (idx < 0 && !keepFilter && ts && ts.searchEl.value) {
+        ts.searchEl.value = '';
+        ts.searchEl.dispatchEvent(new Event('input'));
+        idx = find();
+    }
+    if (idx < 0) return null;
+    listEl.selectedIndex = idx;
+    const opt = listEl.options[idx];
+    const nameEl = document.getElementById('selectedTone-' + part);
+    if (nameEl) nameEl.innerText = opt.text;
+    if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
+        const catEl = document.getElementById('selectedCat-' + part);
+        if (catEl) catEl.innerText = opt.parentElement.label;
+        activeCategories[part] = opt.parentElement.label;
+    }
+    return opt;
 }
 
 // ======================================================================
@@ -1147,29 +1131,15 @@ function initQuickControls() {
             btn.innerText = isOn ? 'ON' : 'OFF';
             btn.classList.toggle('sus-on', isOn);
 
-            if (pcSynthEnabled) applyPcSustain(isOn);
-
-            sendCC(part, 64, isOn ? 127 : 0);
+            sendCC(part, 72, isOn ? SUS_RELEASE : RELEASE_NEUTRAL);
 
             if (!isOn) {
-                // Capture the toggle timestamp to detect rapid re-press
-                const toggledAt = Date.now();
-                // Casio CT-S500 sometimes ignores a single CC64=0 if the buffer is busy.
+                // Clear any damper hold left by the old CC64-based sustain / a stuck pedal.
+                sendCC(part, 64, 0);
+                // Casio CT-S500 sometimes ignores a single CC if the buffer is busy.
                 // Send again after 20ms, but only if sustain is still OFF.
                 setTimeout(() => {
-                    if (!tuning[part].sus) {
-                        sendCC(part, 64, 0);
-                        sendCC(part, 66, 0);
-
-                        // Sync Sostenuto UI
-                        if (eqState[part]?.[66] !== 0) {
-                            eqState[part][66] = 0;
-                            if (activePart === part) {
-                                const sosBtn = document.querySelector('.eq-switch[data-cc="66"]');
-                                if (sosBtn) { sosBtn.innerText = 'OFF'; sosBtn.classList.remove('sus-on'); }
-                            }
-                        }
-                    }
+                    if (!tuning[part].sus) sendCC(part, 72, RELEASE_NEUTRAL);
                 }, 20);
             }
         });
@@ -1378,26 +1348,7 @@ function loadPreset(data) {
         }
         // Restore tone selection
         if (data.tones?.[part]) {
-            const listEl = document.getElementById('list-' + part);
-            if (listEl) {
-                // Show all tones so filter doesn't hide the target
-                if (window.toneSearch?.[part]) {
-                    window.toneSearch[part].populateList(window.toneSearch[part].allTones);
-                }
-                for (let i = 0; i < listEl.options.length; i++) {
-                    if (listEl.options[i].text === data.tones[part]) {
-                        listEl.selectedIndex = i;
-                        // update custom UI text
-                        const nameEl = document.getElementById('selectedTone-' + part);
-                        if (nameEl) nameEl.innerText = listEl.options[i].text;
-                        const catEl = document.getElementById('selectedCat-' + part);
-                        if (catEl && listEl.options[i].parentElement && listEl.options[i].parentElement.tagName === 'OPTGROUP') {
-                            catEl.innerText = listEl.options[i].parentElement.label;
-                        }
-                        break;
-                    }
-                }
-            }
+            selectToneInList(part, (d, o) => o.text === data.tones[part]);
         }
     });
 
@@ -1602,8 +1553,8 @@ function initArranger() {
 // ======================================================================
 function sendCC(part, cc, value) {
     if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
-    // Mirror CCs al PC Synth solo para el part activo
-    if (window.pcSynth?.applyCC && part === activePart) window.pcSynth.applyCC(cc, value);
+    // Mirror CCs al PC Synth en el canal de ese part
+    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value, CHANNEL[part]);
 }
 
 function changeTone(part, msb, lsb, pc) {
@@ -1633,7 +1584,7 @@ function pushAllToKeyboard(skipTones = false) {
             sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
         });
         sendCoarseTuning(part);
-        sendCC(part, 72, tuning[part].sus ? 100 : 64);
+        sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
         
         const listEl = document.getElementById('list-' + part);
         if (listEl && listEl.selectedIndex >= 0) {
@@ -1719,49 +1670,11 @@ function loadAppState() {
         
         if (saved.tones) {
             ['U1', 'U2', 'L'].forEach(part => {
-                const list = document.getElementById('list-' + part);
-                if (list && saved.tones[part] !== undefined) {
-                    // Show all tones so the filter doesn't hide the saved tone
-                    if (window.toneSearch?.[part]) {
-                        window.toneSearch[part].populateList(window.toneSearch[part].allTones);
-                    }
-                    // Find the option by ID
-                    let targetIndex = -1;
-                    const savedId = saved.tones[part];
-                    for (let i = 0; i < list.options.length; i++) {
-                        try {
-                            const d = JSON.parse(list.options[i].value);
-                            // Fallback: if savedId is likely an old index (e.g. < 800 and not matching IDs),
-                            // we just do our best. But matching by ID is safest.
-                            if (d.id === savedId) {
-                                targetIndex = i;
-                                break;
-                            }
-                        } catch(e){}
-                    }
-                    if (targetIndex >= 0) {
-                        list.selectedIndex = targetIndex;
-                    } else if (savedId < list.options.length) {
-                        list.selectedIndex = savedId; // fallback for old saves
-                    }
-                    
-                    // Manually change tone and update UI instead of firing 'change' 
-                    // which would trigger applySmartProfile and wipe saved eqState!
-                    const opt = list.options[list.selectedIndex];
-                    if (opt) {
-                        const data = JSON.parse(opt.value);
-                        
-// changeTone(part, data.bank, data.lsb, data.program); // Disabled on boot so we don't force the keyboard
-const nameEl = document.getElementById('selectedTone-' + part);
-
-                        if (nameEl) nameEl.innerText = opt.text;
-                        
-                        const catEl = document.getElementById('selectedCat-' + part);
-                        if (catEl && opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
-                            catEl.innerText = opt.parentElement.label;
-                            activeCategories[part] = opt.parentElement.label; // Restore active category tracking
-                        }
-                    }
+                // Restore saved tone inside the default filter (Piano / Pad / String) when possible.
+                // UI only — no 'change' event (would wipe saved eqState) and no changeTone
+                // (disabled on boot so we don't force the keyboard).
+                if (saved.tones[part] !== undefined) {
+                    selectToneInList(part, d => d.id === saved.tones[part]);
                 }
                 // Update tuning UI
 
@@ -1780,8 +1693,10 @@ const nameEl = document.getElementById('selectedTone-' + part);
         }
 
         switchEQ(activePart); // updates sliders on screen
+        return true;
     } catch (e) {
         console.error("Error loading app state:", e);
+        return false;
     }
 }
 
@@ -1841,16 +1756,14 @@ async function sf2Init(source, name) {
         await spessaSynth.soundBankManager.addSoundBank(sf2Buffer, 'main');
         await spessaSynth.isReady;
 
-        const initVol = (eqState?.U1?.[7] !== undefined) ? eqState['U1'][7] / 127 : 1.0;
-
-        // Master gain para control de Volume fast
+        // Master gain at unity — per-part volume is CC7 on each channel
         const masterGain = spessaCtx.createGain();
-        masterGain.gain.value = initVol;
+        masterGain.gain.value = 1.0;
         spessaSynth.connect(masterGain);
         masterGain.connect(spessaCtx.destination);
 
         window.pcSynth = {
-            _synth: spessaSynth, _ctx: spessaCtx, _vol: initVol,
+            _synth: spessaSynth, _ctx: spessaCtx,
             _master: masterGain,
             get synth() { return { ctx: spessaCtx }; },
             noteOn(channel, note, velocity) {
@@ -1864,15 +1777,18 @@ async function sf2Init(source, name) {
                 spessaSynth.programChange(channel, prog);
             },
             applyCC(cc, val, channel) {
-                if (cc === 7) {
-                    this._vol = val / 127;
-                    this._master.gain.setTargetAtTime(this._vol, spessaCtx.currentTime, 0.02);
-                } else {
-                    const ch = channel !== undefined ? channel : CHANNEL[activePart];
-                    spessaSynth.controllerChange(ch, cc, val);
-                }
+                const ch = channel !== undefined ? channel : CHANNEL[activePart];
+                spessaSynth.controllerChange(ch, cc, val);
             }
         };
+        // Sync current mixer state (EQ + sustain release) to the freshly created synth
+        ['U1','U2','L'].forEach(part => {
+            EQ_CONTROLS.forEach(ctrl => {
+                const v = eqState[part][ctrl.cc];
+                window.pcSynth.applyCC(ctrl.cc, v !== undefined ? v : ctrl.def, CHANNEL[part]);
+            });
+            window.pcSynth.applyCC(72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL, CHANNEL[part]);
+        });
         window.sf2Ready = true;
         if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
     } catch(err) {
@@ -1934,7 +1850,7 @@ function initMidiController() {
                 if (!mctrlEnabled) return;
                 // Send CC7 on this part's channel
                 if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, v]);
-                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, v);
+                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, v, CHANNEL[part]);
             });
         }
 
@@ -1946,7 +1862,7 @@ function initMidiController() {
                 if (rvbVal) rvbVal.innerText = v;
                 if (!mctrlEnabled) return;
                 if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 91, v]);
-                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(91, v);
+                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(91, v, CHANNEL[part]);
             });
         }
 
@@ -2123,11 +2039,11 @@ document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
         for (const note in pcActiveNotes) {
             const entry = pcActiveNotes[note];
             const ch = entry?.ch ?? 0;
-            const n  = entry?.shiftedNote ?? parseInt(note);
+            const n  = entry?.shiftedNote ?? 0;
             try { window.pcSynth.noteOff(ch, n); } catch(e) {}
         }
         for (const k in pcActiveNotes) delete pcActiveNotes[k];
-        for (const k in pcSustainedNotes) delete pcSustainedNotes[k];
+        Object.values(CHANNEL).forEach(ch => { try { window.pcSynth.applyCC(64, 0, ch); } catch(e) {} });
         // Stop any held virtual keyboard notes
         for (const note in vkActiveKeys) {
             try { window.pcSynth.noteOff(CHANNEL[vkActivePart], parseInt(note)); } catch(e) {}
