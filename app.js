@@ -1925,6 +1925,7 @@ function saveAppState() {
         });
     });
     const appState = {
+        v: 195,
         eqState: eqSnap,
         tuning,
         activeCategories,
@@ -1991,10 +1992,11 @@ function loadAppState() {
             document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
         }
         
-        // Only restore specific tones when the save also carries searchFilters (v192+).
-        // Older saves may contain OpenCode-era tone IDs that don't match the expected
-        // defaults; in that case let initToneSearch's first-in-filter selection stand.
-        if (saved.tones && saved.searchFilters) {
+        // Only restore specific tones from v194+ saves (first version that saves correct
+        // tones + searchFilters together). Saves from v192/v193 may still carry
+        // OpenCode-era tone IDs (e.g. 687 GM SYNTH-STRINGS instead of 24 STRINGS PIANO);
+        // in that case let initToneSearch's first-in-filter default stand.
+        if (saved.tones && saved.v >= 194) {
             ['U1', 'U2', 'L'].forEach(part => {
                 // Restore the search filter first so the tone is selected within the right context.
                 const ts = window.toneSearch?.[part];

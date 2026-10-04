@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v194
+# Casio CT-S500 Pro Controller — v195
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -89,7 +89,7 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 **Cada vez que se modifica `app.js`, `style.css`, `fix_swap.js` o `harmony.js`, se debe actualizar el query string de cache busting en `index.html`:**
 
 ```html
-<script src="app.js?v194"></script>       <!-- incrementar el número -->
+<script src="app.js?v195"></script>       <!-- incrementar el número -->
 <link rel="stylesheet" href="style.css?v187">
 <script src="fix_swap.js?v187"></script>
 <script src="harmony.js?v187"></script>
@@ -108,6 +108,11 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 ---
 
 ## 8. Historial de Versiones (reciente)
+
+### v195 · dom 04 oct 2026 07:24 · COT
+
+- **fix(state):** `loadAppState` ignora tones de saves anteriores a v194 — L carga como 24. STRINGS PIANO por defecto en instalaciones limpias o migración desde v192/v193.
+- **cache-bust:** `app.js` → v195.
 
 ### v194 · dom 04 oct 2026 07:24 · COT
 - **fix(tones):** `loadAppState` solo restaura el tono guardado si el save incluye `searchFilters` (formato v192+). Saves anteriores (era OpenCode, sin `searchFilters`) usan el default de `initToneSearch` → L = 24. STRINGS PIANO, U2 = 457. ADV PIANO PAD.
