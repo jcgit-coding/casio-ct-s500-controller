@@ -14,6 +14,11 @@ let mctrlEnabled = false;    // MIDI Ctrl ON/OFF — off by default
 // naturally) via CC72 Release Time — NOT a damper hold (CC64 is left to the physical pedal).
 const SUS_RELEASE = 100;
 const RELEASE_NEUTRAL = 64;
+// Taps used to re-send CC72 after ANY burst of CCs. The CT-S500 resets its
+// controllers (on every channel) after a large burst, and over Bluetooth the
+// outgoing queue can still be draining hundreds of ms after the app finished
+// writing — hence the deliberately late last tap.
+const SUSTAIN_TAPS = [150, 400, 700, 1300];
 // Per-category CC72 neutral: these instruments have long natural decay;
 // sending 64 after a tone load would shorten it below the preset's intent.
 const CAT_RELEASE_NEUTRAL = {
@@ -191,10 +196,16 @@ let activePart = 'U1';
 let midiInitAttempted = false;
 let _midiConnectTimer = null;
 let _lastMidiOutputId = null;
-// Guard: true while switchEQ is updating fader DOM values programmatically.
-// Some mobile browsers (Android Chrome) fire 'input' on programmatic .value changes,
-// which would send a ~17-CC burst to the Casio and trigger a hardware CC72 reset.
-let _eqSwitching = false;
+// Guard: until this timestamp, the EQ fader 'input' events are ignored.
+// Some mobile browsers (Android Chrome) fire 'input' on programmatic .value
+// changes — and those events can arrive on a later task, after the synchronous
+// guard would already have been cleared. Windowed guard covers both.
+// Cost of the window: a genuine user drag within ~100 ms of a programmatic
+// write is swallowed (the fader still shows the value, MIDI is re-sent by the
+// next change / resync).
+let _eqSwitchingUntil = 0;
+function isEqProgrammatic() { return Date.now() < _eqSwitchingUntil; }
+function beginEqProgrammatic(ms = 100) { _eqSwitchingUntil = Date.now() + ms; }
 
 // ======================================================================
 //  INIT
@@ -288,9 +299,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
-            // Re-send CC72 at 150/400/700ms — a ~57-CC burst from 3×applySmartProfile can
-            // trigger the CT-S500 hardware controller reset multiple times.
-            ['U1', 'U2', 'L'].forEach(part => scheduleSustainResync(part, [150, 400, 700]));
+            // Re-send CC72 on every part — a ~57-CC burst from 3×applySmartProfile
+            // triggers the CT-S500 hardware controller reset multiple times.
+            resyncAllSustain();
             switchEQ(activePart);
         });
     }
@@ -483,7 +494,9 @@ function onMIDIMessage(e) {
                     }
                 } else {
                     const fader = document.querySelector(`.eq-fader[data-cc="${d1}"]`);
-                    if (fader) fader.value = d2;
+                    // Guard: writing .value may fire 'input' on some engines, which
+                    // would echo the same CC straight back to the keyboard.
+                    if (fader) { beginEqProgrammatic(); fader.value = d2; }
                 }
                 const valEl = document.getElementById('eq-val-' + d1);
                 if (valEl) valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
@@ -512,6 +525,10 @@ function onMIDIMessage(e) {
         // the user may have loaded a Casio Registration with its own effects that
         // would be silently overwritten by applySmartProfile.
         selectToneInList(part, d => d.bank === bank && d.program === pc);
+        // The panel tone change resets that channel's controllers. Re-assert the
+        // app's sustain only when it is ON (explicit user intent); when OFF the
+        // new tone's own release is left untouched so Registrations aren't stomped.
+        if (tuning[part].sus) scheduleSustainResync(part, SUSTAIN_TAPS);
     }
 }
 
@@ -789,6 +806,8 @@ function applySmartProfile(part, category) {
 
     // 4. Send to keyboard and update UI — skip performance CCs (preserve live state)
     // CC72 sent LAST so it isn't overwritten by the EQ burst or Casio's internal PC reset
+    // Writing fader.value can fire 'input' on some engines — guard the window first.
+    if (activePart === part) beginEqProgrammatic();
     EQ_CONTROLS.forEach(ctrl => {
         if (PERFORMANCE_CCS.has(ctrl.cc)) return;
         const val = eqState[part][ctrl.cc];
@@ -910,13 +929,16 @@ function buildEQ() {
                 // use the same part even if the user switches EQ target mid-drag.
                 let _faderPart = activePart;
                 fader.addEventListener('input', e => {
-                    // Ignore programmatic .value changes from switchEQ — those are UI-only
-                    // updates and must not send MIDI (a spurious CC burst can reset CC72 on
-                    // the CT-S500, dropping sustain on the part being switched to).
-                    if (_eqSwitching) return;
-                    _faderPart = activePart; // refresh on every real user move
                     const v = parseInt(e.target.value);
+                    _faderPart = activePart; // refresh on every real user move
                     valSpan.innerText = formatVal(ctrl.label, v);
+                    // Programmatic writes (switchEQ / applySmartProfile / incoming CC)
+                    // must not echo back: a spurious ~17-CC burst resets CC72 on EVERY
+                    // channel of the CT-S500 and drops sustain on all three parts.
+                    if (isEqProgrammatic()) return;
+                    // No-op move: the part already has this value — don't re-send.
+                    const cur = eqState[_faderPart][ctrl.cc];
+                    if ((cur !== undefined ? cur : ctrl.def) === v) return;
                     if (ctrl.cc === 7) {
                         // Volume: solo al part activo
                         eqState[_faderPart][7] = v;
@@ -929,6 +951,15 @@ function buildEQ() {
                 fader.addEventListener('change', () => {
                     // Use _faderPart (set during the last real input event) so the save
                     // targets the part that was active when the user was actually dragging.
+                    // Reconcile: 'change' is the committed position, so it wins even if the
+                    // 'input' stream was swallowed by the programmatic-write guard.
+                    const v = parseInt(fader.value);
+                    const cur = eqState[_faderPart][ctrl.cc];
+                    if ((cur !== undefined ? cur : ctrl.def) !== v) {
+                        eqState[_faderPart][ctrl.cc] = v;
+                        sendCC(_faderPart, ctrl.cc, v);
+                        valSpan.innerText = formatVal(ctrl.label, v);
+                    }
                     saveToneEQForPart(_faderPart);
                     if (typeof saveAppState === 'function') saveAppState();
                 });
@@ -966,9 +997,12 @@ function switchEQ(part) {
     const card = document.getElementById('card-' + part);
     if (card) card.classList.add('active-track');
 
-    // Raise guard before touching fader.value — some mobile browsers fire 'input' on
-    // programmatic changes, which would send a spurious CC burst and reset CC72 on the Casio.
-    _eqSwitching = true;
+    // Raise the guard BEFORE touching fader.value and keep it open for a short
+    // window: some mobile browsers fire 'input' on programmatic changes, and the
+    // event can arrive on a later task (after a synchronous guard was cleared).
+    // Those spurious events would send a ~17-CC burst to the Casio and reset
+    // CC72 on every channel.
+    beginEqProgrammatic();
     EQ_CONTROLS.forEach(ctrl => {
         const val = eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def;
 
@@ -986,19 +1020,20 @@ function switchEQ(part) {
             if (valEl) valEl.innerText = formatVal(ctrl.label, val);
         }
     });
-    _eqSwitching = false;
 
-    // Re-send CC72 for this part: even if the guard blocked spurious input events,
-    // a brief DOM flush could still let one through on some engines. Cheap insurance.
+    // Sustain for the part being switched to (covers a burst that slipped past
+    // the guard), then resync ALL parts: switching U1 → U2 → L is exactly the
+    // operation that used to leave the other two parts without sustain.
     sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
+    resyncAllSustain();
 }
 function resetEQ() {
     // Capture activePart now — it may change before the async timers fire if the
     // user switches parts within the window.
     const part = activePart;
     resetToneEQForPart(part);
-    applySmartProfile(part);
-    scheduleSustainResync(part, [150, 400]);
+    applySmartProfile(part); // ~18 CCs — burst, so resync every part
+    resyncAllSustain();
 }
 
 function formatVal(label, val) {
@@ -1037,15 +1072,23 @@ function scheduleSustainResync(part, delays) {
     );
 }
 
+// Every burst source resyncs ALL three parts: a burst on one channel can reset
+// the controllers of the other two, which is exactly how one part's sustain
+// silently disappears while another part is being edited.
+function resyncAllSustain() {
+    ['U1', 'U2', 'L'].forEach(p => scheduleSustainResync(p, SUSTAIN_TAPS));
+}
+
 function scheduleProfile(part, catName) {
     _pendingProfile[part].forEach(clearTimeout);
     _pendingProfile[part] = [
         setTimeout(() => applySmartProfile(part, catName), 150),
     ];
-    // CT-S500 resets controllers on ALL channels when any channel receives a large CC burst.
-    // Resync CC72 for all three parts so the other parts recover too.
-    ['U1', 'U2', 'L'].forEach(p => scheduleSustainResync(p, [400, 700]));
+    // CT-S500 resets controllers on ALL channels when any channel receives a
+    // large CC burst (~18 CCs from applySmartProfile) — resync every part.
+    resyncAllSustain();
 }
+
 
 function initToneSearch() {
     if (typeof db === 'undefined') return;
@@ -1195,7 +1238,7 @@ function initToneSearch() {
             });
         });
         
-        // Default selection = first tone in the default filter (Piano / Pad / String).
+        // Default: select first tone shown by the initial search filter.
         selectToneInList(part, () => true, true);
     });
 }
@@ -1305,12 +1348,16 @@ function initQuickControls() {
             if (!isOn) {
                 // Clear any damper hold left by the old CC64-based sustain / a stuck pedal.
                 sendCC(part, 64, 0);
-                // Casio CT-S500 sometimes ignores a single CC if the buffer is busy.
-                // Send again after 20ms, but only if sustain is still OFF.
-                setTimeout(() => {
-                    if (!tuning[part].sus) sendCC(part, 72, releaseNeutral(part));
-                }, 20);
             }
+            // Casio CT-S500 sometimes ignores a single CC if its buffer is busy —
+            // retry once for BOTH directions (ON used to be sent only once, so
+            // "sustain doesn't turn on" was a real failure mode). Re-read the state
+            // at fire time so a rapid double-tap can't undo the newer decision.
+            setTimeout(() => {
+                if (tuning[part].sus === isOn) {
+                    sendCC(part, 72, isOn ? SUS_RELEASE : releaseNeutral(part));
+                }
+            }, 20);
         });
     });
 }
@@ -1827,10 +1874,11 @@ function pushAllToKeyboard(skipTones = false) {
             sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
         });
     }, skipTones ? 0 : 150);
-    // Re-send CC72 at 400/700ms — CT-S500 resets controllers after tone load
-    if (!skipTones) {
-        ['U1','U2','L'].forEach(part => scheduleSustainResync(part, [400, 700]));
-    }
+    // Re-send CC72 afterwards — CT-S500 resets controllers after tone load AND
+    // after a big CC burst. The skipTones path (statechange with the same port)
+    // sends 81 CCs in a single tick, so it needs the resync just as much:
+    // without it, U1/U2 lose sustain while only the last part keeps it.
+    resyncAllSustain();
 }
 
 
@@ -1884,6 +1932,20 @@ function loadAppState() {
         }
         if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
         if (saved.tuning) Object.assign(tuning, saved.tuning);
+        // Tuning UI must follow the restored state even when the preset has no
+        // tones (or an old/absent appState) — otherwise the SUSTAIN button can
+        // show OFF while tuning.sus is ON and the hardware gets CC72=100.
+        ['U1','U2','L'].forEach(part => {
+            const octEl = document.getElementById('oct-' + part);
+            const octVal = tuning[part].oct || 0;
+            if (octEl) octEl.innerText = octVal > 0 ? '+' + octVal : octVal;
+
+            const susBtn = document.getElementById('sus-' + part);
+            if (susBtn) {
+                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
+                susBtn.classList.toggle('sus-on', tuning[part].sus);
+            }
+        });
         if (saved.globalTranspose !== undefined) {
             globalTranspose = saved.globalTranspose;
             const trnEl = document.getElementById('gTrnVal');
@@ -1909,16 +1971,6 @@ function loadAppState() {
                 // (disabled on boot so we don't force the keyboard).
                 if (saved.tones[part] !== undefined) {
                     selectToneInList(part, d => d.id === saved.tones[part]);
-                }
-                // Update tuning UI
-                const octEl = document.getElementById('oct-' + part);
-                const octVal = tuning[part].oct || 0;
-                if (octEl) octEl.innerText = octVal > 0 ? '+' + octVal : octVal;
-
-                const susBtn = document.getElementById('sus-' + part);
-                if (susBtn) {
-                    susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-                    susBtn.classList.toggle('sus-on', tuning[part].sus);
                 }
             });
         }

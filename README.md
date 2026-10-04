@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v187
+# Casio CT-S500 Pro Controller — v191
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -24,7 +24,7 @@ Dado que la comunicación MIDI es a menudo unidireccional (el teclado no siempre
 - `eqState`: Un objeto que almacena los valores (0-127) de 21 parámetros CC (Control Change) independientes para cada canal o parte (`U1`, `U2`, `L`).
 - `tuning`: Mantiene registro de la octava y el estado del pedal Sustain por cada parte.
 - `globalTranspose` / `globalOctave`: Transposición y octava maestras.
-- **LocalStorage (`casioState`)**: Un `setInterval` captura y guarda todo el estado de la mesa de mezclas y los instrumentos seleccionados cada 1000ms. Al recargar la página, la función `loadAppState()` inyecta silenciosamente estos valores de regreso a los faders sin bombardear de inmediato al teclado, permitiendo retomar el ensayo exactamente donde se dejó.
+- **LocalStorage (`casioAppState`)**: Un `setInterval` captura y guarda todo el estado de la mesa de mezclas y los instrumentos seleccionados cada 1000ms. Al recargar la página, la función `loadAppState()` inyecta silenciosamente estos valores de regreso a los faders sin bombardear de inmediato al teclado, permitiendo retomar el ensayo exactamente donde se dejó.
 - **GitHub Sync**: Los presets se sincronizan con un repositorio GitHub vía la API de contenidos. La función `mergePresetStores` usa timestamp (`_ts`) para resolver conflictos (el más reciente gana). Las eliminaciones se marcan con tombstones `{_deleted:true, _ts}` para sobrevivir merges.
 
 ---
@@ -45,7 +45,7 @@ Solicitar acceso exclusivo de sistema (`{ sysex: true }`) provoca que Chrome blo
 ### Prevención de Desbordamiento del Búfer Casio (Throttling)
 Cuando se cambia un instrumento (Program Change), Casio tarda unos milisegundos en cargar el nuevo DSP. Si la aplicación dispara inmediatamente un aluvión de 21 mensajes de ecualización (CC), el teclado ignora el comando de cambio de instrumento.
 - **La Solución:** `scheduleProfile(part, catName)` espera estratégicamente 150ms después de solicitar un nuevo Tono antes de enviar el paquete de configuraciones de ecualización.
-- **Triple-tap CC72:** El CT-S500 resetea todos los controladores tras una ráfaga grande de CCs. Para preservar el sustain y el release largo de choirs/strings/pads, CC72 se reenvía a 150ms, 400ms y 700ms mediante `scheduleSustainResync(part, delays)` con timers cancelables por parte.
+- **Reenvío de CC72 (Sustain):** El CT-S500 resetea todos los controladores tras una ráfaga grande de CCs. Para preservar el sustain y el release largo de choirs/strings/pads, CC72 se reenvía a las 3 partes mediante `resyncAllSustain()` → `SUSTAIN_TAPS = [150, 400, 700, 1300]` ms, con timers cancelables por parte en `scheduleSustainResync(part, delays)`.
 
 ### Reconexión sin recargar tonos
 `reconnectMIDI()` compara el ID del nuevo puerto con `_lastMidiOutputId`. Si es el mismo (ej. reconexión Bluetooth momentánea), solo reenvía CCs — sin Program Change al Casio. Si el ID cambia (puerto físico nuevo), sí recarga los tonos completos.
@@ -55,7 +55,7 @@ Cuando se cambia un instrumento (Program Change), Casio tarda unos milisegundos 
 ## 4. Perfiles Acústicos Inteligentes (Smart Acoustic Profiles)
 
 Seleccionar un sonido no es suficiente; un Órgano necesita distorsión y rotary, mientras que un Piano necesita Reverb profunda.
-La constante `ENVIRONMENTS` en `app.js` es un motor de diseño sonoro automatizado: 4 ambientes (Studio/Live/Hall/Jazz) × 31 categorías = 124 perfiles.
+La constante `ENVIRONMENTS` en `app.js` es un motor de diseño sonoro automatizado: 4 ambientes (Estudio/Vivo/Sala/Jazz) × 33 categorías = 132 perfiles.
 - Cuando la aplicación detecta que el usuario seleccionó un tono desde un `optgroup` (ej. cambió de "PIANO" a "ELEC.ORGAN"), inyecta automáticamente una matriz de valores predefinidos:
   - *String Ensemble / Choir:* Ataques lentos, liberación larga, Reverb profunda. CC72 neutral elevado (75–78) para preservar el decay natural.
   - *Synth Lead:* Filtros (Cutoff) cerrados, alta resonancia, vibrato activo y Portamento.
@@ -89,7 +89,7 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 **Cada vez que se modifica `app.js`, `style.css`, `fix_swap.js` o `harmony.js`, se debe actualizar el query string de cache busting en `index.html`:**
 
 ```html
-<script src="app.js?v187"></script>       <!-- incrementar el número -->
+<script src="app.js?v191"></script>       <!-- incrementar el número -->
 <link rel="stylesheet" href="style.css?v187">
 <script src="fix_swap.js?v187"></script>
 <script src="harmony.js?v187"></script>
@@ -101,12 +101,31 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 
 ## Documentación técnica
 
-- [`docs/AUDITORIA_MIXER_v180.md`](docs/AUDITORIA_MIXER_v180.md) — Auditoría completa del Mixer (2026-10-04): 5 críticos, 4 altos, 9 medios, 10 bajos. Todos los CRIT/HIGH/MED resueltos en v181–v187.
+- [`docs/AUDITORIA_v190.md`](docs/AUDITORIA_v190.md) — Auditoría general v190 (2026-10-04): bugs ocultos pendientes y mejoras propuestas (no duplica v170/v180).
+- [`docs/AUDITORIA_MIXER_v180.md`](docs/AUDITORIA_MIXER_v180.md) — Auditoría completa del Mixer (2026-10-04): 5 críticos, 4 altos, 9 medios, 10 bajos. CRIT/HIGH/MED cerrados en v181–v187 **con residuos** (MED-03/04/06/07/09, HIGH-01/02/03) — ver [AUDITORIA_v190.md](AUDITORIA_v190.md#verificación-de-hallazgos-previos).
 - [`MIXER_AUDIT.md`](MIXER_AUDIT.md) — Auditoría previa (v170). Todos los hallazgos resueltos.
 
 ---
 
 ## 8. Historial de Versiones (reciente)
+
+### v191 · dom 04 oct 2026 · COT
+- **fix(tones):** revertido a defaults originales — U2 → `457. ADV PIANO PAD`, L → `24. STRINGS PIANO` (primer resultado del filtro "Pad"/"String"). Se eliminó `DEFAULT_INSTRUMENT` y la selección por categoría que OpenCode introdujo.
+- **cache-bust:** `app.js` → v191.
+
+### v190 · dom 04 oct 2026 · COT
+- **fix(sustain):** `resyncAllSustain()` reenvía CC72 a **las 3 partes** tras cualquier ráfaga: cambio de entorno, `switchEQ`, `resetEQ`, `scheduleProfile` y **`pushAllToKeyboard` también en la rama `skipTones`** (A1: 81 CC en un tick al reconectar el mismo puerto dejaba a U1/U2 sin sustain). Taps unificados en `SUSTAIN_TAPS = [150, 400, 700, 1300]`.
+- **fix(sustain):** guard de faders EQ ahora es una ventana temporal (`beginEqProgrammatic`/`isEqProgrammatic`) — los eventos `input` asíncronos de Android escapaban del guard booleano sincrónico.
+- **fix(sustain):** toggle SUSTAIN con retry a 20 ms para ambas direcciones; relee `tuning[part].sus` al disparar para evitar doble-tap.
+- **fix(sustain):** Program Change externo re-sincroniza el sustain de esa parte si está ON.
+- **fix(ui):** `loadAppState` restaura octava + estado SUSTAIN de las 3 partes incluso sin tonos guardados.
+- **docs:** nueva `docs/AUDITORIA_v190.md`.
+
+### v189 · dom 04 oct 2026 · COT
+- **fix(sustain):** resync CC72 en todos los parts tras cambiar de tono.
+
+### v188 · dom 04 oct 2026 · COT
+- **cleanup:** LOW-08/09/10 + MED-09 (guards `EQ_CONTROLS`, cache-bust README, `CC 102/103/104` documentados como **sin verificar** contra el PDF de Casio).
 
 ### v187 · dom 04 oct 2026 · COT
 - **refactor:** `sReedndConnect` renombrado a `reconnectMIDI` (DESIGN-04).
