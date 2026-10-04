@@ -478,9 +478,8 @@ function onMIDIMessage(e) {
             pendingBank[part] = d2;
         }
 
-        // Update EQ memory (exclude CC64=damper pedal, CC72=app sustain, CC0=bank-select,
-        // CC7=volume — Part Mix Rules own this value, hardware knob must not override it)
-        if (d1 !== 64 && d1 !== 72 && d1 !== 0 && d1 !== 7) eqState[part][d1] = d2;
+        // Update EQ memory (exclude CC64=damper pedal, CC72=app sustain, CC0=bank-select)
+        if (d1 !== 64 && d1 !== 72 && d1 !== 0) eqState[part][d1] = d2;
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
@@ -1632,7 +1631,11 @@ function loadPreset(data) {
 
 function readPresetsStore() {
     try { return JSON.parse(localStorage.getItem("casioPresets") || "{}") || {}; }
-    catch(e) { console.error('[presets] corrupted storage, resetting:', e); localStorage.removeItem("casioPresets"); return {}; }
+    catch(e) {
+        console.error('[presets] corrupted storage, backing up:', e);
+        try { localStorage.setItem('casioPresets.corrupt.' + Date.now(), localStorage.getItem('casioPresets')); } catch(_) {}
+        return {};
+    }
 }
 
 function renderPresets() {
@@ -1868,6 +1871,7 @@ function pushAllToKeyboard(skipTones = false) {
     setTimeout(() => {
         ['U1','U2','L'].forEach(part => {
             EQ_CONTROLS.forEach(ctrl => {
+                if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state — never force on reconnect
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCoarseTuning(part);
@@ -1899,8 +1903,16 @@ function _getSavedToneId(part) {
 }
 
 function saveAppState() {
+    // Deep-copy eqState excluding PERFORMANCE_CCS (live-state — must not be forced on reload)
+    const eqSnap = {};
+    ['U1','U2','L'].forEach(p => {
+        eqSnap[p] = {};
+        Object.entries(eqState[p]).forEach(([cc, v]) => {
+            if (!PERFORMANCE_CCS.has(Number(cc))) eqSnap[p][cc] = v;
+        });
+    });
     const appState = {
-        eqState,
+        eqState: eqSnap,
         tuning,
         activeCategories,
         globalTranspose,
@@ -1911,9 +1923,15 @@ function saveAppState() {
             U1: _getSavedToneId('U1'),
             U2: _getSavedToneId('U2'),
             L: _getSavedToneId('L')
+        },
+        searchFilters: {
+            U1: window.toneSearch?.U1?.searchEl?.value ?? 'Piano',
+            U2: window.toneSearch?.U2?.searchEl?.value ?? 'Pad',
+            L:  window.toneSearch?.L?.searchEl?.value  ?? 'String',
         }
     };
-    localStorage.setItem('casioAppState', JSON.stringify(appState));
+    try { localStorage.setItem('casioAppState', JSON.stringify(appState)); }
+    catch(e) { console.warn('[state] save failed:', e); }
 }
 
 function loadAppState() {
@@ -1923,12 +1941,8 @@ function loadAppState() {
         
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
-            // Purge CC72 (Release) — never apply from saved state
+            // Purge CC72 (Release) — never apply from saved state; CC72 is managed by tuning.sus
             ['U1','U2','L'].forEach(p => { delete eqState[p][72]; delete eqState[p]['72']; });
-            // Always enforce Part Mix Rules so Volume fader is correct before MIDI connects
-            eqState['U1'][7] = 100;
-            eqState['U2'][7] = 75;
-            eqState['L'][7]  = 100;
         }
         if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
         if (saved.tuning) Object.assign(tuning, saved.tuning);
@@ -1966,7 +1980,12 @@ function loadAppState() {
         
         if (saved.tones) {
             ['U1', 'U2', 'L'].forEach(part => {
-                // Restore saved tone inside the default filter (Piano / Pad / String) when possible.
+                // Restore the search filter first so the tone is selected within the right context.
+                const ts = window.toneSearch?.[part];
+                if (ts && saved.searchFilters?.[part] !== undefined) {
+                    ts.searchEl.value = saved.searchFilters[part];
+                    ts.searchEl.dispatchEvent(new Event('input'));
+                }
                 // UI only — no 'change' event (would wipe saved eqState) and no changeTone
                 // (disabled on boot so we don't force the keyboard).
                 if (saved.tones[part] !== undefined) {
@@ -2154,6 +2173,7 @@ function initMidiController() {
             volSlider.addEventListener('input', () => {
                 const v = parseInt(volSlider.value);
                 if (volVal) volVal.innerText = v;
+                eqState[part][7] = v;
                 if (!mctrlEnabled) return;
                 if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, v]);
                 if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, v, CHANNEL[part]);
@@ -2166,6 +2186,7 @@ function initMidiController() {
             rvbSlider.addEventListener('input', () => {
                 const v = parseInt(rvbSlider.value);
                 if (rvbVal) rvbVal.innerText = v;
+                eqState[part][91] = v;
                 if (!mctrlEnabled) return;
                 if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 91, v]);
                 if (window.pcSynth?.applyCC) window.pcSynth.applyCC(91, v, CHANNEL[part]);
@@ -2288,27 +2309,28 @@ function buildVirtualKeyboard() {
 }
 
 function vkNoteOn(midiNote, ch) {
-    if (!mctrlEnabled) return;
     if (vkActiveKeys[midiNote]) return;
     ch = ch ?? CHANNEL[vkActivePart];
-    vkActiveKeys[midiNote] = ch; // store channel so NoteOff can use the same one
     const vel = parseInt(document.getElementById('vk-velocity')?.value || 90);
-    // Send to MIDI output (Casio)
-    if (midiOutput) midiOutput.send([0x90 | ch, midiNote, vel]);
-    // Send to PC synth
+    // Apply the same shift the Casio gets via RPN Coarse Tuning so PC synth stays in tune
+    const shift = globalTranspose + globalOctave * 12;
+    const shiftedNote = Math.max(0, Math.min(127, midiNote + shift));
+    vkActiveKeys[midiNote] = { ch, shiftedNote };
+    // Send to MIDI output (Casio) — only when EXT MIDI is ON
+    if (mctrlEnabled && midiOutput) midiOutput.send([0x90 | ch, midiNote, vel]);
+    // Send to PC synth — independent of EXT MIDI toggle
     if (pcSynthEnabled && window.pcSynth) {
         if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-        window.pcSynth.noteOn(ch, midiNote, vel);
+        window.pcSynth.noteOn(ch, shiftedNote, vel);
     }
 }
 
-function vkNoteOff(midiNote, ch) {
-    if (!vkActiveKeys[midiNote]) return;
-    // Use the channel captured at NoteOn time — part may have changed since then
-    ch = vkActiveKeys[midiNote];
+function vkNoteOff(midiNote) {
+    const entry = vkActiveKeys[midiNote];
+    if (!entry) return;
     delete vkActiveKeys[midiNote];
-    if (midiOutput) midiOutput.send([0x80 | ch, midiNote, 0]);
-    if (pcSynthEnabled && window.pcSynth) window.pcSynth.noteOff(ch, midiNote);
+    if (mctrlEnabled && midiOutput) midiOutput.send([0x80 | entry.ch, midiNote, 0]);
+    if (pcSynthEnabled && window.pcSynth) window.pcSynth.noteOff(entry.ch, entry.shiftedNote);
 }
 
 function getMidiNote(keyEl) {

@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v191
+# Casio CT-S500 Pro Controller — v192
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -89,7 +89,7 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 **Cada vez que se modifica `app.js`, `style.css`, `fix_swap.js` o `harmony.js`, se debe actualizar el query string de cache busting en `index.html`:**
 
 ```html
-<script src="app.js?v191"></script>       <!-- incrementar el número -->
+<script src="app.js?v192"></script>       <!-- incrementar el número -->
 <link rel="stylesheet" href="style.css?v187">
 <script src="fix_swap.js?v187"></script>
 <script src="harmony.js?v187"></script>
@@ -108,6 +108,18 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 ---
 
 ## 8. Historial de Versiones (reciente)
+
+### v192 · dom 04 oct 2026 07:28 · COT
+- **fix(tones):** `saveAppState` guarda el filtro de búsqueda activo (`searchFilters`) y `loadAppState` lo restaura antes de seleccionar el tono — U2 arranca en 457. ADV PIANO PAD y L en 24. STRINGS PIANO (o el último tono+filtro usados).
+- **fix(vk):** A3 — VK aplica `globalTranspose + globalOctave×12` al PC Synth (antes desafinado 1–2 octavas vs Casio).
+- **fix(vk):** A10 — VK suena por SF2 interno aunque EXT MIDI esté OFF; gate `mctrlEnabled` solo bloquea envío al Casio.
+- **fix(vk):** `vkNoteOff` usa `shiftedNote` capturado en `vkNoteOn` para liberación correcta del SF2.
+- **fix(eq):** A4 — sliders VOL/RVB del rack escriben a `eqState` → se preservan en reconexión y cambio de tono.
+- **fix(midi):** A5 — CC7 entrante del Casio actualiza `eqState`; ya no silencia el fader EQ en la próxima reconexión.
+- **fix(state):** A6 — `PERFORMANCE_CCS` (CC1/65/66/67) excluidos de `saveAppState` y de `pushAllToKeyboard` — arranque sin Mod/Portamento/Sostenuto/Soft congelados.
+- **fix(state):** A2 — `readPresetsStore` ya no destruye `casioPresets` ante JSON corrupto; hace backup con timestamp.
+- **fix(state):** `saveAppState` envuelto en `try/catch` — ya no lanza `QuotaExceededError` sin control (A11).
+- **cache-bust:** `app.js` → v192.
 
 ### v191 · dom 04 oct 2026 06:56 · COT
 - **fix(tones):** revertido a defaults originales — U2 → `457. ADV PIANO PAD`, L → `24. STRINGS PIANO` (primer resultado del filtro "Pad"/"String"). Se eliminó `DEFAULT_INSTRUMENT` y la selección por categoría que OpenCode introdujo.
