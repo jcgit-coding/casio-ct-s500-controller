@@ -275,13 +275,16 @@ document.addEventListener("DOMContentLoaded", () => {
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
-            // Re-send CC72 after the ~51-CC burst: the Casio may reset controllers
-            // after bulk CC writes (same hardware behaviour seen after tone changes).
-            setTimeout(() => {
-                ['U1', 'U2', 'L'].forEach(part => {
-                    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
-                });
-            }, 150);
+            // Re-send CC72 at 150 / 400 / 700ms — same triple-tap pattern as tone changes.
+            // A ~57-CC burst (3 × applySmartProfile) can trigger the CT-S500 hardware
+            // controller reset multiple times; a single 150ms re-send is not always enough.
+            [150, 400, 700].forEach(delay => {
+                setTimeout(() => {
+                    ['U1', 'U2', 'L'].forEach(part => {
+                        sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
+                    });
+                }, delay);
+            });
             switchEQ(activePart);
         });
     }
@@ -963,16 +966,18 @@ function switchEQ(part) {
     sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
 }
 function resetEQ() {
-    // Capture activePart now — it may change before the async timer fires if the
-    // user switches parts within the 150ms window.
+    // Capture activePart now — it may change before the async timers fire if the
+    // user switches parts within the window.
     const part = activePart;
     resetToneEQForPart(part);
     applySmartProfile(part);
-    // Re-send CC72 after the CC burst — the Casio may process the bulk write
-    // as a reset event (same hardware behaviour seen after tone changes).
-    setTimeout(() => {
-        if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
-    }, 150);
+    // Re-send CC72 at 150ms and 400ms: applySmartProfile sends 18 CCs which can
+    // trigger the CT-S500 hardware controller reset. Two taps cover slow resets.
+    [150, 400].forEach(delay => {
+        setTimeout(() => {
+            sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
+        }, delay);
+    });
 }
 
 function formatVal(label, val) {
