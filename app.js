@@ -876,24 +876,30 @@ function buildEQ() {
                 fader.min = 0; fader.max = 127;
                 fader.value = ctrl.def;
     
+                // Capture the active part when the drag starts so both 'input' and 'change'
+                // use the same part even if the user switches EQ target mid-drag.
+                let _faderPart = activePart;
                 fader.addEventListener('input', e => {
                     // Ignore programmatic .value changes from switchEQ — those are UI-only
                     // updates and must not send MIDI (a spurious CC burst can reset CC72 on
                     // the CT-S500, dropping sustain on the part being switched to).
                     if (_eqSwitching) return;
+                    _faderPart = activePart; // refresh on every real user move
                     const v = parseInt(e.target.value);
                     valSpan.innerText = formatVal(ctrl.label, v);
                     if (ctrl.cc === 7) {
                         // Volume: solo al part activo
-                        eqState[activePart][7] = v;
-                        sendCC(activePart, 7, v);
+                        eqState[_faderPart][7] = v;
+                        sendCC(_faderPart, 7, v);
                     } else {
-                        eqState[activePart][ctrl.cc] = v;
-                        sendCC(activePart, ctrl.cc, v);
+                        eqState[_faderPart][ctrl.cc] = v;
+                        sendCC(_faderPart, ctrl.cc, v);
                     }
                 });
                 fader.addEventListener('change', () => {
-                    saveToneEQForPart(activePart);
+                    // Use _faderPart (set during the last real input event) so the save
+                    // targets the part that was active when the user was actually dragging.
+                    saveToneEQForPart(_faderPart);
                     if (typeof saveAppState === 'function') saveAppState();
                 });
     
@@ -957,12 +963,15 @@ function switchEQ(part) {
     sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
 }
 function resetEQ() {
-    resetToneEQForPart(activePart);
-    applySmartProfile(activePart);
+    // Capture activePart now — it may change before the async timer fires if the
+    // user switches parts within the 150ms window.
+    const part = activePart;
+    resetToneEQForPart(part);
+    applySmartProfile(part);
     // Re-send CC72 after the CC burst — the Casio may process the bulk write
     // as a reset event (same hardware behaviour seen after tone changes).
     setTimeout(() => {
-        if (tuning[activePart].sus) sendCC(activePart, 72, SUS_RELEASE);
+        if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
     }, 150);
 }
 
