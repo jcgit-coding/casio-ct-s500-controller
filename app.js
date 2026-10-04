@@ -229,10 +229,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("connectBtn").addEventListener("click", () => {
         midiInitAttempted = true; // avoid a second requestMIDIAccess from the document click
-        if (midiAccess) sReedndConnect(); else initMIDI();
+        if (midiAccess) reconnectMIDI(); else initMIDI();
     });
 
-    
+
     // EQ Part Target Logic
     document.querySelectorAll('.btn-eq').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -331,9 +331,9 @@ function initMIDI() {
         // Debounce: statechange fires for every port open/close; batch into one reconnect
         access.onstatechange = () => {
             clearTimeout(_midiConnectTimer);
-            _midiConnectTimer = setTimeout(() => sReedndConnect(), 300);
+            _midiConnectTimer = setTimeout(() => reconnectMIDI(), 300);
         };
-        sReedndConnect();
+        reconnectMIDI();
     }, err => {
         const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
         console.error('[MIDI] error:', err.name, err.message);
@@ -347,7 +347,7 @@ function initMIDI() {
     });
 }
 
-function sReedndConnect() {
+function reconnectMIDI() {
     // Detach old input handler first — prevents ghost messages and PC Synth duplicate notes
     if (midiInput) { midiInput.onmidimessage = null; }
     midiInput  = null;
@@ -1840,7 +1840,7 @@ function debugMidiPorts() {
 }
 document.querySelector('.status-badge')?.addEventListener('click', () => {
     midiInitAttempted = true; // prevent double init from the document {once} listener
-    if (midiAccess) sReedndConnect(); else initMIDI();
+    if (midiAccess) reconnectMIDI(); else initMIDI();
 });
 function _getSavedToneId(part) {
     return currentTone[part]?.id ?? 0;
