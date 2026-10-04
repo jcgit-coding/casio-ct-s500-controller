@@ -205,7 +205,9 @@ let _lastMidiOutputId = null;
 // next change / resync).
 let _eqSwitchingUntil = 0;
 function isEqProgrammatic() { return Date.now() < _eqSwitchingUntil; }
-function beginEqProgrammatic(ms = 100) { _eqSwitchingUntil = Date.now() + ms; }
+// 250ms: Android Chrome fires 'input' asynchronously after programmatic fader.value writes;
+// 100ms was too short and let spurious ~17-CC bursts through, resetting CC72 on all channels.
+function beginEqProgrammatic(ms = 250) { _eqSwitchingUntil = Date.now() + ms; }
 
 // ======================================================================
 //  INIT
@@ -1081,11 +1083,14 @@ function resyncAllSustain() {
 function scheduleProfile(part, catName) {
     _pendingProfile[part].forEach(clearTimeout);
     _pendingProfile[part] = [
-        setTimeout(() => applySmartProfile(part, catName), 150),
+        setTimeout(() => {
+            applySmartProfile(part, catName);
+            // Resync AFTER the burst so taps arrive after the CT-S500 hardware reset,
+            // not racing with it. Calling before the burst had the first tap (150ms)
+            // compete with applySmartProfile — undefined ordering, unreliable.
+            resyncAllSustain();
+        }, 150),
     ];
-    // CT-S500 resets controllers on ALL channels when any channel receives a
-    // large CC burst (~18 CCs from applySmartProfile) — resync every part.
-    resyncAllSustain();
 }
 
 
