@@ -25,6 +25,9 @@ const CAT_RELEASE_NEUTRAL = {
 function releaseNeutral(part) {
     return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
 }
+// CCs that represent live performance state — never save to toneEQ, never reset on tone/env change.
+// CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal
+const PERFORMANCE_CCS = new Set([1, 65, 66, 67]);
 
 function pcNoteOff(ch, note) {
     const info = pcActiveNotes[ch + ':' + note];
@@ -167,6 +170,8 @@ function saveToneEQForPart(part) {
     delete profile[7]; delete profile['7'];
     // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button — never persist
     delete profile[72]; delete profile['72'];
+    // Performance CCs (modulation, pedal switches) are live state — never persist
+    PERFORMANCE_CCS.forEach(cc => { delete profile[cc]; delete profile[String(cc)]; });
     toneEQ[id][currentEnv] = profile;
     saveToneEQ();
 }
@@ -182,6 +187,10 @@ function resetToneEQForPart(part) {
 
 // Which part the EQ panel is editing
 let activePart = 'U1';
+// MIDI connection state
+let midiInitAttempted = false;
+let _midiConnectTimer = null;
+let _lastMidiOutputId = null;
 // Guard: true while switchEQ is updating fader DOM values programmatically.
 // Some mobile browsers (Android Chrome) fire 'input' on programmatic .value changes,
 // which would send a ~17-CC burst to the Casio and trigger a hardware CC72 reset.
@@ -205,9 +214,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!loadAppState()) ['U1','U2','L'].forEach(part => applySmartProfile(part));
     setInterval(saveAppState, 1000);
 
-    // Android Chrome necesita un gesto de usuario para mostrar el dialog de
-    // permisos MIDI. Esperamos el primer click en cualquier lugar de la pantalla.
-    let midiInitAttempted = false;
+    // On desktop Chrome, MIDI doesn't require a user gesture — init right away.
+    // On Android Chrome, requestMIDIAccess needs a user gesture to show the permission dialog.
+    const isAndroid = /android/i.test(navigator.userAgent);
+    if (!isAndroid) {
+        midiInitAttempted = true;
+        initMIDI();
+    }
     document.addEventListener("click", () => {
         if (!midiInitAttempted) { midiInitAttempted = true; initMIDI(); }
         // Pre-init AudioContext on first gesture so PC synth is ready immediately
@@ -322,7 +335,11 @@ function initMIDI() {
     const sysex = !/android/i.test(navigator.userAgent);
     navigator.requestMIDIAccess({ sysex }).then(access => {
         midiAccess = access;
-        access.onstatechange = () => sReedndConnect();
+        // Debounce: statechange fires for every port open/close; batch into one reconnect
+        access.onstatechange = () => {
+            clearTimeout(_midiConnectTimer);
+            _midiConnectTimer = setTimeout(() => sReedndConnect(), 300);
+        };
         sReedndConnect();
     }, err => {
         const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
@@ -379,7 +396,17 @@ function sReedndConnect() {
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
-        if (midiOutput) pushAllToKeyboard();
+        if (midiOutput) {
+            const newId = midiOutput.id;
+            // Only reload tones when the output port actually changes — avoids cutting notes
+            // during Bluetooth reconnects or virtual port appearances that don't change the Casio
+            if (newId !== _lastMidiOutputId) {
+                _lastMidiOutputId = newId;
+                pushAllToKeyboard();
+            } else {
+                pushAllToKeyboard(true); // CCs only — tones already loaded, no PC needed
+            }
+        }
     } else {
         const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
         const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
@@ -731,8 +758,9 @@ function applySmartProfile(part, category) {
     if (category) activeCategories[part] = category;
     const cat = activeCategories[part];
 
-    // 1. Reset everything to generic default first
+    // 1. Reset tone/env parameters to generic defaults — skip live performance CCs
     EQ_CONTROLS.forEach(ctrl => {
+        if (PERFORMANCE_CCS.has(ctrl.cc)) return;
         eqState[part][ctrl.cc] = ctrl.def;
     });
 
@@ -741,6 +769,7 @@ function applySmartProfile(part, category) {
     const savedProfile = toneId != null && toneEQ[toneId]?.[currentEnv];
     if (savedProfile) {
         for (const [cc, val] of Object.entries(savedProfile)) {
+            if (PERFORMANCE_CCS.has(Number(cc))) continue;
             eqState[part][cc] = val;
         }
     } else {
@@ -761,9 +790,10 @@ function applySmartProfile(part, category) {
     // Ensure CC72 (Release) is never in eqState — send a neutral value to keyboard instead
     delete eqState[part][72]; delete eqState[part]['72'];
 
-    // 4. Send to keyboard and update UI
+    // 4. Send to keyboard and update UI — skip performance CCs (preserve live state)
     // CC72 sent LAST so it isn't overwritten by the EQ burst or Casio's internal PC reset
     EQ_CONTROLS.forEach(ctrl => {
+        if (PERFORMANCE_CCS.has(ctrl.cc)) return;
         const val = eqState[part][ctrl.cc];
         sendCC(part, ctrl.cc, val);
         if (activePart === part) {
@@ -1307,9 +1337,9 @@ async function syncPull() {
         if (!res.ok) return false;
         const json = await res.json();
         ghFileSha = json.sha;
-        const cloud = JSON.parse(atob(json.content.replace(/\n/g, '')));
+        const cloud = JSON.parse(decodeURIComponent(escape(atob(json.content.replace(/\n/g, '')))));
         // Merge: cloud wins (source of truth)
-        const local = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        const local = readPresetsStore();
         const merged = Object.assign({}, local, cloud);
         localStorage.setItem('casioPresets', JSON.stringify(merged));
         renderPresets();
@@ -1324,7 +1354,7 @@ async function syncPush() {
         updateSyncStatus('Saving...');
         // Re-fetch SHA if missing (e.g. first push)
         if (!ghFileSha) await syncPull();
-        const presets = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+        const presets = readPresetsStore();
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(presets, null, 2))));
         const body = { message: 'Update presets', content };
         if (ghFileSha) body.sha = ghFileSha;
@@ -1368,7 +1398,7 @@ function initPresets() {
         const input = document.getElementById("presetName");
         const name  = input.value.trim();
         if (!name) { alert("Enter a name for the preset."); return; }
-        const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+        const presets = readPresetsStore();
         if (presets[name] && !confirm(`"${name}" already exists. Overwrite?`)) return;
         captureAndSavePreset(name);
         input.value = '';
@@ -1461,7 +1491,7 @@ function captureAndSavePreset(name) {
             L:  currentTone.L?.id  ?? '',
         }
     };
-    const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+    const presets = readPresetsStore();
     presets[name] = data;
     localStorage.setItem("casioPresets", JSON.stringify(presets));
     renderPresets();
@@ -1522,9 +1552,14 @@ function loadPreset(data) {
     pushAllToKeyboard();
 }
 
+function readPresetsStore() {
+    try { return JSON.parse(localStorage.getItem("casioPresets") || "{}") || {}; }
+    catch(e) { console.error('[presets] corrupted storage, resetting:', e); localStorage.removeItem("casioPresets"); return {}; }
+}
+
 function renderPresets() {
     const list    = document.getElementById("presetsList");
-    const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+    const presets = readPresetsStore();
     list.innerHTML = '';
 
     for (const [name, data] of Object.entries(presets)) {
@@ -1552,7 +1587,7 @@ function renderPresets() {
         delBtn.className   = 'del-btn';
         delBtn.onclick = () => {
             if (!confirm(`Delete "${name}"?`)) return;
-            const p = JSON.parse(localStorage.getItem("casioPresets") || "{}");
+            const p = readPresetsStore();
             delete p[name];
             localStorage.setItem("casioPresets", JSON.stringify(p));
             renderPresets();
@@ -1771,6 +1806,7 @@ function debugMidiPorts() {
     alert(msg || 'Sin puertos MIDI.');
 }
 document.querySelector('.status-badge')?.addEventListener('click', () => {
+    midiInitAttempted = true; // prevent double init from the document {once} listener
     if (midiAccess) sReedndConnect(); else initMIDI();
 });
 function _getSavedToneId(part) {
