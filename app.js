@@ -1571,6 +1571,11 @@ function captureAndSavePreset(name) {
             U1: currentTone.U1?.id ?? '',
             U2: currentTone.U2?.id ?? '',
             L:  currentTone.L?.id  ?? '',
+        },
+        searchFilters: {
+            U1: window.toneSearch?.U1?.searchEl?.value ?? 'Piano',
+            U2: window.toneSearch?.U2?.searchEl?.value ?? 'Pad',
+            L:  window.toneSearch?.L?.searchEl?.value  ?? 'String',
         }
     };
     const presets = readPresetsStore();
@@ -1590,10 +1595,7 @@ function loadPreset(data) {
             delete eqState[part][72]; delete eqState[part]['72'];
         }
     });
-    // Enforce Part Mix Rules — old presets may have captured CC7 at a user-adjusted value
-    eqState['U1'][7] = 100;
-    eqState['U2'][7] = 75;
-    eqState['L'][7]  = 100;
+    // CC7 (Volume) comes from the saved eqState — no longer forced here.
     ['U1','U2','L'].forEach(part => {
         if (data.tuning?.[part]) {
             tuning[part].oct = data.tuning[part].oct || 0;
@@ -1608,9 +1610,15 @@ function loadPreset(data) {
                 susBtn.classList.toggle('sus-on', tuning[part].sus);
             }
         }
-        // Restore tone selection — new presets store numeric id, old ones stored text
+        // Restore tone selection — new presets store numeric id, old ones stored text.
+        // Restore filter first so the tone appears in context (and the chip highlights).
         if (data.tones?.[part] !== undefined && data.tones[part] !== '') {
-            const byId   = typeof data.tones[part] === 'number';
+            const ts = window.toneSearch?.[part];
+            if (ts && data.searchFilters?.[part] !== undefined) {
+                ts.searchEl.value = data.searchFilters[part];
+                ts.searchEl.dispatchEvent(new Event('input'));
+            }
+            const byId = typeof data.tones[part] === 'number';
             selectToneInList(part, byId
                 ? (d)    => d.id === data.tones[part]
                 : (d, o) => o.text === data.tones[part]);
@@ -1983,11 +1991,14 @@ function loadAppState() {
             document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
         }
         
-        if (saved.tones) {
+        // Only restore specific tones when the save also carries searchFilters (v192+).
+        // Older saves may contain OpenCode-era tone IDs that don't match the expected
+        // defaults; in that case let initToneSearch's first-in-filter selection stand.
+        if (saved.tones && saved.searchFilters) {
             ['U1', 'U2', 'L'].forEach(part => {
                 // Restore the search filter first so the tone is selected within the right context.
                 const ts = window.toneSearch?.[part];
-                if (ts && saved.searchFilters?.[part] !== undefined) {
+                if (ts && saved.searchFilters[part] !== undefined) {
                     ts.searchEl.value = saved.searchFilters[part];
                     ts.searchEl.dispatchEvent(new Event('input'));
                 }
