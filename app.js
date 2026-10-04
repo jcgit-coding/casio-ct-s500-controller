@@ -1734,6 +1734,7 @@ function saveAppState() {
     const appState = {
         eqState,
         tuning,
+        activeCategories,
         globalTranspose,
         globalOctave,
         activePart,
@@ -1754,9 +1755,14 @@ function loadAppState() {
         
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
-            // Purge CC72 (Release) — eliminado del EQ, nunca debe aplicarse desde estado guardado
+            // Purge CC72 (Release) — never apply from saved state
             ['U1','U2','L'].forEach(p => { delete eqState[p][72]; delete eqState[p]['72']; });
+            // Always enforce Part Mix Rules so Volume fader is correct before MIDI connects
+            eqState['U1'][7] = 100;
+            eqState['U2'][7] = 75;
+            eqState['L'][7]  = 100;
         }
+        if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
         if (saved.tuning) Object.assign(tuning, saved.tuning);
         if (saved.globalTranspose !== undefined) {
             globalTranspose = saved.globalTranspose;
