@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v162
+# Casio CT-S500 Pro Controller — v187
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -12,6 +12,7 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 - `index.html`: La estructura visual, construida semánticamente. Carga iconos Material UI y la tipografía Montserrat.
 - `style.css`: Motor de diseño. Utiliza CSS Variables (`--panel-bg`, `--accent`, etc.) para gestionar dinámicamente un Tema Claro / Tema Oscuro. Usa una arquitectura puramente basada en Flexbox para lograr un diseño "Responsive" extremo (funciona igual de bien en monitores 4K que en smartphones verticales).
 - `app.js`: El cerebro de la aplicación. Gestiona la conexión MIDI, el "State Management" global, los listeners de la interfaz y la inyección en el DOM.
+- `fix_swap.js`: Maneja el swap visual de partes (U1/U2/L) y llama a `window.swapPartState` para sincronizar el estado MIDI.
 - `raw_tones.js` y `raw_rhythms.js`: Bases de datos crudas del manual oficial de Casio. Contienen listas de texto sin formato que `app.js` "parsea" al arrancar para construir los catálogos lógicos.
 
 ---
@@ -20,10 +21,11 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 
 Dado que la comunicación MIDI es a menudo unidireccional (el teclado no siempre reporta la posición de todos sus parámetros internos al encenderse), la app mantiene un árbol de estado estricto:
 
-- `eqState`: Un objeto que almacena los valores (0-127) de 18 parámetros CC (Control Change) independientes para cada canal o parte (`U1`, `U2`, `L`).
+- `eqState`: Un objeto que almacena los valores (0-127) de 21 parámetros CC (Control Change) independientes para cada canal o parte (`U1`, `U2`, `L`).
 - `tuning`: Mantiene registro de la octava y el estado del pedal Sustain por cada parte.
-- `globalTranspose`: Almacena la transposición maestra del teclado.
+- `globalTranspose` / `globalOctave`: Transposición y octava maestras.
 - **LocalStorage (`casioState`)**: Un `setInterval` captura y guarda todo el estado de la mesa de mezclas y los instrumentos seleccionados cada 1000ms. Al recargar la página, la función `loadAppState()` inyecta silenciosamente estos valores de regreso a los faders sin bombardear de inmediato al teclado, permitiendo retomar el ensayo exactamente donde se dejó.
+- **GitHub Sync**: Los presets se sincronizan con un repositorio GitHub vía la API de contenidos. La función `mergePresetStores` usa timestamp (`_ts`) para resolver conflictos (el más reciente gana). Las eliminaciones se marcan con tombstones `{_deleted:true, _ts}` para sobrevivir merges.
 
 ---
 
@@ -33,7 +35,7 @@ El módulo MIDI de la aplicación fue diseñado para sortear las extremas limita
 
 ### Bloqueo de Puertos "Fantasma" (MidiThrough)
 En Android, el sistema operativo inyecta rutinariamente un puerto virtual llamado `Android MIDI` o `MidiThrough`. Adaptadores USB OTG genéricos a menudo se reportan como "Dispositivo USB genérico" en lugar de "Casio".
-- **La Solución:** La función `scanAndConnect()` rastrea todos los puertos. Prioriza nombres que contengan `CASIO`, `CT-S`, `WU-BT`, `BLE`. Si no los encuentra, filtra y expulsa agresivamente cualquier puerto que contenga la palabra `THROUGH` o `ANDROID`, obligando a la app a engancharse al cable físico USB real.
+- **La Solución:** La función `reconnectMIDI()` rastrea todos los puertos. Prioriza nombres que contengan `CASIO`, `CT-S`, `WU-BT`, `BLE`. Si no los encuentra, filtra y expulsa agresivamente cualquier puerto que contenga la palabra `THROUGH` o `ANDROID`, obligando a la app a engancharse al cable físico USB real.
 
 ### Seguridad y SysEx en Chrome Móvil
 Solicitar acceso exclusivo de sistema (`{ sysex: true }`) provoca que Chrome bloquee el acceso silencioso al hardware.
@@ -41,20 +43,24 @@ Solicitar acceso exclusivo de sistema (`{ sysex: true }`) provoca que Chrome blo
 - Si Chrome en Android bloquea la conexión inicial (`NotAllowedError` / `SecurityError`), la app captura el error y redirige al usuario a utilizar el botón manual de **Reconectar**. Presionar este botón cuenta como un "Gesto de Usuario" (User Gesture), lo que obliga al navegador móvil a abrir el pop-up de permisos USB.
 
 ### Prevención de Desbordamiento del Búfer Casio (Throttling)
-Cuando se cambia un instrumento (Program Change), Casio tarda unos milisegundos en cargar el nuevo DSP. Si la aplicación dispara inmediatamente un aluvión de 18 mensajes de ecualización (CC), el teclado ignora el comando de cambio de instrumento.
-- **La Solución:** `setTimeout(() => applySmartProfile(...), 100);`. La app espera estratégicamente 100ms después de solicitar un nuevo Tono antes de enviar el paquete masivo de configuraciones de ecualización.
+Cuando se cambia un instrumento (Program Change), Casio tarda unos milisegundos en cargar el nuevo DSP. Si la aplicación dispara inmediatamente un aluvión de 21 mensajes de ecualización (CC), el teclado ignora el comando de cambio de instrumento.
+- **La Solución:** `scheduleProfile(part, catName)` espera estratégicamente 150ms después de solicitar un nuevo Tono antes de enviar el paquete de configuraciones de ecualización.
+- **Triple-tap CC72:** El CT-S500 resetea todos los controladores tras una ráfaga grande de CCs. Para preservar el sustain y el release largo de choirs/strings/pads, CC72 se reenvía a 150ms, 400ms y 700ms mediante `scheduleSustainResync(part, delays)` con timers cancelables por parte.
+
+### Reconexión sin recargar tonos
+`reconnectMIDI()` compara el ID del nuevo puerto con `_lastMidiOutputId`. Si es el mismo (ej. reconexión Bluetooth momentánea), solo reenvía CCs — sin Program Change al Casio. Si el ID cambia (puerto físico nuevo), sí recarga los tonos completos.
 
 ---
 
 ## 4. Perfiles Acústicos Inteligentes (Smart Acoustic Profiles)
 
-Seleccionar un sonido no es suficiente; un Órgano necesita distorsión y rotary, mientras que un Piano necesita Reverb profunda. 
-La constante `CATEGORY_PROFILES` en `app.js` es un motor de diseño sonoro automatizado.
+Seleccionar un sonido no es suficiente; un Órgano necesita distorsión y rotary, mientras que un Piano necesita Reverb profunda.
+La constante `ENVIRONMENTS` en `app.js` es un motor de diseño sonoro automatizado: 4 ambientes (Studio/Live/Hall/Jazz) × 31 categorías = 124 perfiles.
 - Cuando la aplicación detecta que el usuario seleccionó un tono desde un `optgroup` (ej. cambió de "PIANO" a "ELEC.ORGAN"), inyecta automáticamente una matriz de valores predefinidos:
-  - *String Ensemble:* Ataques lentos, liberación larga, Reverb profunda.
+  - *String Ensemble / Choir:* Ataques lentos, liberación larga, Reverb profunda. CC72 neutral elevado (75–78) para preservar el decay natural.
   - *Synth Lead:* Filtros (Cutoff) cerrados, alta resonancia, vibrato activo y Portamento.
   - *Elec. Organ:* Activación del DSP Rotatorio, cero resonancia.
-Esto emula el comportamiento de los "Registrations" de alta gama, haciendo que cualquier sonido suene profesional y "mezclado" al instante de ser seleccionado.
+- Los CCs de interpretación en vivo (CC1 Mod, CC65 Portamento SW, CC66 Sostenuto, CC67 Soft) están en `PERFORMANCE_CCS` y nunca se resetean al cambiar de tono.
 
 ---
 
@@ -78,84 +84,58 @@ En lugar de construir listas masivas de código HTML manualmente, el sistema ing
 
 ---
 
----
-
 ## 7. Regla de Versioning
 
-**Cada vez que se modifica `app.js` o `style.css`, se debe actualizar el query string de cache busting en `index.html`:**
+**Cada vez que se modifica `app.js`, `style.css`, `fix_swap.js` o `harmony.js`, se debe actualizar el query string de cache busting en `index.html`:**
 
 ```html
-<script src="app.js?v162"></script>   <!-- incrementar el número -->
-<link rel="stylesheet" href="style.css?v162">
+<script src="app.js?v187"></script>       <!-- incrementar el número -->
+<link rel="stylesheet" href="style.css?v187">
+<script src="fix_swap.js?v187"></script>
+<script src="harmony.js?v187"></script>
 ```
 
-Sin este paso, los navegadores (especialmente móviles) sirven la versión anterior en caché y los cambios no se ven.  
-El número debe coincidir con la versión del README, y tanto el título del README como la entrada del historial deben incluir la fecha y hora Colombia (COT, UTC-5) en que se hizo el cambio.
+Sin este paso, los navegadores (especialmente móviles) sirven la versión anterior en caché y los cambios no se ven.
+
+---
+
+## Documentación técnica
+
+- [`docs/AUDITORIA_MIXER_v180.md`](docs/AUDITORIA_MIXER_v180.md) — Auditoría completa del Mixer (2026-10-04): 5 críticos, 4 altos, 9 medios, 10 bajos. Todos los CRIT/HIGH/MED resueltos en v181–v187.
+- [`MIXER_AUDIT.md`](MIXER_AUDIT.md) — Auditoría previa (v170). Todos los hallazgos resueltos.
 
 ---
 
 ## 8. Historial de Versiones (reciente)
+
+### v187 · dom 04 oct 2026 · COT
+- **refactor:** `sReedndConnect` renombrado a `reconnectMIDI` (DESIGN-04).
+- **cleanup:** `EQ_CONTROLS.find(c => c && ...)` → guard innecesario removido; `blackOffsets` (array sin uso en VK); comentario incorrecto en `buildGMSelectors`. (LOW-08)
+- **cache-bust:** `style.css`, `fix_swap.js`, `harmony.js` actualizados a v187. (LOW-09)
+
+### v186 · dom 04 oct 2026 · COT
+- **refactor(sustain):** LOW-07 — `scheduleSustainResync` centraliza todos los timers CC72.
+
+### v185 · dom 04 oct 2026 · COT
+- **fix(sf2+swap+xss):** MED-06/07 + LOW-05.
+
+### v184 · dom 04 oct 2026 · COT
+- **fix(midi+vk):** MED-01/02/05/08 — input detach, output-only, vol cap, stuck notes.
+
+### v183 · dom 04 oct 2026 · COT
+- **fix(sync+pc):** CRIT-02 sync strategy + HIGH-04 external PC.
+
+### v182 · dom 04 oct 2026 · COT
+- **fix(tones+octave):** debounce profile bursts + remove per-part octave desync.
+
+### v181 · dom 04 oct 2026 · COT
+- **fix(midi+presets):** CRIT-01/03/04/05 + HIGH-01/02/03 + MED-03.
 
 ### v162 · 2026-09-30 13:07 COT
 - **UX Mixer:** Lista de tones reducida de `size=8` a `size=5`.
 - **Fix:** Botón "↑ Top" ahora hace scroll al tope de la tarjeta Instrument 1 (`card-U1`), no al tope absoluto de la página.
 - **feat:** EQ por tono+ambiente — al mover cualquier fader o switch, se guarda automáticamente el perfil para ese tono en ese ambiente (Studio/Live/Hall/Jazz). Cambiar de tono o ambiente carga el perfil guardado; si no existe, usa el perfil de categoría. Botón Reset borra el perfil guardado y vuelve al default de categoría.
 - **feat:** Al recibir un Program Change del Casio físico, se aplica automáticamente `applySmartProfile` para la nueva categoría del tono.
-
-### v143
-- **Fix:** Botón "↑ Top" usa `window.scrollTo({ top: 0 })` — scroll al inicio absoluto de la página.
-
-### v142
-- **Fix:** Botón "↑ Top" del EQ ahora scrollea al inicio del Mixer (tarjetas de instrumentos), no al panel EQ mismo.
-
-### v141
-- **UX EQ:** Secciones del EQ compactadas para caber en una sola fila — reducidos padding, gap, tamaño de fader (200→160px) y valor numérico. `flex-wrap: nowrap` con `overflow-x: auto` como fallback.
-
-### v140
-- **Fix:** Scroll de "↑ Top" y "EDIT EQ ↓" cambiado a `window.scrollTo` — `scrollIntoView` no funcionaba con el layout flex actual.
-
-### v139
-- **UX:** Botón "↑ Top" en el panel EQ & Effects — hace scroll para que el EQ quede en la parte superior del viewport.
-
-### v138
-- **UX:** Botones "EDIT EQ ↓" hacen scroll automático a la sección "EQ & Effects" al ser presionados.
-
-### v137
-- **Fix Android MIDI:** El fallback asíncrono `sysex:true → sysex:false` perdía el contexto de user gesture en Android Chrome, causando "platform dependent initialization failed". Ahora se detecta Android vía UA (`/android/i`) y se usa `sysex:false` directamente — sin retry. Desktop sigue usando `sysex:true`.
-
-### v136
-- **Fix crítico MIDI Android:** `requestMIDIAccess({ sysex: true })` causaba bloqueo silencioso en Chrome Android — cambiado a `sysex: false` (documentado en README desde el inicio, pero el código tenía el valor incorrecto).
-- **Fix CSS variable:** `var(--text-dim)` en el badge de versión no existe — cambiado a `var(--text-muted)`. En modo oscuro la badge era invisible.
-- **Fix HTML:** `<span id="statusText">` y `<span id="statusText">` sin cerrar — corregidos.
-- **Fix VK highlight:** `querySelectorAll('.vk-key')` no encontraba nada (las teclas tienen clases `vk-white`/`vk-black`) — las teclas activas no se limpiaban visualmente al desactivar MIDI CTRL.
-- **Fix versiones CSS/JS:** cache busting no se había actualizado correctamente de v133 a v135.
-
-### v135
-- **Fix:** `<span id="syncAutoStatus">` sin cerrar — al llamar `innerText =` destruía los elementos hijo `syncTokenDisplay` y `btnSyncCreate`, haciéndolos desaparecer del DOM tras el primer render. Ahora son elementos independientes.
-- **Fix:** `pcSynthEnabled` inicializado a `true` cuando el comentario y la intención dicen que debe ser `false` — el PC Synth ahora arranca apagado como se esperaba.
-
-### v134
-- **Fix MIDI CTRL estructura HTML:** `</div>` extra cerraba `.synth-rack` prematuramente — canales y teclado virtual quedaban fuera del contenedor flex, perdiendo el layout y el max-width centrado.
-- **Fix HTML:** `<span id="sf2-status">` sin cerrar — corregido.
-- **MIDI CTRL OFF por defecto:** `mctrlEnabled` ahora inicia en `false`; toggle empieza sin `checked`. El usuario activa cuando lo necesite.
-- **CSS light mode:** `.rc-controls` ahora tiene override `rgba(0,0,0,0.04)` en modo claro — ya no aparece con fondo grisáceo oscuro sobre blanco.
-
-### v133
-- **Fix harmony.js:** Errores de sintaxis fatales (strings sin cerrar en líneas 34 y 47) que impedían que el script parseara. Variable `extensions` ahora declarada con `const`. Nombres de grados corregidos: mayor `['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']`, menor `['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII']`. Grado VII menor corregido a `Maj` (no `Dom`). Reemplazado `var(--text-dim)` (inexistente) por `var(--text-muted)`.
-
-### v132
-- **Fix:** `loadAppState`, `loadPreset` y `onMIDIMessage` (Program Change) ahora resetean el filtro de búsqueda antes de buscar el tono guardado — ya no fallaban si el tono estaba fuera del filtro activo.
-- **Fix:** `pcSynthEnabled` ahora se restaura correctamente desde `loadAppState` y sincroniza el checkbox de UI.
-- **Fix:** `CC0` (Bank Select) ya no se almacenaba incorrectamente en `eqState`.
-- **CSS dark mode:** Variables `--danger`, `--danger-glow`, `--blue`, `--border-light`, `--border-strong` y otras ahora definidas en `:root` — el indicador de estado MIDI (punto rojo) ya es visible en modo oscuro.
-- **CSS light mode:** Overrides para Arranger (`.btn-giant`, `.rhythm-item`, `.clock-toggle`), Rack/MIDI CTRL (`.rack-header`, `.rack-channel`, `.vk-toolbar`, `.rack-btn`), swap buttons y scrollbars.
-- **Cleanup:** Eliminadas referencias a elementos HTML removidos (`sf2-vol`, `pcSoundWarning`, `pcSynthControls`). Eliminado selector CSS fantasma `[data-theme="light"] [data-theme="light"]`.
-- **Mixer:** Altura de listados de tones aumentada (`size=8`). Chips de búsqueda ahora incluyen: Reed, Pipe, EDM, World; removido Synth duplicado.
-- **Search fix:** Los chips de búsqueda ahora buscan en nombre **y** categoría (lógica OR con `|`).
-
-### v131
-- Chips de búsqueda en selector de tones del Mixer movidos a la parte superior de la tarjeta.
-- Simplificación de chips: removido E.Piano, añadidos Reed/Clavi/Perc.
 
 ---
 

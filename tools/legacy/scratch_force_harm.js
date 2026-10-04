@@ -1,0 +1,208 @@
+const fs = require('fs');
+let harm = fs.readFileSync('harmony.js', 'utf8');
+
+const idx = harm.indexOf('    function renderChords() {');
+if (idx === -1) {
+    console.log('Could not find renderChords');
+    process.exit(1);
+}
+
+const before = harm.substring(0, idx);
+
+// I will append my new logic
+const replacement = `    function renderMasterKeyboard(rootNote, intervals, title, notesStr) {
+        const svgContainer = document.getElementById('harm-keyboard-svg');
+        const titleContainer = document.getElementById('harm-keyboard-title');
+        
+        if (!svgContainer) return;
+
+        if (title && notesStr) {
+            titleContainer.innerHTML = \`<span style="color:var(--text);">\${title}</span> <span style="font-weight:400; opacity:0.7;">(\${notesStr})</span>\`;
+        } else {
+            titleContainer.innerHTML = title || 'Select a chord or extension to view fingering';
+        }
+
+        let rootIdx = -1;
+        const activeNotes = new Set();
+        
+        if (rootNote && intervals && intervals.length > 0) {
+            rootIdx = getNoteIndex(rootNote);
+            intervals.forEach(iv => {
+                let note = rootIdx + iv;
+                while (note >= 24) note -= 12;
+                activeNotes.add(note);
+            });
+        }
+
+        const whiteKeys = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23];
+        const blackKeys = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22];
+        const noteToWhiteIdx = { 1:1, 3:2, 6:4, 8:5, 10:6, 13:8, 15:9, 18:11, 20:12, 22:13 };
+
+        let svg = \`<svg width="100%" viewBox="0 0 336 100" style="max-width:380px; display:block; margin: 0 auto;">\`;
+        
+        whiteKeys.forEach((note, i) => {
+            const isActive = activeNotes.has(note);
+            const fill = isActive ? '#4a90e2' : 'white';
+            svg += \`<rect x="\${i * 24}" y="0" width="24" height="80" fill="\${fill}" stroke="#333" stroke-width="1.5" rx="2" />\`;
+        });
+
+        blackKeys.forEach(note => {
+            const isActive = activeNotes.has(note);
+            const fill = isActive ? '#4a90e2' : '#222';
+            const wIdx = noteToWhiteIdx[note];
+            const x = wIdx * 24 - 8;
+            svg += \`<rect x="\${x}" y="0" width="16" height="50" fill="\${fill}" stroke="#111" stroke-width="1.5" rx="1" />\`;
+        });
+
+        const noteNamesArr = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const allKeys = [...whiteKeys, ...blackKeys];
+        allKeys.forEach(note => {
+            if (activeNotes.has(note)) {
+                let cx;
+                if (whiteKeys.includes(note)) {
+                    cx = whiteKeys.indexOf(note) * 24 + 12;
+                } else {
+                    cx = noteToWhiteIdx[note] * 24;
+                }
+                const name = noteNamesArr[note % 12];
+                svg += \`<text x="\${cx}" y="95" font-family="sans-serif" font-size="12" font-weight="bold" fill="#e74c3c" text-anchor="middle">\${name}</text>\`;
+            }
+        });
+
+        svg += \`</svg>\`;
+        svgContainer.innerHTML = svg;
+    }
+
+    let globalActiveTag = null;
+
+    function renderChords() {
+        const key = harmKeySelect.value;
+        const modeData = MODES[harmModeSelect.value];
+
+        chordsContainer.innerHTML = '';
+        renderMasterKeyboard(null, [], 'Select a chord or extension to view fingering', '');
+        globalActiveTag = null;
+
+        modeData.intervals.forEach((interval, idx) => {
+            const rootNote = getNoteOffset(key, interval);
+            const qual     = modeData.qualities[idx];
+            const deg      = modeData.degrees[idx];
+            const exts     = modeData.extensions[idx];
+
+            let chordName = rootNote;
+            if (qual === 'm')   chordName += 'm';
+            if (qual === 'dim') chordName += 'dim';
+
+            const card = document.createElement('div');
+            card.style.cssText = \`
+                background: var(--panel-bg);
+                border-radius: 8px;
+                padding: 15px;
+                border: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            \`;
+
+            const header = document.createElement('div');
+            header.style.cssText = \`
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 5px;
+                cursor: pointer;
+            \`;
+            
+            // Allow clicking the header to show the base chord!
+            header.addEventListener('click', () => {
+                if (globalActiveTag) {
+                    globalActiveTag.style.background = 'var(--bg)';
+                    globalActiveTag.style.color = 'var(--text)';
+                    globalActiveTag = null;
+                }
+                let baseIntervals = [];
+                if (qual === 'Maj' || qual === 'Dom') baseIntervals = [0, 4, 7];
+                else if (qual === 'm') baseIntervals = [0, 3, 7];
+                else if (qual === 'dim') baseIntervals = [0, 3, 6];
+                
+                const notesStr = baseIntervals.map(iv => getNoteOffset(rootNote, iv)).join('-');
+                renderMasterKeyboard(rootNote, baseIntervals, chordName + ' (Base Triad)', notesStr);
+            });
+
+            const degSpan = document.createElement('span');
+            degSpan.textContent = deg;
+            degSpan.style.cssText = 'color: var(--accent); font-weight: 800; font-size: 14px; pointer-events:none;';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = chordName;
+            nameSpan.style.cssText = 'font-size: 24px; font-weight: 800; pointer-events:none;';
+
+            header.appendChild(degSpan);
+            header.appendChild(nameSpan);
+            card.appendChild(header);
+
+            const extTitle = document.createElement('div');
+            extTitle.textContent = 'Suggested extensions:';
+            extTitle.style.cssText = 'font-size: 12px; color: var(--text-muted); margin-top: 4px;';
+            card.appendChild(extTitle);
+
+            const tagsContainer = document.createElement('div');
+            tagsContainer.style.cssText = 'display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;';
+
+            exts.forEach(ext => {
+                const tag = document.createElement('span');
+                tag.textContent = ext;
+                tag.style.cssText = \`
+                    background: var(--bg);
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text);
+                    border: 1px solid var(--border);
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    user-select: none;
+                \`;
+
+                tag.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (globalActiveTag === tag) {
+                        tag.style.background = 'var(--bg)';
+                        tag.style.color = 'var(--text)';
+                        globalActiveTag = null;
+                        renderMasterKeyboard(null, [], 'Select a chord or extension to view fingering', '');
+                        return;
+                    }
+
+                    if (globalActiveTag) {
+                        globalActiveTag.style.background = 'var(--bg)';
+                        globalActiveTag.style.color = 'var(--text)';
+                    }
+
+                    tag.style.background = 'var(--accent)';
+                    tag.style.color = '#000';
+                    globalActiveTag = tag;
+
+                    const intervals = EXT_INTERVALS[ext] || [];
+                    const notesStr = getChordNotes(rootNote, ext);
+                    renderMasterKeyboard(rootNote, intervals, chordName + ' ' + ext, notesStr);
+                });
+
+                tagsContainer.appendChild(tag);
+            });
+
+            card.appendChild(tagsContainer);
+            chordsContainer.appendChild(card);
+        });
+    }
+
+    harmKeySelect.addEventListener('change', renderChords);
+    harmModeSelect.addEventListener('change', renderChords);
+    renderChords();
+});
+`;
+
+fs.writeFileSync('harmony.js', before + replacement);
+console.log('Properly replaced harmony logic');

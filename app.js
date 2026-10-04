@@ -473,7 +473,7 @@ function onMIDIMessage(e) {
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
-            const ctrl = EQ_CONTROLS.find(c => c && c.cc === d1);
+            const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
             if (ctrl) {
                 if (ctrl.type === 'switch') {
                     const btn = document.querySelector(`.eq-switch[data-cc="${d1}"]`);
@@ -529,6 +529,8 @@ const EQ_SECTIONS = [
         ]
     },
     {
+        // CC102/103/104 are Casio AiX proprietary — not in the GM spec.
+        // Behavior observed as EQ shelves; unverified against CT-S500 MIDI Implementation PDF.
         title: 'Master EQ',
         controls: [
             { label: 'LOWS',   cc: 104, def: 64, tip: 'Low Shelf Filter (Body/Bass)' },
@@ -2214,10 +2216,6 @@ function buildVirtualKeyboard() {
     });
 
     // Draw black keys absolutely positioned
-    // Black key positions relative to white keys
-    // Per octave: C#(1), D#(3), F#(6), G#(8), A#(10) — white key indices
-    const blackOffsets = [1, 3, null, 6, 8, 10]; // relative to octave start white idx
-    // Actually compute: for each black key, find which white keys it's between
     const whiteWidth = 100 / whiteKeys.length; // percent
 
     allKeys.filter(k => k.black).forEach(k => {
@@ -2323,7 +2321,7 @@ document.getElementById('mctrlToggle')?.addEventListener('change', e => {
     }
 });
 
-// Build GM instrument selectors (after DOM is ready — DOMContentLoaded already fired)
+// Build GM instrument selectors (script runs after body — DOM elements exist)
 buildGMSelectors();
 
 
