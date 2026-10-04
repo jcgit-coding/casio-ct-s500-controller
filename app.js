@@ -1411,8 +1411,15 @@ function initPresets() {
 }
 
 function captureAndSavePreset(name) {
+    const eqSnap = JSON.parse(JSON.stringify(eqState));
+    // CC7 (Volume) is governed by Part Mix Rules — not per-preset character
+    // CC72 (Release/Sustain) is a live toggle — not per-preset state
+    ['U1','U2','L'].forEach(p => {
+        delete eqSnap[p][7];  delete eqSnap[p]['7'];
+        delete eqSnap[p][72]; delete eqSnap[p]['72'];
+    });
     const data = {
-        eqState:          JSON.parse(JSON.stringify(eqState)),
+        eqState:          eqSnap,
         tuning:           JSON.parse(JSON.stringify(tuning)),
         globalTranspose:  globalTranspose,
         globalOctave:     globalOctave,
@@ -1437,8 +1444,14 @@ function loadPreset(data) {
             // Start from defaults so CCs missing in older presets don't keep the previous values
             EQ_CONTROLS.forEach(ctrl => { eqState[part][ctrl.cc] = ctrl.def; });
             Object.assign(eqState[part], data.eqState[part]);
-            delete eqState[part][72]; // CC72 not in EQ_CONTROLS, no sendsr al hardware
+            delete eqState[part][72]; delete eqState[part]['72'];
         }
+    });
+    // Enforce Part Mix Rules — old presets may have captured CC7 at a user-adjusted value
+    eqState['U1'][7] = 100;
+    eqState['U2'][7] = 75;
+    eqState['L'][7]  = 100;
+    ['U1','U2','L'].forEach(part => {
         if (data.tuning?.[part]) {
             tuning[part].oct = data.tuning[part].oct || 0;
             tuning[part].sus = data.tuning[part].sus || false;
