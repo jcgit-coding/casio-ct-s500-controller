@@ -288,16 +288,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
-            // Re-send CC72 at 150 / 400 / 700ms — same triple-tap pattern as tone changes.
-            // A ~57-CC burst (3 × applySmartProfile) can trigger the CT-S500 hardware
-            // controller reset multiple times; a single 150ms re-send is not always enough.
-            [150, 400, 700].forEach(delay => {
-                setTimeout(() => {
-                    ['U1', 'U2', 'L'].forEach(part => {
-                        sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
-                    });
-                }, delay);
-            });
+            // Re-send CC72 at 150/400/700ms — a ~57-CC burst from 3×applySmartProfile can
+            // trigger the CT-S500 hardware controller reset multiple times.
+            ['U1', 'U2', 'L'].forEach(part => scheduleSustainResync(part, [150, 400, 700]));
             switchEQ(activePart);
         });
     }
@@ -1003,13 +996,7 @@ function resetEQ() {
     const part = activePart;
     resetToneEQForPart(part);
     applySmartProfile(part);
-    // Re-send CC72 at 150ms and 400ms: applySmartProfile sends 18 CCs which can
-    // trigger the CT-S500 hardware controller reset. Two taps cover slow resets.
-    [150, 400].forEach(delay => {
-        setTimeout(() => {
-            sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
-        }, delay);
-    });
+    scheduleSustainResync(part, [150, 400]);
 }
 
 function formatVal(label, val) {
@@ -1035,17 +1022,25 @@ window.toneSearch = {};
 // the list's selectedIndex is only a view and is -1 whenever the filter hides the tone.
 const currentTone = { U1: null, U2: null, L: null };
 
-// Per-part cancellable timers for applySmartProfile + sustain re-sends.
-// Rapid prev/next clicks cancel the previous batch so only the final tone
-// triggers an EQ burst — prevents flooding the Casio MIDI buffer.
+// Per-part cancellable timers — shared by scheduleProfile and scheduleSustainResync.
+// This ensures rapid tone navigation, env changes, and resets all cancel each other's
+// pending CC72 re-sends instead of piling up stale timers.
 const _pendingProfile = { U1: [], U2: [], L: [] };
+const _pendingSustain = { U1: [], U2: [], L: [] };
+
+function scheduleSustainResync(part, delays) {
+    _pendingSustain[part].forEach(clearTimeout);
+    _pendingSustain[part] = delays.map(d =>
+        setTimeout(() => sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part)), d)
+    );
+}
+
 function scheduleProfile(part, catName) {
     _pendingProfile[part].forEach(clearTimeout);
     _pendingProfile[part] = [
         setTimeout(() => applySmartProfile(part, catName), 150),
-        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400),
-        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700),
     ];
+    scheduleSustainResync(part, [400, 700]); // 150ms re-send is inside applySmartProfile
 }
 
 function initToneSearch() {
@@ -1828,16 +1823,9 @@ function pushAllToKeyboard(skipTones = false) {
             sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
         });
     }, skipTones ? 0 : 150);
-    // Re-send CC72 for parts with sustain ON: the Casio resets controllers after
-    // finishing a tone load (timing varies). Cover the full loading window.
+    // Re-send CC72 at 400/700ms — CT-S500 resets controllers after tone load
     if (!skipTones) {
-        [400, 700].forEach(delay => {
-            setTimeout(() => {
-                ['U1','U2','L'].forEach(part => {
-                    if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
-                });
-            }, delay);
-        });
+        ['U1','U2','L'].forEach(part => scheduleSustainResync(part, [400, 700]));
     }
 }
 
