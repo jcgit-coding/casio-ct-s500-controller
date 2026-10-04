@@ -1798,6 +1798,18 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
     midiOutput.send([0xB0 | ch, 100, 0x7F]);
 }
+// Swap sustain state between two parts after a UI swap — called by fix_swap.js.
+// EQ and categories are rebuilt by the scheduleProfile calls the change events already fire.
+window.swapPartState = function(partA, partB) {
+    [tuning[partA].sus, tuning[partB].sus] = [tuning[partB].sus, tuning[partA].sus];
+    [partA, partB].forEach(p => {
+        const btn = document.getElementById('sus-' + p);
+        if (btn) { btn.innerText = tuning[p].sus ? 'ON' : 'OFF'; btn.classList.toggle('sus-on', tuning[p].sus); }
+        sendCC(p, 72, tuning[p].sus ? SUS_RELEASE : releaseNeutral(p));
+        sendCoarseTuning(p);
+    });
+};
+
 function pushAllToKeyboard(skipTones = false) {
     // Tones first, CCs after a delay: a burst of CCs before/around the Program Change
     // overflows the Casio's MIDI buffer and makes it drop the tone change.
@@ -1976,7 +1988,10 @@ async function sf2Init(source, name) {
         const { WorkletSynthesizer } = await import('https://esm.sh/spessasynth_lib@4.3.14');
 
         if (!spessaCtx) spessaCtx = new (window.AudioContext || window.webkitAudioContext)();
-        await spessaCtx.audioWorklet.addModule('./spessasynth_processor.min.js');
+        if (!spessaCtx._workletAdded) {
+            await spessaCtx.audioWorklet.addModule('./spessasynth_processor.min.js');
+            spessaCtx._workletAdded = true;
+        }
 
         if (!spessaSynth) spessaSynth = new WorkletSynthesizer(spessaCtx);
 
@@ -1995,7 +2010,9 @@ async function sf2Init(source, name) {
         await spessaSynth.soundBankManager.addSoundBank(sf2Buffer, 'main');
         await spessaSynth.isReady;
 
-        // Master gain at unity — per-part volume is CC7 on each channel
+        // Master gain at unity — per-part volume is CC7 on each channel.
+        // Disconnect the previous gain node first to avoid parallel audio paths on SF2 reload.
+        if (window.pcSynth?._master) { try { window.pcSynth._master.disconnect(); } catch(e) {} }
         const masterGain = spessaCtx.createGain();
         masterGain.gain.value = 1.0;
         spessaSynth.connect(masterGain);
@@ -2029,7 +2046,12 @@ async function sf2Init(source, name) {
             window.pcSynth.applyCC(72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part), CHANNEL[part]);
         });
         window.sf2Ready = true;
-        if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
+        if (statusEl) {
+            statusEl.dataset.sf2loaded = '1';
+            const sp = document.createElement('span'); sp.style.color = '#4CAF50';
+            sp.textContent = '✓ SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
+            statusEl.innerHTML = ''; statusEl.appendChild(sp);
+        }
     } catch(err) {
         console.error('SF2 init error:', err);
         if (statusEl) statusEl.innerHTML = '<span style="color:var(--text-muted);">Error: Could not load SF2</span>';
