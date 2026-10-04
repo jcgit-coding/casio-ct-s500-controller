@@ -1042,7 +1042,9 @@ function scheduleProfile(part, catName) {
     _pendingProfile[part] = [
         setTimeout(() => applySmartProfile(part, catName), 150),
     ];
-    scheduleSustainResync(part, [400, 700]); // 150ms re-send is inside applySmartProfile
+    // CT-S500 resets controllers on ALL channels when any channel receives a large CC burst.
+    // Resync CC72 for all three parts so the other parts recover too.
+    ['U1', 'U2', 'L'].forEach(p => scheduleSustainResync(p, [400, 700]));
 }
 
 function initToneSearch() {
