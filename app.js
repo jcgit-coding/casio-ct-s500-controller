@@ -511,10 +511,10 @@ function onMIDIMessage(e) {
         const pc = d1;
         const bank = pendingBank[part] || 0;
 
-        // Update UI and apply EQ profile for the new tone's category.
-        // Delay CCs: Casio sent the PC but is still loading the tone internally.
+        // Update UI to reflect the new tone. Do NOT apply the app's EQ profile —
+        // the user may have loaded a Casio Registration with its own effects that
+        // would be silently overwritten by applySmartProfile.
         selectToneInList(part, d => d.bank === bank && d.program === pc);
-        scheduleProfile(part, activeCategories[part]);
     }
 }
 
@@ -1329,6 +1329,21 @@ function updateSyncStatus(msg) {
 
 function ghToken() { return localStorage.getItem('casioGhToken') || ''; }
 
+// Merge two preset stores by timestamp — most recent entry wins.
+// Tombstones ({_deleted,_ts}) are kept so deletions propagate across devices.
+// Old presets without _ts lose to any timestamped version (_ts ?? 0 = epoch).
+function mergePresetStores(local, cloud) {
+    const merged = {};
+    const keys = new Set([...Object.keys(local), ...Object.keys(cloud)]);
+    for (const key of keys) {
+        const l = local[key], c = cloud[key];
+        if (!l) { merged[key] = c; continue; }
+        if (!c) { merged[key] = l; continue; }
+        merged[key] = (c._ts ?? 0) >= (l._ts ?? 0) ? c : l;
+    }
+    return merged;
+}
+
 async function syncPull() {
     try {
         // Public read — no auth needed
@@ -1339,21 +1354,26 @@ async function syncPull() {
         const json = await res.json();
         ghFileSha = json.sha;
         const cloud = JSON.parse(decodeURIComponent(escape(atob(json.content.replace(/\n/g, '')))));
-        // Merge: cloud wins (source of truth)
         const local = readPresetsStore();
-        const merged = Object.assign({}, local, cloud);
+        const merged = mergePresetStores(local, cloud);
         localStorage.setItem('casioPresets', JSON.stringify(merged));
         renderPresets();
         return true;
     } catch { return false; }
 }
 
-async function syncPush() {
+// Serialized push queue — prevents concurrent PUTs racing on the same SHA
+let _syncQueue = Promise.resolve();
+function syncPush() {
+    _syncQueue = _syncQueue.catch(() => {}).then(() => _syncPushOnce());
+    return _syncQueue;
+}
+
+async function _syncPushOnce(retried = false) {
     const token = ghToken();
     if (!token) { updateSyncStatus('No GitHub token'); return; }
     try {
         updateSyncStatus('Saving...');
-        // Re-fetch SHA if missing (e.g. first push)
         if (!ghFileSha) await syncPull();
         const presets = readPresetsStore();
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(presets, null, 2))));
@@ -1368,6 +1388,12 @@ async function syncPush() {
             },
             body: JSON.stringify(body)
         });
+        if (res.status === 409 && !retried) {
+            // SHA conflict from a concurrent write — re-fetch, merge, retry once
+            ghFileSha = null;
+            await syncPull();
+            return _syncPushOnce(true);
+        }
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
             throw new Error(err.message || res.status);
@@ -1481,6 +1507,7 @@ function captureAndSavePreset(name) {
         delete eqSnap[p][72]; delete eqSnap[p]['72'];
     });
     const data = {
+        _ts:              Date.now(),
         eqState:          eqSnap,
         tuning:           JSON.parse(JSON.stringify(tuning)),
         globalTranspose:  globalTranspose,
@@ -1564,6 +1591,7 @@ function renderPresets() {
     list.innerHTML = '';
 
     for (const [name, data] of Object.entries(presets)) {
+        if (data?._deleted) continue; // tombstone — deleted on another device
         const item = document.createElement('div');
         item.className = 'preset-item';
 
@@ -1589,7 +1617,7 @@ function renderPresets() {
         delBtn.onclick = () => {
             if (!confirm(`Delete "${name}"?`)) return;
             const p = readPresetsStore();
-            delete p[name];
+            p[name] = { _deleted: true, _ts: Date.now() }; // tombstone so deletion propagates to other devices
             localStorage.setItem("casioPresets", JSON.stringify(p));
             renderPresets();
             syncPush();
