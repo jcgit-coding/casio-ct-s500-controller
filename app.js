@@ -436,8 +436,9 @@ function onMIDIMessage(e) {
             pendingBank[part] = d2;
         }
 
-        // Update EQ memory (exclude CC64=damper pedal, CC72=app sustain and CC0=bank-select)
-        if (d1 !== 64 && d1 !== 72 && d1 !== 0) eqState[part][d1] = d2;
+        // Update EQ memory (exclude CC64=damper pedal, CC72=app sustain, CC0=bank-select,
+        // CC7=volume — Part Mix Rules own this value, hardware knob must not override it)
+        if (d1 !== 64 && d1 !== 72 && d1 !== 0 && d1 !== 7) eqState[part][d1] = d2;
 
         // If EQ panel is showing this part, update fader UI
         if (part === activePart) {
@@ -1425,9 +1426,9 @@ function captureAndSavePreset(name) {
         globalOctave:     globalOctave,
         activeCategories: JSON.parse(JSON.stringify(activeCategories)),
         tones: {
-            U1: currentTone.U1?.text || '',
-            U2: currentTone.U2?.text || '',
-            L:  currentTone.L?.text  || '',
+            U1: currentTone.U1?.id ?? '',
+            U2: currentTone.U2?.id ?? '',
+            L:  currentTone.L?.id  ?? '',
         }
     };
     const presets = JSON.parse(localStorage.getItem("casioPresets") || "{}");
@@ -1465,9 +1466,12 @@ function loadPreset(data) {
                 susBtn.classList.toggle('sus-on', tuning[part].sus);
             }
         }
-        // Restore tone selection
-        if (data.tones?.[part]) {
-            selectToneInList(part, (d, o) => o.text === data.tones[part]);
+        // Restore tone selection — new presets store numeric id, old ones stored text
+        if (data.tones?.[part] !== undefined && data.tones[part] !== '') {
+            const byId   = typeof data.tones[part] === 'number';
+            selectToneInList(part, byId
+                ? (d)    => d.id === data.tones[part]
+                : (d, o) => o.text === data.tones[part]);
         }
     });
 
@@ -1823,6 +1827,12 @@ function loadAppState() {
         }
 
         switchEQ(activePart); // updates sliders on screen
+
+        // If MIDI is already connected (USB was not unplugged between reloads), onstatechange
+        // won't fire again and pushAllToKeyboard won't be called. Re-sync CCs now so the
+        // Casio receives the correct EQ + sustain state without requiring a reconnect.
+        if (midiOutput) pushAllToKeyboard(true);
+
         return true;
     } catch (e) {
         console.error("Error loading app state:", e);
