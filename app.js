@@ -132,7 +132,16 @@ function saveToneEQ() {
     try { localStorage.setItem('casioToneEQ', JSON.stringify(toneEQ)); } catch(e) {}
 }
 function loadToneEQ() {
-    try { toneEQ = JSON.parse(localStorage.getItem('casioToneEQ') || '{}'); } catch(e) { toneEQ = {}; }
+    try {
+        toneEQ = JSON.parse(localStorage.getItem('casioToneEQ') || '{}');
+        // Purge any CC7 (Volume) values saved by older versions — volume is now always
+        // governed by Part Mix Rules and must never be locked per-tone.
+        for (const id of Object.keys(toneEQ)) {
+            for (const env of Object.keys(toneEQ[id])) {
+                delete toneEQ[id][env][7]; delete toneEQ[id][env]['7'];
+            }
+        }
+    } catch(e) { toneEQ = {}; }
 }
 
 // Save current eqState for the active part's tone+environment
@@ -141,7 +150,10 @@ function saveToneEQForPart(part) {
     if (!tone) return;
     const id = tone.id;
     if (!toneEQ[id]) toneEQ[id] = {};
-    toneEQ[id][currentEnv] = Object.assign({}, eqState[part]);
+    const profile = Object.assign({}, eqState[part]);
+    // CC7 (Volume) is per-part mix balance, not tone character — never persist it in toneEQ
+    delete profile[7]; delete profile['7'];
+    toneEQ[id][currentEnv] = profile;
     saveToneEQ();
 }
 
@@ -709,11 +721,13 @@ function applySmartProfile(part, category) {
                 eqState[part][cc] = val;
             }
         }
-        // 3. Apply Part Mix Rules only when using category defaults (user profile may intentionally override volume)
-        if (part === 'U1') eqState[part][7] = 100;
-        if (part === 'U2') eqState[part][7] = 75;
-        if (part === 'L')  eqState[part][7] = 100;
     }
+    // 3. Part Mix Rules always applied — CC7 is per-part balance, not per-tone character.
+    // A saved toneEQ must never lock in a low volume from a different part or an
+    // accidental fader touch. Users can still adjust volume live via the fader.
+    if (part === 'U1') eqState[part][7] = 100;
+    if (part === 'U2') eqState[part][7] = 75;
+    if (part === 'L')  eqState[part][7] = 100;
 
     // Ensure CC72 (Release) is never in eqState — send a neutral value to keyboard instead
     delete eqState[part][72]; delete eqState[part]['72'];
