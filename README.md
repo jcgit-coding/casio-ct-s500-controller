@@ -109,7 +109,7 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 
 ## 8. Historial de Versiones (reciente)
 
-### v191 · dom 04 oct 2026 12:01 · COT
+### v191 · dom 04 oct 2026 07:02 · COT
 - **fix(tones):** revertido a defaults originales — U2 → `457. ADV PIANO PAD`, L → `24. STRINGS PIANO` (primer resultado del filtro "Pad"/"String"). Se eliminó `DEFAULT_INSTRUMENT` y la selección por categoría que OpenCode introdujo.
 - **cache-bust:** `app.js` → v191.
 
