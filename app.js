@@ -355,6 +355,8 @@ function initMIDI() {
 }
 
 function sReedndConnect() {
+    // Detach old input handler first — prevents ghost messages and PC Synth duplicate notes
+    if (midiInput) { midiInput.onmidimessage = null; }
     midiInput  = null;
     midiOutput = null;
 
@@ -389,10 +391,12 @@ function sReedndConnect() {
         midiInput.onmidimessage = onMIDIMessage;
     }
 
-    if (midiInput) {
+    if (midiOutput || midiInput) {
         const name = (midiOutput || midiInput).name;
-        const label = midiOutput ? "✓ " + name : "✓ " + name + " (input only)";
-        setStatus(label, true);
+        const label = midiOutput && midiInput ? "✓ " + name
+                    : midiOutput ? "✓ " + name + " (output only)"
+                    : "✓ " + name + " (input only)";
+        setStatus(label, !!(midiOutput || midiInput));
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
@@ -2071,7 +2075,7 @@ document.getElementById('sf2-file')?.addEventListener('change', async e => {
 const mctrlOct = { U1: 0, U2: 0, L: 0 };
 let vkActivePart = 'U1';   // which part the virtual keyboard plays
 let vkOctave = 4;           // base octave for virtual keyboard (C4 = MIDI 60)
-const vkActiveKeys = {};    // note → true while held (mouse/touch)
+const vkActiveKeys = {};    // note → channel number while held (captured at press time)
 
 function initMidiController() {
     // Per-part volume sliders
@@ -2079,16 +2083,14 @@ function initMidiController() {
         const volSlider = document.getElementById('mctrl-vol-' + part);
         const volVal = document.getElementById('mctrl-vol-' + part + '-val');
         if (volSlider) {
+            const cap = part === 'U2' ? 75 : 100;
+            volSlider.max = cap; // slider range matches Part Mix Rules — no dead zone above cap
             volSlider.addEventListener('input', () => {
                 const v = parseInt(volSlider.value);
                 if (volVal) volVal.innerText = v;
                 if (!mctrlEnabled) return;
-                // Send CC7 but keep within Part Mix Rules limits so the live volume knob
-                // cannot accidentally override the mix balance set by the mixer.
-                const cap = part === 'U2' ? 75 : 100;
-                const clamped = Math.min(v, cap);
-                if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, clamped]);
-                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, clamped, CHANNEL[part]);
+                if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, v]);
+                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, v, CHANNEL[part]);
             });
         }
 
@@ -2194,7 +2196,7 @@ function buildVirtualKeyboard() {
         if (k.n === 0) {
             const lbl = document.createElement('span');
             lbl.style.cssText = 'position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:8px;color:#666;font-weight:bold;';
-            lbl.innerText = 'C' + (vkOctave + k.oct);
+            lbl.innerText = 'C' + (vkOctave + k.oct - 1); // MIDI C4=60; (4+0)*12=48=C3 so subtract 1
             el.appendChild(lbl);
         }
         attachKeyEvents(el, k);
@@ -2223,12 +2225,12 @@ function buildVirtualKeyboard() {
     });
 }
 
-function vkNoteOn(midiNote) {
+function vkNoteOn(midiNote, ch) {
     if (!mctrlEnabled) return;
     if (vkActiveKeys[midiNote]) return;
-    vkActiveKeys[midiNote] = true;
+    ch = ch ?? CHANNEL[vkActivePart];
+    vkActiveKeys[midiNote] = ch; // store channel so NoteOff can use the same one
     const vel = parseInt(document.getElementById('vk-velocity')?.value || 90);
-    const ch = CHANNEL[vkActivePart];
     // Send to MIDI output (Casio)
     if (midiOutput) midiOutput.send([0x90 | ch, midiNote, vel]);
     // Send to PC synth
@@ -2238,10 +2240,11 @@ function vkNoteOn(midiNote) {
     }
 }
 
-function vkNoteOff(midiNote) {
+function vkNoteOff(midiNote, ch) {
     if (!vkActiveKeys[midiNote]) return;
+    // Use the channel captured at NoteOn time — part may have changed since then
+    ch = vkActiveKeys[midiNote];
     delete vkActiveKeys[midiNote];
-    const ch = CHANNEL[vkActivePart];
     if (midiOutput) midiOutput.send([0x80 | ch, midiNote, 0]);
     if (pcSynthEnabled && window.pcSynth) window.pcSynth.noteOff(ch, midiNote);
 }
@@ -2256,12 +2259,15 @@ function attachKeyEvents(el, k) {
     const getNote = () => (vkOctave + k.oct) * 12 + k.n;
     let heldNote = null;
 
-    el.addEventListener('mousedown', (e) => { e.preventDefault(); heldNote = getNote(); vkNoteOn(heldNote); el.classList.add('vk-active'); });
-    el.addEventListener('mouseup',   () => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); });
-    el.addEventListener('mouseleave',() => { if (heldNote !== null && vkActiveKeys[heldNote]) { vkNoteOff(heldNote); heldNote = null; el.classList.remove('vk-active'); } });
+    const press = () => { heldNote = getNote(); vkNoteOn(heldNote, CHANNEL[vkActivePart]); el.classList.add('vk-active'); };
+    const release = () => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); };
 
-    el.addEventListener('touchstart', (e) => { e.preventDefault(); heldNote = getNote(); vkNoteOn(heldNote); el.classList.add('vk-active'); }, { passive: false });
-    el.addEventListener('touchend',   (e) => { e.preventDefault(); if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); }, { passive: false });
+    el.addEventListener('mousedown',  (e) => { e.preventDefault(); press(); });
+    el.addEventListener('mouseup',    () => release());
+    el.addEventListener('mouseleave', () => { if (heldNote !== null && vkActiveKeys[heldNote]) release(); });
+
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); press(); }, { passive: false });
+    el.addEventListener('touchend',   (e) => { e.preventDefault(); release(); }, { passive: false });
     el.addEventListener('touchcancel',() => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); });
 }
 
@@ -2282,9 +2288,9 @@ document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
         }
         for (const k in pcActiveNotes) delete pcActiveNotes[k];
         Object.values(CHANNEL).forEach(ch => { try { window.pcSynth.applyCC(64, 0, ch); } catch(e) {} });
-        // Stop any held virtual keyboard notes
+        // Stop any held virtual keyboard notes (use captured channel, not current vkActivePart)
         for (const note in vkActiveKeys) {
-            try { window.pcSynth.noteOff(CHANNEL[vkActivePart], parseInt(note)); } catch(e) {}
+            try { window.pcSynth.noteOff(vkActiveKeys[note], parseInt(note)); } catch(e) {}
         }
         for (const k in vkActiveKeys) delete vkActiveKeys[k];
     }
@@ -2296,9 +2302,9 @@ document.getElementById('mctrlToggle')?.addEventListener('change', e => {
     const rack = document.getElementById('mctrl-rack-content');
     if (rack) rack.style.opacity = mctrlEnabled ? '' : '0.4';
     if (!mctrlEnabled) {
-        // Stop any held virtual keyboard notes
+        // Stop any held virtual keyboard notes (use captured channel, not current vkActivePart)
         for (const note in vkActiveKeys) {
-            const ch = CHANNEL[vkActivePart];
+            const ch = vkActiveKeys[note];
             if (midiOutput) try { midiOutput.send([0x80 | ch, parseInt(note), 0]); } catch(e) {}
             if (window.pcSynth) try { window.pcSynth.noteOff(ch, parseInt(note)); } catch(e) {}
         }
