@@ -110,9 +110,9 @@ const pendingBank = { U1: 0, U2: 0, L: 0 };
 
 // Per-part state (octave and sustain are independent per channel)
 const tuning = {
-    U1: { sus: false },
-    U2: { sus: false },
-    L:  { sus: false }
+    U1: { sus: false, oct: 0 },
+    U2: { sus: false, oct: 0 },
+    L:  { sus: false, oct: 0 }
 };
 
 // MIDI channel per part
@@ -230,9 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Theme Toggle Logic
-    const btnThemeToggle = document.getElementById('btnThemeToggle');
-    if (btnThemeToggle) {
-        
     const envSel = document.getElementById('envSelector');
     if (envSel) {
         // Load saved env
@@ -252,12 +249,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const btnThemeToggle = document.getElementById('btnThemeToggle');
+    if (btnThemeToggle) {
         const savedTheme = localStorage.getItem('casioTheme') || 'dark';
         if (savedTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
             btnThemeToggle.innerHTML = '<span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">dark_mode</span>';
         }
-        
+
         btnThemeToggle.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme') || 'dark';
             const next = current === 'dark' ? 'light' : 'dark';
@@ -997,12 +996,23 @@ function initToneSearch() {
                 searchEl.value = btn.dataset.q;
                 searchEl.dispatchEvent(new Event('input'));
                 searchEl.blur();
-                // If current tone is not visible in the new filter, select the first tone in the list
+                // If current tone is not visible in the new filter, select the first tone
+                // and send it to the Casio — otherwise the UI and hardware would desync.
                 const cur = currentTone[part];
                 const inList = cur && [...listEl.options].some(o => {
                     try { return JSON.parse(o.value).id === cur.id; } catch(e) { return false; }
                 });
-                if (!inList) selectToneInList(part, () => true, true);
+                if (!inList) {
+                    const opt = selectToneInList(part, () => true, true);
+                    if (opt) {
+                        const d = JSON.parse(opt.value);
+                        changeTone(part, d.bank, d.lsb, d.program);
+                        const catName = opt.parentElement?.tagName === 'OPTGROUP' ? opt.parentElement.label : 'PIANO';
+                        setTimeout(() => applySmartProfile(part, catName), 150);
+                        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400);
+                        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700);
+                    }
+                }
             });
         });
 
@@ -1651,6 +1661,17 @@ function pushAllToKeyboard(skipTones = false) {
             sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
         });
     }, skipTones ? 0 : 150);
+    // Re-send CC72 for parts with sustain ON: the Casio resets controllers after
+    // finishing a tone load (timing varies). Cover the full loading window.
+    if (!skipTones) {
+        [400, 700].forEach(delay => {
+            setTimeout(() => {
+                ['U1','U2','L'].forEach(part => {
+                    if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
+                });
+            }, delay);
+        });
+    }
 }
 
 
@@ -1724,6 +1745,9 @@ function loadAppState() {
                     selectToneInList(part, d => d.id === saved.tones[part]);
                 }
                 // Update tuning UI
+                const octEl = document.getElementById('oct-' + part);
+                const octVal = tuning[part].oct || 0;
+                if (octEl) octEl.innerText = octVal > 0 ? '+' + octVal : octVal;
 
                 const susBtn = document.getElementById('sus-' + part);
                 if (susBtn) {
