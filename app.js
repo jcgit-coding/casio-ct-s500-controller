@@ -14,6 +14,17 @@ let mctrlEnabled = false;    // MIDI Ctrl ON/OFF — off by default
 // naturally) via CC72 Release Time — NOT a damper hold (CC64 is left to the physical pedal).
 const SUS_RELEASE = 100;
 const RELEASE_NEUTRAL = 64;
+// Per-category CC72 neutral: these instruments have long natural decay;
+// sending 64 after a tone load would shorten it below the preset's intent.
+const CAT_RELEASE_NEUTRAL = {
+    'SYNTH-PAD':        82,
+    'CHOIR':            78,
+    'STRING ENSEMBLE':  75,
+    'SOLO STRINGS':     72,
+};
+function releaseNeutral(part) {
+    return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
+}
 
 function pcNoteOff(ch, note) {
     const info = pcActiveNotes[ch + ':' + note];
@@ -138,7 +149,8 @@ function loadToneEQ() {
         // governed by Part Mix Rules and must never be locked per-tone.
         for (const id of Object.keys(toneEQ)) {
             for (const env of Object.keys(toneEQ[id])) {
-                delete toneEQ[id][env][7]; delete toneEQ[id][env]['7'];
+                delete toneEQ[id][env][7];  delete toneEQ[id][env]['7'];
+                delete toneEQ[id][env][72]; delete toneEQ[id][env]['72'];
             }
         }
     } catch(e) { toneEQ = {}; }
@@ -151,8 +163,10 @@ function saveToneEQForPart(part) {
     const id = tone.id;
     if (!toneEQ[id]) toneEQ[id] = {};
     const profile = Object.assign({}, eqState[part]);
-    // CC7 (Volume) is per-part mix balance, not tone character — never persist it in toneEQ
+    // CC7 (Volume) is per-part mix balance — never persist in toneEQ
     delete profile[7]; delete profile['7'];
+    // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button — never persist
+    delete profile[72]; delete profile['72'];
     toneEQ[id][currentEnv] = profile;
     saveToneEQ();
 }
@@ -257,6 +271,13 @@ document.addEventListener("DOMContentLoaded", () => {
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
+            // Re-send CC72 after the ~51-CC burst: the Casio may reset controllers
+            // after bulk CC writes (same hardware behaviour seen after tone changes).
+            setTimeout(() => {
+                ['U1', 'U2', 'L'].forEach(part => {
+                    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
+                });
+            }, 150);
             switchEQ(activePart);
         });
     }
@@ -567,15 +588,15 @@ const ENVIRONMENTS = {
         "PIPE":             { "73":64, "75":64, "91":18, "76":66, "77":64, "104":64, "103":64, "102":64 },
         "SYNTH-LEAD":       { "74":66, "71":68, "73":60, "75":64, "91":25, "94":15, "104":64, "103":64, "102":64 },
         "SYNTH-PAD":        { "73":72, "75":72, "91":35, "93":25, "104":64, "103":64, "102":64 },
-        "CHOIR":            { "73":70, "75":70, "91":30, "93":15, "104":64, "103":64, "102":64 },
+        "CHOIR":            { "73":70, "75":70, "91":30, "93":15, "76":65, "77":62, "78":72, "104":64, "103":64, "102":64 },
         "EDM SYNTH":        { "73":58, "75":64, "91":20, "94":15, "104":64, "103":64, "102":64 },
         "CASIO CLASSIC":    { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
-        "INDIAN":           { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
-        "INDONESIAN":       { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
-        "ARABIC":           { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
-        "CHINESE":          { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
-        "BRAZILIAN":        { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
-        "ETHNIC OTHERS":    { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 },
+        "INDIAN":           { "74":66, "73":62, "75":64, "91":18, "76":68, "77":62, "78":60, "104":64, "103":64, "102":64 },
+        "INDONESIAN":       { "74":70, "73":58, "75":62, "91":22, "93":12, "104":64, "103":64, "102":64 },
+        "ARABIC":           { "74":62, "73":64, "75":66, "91":18, "76":66, "77":66, "78":64, "104":64, "103":64, "102":64 },
+        "CHINESE":          { "74":68, "73":62, "75":64, "91":18, "76":66, "77":68, "78":60, "94":8, "104":64, "103":64, "102":64 },
+        "BRAZILIAN":        { "74":66, "73":60, "75":62, "91":15, "93":10, "104":64, "103":64, "102":64 },
+        "ETHNIC OTHERS":    { "73":64, "75":64, "91":18, "104":64, "103":64, "102":64 },
         "GM TONES":         { "73":64, "75":64, "91":15, "104":64, "103":64, "102":64 }
     },
     // ══════════════════════════════════════════════════════════════════════
@@ -606,14 +627,14 @@ const ENVIRONMENTS = {
         "PIPE":             { "74":68, "73":60, "75":64, "91":40, "76":68, "77":66, "104":72, "103":68, "102":70 },
         "SYNTH-LEAD":       { "74":72, "71":72, "73":58, "75":64, "91":45, "93":15, "94":30, "104":72, "103":68, "102":70 },
         "SYNTH-PAD":        { "74":68, "71":68, "73":66, "75":66, "91":50, "93":40, "104":72, "103":68, "102":70 },
-        "CHOIR":            { "74":68, "73":66, "75":66, "91":50, "93":25, "104":72, "103":68, "102":70 },
+        "CHOIR":            { "74":68, "73":66, "75":66, "91":50, "93":25, "76":67, "77":66, "78":66, "104":72, "103":68, "102":70 },
         "EDM SYNTH":        { "74":72, "71":72, "73":56, "75":64, "91":40, "94":25, "104":72, "103":68, "102":70 },
         "CASIO CLASSIC":    { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
-        "INDIAN":           { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
-        "INDONESIAN":       { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
-        "ARABIC":           { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
-        "CHINESE":          { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
-        "BRAZILIAN":        { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
+        "INDIAN":           { "74":70, "73":60, "75":64, "91":30, "76":70, "77":64, "78":58, "104":72, "103":68, "102":70 },
+        "INDONESIAN":       { "74":74, "73":56, "75":62, "91":38, "93":18, "104":72, "103":68, "102":70 },
+        "ARABIC":           { "74":64, "73":60, "75":64, "91":30, "76":68, "77":68, "78":62, "104":72, "103":68, "102":70 },
+        "CHINESE":          { "74":70, "73":58, "75":64, "91":35, "76":68, "77":70, "78":58, "94":15, "104":72, "103":68, "102":70 },
+        "BRAZILIAN":        { "74":70, "73":58, "75":62, "91":30, "93":18, "104":72, "103":68, "102":70 },
         "ETHNIC OTHERS":    { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 },
         "GM TONES":         { "74":68, "73":60, "75":64, "91":30, "104":72, "103":68, "102":70 }
     },
@@ -645,14 +666,14 @@ const ENVIRONMENTS = {
         "PIPE":             { "74":60, "73":66, "75":66, "91":70, "76":64, "77":68, "78":70, "104":70, "103":60, "102":66 },
         "SYNTH-LEAD":       { "74":64, "71":66, "73":62, "75":64, "91":75, "94":40, "104":70, "103":60, "102":66 },
         "SYNTH-PAD":        { "74":60, "71":62, "73":82, "75":82, "91":90, "93":35, "104":70, "103":60, "102":66 },
-        "CHOIR":            { "74":60, "73":78, "75":78, "91":90, "93":30, "104":70, "103":60, "102":66 },
+        "CHOIR":            { "74":60, "73":78, "75":78, "91":90, "93":30, "76":64, "77":70, "78":76, "104":70, "103":60, "102":66 },
         "EDM SYNTH":        { "74":62, "73":62, "75":64, "91":70, "94":35, "104":70, "103":60, "102":66 },
         "CASIO CLASSIC":    { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
-        "INDIAN":           { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
-        "INDONESIAN":       { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
-        "ARABIC":           { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
-        "CHINESE":          { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
-        "BRAZILIAN":        { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
+        "INDIAN":           { "74":64, "73":66, "75":68, "91":60, "76":66, "77":66, "78":66, "104":70, "103":60, "102":66 },
+        "INDONESIAN":       { "74":68, "73":62, "75":66, "91":70, "93":12, "104":70, "103":60, "102":66 },
+        "ARABIC":           { "74":60, "73":68, "75":70, "91":60, "76":64, "77":68, "78":70, "104":70, "103":60, "102":66 },
+        "CHINESE":          { "74":64, "73":68, "75":70, "91":65, "76":64, "77":70, "78":68, "94":12, "104":70, "103":60, "102":66 },
+        "BRAZILIAN":        { "74":64, "73":64, "75":66, "91":55, "93":12, "104":70, "103":60, "102":66 },
         "ETHNIC OTHERS":    { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 },
         "GM TONES":         { "74":62, "73":66, "75":68, "91":60, "104":70, "103":60, "102":66 }
     },
@@ -684,14 +705,14 @@ const ENVIRONMENTS = {
         "PIPE":             { "74":60, "73":64, "75":64, "91":20, "76":66, "77":70, "78":66, "104":72, "103":70, "102":56 },
         "SYNTH-LEAD":       { "74":60, "71":64, "73":62, "75":64, "91":25, "94":10, "104":72, "103":70, "102":56 },
         "SYNTH-PAD":        { "74":60, "71":64, "73":72, "75":70, "91":30, "93":20, "104":72, "103":70, "102":56 },
-        "CHOIR":            { "74":60, "73":72, "75":70, "91":25, "104":72, "103":70, "102":56 },
+        "CHOIR":            { "74":60, "73":72, "75":70, "91":25, "76":67, "77":68, "78":62, "104":72, "103":70, "102":56 },
         "EDM SYNTH":        { "74":60, "73":64, "75":64, "91":20, "94":10, "104":72, "103":70, "102":56 },
         "CASIO CLASSIC":    { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "INDIAN":           { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "INDONESIAN":       { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "ARABIC":           { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "CHINESE":          { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
-        "BRAZILIAN":        { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
+        "INDIAN":           { "74":62, "73":64, "75":64, "91":18, "76":68, "77":64, "78":60, "104":72, "103":70, "102":56 },
+        "INDONESIAN":       { "74":64, "73":60, "75":62, "91":22, "93":15, "104":72, "103":70, "102":56 },
+        "ARABIC":           { "74":58, "73":66, "75":66, "91":18, "76":66, "77":70, "78":64, "104":72, "103":70, "102":56 },
+        "CHINESE":          { "74":62, "73":64, "75":64, "91":18, "76":66, "77":68, "78":60, "94":8, "104":72, "103":70, "102":56 },
+        "BRAZILIAN":        { "74":62, "73":62, "75":64, "91":15, "93":12, "104":72, "103":70, "102":56 },
         "ETHNIC OTHERS":    { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 },
         "GM TONES":         { "74":60, "73":64, "75":64, "91":15, "104":72, "103":70, "102":56 }
     }
@@ -755,7 +776,7 @@ function applySmartProfile(part, category) {
         }
     });
     // Sustain (CC72) sent after all EQ CCs so a tone change never drops it
-    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
+    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
 }
 
 function buildEQ() {
@@ -921,6 +942,11 @@ function switchEQ(part) {
 function resetEQ() {
     resetToneEQForPart(activePart);
     applySmartProfile(activePart);
+    // Re-send CC72 after the CC burst — the Casio may process the bulk write
+    // as a reset event (same hardware behaviour seen after tone changes).
+    setTimeout(() => {
+        if (tuning[activePart].sus) sendCC(activePart, 72, SUS_RELEASE);
+    }, 150);
 }
 
 function formatVal(label, val) {
@@ -1209,7 +1235,7 @@ function initQuickControls() {
             btn.innerText = isOn ? 'ON' : 'OFF';
             btn.classList.toggle('sus-on', isOn);
 
-            sendCC(part, 72, isOn ? SUS_RELEASE : RELEASE_NEUTRAL);
+            sendCC(part, 72, isOn ? SUS_RELEASE : releaseNeutral(part));
 
             if (!isOn) {
                 // Clear any damper hold left by the old CC64-based sustain / a stuck pedal.
@@ -1217,7 +1243,7 @@ function initQuickControls() {
                 // Casio CT-S500 sometimes ignores a single CC if the buffer is busy.
                 // Send again after 20ms, but only if sustain is still OFF.
                 setTimeout(() => {
-                    if (!tuning[part].sus) sendCC(part, 72, RELEASE_NEUTRAL);
+                    if (!tuning[part].sus) sendCC(part, 72, releaseNeutral(part));
                 }, 20);
             }
         });
@@ -1672,7 +1698,7 @@ function pushAllToKeyboard(skipTones = false) {
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCoarseTuning(part);
-            sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL);
+            sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
         });
     }, skipTones ? 0 : 150);
     // Re-send CC72 for parts with sustain ON: the Casio resets controllers after
@@ -1872,7 +1898,7 @@ async function sf2Init(source, name) {
                 const v = eqState[part][ctrl.cc];
                 window.pcSynth.applyCC(ctrl.cc, v !== undefined ? v : ctrl.def, CHANNEL[part]);
             });
-            window.pcSynth.applyCC(72, tuning[part].sus ? SUS_RELEASE : RELEASE_NEUTRAL, CHANNEL[part]);
+            window.pcSynth.applyCC(72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part), CHANNEL[part]);
         });
         window.sf2Ready = true;
         if (statusEl) { statusEl.dataset.sf2loaded = '1'; statusEl.innerHTML = '<span style="color:#4CAF50;">✓ SF2: ' + (name || 'soundfont.sf2') + '</span>'; }
