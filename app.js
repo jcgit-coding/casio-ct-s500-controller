@@ -182,6 +182,10 @@ function resetToneEQForPart(part) {
 
 // Which part the EQ panel is editing
 let activePart = 'U1';
+// Guard: true while switchEQ is updating fader DOM values programmatically.
+// Some mobile browsers (Android Chrome) fire 'input' on programmatic .value changes,
+// which would send a ~17-CC burst to the Casio and trigger a hardware CC72 reset.
+let _eqSwitching = false;
 
 // ======================================================================
 //  INIT
@@ -873,6 +877,10 @@ function buildEQ() {
                 fader.value = ctrl.def;
     
                 fader.addEventListener('input', e => {
+                    // Ignore programmatic .value changes from switchEQ — those are UI-only
+                    // updates and must not send MIDI (a spurious CC burst can reset CC72 on
+                    // the CT-S500, dropping sustain on the part being switched to).
+                    if (_eqSwitching) return;
                     const v = parseInt(e.target.value);
                     valSpan.innerText = formatVal(ctrl.label, v);
                     if (ctrl.cc === 7) {
@@ -922,9 +930,12 @@ function switchEQ(part) {
     const card = document.getElementById('card-' + part);
     if (card) card.classList.add('active-track');
 
+    // Raise guard before touching fader.value — some mobile browsers fire 'input' on
+    // programmatic changes, which would send a spurious CC burst and reset CC72 on the Casio.
+    _eqSwitching = true;
     EQ_CONTROLS.forEach(ctrl => {
         const val = eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def;
-        
+
         if (ctrl.type === 'switch') {
             const btn = document.querySelector(`.eq-switch[data-cc="${ctrl.cc}"]`);
             if (btn) {
@@ -934,11 +945,16 @@ function switchEQ(part) {
         } else {
             const fader = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
             if (fader) fader.value = val;
-            
+
             const valEl = document.getElementById('eq-val-' + ctrl.cc);
             if (valEl) valEl.innerText = formatVal(ctrl.label, val);
         }
     });
+    _eqSwitching = false;
+
+    // Re-send CC72 for this part: even if the guard blocked spurious input events,
+    // a brief DOM flush could still let one through on some engines. Cheap insurance.
+    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
 }
 function resetEQ() {
     resetToneEQForPart(activePart);
@@ -1988,9 +2004,12 @@ function initMidiController() {
                 const v = parseInt(volSlider.value);
                 if (volVal) volVal.innerText = v;
                 if (!mctrlEnabled) return;
-                // Send CC7 on this part's channel
-                if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, v]);
-                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, v, CHANNEL[part]);
+                // Send CC7 but keep within Part Mix Rules limits so the live volume knob
+                // cannot accidentally override the mix balance set by the mixer.
+                const cap = part === 'U2' ? 75 : 100;
+                const clamped = Math.min(v, cap);
+                if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], 7, clamped]);
+                if (window.pcSynth?.applyCC) window.pcSynth.applyCC(7, clamped, CHANNEL[part]);
             });
         }
 
