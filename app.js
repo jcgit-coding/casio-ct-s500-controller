@@ -435,10 +435,10 @@ function onMIDIMessage(e) {
 
         if (cmd === 0x90) { // Note On
             if (d2 > 0) {
-                const partKey = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
-                const octOffset = (partKey && tuning[partKey]?.oct) ? tuning[partKey].oct * 12 : 0;
                 // Same shift the Casio gets via RPN Coarse Tuning (global octave + transpose)
-                const shift = globalTranspose + globalOctave * 12 + octOffset;
+                // Per-part octave removed: sendCoarseTuning ignores tuning[part].oct and
+                // applying it only here would desync PC Synth pitch from the Casio.
+                const shift = globalTranspose + globalOctave * 12;
                 const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
 
                 pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
@@ -514,9 +514,7 @@ function onMIDIMessage(e) {
         // Update UI and apply EQ profile for the new tone's category.
         // Delay CCs: Casio sent the PC but is still loading the tone internally.
         selectToneInList(part, d => d.bank === bank && d.program === pc);
-        setTimeout(() => applySmartProfile(part), 150);
-        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400);
-        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700);
+        scheduleProfile(part, activeCategories[part]);
     }
 }
 
@@ -1033,6 +1031,19 @@ window.toneSearch = {};
 // the list's selectedIndex is only a view and is -1 whenever the filter hides the tone.
 const currentTone = { U1: null, U2: null, L: null };
 
+// Per-part cancellable timers for applySmartProfile + sustain re-sends.
+// Rapid prev/next clicks cancel the previous batch so only the final tone
+// triggers an EQ burst — prevents flooding the Casio MIDI buffer.
+const _pendingProfile = { U1: [], U2: [], L: [] };
+function scheduleProfile(part, catName) {
+    _pendingProfile[part].forEach(clearTimeout);
+    _pendingProfile[part] = [
+        setTimeout(() => applySmartProfile(part, catName), 150),
+        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400),
+        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700),
+    ];
+}
+
 function initToneSearch() {
     if (typeof db === 'undefined') return;
 
@@ -1109,9 +1120,7 @@ function initToneSearch() {
                         const d = JSON.parse(opt.value);
                         changeTone(part, d.bank, d.lsb, d.program);
                         const catName = opt.parentElement?.tagName === 'OPTGROUP' ? opt.parentElement.label : 'PIANO';
-                        setTimeout(() => applySmartProfile(part, catName), 150);
-                        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400);
-                        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700);
+                        scheduleProfile(part, catName);
                     }
                 }
             });
@@ -1134,15 +1143,7 @@ function initToneSearch() {
             if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
                 catName = opt.parentElement.label;
             }
-            
-            // Delay sending 18 CCs to prevent overwhelming the Casio's MIDI buffer
-            // which causes it to abort the Program Change.
-            setTimeout(() => applySmartProfile(part, catName), 150);
-            // Re-send CC72 at 400ms and 700ms: the Casio resets all controllers when it
-            // finishes loading a tone (timing varies 50–300ms+ by tone complexity).
-            // A single send at 150ms gets overwritten for slow-loading tones.
-            setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400);
-            setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700);
+            scheduleProfile(part, catName);
 
             // Update the name shown in the card header
             const nameEl = document.getElementById('selectedTone-' + part);
