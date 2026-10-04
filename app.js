@@ -444,9 +444,12 @@ function onMIDIMessage(e) {
         const pc = d1;
         const bank = pendingBank[part] || 0;
 
-        // Update UI and apply EQ profile for the new tone's category
+        // Update UI and apply EQ profile for the new tone's category.
+        // Delay CCs: Casio sent the PC but is still loading the tone internally.
         selectToneInList(part, d => d.bank === bank && d.program === pc);
-        applySmartProfile(part);
+        setTimeout(() => applySmartProfile(part), 150);
+        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400);
+        setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700);
     }
 }
 
@@ -1023,11 +1026,12 @@ function initToneSearch() {
             
             // Delay sending 18 CCs to prevent overwhelming the Casio's MIDI buffer
             // which causes it to abort the Program Change.
-            setTimeout(() => {
-                applySmartProfile(part, catName);
-                
-                
-            }, 150);
+            setTimeout(() => applySmartProfile(part, catName), 150);
+            // Re-send CC72 at 400ms and 700ms: the Casio resets all controllers when it
+            // finishes loading a tone (timing varies 50–300ms+ by tone complexity).
+            // A single send at 150ms gets overwritten for slow-loading tones.
+            setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 400);
+            setTimeout(() => { if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE); }, 700);
 
             // Update the name shown in the card header
             const nameEl = document.getElementById('selectedTone-' + part);
