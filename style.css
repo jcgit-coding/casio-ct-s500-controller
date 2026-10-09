@@ -1967,3 +1967,5 @@ input[type="range"].rc-fader::-moz-range-thumb {
     border: 1px dashed var(--border);
     border-radius: 8px;
 }
+
+.nav-tab .material-symbols-outlined { font-size: 18px !important; }
