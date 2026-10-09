@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v196">
+    <link rel="stylesheet" href="style.css?v197">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v196 &middot; vie 09 oct 17:19 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v197 &middot; vie 09 oct 17:27 &middot; COT</span>
             </div>
         </div>
 
@@ -644,11 +644,18 @@
         <!-- =========== VIEW: LIBRARY =========== -->
         <div class="app-view" id="view-library">
             
-            <!-- Barra Superior: Extractor -->
-            <div class="panel panel-toolbar">
-                <input type="text" id="lib-url-input" class="search-input" placeholder="Paste CifraClub/LaCuerda URL to import song..." style="flex:1;">
-                <button class="btn btn-primary" id="lib-btn-import" style="display:flex; align-items:center; gap:8px;">
-                    <span class="material-symbols-outlined">download</span> Extraer Letra y Acordes
+            <!-- Barra Superior: Extractor Directo -->
+            <div class="panel panel-toolbar" style="align-items: stretch; gap: 12px;">
+                <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="lib-song-title-input" class="search-input" placeholder="Title (e.g. Santo por Siempre)" style="flex:1;">
+                        <input type="text" id="lib-song-artist-input" class="search-input" placeholder="Artist (e.g. Bethel Music)" style="flex:1;">
+                    </div>
+                    <textarea id="lib-raw-text-input" class="search-input" placeholder="Paste lyrics and chords here directly from LaCuerda or any website..." style="min-height: 100px; resize:vertical; font-family:var(--font-mono); font-size:12px;"></textarea>
+                </div>
+                <button class="btn" id="lib-btn-import" style="display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px; padding: 0 20px; background: var(--accent-dim); color: var(--accent); border-color: var(--accent);">
+                    <span class="material-symbols-outlined" style="font-size: 32px;">auto_fix_high</span>
+                    <span style="font-weight:bold;">Process<br>Chords</span>
                 </button>
             </div>
 
@@ -778,9 +785,9 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v196"></script>
-    <script src="fix_swap.js?v196"></script>
-    <script src="harmony.js?v196"></script>
+    <script src="app.js?v197"></script>
+    <script src="fix_swap.js?v197"></script>
+    <script src="harmony.js?v197"></script>
     <script src="library.js"></script>
 </body>
 </html>

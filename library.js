@@ -17,7 +17,7 @@ const RepertorioApp = {
     },
 
     bindEvents() {
-        document.getElementById('lib-btn-import').addEventListener('click', () => this.importFromURL());
+        document.getElementById('lib-btn-import').addEventListener('click', () => this.importFromText());
         document.getElementById('lib-transpose-select').addEventListener('change', (e) => this.applyTranspose(parseInt(e.target.value)));
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
     },
@@ -29,95 +29,53 @@ const RepertorioApp = {
         for(let i=-1; i>=-11; i--) select.innerHTML += `<option value="${i}">${i} Semitonos</option>`;
     },
 
-    async importFromURL() {
-        const url = document.getElementById('lib-url-input').value.trim();
-        if(!url) return alert("Por favor ingresa una URL de LaCuerda o CifraClub");
+    importFromText() {
+        const title = document.getElementById('lib-song-title-input').value.trim() || "Canción Personalizada";
+        const artist = document.getElementById('lib-song-artist-input').value.trim() || "Artista Desconocido";
+        const rawText = document.getElementById('lib-raw-text-input').value;
         
+        if (!rawText.trim()) {
+            return alert("Por favor pega la letra y acordes en el cuadro de texto.");
+        }
+
         const titleEl = document.getElementById('lib-song-title');
         const artistEl = document.getElementById('lib-song-artist');
         const chordsEl = document.getElementById('lib-chords-view');
-        
-        titleEl.innerText = "Extrayendo...";
-        artistEl.innerText = "Conectando con la web...";
-        chordsEl.innerHTML = "<i>Por favor espera, descargando letra y acordes...</i>";
 
-        try {
-            // Usamos AllOrigins como proxy CORS gratuito para extraer HTML directamente desde el navegador
-            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-            const response = await fetch(proxy);
-            const data = await response.json();
-            
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.contents, "text/html");
+        // Parsear el texto crudo y detectar acordes para envolverlos
+        let parsedHTML = this.parseRawTextToChords(rawText);
 
-            let songData = this.parseSongHTML(doc, url, data.contents);
+        this.currentSong = {
+            title: title,
+            artist: artist,
+            originalContent: parsedHTML
+        };
 
-            // Guardar en memoria la canción actual
-            this.currentSong = {
-                title: songData.title,
-                artist: songData.artist,
-                originalContent: songData.content
-            };
-
-            // Mostrar en UI
-            titleEl.innerText = this.currentSong.title;
-            artistEl.innerText = this.currentSong.artist;
-            document.getElementById('lib-transpose-select').value = "0";
-            this.renderChords(this.currentSong.originalContent);
-
-        } catch (err) {
-            console.error("Error extrayendo canción:", err);
-            titleEl.innerText = "Error";
-            artistEl.innerText = "Falló la extracción";
-            chordsEl.innerHTML = `<span style="color:#ff3366">Hubo un error al intentar leer la URL. Verifica que sea un enlace válido de LaCuerda.</span>`;
-        }
+        titleEl.innerText = this.currentSong.title;
+        artistEl.innerText = this.currentSong.artist;
+        document.getElementById('lib-transpose-select').value = "0";
+        this.renderChords(this.currentSong.originalContent);
     },
 
-    parseSongHTML(doc, url, rawHTML) {
-        let title = "Canción Desconocida";
-        let artist = "Artista Desconocido";
-        let rawContent = "";
+    parseRawTextToChords(text) {
+        let lines = text.split('\n');
+        let htmlLines = lines.map(line => {
+            // Un heurístico simple: si la línea tiene muchos espacios y palabras cortas que parecen acordes, es una línea de acordes.
+            // Para simplificar, buscaremos el patrón de acordes en cualquier línea y lo envolveremos.
+            // Regex estricto de acorde: Nota A-G, opcional # o b, opcional m/maj/dim/aug/sus/add, opcional numero, opcional bajo (/Nota)
+            const chordRegex = /(^|\s)([CDEFGAB][#b]?(?:m|maj|dim|aug|sus|add)?\d*(?:\/[CDEFGAB][#b]?)?)(?=\s|$)/g;
+            
+            // Reemplazar los acordes con span
+            let parsedLine = line.replace(chordRegex, (match, prefix, chord) => {
+                return prefix + `<span class='chord' style='color:var(--accent); font-weight:bold;'>${chord}</span>`;
+            });
 
-        if (url.includes("lacuerda.net")) {
-            title = doc.querySelector('h1')?.innerText.trim() || title;
-            artist = doc.querySelector('h2 a')?.innerText.trim() || doc.querySelector('h2')?.innerText.trim() || artist;
-            
-            // Attempt 1: DOM query for #t_body pre
-            let pre = doc.querySelector('#t_body pre') || doc.querySelector('#t_body PRE');
-            
-            if (pre && pre.innerHTML.trim().length > 10) {
-                rawContent = pre.innerHTML;
-            } else {
-                // Attempt 2: Regex extraction from raw HTML if DOMParser failed due to malformed HTML
-                let match = rawHTML.match(/<div[^>]*id=["']?t_body["']?[^>]*>\s*<pre[^>]*>([\s\S]*?)<\/pre>/i);
-                if (match && match[1].trim().length > 10) {
-                    rawContent = match[1];
-                } else {
-                    // Attempt 3: Any non-empty PRE tag
-                    let pres = doc.querySelectorAll('pre, PRE');
-                    for (let p of pres) {
-                        if (p.innerHTML.trim().length > 20) {
-                            rawContent = p.innerHTML;
-                            break;
-                        }
-                    }
-                }
-            }
+            // Conservar espacios usando &nbsp; para que no colapse
+            parsedLine = parsedLine.replace(/ {2}/g, '&nbsp;&nbsp;');
+            return parsedLine;
+        });
 
-            if(!rawContent || rawContent.length < 10) {
-                 rawContent = "No se encontró la estructura de acordes en esta página.";
-            }
-            
-            // Convertir los hipervínculos de acordes que usa LaCuerda a nuestro formato interno (span class="chord")
-            rawContent = rawContent.replace(/<a[^>]*>(.*?)<\/a>/gi, "<span class='chord' style='color:var(--accent); font-weight:bold;'>$1</span>");
-        } else {
-            // Generic fallback parser
-            title = doc.querySelector('title')?.innerText || title;
-            let pre = doc.querySelector('pre');
-            rawContent = pre ? pre.innerHTML : "Solo se soporta extracción optimizada para LaCuerda.net por el momento.";
-        }
-        
-        return { title, artist, content: rawContent };
+        return htmlLines.join('<br>');
     },
 
     applyTranspose(steps) {
@@ -128,11 +86,7 @@ const RepertorioApp = {
             return;
         }
 
-        // Motor Matemático de Transposición
-        // Busca todo el texto que está clasificado como acorde (dentro del span class='chord')
         let newContent = this.currentSong.originalContent.replace(/(<span[^>]*class=['"]chord['"][^>]*>)(.*?)(<\/span>)/gi, (match, openTag, chordText, closeTag) => {
-            
-            // Transponer cada nota base encontrada en el acorde (Ej: F#m -> G#m)
             let transposedChord = chordText.replace(/[CDEFGAB]#?/g, note => {
                 let idx = this.notes.indexOf(note);
                 if (idx === -1) return note; 
@@ -140,7 +94,6 @@ const RepertorioApp = {
                 if (newIdx < 0) newIdx += 12;
                 return this.notes[newIdx];
             });
-            
             return openTag + transposedChord + closeTag;
         });
 
