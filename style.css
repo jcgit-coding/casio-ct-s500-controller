@@ -1799,3 +1799,178 @@ input[type="range"].rc-fader::-moz-range-thumb {
     background: var(--border);
     border-radius: 4px;
 }
+
+/* ======================================================================
+   NUEVOS MÓDULOS: REPERTORIO Y ENTRENADOR MIDI
+   ====================================================================== */
+
+/* Layout Grid para Vistas Complejas */
+.app-layout-split {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.sidebar-col {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.main-col {
+    flex: 2;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Toolbars */
+.panel-toolbar {
+    flex-direction: row;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.daw-transport-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.daw-btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.daw-btn-play {
+    background: rgba(0, 230, 118, 0.15) !important;
+    border-color: var(--color-l) !important;
+    color: var(--color-l) !important;
+    font-weight: bold !important;
+}
+
+.daw-btn-stop {
+    background: var(--danger-glow) !important;
+    border-color: var(--danger) !important;
+    color: var(--danger) !important;
+    font-weight: bold !important;
+}
+
+.daw-control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.daw-control-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.daw-stepper {
+    display: flex;
+    align-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.daw-stepper button {
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-weight: bold;
+}
+
+/* Lienzo de Acordes (Repertorio) */
+.chords-canvas {
+    flex: 1;
+    font-family: var(--font-mono);
+    white-space: pre;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    height: 500px;
+    overflow-y: auto;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Piano Roll Canvas (Entrenador) */
+.piano-roll-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.piano-roll-canvas {
+    flex: 1;
+    position: relative;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.piano-roll-placeholder {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-family: var(--main-font);
+}
+
+.piano-roll-keys {
+    height: 80px;
+    display: flex;
+    background: var(--panel-bg);
+    position: relative;
+    border-top: 2px solid var(--border);
+}
+
+.piano-roll-key-mock {
+    flex: 1;
+    background: var(--text);
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #bbb;
+    border-radius: 0 0 4px 4px;
+    position: relative;
+    opacity: 0.8;
+}
+
+/* Event List Box */
+.event-list-empty {
+    padding: 15px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+}
