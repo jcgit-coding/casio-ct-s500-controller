@@ -50,7 +50,7 @@ const RepertorioApp = {
             const parser = new DOMParser();
             const doc = parser.parseFromString(data.contents, "text/html");
 
-            let songData = this.parseSongHTML(doc, url);
+            let songData = this.parseSongHTML(doc, url, data.contents);
 
             // Guardar en memoria la canción actual
             this.currentSong = {
@@ -73,7 +73,7 @@ const RepertorioApp = {
         }
     },
 
-    parseSongHTML(doc, url) {
+    parseSongHTML(doc, url, rawHTML) {
         let title = "Canción Desconocida";
         let artist = "Artista Desconocido";
         let rawContent = "";
@@ -81,8 +81,32 @@ const RepertorioApp = {
         if (url.includes("lacuerda.net")) {
             title = doc.querySelector('h1')?.innerText.trim() || title;
             artist = doc.querySelector('h2 a')?.innerText.trim() || doc.querySelector('h2')?.innerText.trim() || artist;
-            let pre = doc.querySelector('#t_body pre') || doc.querySelector('pre');
-            rawContent = pre ? pre.innerHTML : "No se encontró la estructura de acordes en esta página.";
+            
+            // Attempt 1: DOM query for #t_body pre
+            let pre = doc.querySelector('#t_body pre') || doc.querySelector('#t_body PRE');
+            
+            if (pre && pre.innerHTML.trim().length > 10) {
+                rawContent = pre.innerHTML;
+            } else {
+                // Attempt 2: Regex extraction from raw HTML if DOMParser failed due to malformed HTML
+                let match = rawHTML.match(/<div[^>]*id=["']?t_body["']?[^>]*>\s*<pre[^>]*>([\s\S]*?)<\/pre>/i);
+                if (match && match[1].trim().length > 10) {
+                    rawContent = match[1];
+                } else {
+                    // Attempt 3: Any non-empty PRE tag
+                    let pres = doc.querySelectorAll('pre, PRE');
+                    for (let p of pres) {
+                        if (p.innerHTML.trim().length > 20) {
+                            rawContent = p.innerHTML;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(!rawContent || rawContent.length < 10) {
+                 rawContent = "No se encontró la estructura de acordes en esta página.";
+            }
             
             // Convertir los hipervínculos de acordes que usa LaCuerda a nuestro formato interno (span class="chord")
             rawContent = rawContent.replace(/<a[^>]*>(.*?)<\/a>/gi, "<span class='chord' style='color:var(--accent); font-weight:bold;'>$1</span>");
