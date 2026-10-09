@@ -640,20 +640,135 @@
                 </div>
         <!-- =========== VIEW: REPERTORIO =========== -->
         <div class="app-view" id="view-repertorio">
-            <div class="panel" style="justify-content: center; align-items: center; min-height: 400px; width: 100%;">
-                <span class="material-symbols-outlined" style="font-size: 48px; color: var(--accent); margin-bottom: 20px;">library_music</span>
-                <h2 style="margin:0; font-size: 24px; color: var(--text);">Módulo de Repertorio</h2>
-                <p style="color: var(--text-muted); margin-top: 10px;">En construcción (Fase 1: Scaffolding y Ruteo Exitoso).</p>
+            
+            <!-- Barra Superior: Extractor -->
+            <div class="panel" style="flex-direction: row; gap: 12px; margin-bottom: 20px; align-items: center;">
+                <input type="text" id="rep-url-input" class="search-input" placeholder="Pegar URL de CifraClub/LaCuerda para importar canción..." style="flex:1;">
+                <button class="btn btn-primary" id="rep-btn-import" style="display:flex; align-items:center; gap:8px;">
+                    <span class="material-symbols-outlined">download</span> Extraer Letra y Acordes
+                </button>
             </div>
+
+            <div style="display: flex; gap: 20px; align-items: stretch; flex-wrap: wrap;">
+                
+                <!-- SIDEBAR: EVENTOS -->
+                <div style="flex: 1; min-width: 300px; max-width: 350px; display: flex; flex-direction: column; gap: 16px;">
+                    <div class="panel" style="flex: 1;">
+                        <div class="panel-title">Próximos Eventos</div>
+                        
+                        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                            <input type="date" id="rep-date-picker" class="search-input" style="flex: 1;">
+                            <button class="btn" id="rep-btn-add-event"><span class="material-symbols-outlined">add</span></button>
+                        </div>
+
+                        <!-- Lista de eventos (se inyectará vía JS) -->
+                        <div id="rep-event-list" style="display:flex; flex-direction:column; gap:10px;">
+                            <div style="padding:15px; text-align:center; color:var(--text-muted); font-size:13px; border:1px dashed var(--border); border-radius:8px;">
+                                No hay eventos programados.<br>Selecciona una fecha arriba.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAIN: VISOR DE CANCIÓN -->
+                <div class="panel" style="flex: 2; min-width: 400px;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap:15px;">
+                        <div>
+                            <h2 id="rep-song-title" style="margin: 0 0 4px 0; font-size: 26px;">Repertorio Vacío</h2>
+                            <span id="rep-song-artist" style="color: var(--text-muted); font-weight: 600;">Agrega una canción para comenzar</span>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <!-- Control Transposición -->
+                            <div style="display: flex; flex-direction: column; gap: 4px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);">
+                                <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Transponer</span>
+                                <select id="rep-transpose-select" class="search-input" style="color: var(--accent); padding: 4px 8px; min-height: auto; width: 140px; font-weight: bold; cursor: pointer;">
+                                    <option value="0">Tono Original</option>
+                                </select>
+                            </div>
+
+                            <!-- Botón Maximizar -->
+                            <button class="btn" id="rep-btn-fullscreen" style="display:flex; align-items:center; gap:8px; height: 100%;">
+                                <span class="material-symbols-outlined">fullscreen</span> Maximizar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lienzo de Letra y Acordes -->
+                    <div id="rep-chords-view" style="font-family: 'Consolas', 'Courier New', monospace; white-space: pre; font-size: 20px; line-height: 1.6; color: #e0e0e0; background: #0a0b0d; padding: 30px; border-radius: 12px; border: 1px solid var(--border); height: 450px; overflow-y: auto;">
+                        
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- =========== VIEW: ENTRENADOR =========== -->
         <div class="app-view" id="view-entrenador">
-            <div class="panel" style="justify-content: center; align-items: center; min-height: 400px; width: 100%;">
-                <span class="material-symbols-outlined" style="font-size: 48px; color: var(--accent); margin-bottom: 20px;">model_training</span>
-                <h2 style="margin:0; font-size: 24px; color: var(--text);">Módulo Entrenador MIDI</h2>
-                <p style="color: var(--text-muted); margin-top: 10px;">En construcción (Fase 1: Scaffolding y Ruteo Exitoso).</p>
+            
+            <div class="panel" style="flex-direction: row; gap: 12px; align-items: center; margin-bottom: 20px;">
+                <input type="text" id="trainer-search-input" class="search-input" placeholder="Buscar canción en la base de datos (ej. Chopin Nocturne)..." style="flex:1;">
+                <button class="btn btn-primary" id="trainer-btn-search" style="display:flex; align-items:center; gap:8px;">
+                    <span class="material-symbols-outlined">search</span> Buscar
+                </button>
             </div>
+
+            <!-- TRANSPORT BAR ESTILO DAW -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; flex-wrap: wrap; gap:15px;">
+                
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="trainer-btn-play" style="background: rgba(0, 230, 118, 0.15); border-color: var(--success); color: var(--success); display:flex; align-items:center; gap:5px;">
+                        <span class="material-symbols-outlined">play_arrow</span> Reproducir
+                    </button>
+                    <button class="btn" id="trainer-btn-stop" style="background: rgba(255, 51, 102, 0.1); border-color: #ff3366; color: #ff3366; display:flex; align-items:center; gap:5px;">
+                        <span class="material-symbols-outlined">stop</span> Detener
+                    </button>
+                    <button class="btn" id="trainer-btn-wait" style="display:flex; align-items:center; gap:5px;">
+                        <span class="material-symbols-outlined">front_hand</span> Activar Modo Espera (Wait)
+                    </button>
+                </div>
+
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <!-- Tempo -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Tempo</span>
+                        <div style="display: flex; align-items: center; background: #08090a; border: 1px solid var(--border); border-radius: 6px; padding: 2px;">
+                            <button id="trainer-tempo-minus" style="background: none; border:none; color: #fff; cursor: pointer; padding: 4px 8px; font-weight:bold;">-</button>
+                            <input type="text" id="trainer-tempo-val" class="search-input" value="120" style="border: none; padding: 4px; width: 45px; text-align:center; font-weight:bold; min-height:auto;">
+                            <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">BPM</span>
+                            <button id="trainer-tempo-plus" style="background: none; border:none; color: #fff; cursor: pointer; padding: 4px 8px; font-weight:bold;">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Pitch / Transposición MIDI -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Pitch (Tono)</span>
+                        <div style="display: flex; align-items: center; background: #08090a; border: 1px solid var(--border); border-radius: 6px; padding: 2px;">
+                            <button id="trainer-pitch-minus" style="background: none; border:none; color: #fff; cursor: pointer; padding: 4px 8px; font-weight:bold;">-</button>
+                            <input type="text" id="trainer-pitch-val" class="search-input" value="0" style="border: none; padding: 4px; width: 35px; text-align:center; font-weight:bold; color: var(--accent); min-height:auto;">
+                            <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">Semi</span>
+                            <button id="trainer-pitch-plus" style="background: none; border:none; color: #fff; cursor: pointer; padding: 4px 8px; font-weight:bold;">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIANO ROLL RENDERER -->
+            <div style="position: relative; width: 100%; height: 400px; background: #08090a; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;">
+                <div id="trainer-piano-roll-canvas" style="flex: 1; position: relative; background: linear-gradient(180deg, #050608 0%, #151820 100%); display:flex; justify-content:center; align-items:center;">
+                    <span style="color:var(--text-muted); font-size:14px;">(El visualizador MIDI de partituras se renderizará aquí)</span>
+                </div>
+                
+                <!-- Simple Keyboard Mockup for structural spacing -->
+                <div style="height: 80px; display: flex; background: #000; position: relative; border-top: 2px solid #222;">
+                    <!-- In the real implementation, this will be generated dynamically by MIDI JS -->
+                    <div style="flex: 1; background: #f3f4f6; border-right: 1px solid #ccc; border-bottom: 1px solid #bbb; border-radius: 0 0 4px 4px; position: relative;"></div>
+                    <div style="flex: 1; background: #f3f4f6; border-right: 1px solid #ccc; border-bottom: 1px solid #bbb; border-radius: 0 0 4px 4px; position: relative;"></div>
+                    <div style="flex: 1; background: #f3f4f6; border-right: 1px solid #ccc; border-bottom: 1px solid #bbb; border-radius: 0 0 4px 4px; position: relative;"></div>
+                </div>
+            </div>
+
         </div>
 
     </div><!-- /main-console -->
