@@ -1372,7 +1372,7 @@ button {
     user-select: none;
 }
 
-.btn, .nav-tab, .step-btn, .sus-btn {
+.btn, .step-btn, .sus-btn {
     background: var(--panel-bg);
     border: 1px solid var(--border-light);
     color: var(--text);
@@ -1380,20 +1380,13 @@ button {
     transition: all 0.15s ease;
 }
 
-.btn:hover, .nav-tab:hover, .step-btn:hover, .sus-btn:hover {
+.btn:hover, .step-btn:hover, .sus-btn:hover {
     background: #252830;
     border-color: rgba(255,255,255,0.1);
 }
 
-.btn:active, .nav-tab:active, .step-btn:active, .sus-btn:active {
+.btn:active, .step-btn:active, .sus-btn:active {
     transform: translateY(1px);
-}
-
-.nav-tab.active {
-    background: var(--accent-dim);
-    border-color: var(--accent);
-    color: var(--accent);
-    box-shadow: inset 0 0 10px var(--accent-glow);
 }
 
 .sus-btn.sus-on {
