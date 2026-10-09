@@ -1,0 +1,34 @@
+[
+    {
+        "id": "beethoven_moonlight",
+        "title": "Moonlight Sonata (1st Mvt)",
+        "artist": "Ludwig van Beethoven",
+        "genre": "Classical",
+        "difficulty": "Intermediate",
+        "file": "beethoven_moonlight.mid"
+    },
+    {
+        "id": "chopin_nocturne_9_2",
+        "title": "Nocturne Op. 9 No. 2",
+        "artist": "Frederic Chopin",
+        "genre": "Classical",
+        "difficulty": "Advanced",
+        "file": "chopin_nocturne_9_2.mid"
+    },
+    {
+        "id": "mozart_rondo_alla_turca",
+        "title": "Rondo Alla Turca",
+        "artist": "Wolfgang Amadeus Mozart",
+        "genre": "Classical",
+        "difficulty": "Intermediate",
+        "file": "mozart_rondo_alla_turca.mid"
+    },
+    {
+        "id": "debussy_clair_de_lune",
+        "title": "Clair de Lune",
+        "artist": "Claude Debussy",
+        "genre": "Classical",
+        "difficulty": "Advanced",
+        "file": "debussy_clair_de_lune.mid"
+    }
+]

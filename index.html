@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v192">
+    <link rel="stylesheet" href="style.css?v193">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -46,8 +46,8 @@
                 <button class="nav-tab" data-target="view-settings"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">settings</span> PRESETS</button>
                 <button class="nav-tab" data-target="view-harmony"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">music_note</span> HARMONY</button>
                 <button class="nav-tab" data-target="view-synth"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">piano</span> MIDI CTRL</button>
-                <button class="nav-tab" data-target="view-repertorio"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">library_music</span> REPERTORIO</button>
-                <button class="nav-tab" data-target="view-entrenador"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">model_training</span> ENTRENADOR</button>
+                <button class="nav-tab" data-target="view-library"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">library_music</span> LIBRARY</button>
+                <button class="nav-tab" data-target="view-trainer"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">model_training</span> TRAINER</button>
             </div>
         </div>
 
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v192 &middot; vie 09 oct 15:46 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v193 &middot; vie 09 oct 15:50 &middot; COT</span>
             </div>
         </div>
 
@@ -641,13 +641,13 @@
             </div>
         </div>
 
-        <!-- =========== VIEW: REPERTORIO =========== -->
-        <div class="app-view" id="view-repertorio">
+        <!-- =========== VIEW: LIBRARY =========== -->
+        <div class="app-view" id="view-library">
             
             <!-- Barra Superior: Extractor -->
             <div class="panel panel-toolbar">
-                <input type="text" id="rep-url-input" class="search-input" placeholder="Pegar URL de CifraClub/LaCuerda para importar canción..." style="flex:1;">
-                <button class="btn btn-primary" id="rep-btn-import" style="display:flex; align-items:center; gap:8px;">
+                <input type="text" id="lib-url-input" class="search-input" placeholder="Paste CifraClub/LaCuerda URL to import song..." style="flex:1;">
+                <button class="btn btn-primary" id="lib-btn-import" style="display:flex; align-items:center; gap:8px;">
                     <span class="material-symbols-outlined">download</span> Extraer Letra y Acordes
                 </button>
             </div>
@@ -660,12 +660,12 @@
                         <div class="panel-title">Próximos Eventos</div>
                         
                         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                            <input type="date" id="rep-date-picker" class="search-input" style="flex: 1;">
-                            <button class="btn" id="rep-btn-add-event"><span class="material-symbols-outlined">add</span></button>
+                            <input type="date" id="lib-date-picker" class="search-input" style="flex: 1;">
+                            <button class="btn" id="lib-btn-add-event"><span class="material-symbols-outlined">add</span></button>
                         </div>
 
                         <!-- Lista de eventos (se inyectará vía JS) -->
-                        <div id="rep-event-list" style="display:flex; flex-direction:column; gap:10px;">
+                        <div id="lib-event-list" style="display:flex; flex-direction:column; gap:10px;">
                             <div class="event-list-empty">
                                 No hay eventos programados.<br>Selecciona una fecha arriba.
                             </div>
@@ -678,28 +678,28 @@
                     
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap:15px;">
                         <div>
-                            <h2 id="rep-song-title" style="margin: 0 0 4px 0; font-size: 26px; font-family: var(--main-font); color: var(--text);">Repertorio Vacío</h2>
-                            <span id="rep-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Agrega una canción para comenzar</span>
+                            <h2 id="lib-song-title" style="margin: 0 0 4px 0; font-size: 26px; font-family: var(--main-font); color: var(--text);">Empty Library</h2>
+                            <span id="lib-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Add a song to begin</span>
                         </div>
 
                         <div style="display: flex; gap: 12px; align-items: center;">
                             <!-- Control Transposición -->
                             <div style="display: flex; flex-direction: column; gap: 4px; background: var(--input-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);">
                                 <span class="daw-control-label">Transponer</span>
-                                <select id="rep-transpose-select" class="search-input" style="color: var(--accent); padding: 4px 8px; min-height: auto; width: 140px; font-weight: bold; cursor: pointer;">
+                                <select id="lib-transpose-select" class="search-input" style="color: var(--accent); padding: 4px 8px; min-height: auto; width: 140px; font-weight: bold; cursor: pointer;">
                                     <option value="0">Tono Original</option>
                                 </select>
                             </div>
 
                             <!-- Botón Maximizar -->
-                            <button class="btn" id="rep-btn-fullscreen" style="display:flex; align-items:center; gap:8px; height: 100%;">
+                            <button class="btn" id="lib-btn-fullscreen" style="display:flex; align-items:center; gap:8px; height: 100%;">
                                 <span class="material-symbols-outlined">fullscreen</span> Maximizar
                             </button>
                         </div>
                     </div>
 
                     <!-- Lienzo de Letra y Acordes -->
-                    <div id="rep-chords-view" class="chords-canvas">
+                    <div id="lib-chords-view" class="chords-canvas">
                         
                     </div>
                 </div>
@@ -707,11 +707,11 @@
 
         </div>
 
-        <!-- =========== VIEW: ENTRENADOR =========== -->
-        <div class="app-view" id="view-entrenador">
+        <!-- =========== VIEW: TRAINER =========== -->
+        <div class="app-view" id="view-trainer">
             
             <div class="panel panel-toolbar">
-                <input type="text" id="trainer-search-input" class="search-input" placeholder="Buscar canción en la base de datos (ej. Chopin Nocturne)..." style="flex:1; font-family: var(--main-font);">
+                <input type="text" id="trainer-search-input" class="search-input" placeholder="Search song in database (e.g. Chopin Nocturne)..." style="flex:1; font-family: var(--main-font);">
                 <button class="btn btn-primary" id="trainer-btn-search" style="display:flex; align-items:center; gap:8px;">
                     <span class="material-symbols-outlined">search</span> Buscar
                 </button>
@@ -779,8 +779,8 @@
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
     <script src="app.js?v195"></script>
-    <script src="fix_swap.js?v192"></script>
-    <script src="harmony.js?v192"></script>
-    <script src="repertorio.js"></script>
+    <script src="fix_swap.js?v193"></script>
+    <script src="harmony.js?v193"></script>
+    <script src="library.js"></script>
 </body>
 </html>

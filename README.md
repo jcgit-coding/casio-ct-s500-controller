@@ -107,7 +107,11 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 
 ---
 
-## 8. Historial de Versiones (reciente)
+## 8. Development Rules
+
+- **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
+
+## 9. Historial de Versiones (reciente)
 
 ### v195 · dom 04 oct 2026 07:24 · COT
 
