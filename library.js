@@ -190,7 +190,11 @@ const RepertoireSync = {
         `).join('');
         
         let sidebar = document.querySelector('.sidebar-col');
-        sidebar.innerHTML = `<div class='panel' style='flex:1;'><div class='panel-title'>Repertorio (Cloud)</div><div style='overflow-y:auto; max-height:400px;'>${listHTML}</div></div>`;
+        
+        let existingCloud = document.getElementById('cloud-rep-panel');
+        if(existingCloud) existingCloud.remove();
+        sidebar.insertAdjacentHTML('beforeend', "<div class='panel' id='cloud-rep-panel' style='flex:1; margin-top:12px;'><div class='panel-title'>Repertorio (Cloud)</div><div style='overflow-y:auto; max-height:400px;'>" + listHTML + "</div></div>");
+'><div class='panel-title'>Repertorio (Cloud)</div><div style='overflow-y:auto; max-height:400px;'>${listHTML}</div></div>`;
     },
     
     async openSong(id) {
