@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v197">
+    <link rel="stylesheet" href="style.css?v199">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v197 &middot; vie 09 oct 17:27 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v199 &middot; sáb 10 oct 14:35 &middot; COT</span>
             </div>
         </div>
 
@@ -344,7 +344,31 @@
         </div>
 
         <!-- =========== VIEW: SETTINGS & PRESETS =========== -->
-        <div class="app-view" id="view-settings">
+                <div class="app-view" id="view-settings">
+
+            <!-- Cloud Integration row -->
+            <div class="panel">
+                <div class="panel-title">Cloud Integration & AI</div>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <p style="font-size:14px; color:var(--text-muted); line-height:1.5;">
+                        To enable automatic song generation and cloud synchronization across devices, you must provide the following API keys. These keys are saved <b>locally</b> on this device and are never sent to our servers.
+                    </p>
+                    
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <div style="flex:1;">
+                            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px; color:var(--accent);">Gemini API Key (AI Song Generation)</label>
+                            <input type="password" id="api-key-gemini" class="search-input" placeholder="AIzaSy..." style="width:100%;" />
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px; color:var(--accent);">GitHub PAT (Cloud Sync)</label>
+                            <input type="password" id="api-key-github" class="search-input" placeholder="github_pat_..." style="width:100%;" />
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end;">
+                        <button id="btnSaveApiKeys" class="btn btn-primary" style="padding:10px 24px;">Save Keys</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- MIDI Connection row -->
             <div class="panel">
@@ -650,13 +674,22 @@
                     <div style="display:flex; gap:8px;">
                         <input type="text" id="lib-song-title-input" class="search-input" placeholder="Title (e.g. Santo por Siempre)" style="flex:1;">
                         <input type="text" id="lib-song-artist-input" class="search-input" placeholder="Artist (e.g. Bethel Music)" style="flex:1;">
+                        <button class="btn" id="lib-btn-ai" style="background:var(--accent-glow); color:#fff; font-weight:bold;">
+                            <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">smart_toy</span> Ask AI
+                        </button>
                     </div>
                     <textarea id="lib-raw-text-input" class="search-input" placeholder="Paste lyrics and chords here directly from LaCuerda or any website..." style="min-height: 100px; resize:vertical; font-family:var(--font-mono); font-size:12px;"></textarea>
                 </div>
-                <button class="btn" id="lib-btn-import" style="display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px; padding: 0 20px; background: var(--accent-dim); color: var(--accent); border-color: var(--accent);">
-                    <span class="material-symbols-outlined" style="font-size: 32px;">auto_fix_high</span>
-                    <span style="font-weight:bold;">Process<br>Chords</span>
-                </button>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <button class="btn" id="lib-btn-import" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; padding: 0 20px; background: var(--accent-dim); color: var(--accent); border-color: var(--accent);">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">auto_fix_high</span>
+                        <span style="font-weight:bold; font-size:11px;">Process<br>Chords</span>
+                    </button>
+                    <button class="btn" id="lib-btn-save-cloud" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; padding: 0 20px; background: rgba(51, 204, 102, 0.1); color: #33cc66; border-color: #33cc66;">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">cloud_upload</span>
+                        <span style="font-weight:bold; font-size:11px;">Save to<br>Cloud</span>
+                    </button>
+                </div>
             </div>
 
             <div class="app-layout-split">
@@ -785,9 +818,9 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v197"></script>
-    <script src="fix_swap.js?v197"></script>
-    <script src="harmony.js?v197"></script>
+    <script src="app.js?v199"></script>
+    <script src="fix_swap.js?v199"></script>
+    <script src="harmony.js?v199"></script>
     <script src="library.js"></script>
 </body>
 </html>
