@@ -138,7 +138,7 @@ const RepertorioApp = {
 };
 
 // ================= CLOUD SYNC & AI =================
-document.addEventListener('DOMContentLoaded', () => {
+function initCloudSync() {
     const btnSaveKeys = document.getElementById('btnSaveApiKeys');
     if(btnSaveKeys) {
         // Cargar llaves
@@ -163,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if(typeof RepertoireSync !== 'undefined') {
         RepertoireSync.loadIndex();
     }
-});
+}
+initCloudSync();
 
 const RepertoireSync = {
     repoPath: 'jcgit-coding/casio-ct-s500-controller',
