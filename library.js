@@ -164,7 +164,7 @@ function initCloudSync() {
         RepertoireSync.loadIndex();
     }
 }
-initCloudSync();
+
 
 const RepertoireSync = {
     repoPath: 'jcgit-coding/casio-ct-s500-controller',
@@ -195,7 +195,6 @@ const RepertoireSync = {
         let existingCloud = document.getElementById('cloud-rep-panel');
         if(existingCloud) existingCloud.remove();
         sidebar.insertAdjacentHTML('beforeend', "<div class='panel' id='cloud-rep-panel' style='flex:1; margin-top:12px;'><div class='panel-title'>Repertorio (Cloud)</div><div style='overflow-y:auto; max-height:400px;'>" + listHTML + "</div></div>");
-'><div class='panel-title'>Repertorio (Cloud)</div><div style='overflow-y:auto; max-height:400px;'>${listHTML}</div></div>`;
     },
     
     async openSong(id) {
@@ -222,11 +221,11 @@ const RepertoireSync = {
     }
 };
 window.RepertoireSync = RepertoireSync;
+initCloudSync();
 
 
 // ================= AI GENERATOR =================
-document.addEventListener('DOMContentLoaded', () => {
-    const btnAi = document.getElementById('lib-btn-ai');
+const btnAi = document.getElementById('lib-btn-ai');
     if(btnAi) {
         btnAi.addEventListener('click', async () => {
             const title = document.getElementById('lib-song-title-input').value.trim();
@@ -348,4 +347,3 @@ No incluyas introducciones habladas ni explicaciones, SOLO la canción con sus a
             }
         });
     }
-});
