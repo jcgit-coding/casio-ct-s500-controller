@@ -58,15 +58,32 @@ const RepertorioApp = {
     },
 
     parseRawTextToChords(text) {
+        // Diccionario de conversión de notación latina a inglesa
+        const latinToEnglish = {
+            'DO': 'C', 'RE': 'D', 'MI': 'E', 'FA': 'F', 'SOL': 'G', 'LA': 'A', 'SI': 'B',
+            'Do': 'C', 'Re': 'D', 'Mi': 'E', 'Fa': 'F', 'Sol': 'G', 'La': 'A', 'Si': 'B',
+            'do': 'C', 're': 'D', 'mi': 'E', 'fa': 'F', 'sol': 'G', 'la': 'A', 'si': 'B'
+        };
+
         let lines = text.split('\n');
         let htmlLines = lines.map(line => {
-            // Un heurístico simple: si la línea tiene muchos espacios y palabras cortas que parecen acordes, es una línea de acordes.
-            // Para simplificar, buscaremos el patrón de acordes en cualquier línea y lo envolveremos.
-            // Regex estricto de acorde: Nota A-G, opcional # o b, opcional m/maj/dim/aug/sus/add, opcional numero, opcional bajo (/Nota)
-            const chordRegex = /(^|\s)([CDEFGAB][#b]?(?:m|maj|dim|aug|sus|add)?\d*(?:\/[CDEFGAB][#b]?)?)(?=\s|$)/g;
+            // Regex completo que captura notación inglesa o latina
+            const chordRegex = /(^|\s)([CDEFGAB]|DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si|do|re|mi|fa|sol|la|si)([#b]?)(m|maj|dim|aug|sus|add)?(\d*)(\/([CDEFGAB]|DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si|do|re|mi|fa|sol|la|si)[#b]?)?(?=\s|$)/g;
             
-            // Reemplazar los acordes con span
-            let parsedLine = line.replace(chordRegex, (match, prefix, chord) => {
+            let parsedLine = line.replace(chordRegex, (match, prefix, root, acc, type, num, bass) => {
+                // Letras como "A", "Y", "LA" podrían ser palabras sueltas de la letra de la canción.
+                // Es arriesgado, pero normalmente los acordes están en líneas con muchos espacios.
+                let engRoot = latinToEnglish[root] || root.toUpperCase();
+                let engBass = "";
+                if (bass) {
+                    let rawBassNote = bass.substring(1); // remover slash
+                    let bassAcc = rawBassNote.match(/[#b]$/) ? rawBassNote.slice(-1) : "";
+                    let bassBase = rawBassNote.replace(/[#b]$/, "");
+                    let engBassBase = latinToEnglish[bassBase] || bassBase.toUpperCase();
+                    engBass = "/" + engBassBase + bassAcc;
+                }
+                
+                let chord = engRoot + (acc||"") + (type||"") + (num||"") + engBass;
                 return prefix + `<span class='chord' style='color:var(--accent); font-weight:bold;'>${chord}</span>`;
             });
 
