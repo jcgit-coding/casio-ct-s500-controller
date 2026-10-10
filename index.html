@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v199">
+    <link rel="stylesheet" href="style.css?v201">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v199 &middot; sáb 10 oct 14:35 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v201 &middot; sáb 10 oct 14:43 &middot; COT</span>
             </div>
         </div>
 
@@ -752,9 +752,16 @@
             
             <div class="panel panel-toolbar">
                 <input type="text" id="trainer-search-input" class="search-input" placeholder="Search song in database (e.g. Chopin Nocturne)..." style="flex:1; font-family: var(--main-font);">
+                
                 <button class="btn btn-primary" id="trainer-btn-search" style="display:flex; align-items:center; gap:8px;">
                     <span class="material-symbols-outlined">search</span> Buscar
                 </button>
+                <div style="width:1px; background:var(--border-color); margin:0 5px;"></div>
+                <label for="trainer-file-import" class="btn" style="display:flex; align-items:center; gap:8px; cursor:pointer; background:var(--accent-dim); color:var(--accent); border-color:var(--accent);">
+                    <span class="material-symbols-outlined">file_upload</span> Importar MIDI Local
+                </label>
+                <input type="file" id="trainer-file-import" accept=".mid,.midi" style="display:none;">
+
             </div>
 
             <!-- TRANSPORT BAR ESTILO DAW -->
@@ -818,9 +825,10 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v199"></script>
-    <script src="fix_swap.js?v199"></script>
-    <script src="harmony.js?v199"></script>
+    <script src="app.js?v201"></script>
+    <script src="fix_swap.js?v201"></script>
+    <script src="harmony.js?v201"></script>
     <script src="library.js"></script>
+    <script src="trainer.js"></script>
 </body>
 </html>
