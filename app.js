@@ -176,6 +176,10 @@ const tuning = {
 // MIDI channel per part
 const CHANNEL = { U1: 0, U2: 1, L: 2 };
 
+// Last CC64 value received from the Casio per part (physical sustain button/pedal).
+// Tracked so bursts that reset CT-S500 controllers can re-assert it.
+const physCC64 = { U1: 0, U2: 0, L: 0 };
+
 
 
 
@@ -374,6 +378,7 @@ function onMIDIMessage(e) {
         if (!part) return;
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
         if (d1 === 0) { pendingBank[part] = d2; }
+        if (d1 === 64) { physCC64[part] = d2; }
         if (d1 !== 64 && d1 !== 72 && d1 !== 0) eqState[part][d1] = d2;
         if (part === activePart) {
             const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
@@ -557,12 +562,12 @@ const _pendingSustain = { U1: [], U2: [], L: [] };
 function scheduleSustainResync(part, delays) {
     // Do NOT cancel existing taps — a new burst may arrive while previous taps are still
     // pending (e.g. rapid tone changes). Accumulating ensures CC72 survives every burst.
-    if (!tuning[part].sus) return;
     delays.forEach(d => {
         const id = setTimeout(() => {
-            // Remove self from list so it doesn't grow unboundedly
             _pendingSustain[part] = _pendingSustain[part].filter(t => t !== id);
             if (tuning[part].sus) sendCC(part, 72, susRelease(part));
+            // Re-assert physical CC64 so a CT-S500 controller reset doesn't clear it
+            if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         }, d);
         _pendingSustain[part].push(id);
     });
@@ -570,7 +575,8 @@ function scheduleSustainResync(part, delays) {
 
 function resyncAllSustain() {
     ['U1', 'U2', 'L'].forEach(p => {
-        if (tuning[p].sus) scheduleSustainResync(p, SUSTAIN_TAPS);
+        const needsResync = tuning[p].sus || physCC64[p] > 0;
+        if (needsResync) scheduleSustainResync(p, SUSTAIN_TAPS);
     });
 }
 
@@ -833,9 +839,9 @@ function initQuickControls() {
                 sendCC(part, 72, susRelease(part));
                 scheduleSustainResync(part, [40, 150, 400]);
             } else {
-                // Sustain turned OFF: return release to standard neutral and clear damper
                 sendCC(part, 72, releaseNeutral(part));
-                sendCC(part, 64, 0);
+                // Only clear CC64 if the physical sustain is not active
+                if (physCC64[part] === 0) sendCC(part, 64, 0);
             }
         });
     });
@@ -1074,6 +1080,7 @@ function pushAllToKeyboard(skipTones = false) {
             });
             sendCoarseTuning(part);
             if (tuning[part].sus) sendCC(part, 72, susRelease(part));
+            if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         });
     }, skipTones ? 0 : 150);
     resyncAllSustain();
