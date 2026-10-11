@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v203">
+    <link rel="stylesheet" href="style.css?v206">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v203 &middot; sáb 10 oct 14:57 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v206 &middot; sáb 10 oct 23:42 &middot; COT</span>
             </div>
         </div>
 
@@ -668,33 +668,12 @@
         <!-- =========== VIEW: LIBRARY =========== -->
         <div class="app-view" id="view-library">
             
-            <!-- Barra Superior: Extractor Directo -->
-            <div class="panel panel-toolbar" style="align-items: stretch; gap: 12px;">
-                <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
-                    <div style="display:flex; gap:8px;">
-                        <input type="text" id="lib-ai-query" class="search-input" placeholder="Pegar Link de YouTube o Nombre de la Canción..." style="flex:1;">
-                        <button class="btn" id="lib-btn-ai" style="background:var(--accent-glow); color:#fff; font-weight:bold; white-space:nowrap; padding: 0 20px;">
-                            <span class="material-symbols-outlined" style="font-size:20px; vertical-align:middle; margin-right:5px;">auto_awesome</span> Generar Magia
-                        </button>
-                    </div>
-                    
-                    <div style="display:flex; gap:8px;">
-                        <input type="text" id="lib-song-title-input" class="search-input" placeholder="Título" style="flex:1; font-size: 11px;">
-                        <input type="text" id="lib-song-artist-input" class="search-input" placeholder="Artista" style="flex:1; font-size: 11px;">
-                    </div>
-                    <textarea id="lib-raw-text-input" class="search-input" placeholder="(Opcional) La IA pegará la letra aquí. También puedes pegar manualmente..." style="min-height: 80px; resize:vertical; font-family:var(--font-mono); font-size:12px;"></textarea>
-                </div>
-                
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <button class="btn" id="lib-btn-import" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; padding: 0 20px; background: var(--accent-dim); color: var(--accent); border-color: var(--accent);">
-                        <span class="material-symbols-outlined" style="font-size: 24px;">auto_fix_high</span>
-                        <span style="font-weight:bold; font-size:11px;">Procesar<br>Manualmente</span>
-                    </button>
-                    <button class="btn" id="lib-btn-save-cloud" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; padding: 0 20px; background: rgba(51, 204, 102, 0.1); color: #33cc66; border-color: #33cc66;">
-                        <span class="material-symbols-outlined" style="font-size: 24px;">cloud_upload</span>
-                        <span style="font-weight:bold; font-size:11px;">Guardar en<br>Nube</span>
-                    </button>
-                </div>
+            <!-- Barra Superior: Búsqueda Limpia y Sobria -->
+            <div class="panel panel-toolbar" style="align-items: center; gap: 12px;">
+                <input type="text" id="lib-ai-query" class="search-input" placeholder="Pega el enlace de YouTube o nombre de la canción..." style="flex:1;">
+                <button class="btn btn-primary" id="lib-btn-ai" style="padding: 10px 24px; font-weight: 600; white-space: nowrap;">
+                    Buscar canción
+                </button>
             </div>
 
             <div class="app-layout-split">
@@ -737,8 +716,11 @@
                             </div>
 
                             <!-- Botón Maximizar -->
-                            <button class="btn" id="lib-btn-fullscreen" style="display:flex; align-items:center; gap:8px; height: 100%;">
-                                <span class="material-symbols-outlined">fullscreen</span> Maximizar
+                            <button class="btn" id="lib-btn-save-cloud" style="padding: 8px 16px; font-weight: 600; color: #33cc66; border-color: rgba(51, 204, 102, 0.4); display: none;">
+                                Guardar en nube
+                            </button>
+                            <button class="btn" id="lib-btn-fullscreen" style="padding: 8px 16px; font-weight: 600;">
+                                Maximizar
                             </button>
                         </div>
                     </div>
@@ -830,9 +812,9 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v203"></script>
-    <script src="fix_swap.js?v203"></script>
-    <script src="harmony.js?v203"></script>
+    <script src="app.js?v206"></script>
+    <script src="fix_swap.js?v206"></script>
+    <script src="harmony.js?v206"></script>
     <script src="library.js"></script>
     <script src="trainer.js"></script>
 </body>

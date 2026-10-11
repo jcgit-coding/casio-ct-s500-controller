@@ -1,4 +1,4 @@
-﻿// ======================================================================
+// ======================================================================
 //  MIDI state
 // ======================================================================
 let midiAccess  = null;
@@ -408,14 +408,9 @@ function reconnectMIDI() {
         if (warn) warn.style.display = 'none';
         if (midiOutput) {
             const newId = midiOutput.id;
-            // Only reload tones when the output port actually changes — avoids cutting notes
-            // during Bluetooth reconnects or virtual port appearances that don't change the Casio
-            if (newId !== _lastMidiOutputId) {
-                _lastMidiOutputId = newId;
-                pushAllToKeyboard();
-            } else {
-                pushAllToKeyboard(true); // CCs only — tones already loaded, no PC needed
-            }
+            _lastMidiOutputId = newId;
+            // Always push tones and CCs so the Casio accurately reflects the app's initial/current instruments
+            pushAllToKeyboard(false);
         }
     } else {
         const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
@@ -2020,10 +2015,9 @@ function loadAppState() {
 
         switchEQ(activePart); // updates sliders on screen
 
-        // If MIDI is already connected (USB was not unplugged between reloads), onstatechange
-        // won't fire again and pushAllToKeyboard won't be called. Re-sync CCs now so the
-        // Casio receives the correct EQ + sustain state without requiring a reconnect.
-        if (midiOutput) pushAllToKeyboard(true);
+        // If MIDI is already connected (USB was not unplugged between reloads),
+        // send tones and CCs so the Casio accurately matches the instruments on screen.
+        if (midiOutput) pushAllToKeyboard(false);
 
         return true;
     } catch (e) {

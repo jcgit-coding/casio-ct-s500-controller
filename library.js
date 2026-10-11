@@ -17,7 +17,7 @@ const RepertorioApp = {
     },
 
     bindEvents() {
-        document.getElementById('lib-btn-import').addEventListener('click', () => this.importFromText());
+        document.getElementById('lib-btn-import')?.addEventListener('click', () => this.importFromText());
         document.getElementById('lib-transpose-select').addEventListener('change', (e) => this.applyTranspose(parseInt(e.target.value)));
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
     },
@@ -27,6 +27,28 @@ const RepertorioApp = {
         select.innerHTML = '<option value="0">Tono Original</option>';
         for(let i=1; i<=11; i++) select.innerHTML += `<option value="${i}">+${i} Semitonos</option>`;
         for(let i=-1; i>=-11; i--) select.innerHTML += `<option value="${i}">${i} Semitonos</option>`;
+    },
+
+    setSong(title, artist, rawText) {
+        const titleEl = document.getElementById('lib-song-title');
+        const artistEl = document.getElementById('lib-song-artist');
+        let parsedHTML = this.parseRawTextToChords(rawText);
+
+        this.currentSong = {
+            title: title || "Canción",
+            artist: artist || "Artista",
+            rawText: rawText,
+            originalContent: parsedHTML
+        };
+
+        if (titleEl) titleEl.innerText = this.currentSong.title;
+        if (artistEl) artistEl.innerText = this.currentSong.artist;
+        const trSelect = document.getElementById('lib-transpose-select');
+        if (trSelect) trSelect.value = "0";
+        this.renderChords(this.currentSong.originalContent);
+
+        const btnSave = document.getElementById('lib-btn-save-cloud');
+        if (btnSave) btnSave.style.display = 'inline-block';
     },
 
     importFromText() {
@@ -201,20 +223,17 @@ const RepertoireSync = {
         try {
             const res = await fetch(`library/${id}/chords.txt?v=` + Date.now());
             const text = await res.text();
+            let title = "Canción";
+            let artist = "Artista";
             
-            // Simular importación de texto
-            document.getElementById('lib-raw-text-input').value = text;
-            
-            // Buscar metadatos
             const metaRes = await fetch(`library/${id}/meta.json?v=` + Date.now());
             if(metaRes.ok) {
                 const meta = await metaRes.json();
-                document.getElementById('lib-song-title-input').value = meta.title;
-                document.getElementById('lib-song-artist-input').value = meta.artist;
+                title = meta.title;
+                artist = meta.artist;
             }
             
-            // Procesar
-            RepertorioApp.importFromText(); 
+            RepertorioApp.setSong(title, artist, text);
         } catch(e) {
             alert('Error abriendo canción desde la nube');
         }
@@ -224,126 +243,142 @@ window.RepertoireSync = RepertoireSync;
 initCloudSync();
 
 
-// ================= AI GENERATOR =================
+// ================= AI GENERATOR & CLOUD SAVE =================
 const btnAi = document.getElementById('lib-btn-ai');
-    if(btnAi) {
-        btnAi.addEventListener('click', async () => {
-            const title = document.getElementById('lib-song-title-input').value.trim();
-            const artist = document.getElementById('lib-song-artist-input').value.trim();
-            if(!title) return alert("Por favor escribe el título de la canción primero.");
+if (btnAi) {
+    btnAi.addEventListener('click', async () => {
+        const queryInput = document.getElementById('lib-ai-query');
+        const query = queryInput ? queryInput.value.trim() : '';
+        if (!query) return alert("Por favor escribe el nombre de la canción o pega el enlace de YouTube.");
+        
+        const apiKey = localStorage.getItem('gemini_api_key');
+        if (!apiKey) {
+            alert("Por favor ve a PRESETS y configura tu llave Gemini API Key.");
+            document.querySelector('[data-target="view-settings"]')?.click();
+            return;
+        }
+        
+        btnAi.innerText = "Buscando...";
+        btnAi.disabled = true;
+        
+        try {
+            const prompt = `Analiza la siguiente búsqueda o enlace de YouTube: "${query}".
+Determina el título exacto de la canción y el artista.
+Luego escribe la letra completa con sus acordes encima de cada verso (acordes en inglés: C, D, Em, F#m, G/B).
+Devuelve únicamente un JSON con este formato exacto, sin explicaciones ni formato markdown extra:
+{
+  "title": "Título de la canción",
+  "artist": "Nombre del Artista",
+  "chords": "Letra completa con acordes encima..."
+}`;
             
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if(!apiKey) {
-                alert("Por favor ve a PRESETS y configura tu llave Gemini API Key gratuita.");
-                document.querySelector('[data-target="view-settings"]').click();
-                return;
-            }
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
             
-            btnAi.innerText = "Pensando...";
-            btnAi.disabled = true;
+            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            const data = await response.json();
+            let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
             
+            aiText = aiText.replace(/\`\`\`json/gi, '').replace(/\`\`\`/g, '').trim();
+            let parsed;
             try {
-                const prompt = `Eres un músico experto. Escribe la letra completa con acordes encima para la canción "${title}" de "${artist}". 
-Usa estrictamente formato de acordes en inglés (C, D, Em) en una línea, y la letra en la siguiente línea.
-No incluyas introducciones habladas ni explicaciones, SOLO la canción con sus acordes.`;
-                
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{parts: [{text: prompt}]}]
-                    })
-                });
-                
-                if(!response.ok) throw new Error("Error en API");
-                const data = await response.json();
-                const aiText = data.candidates[0].content.parts[0].text;
-                
-                document.getElementById('lib-raw-text-input').value = aiText;
-                
-                // Procesar automáticamente
-                RepertorioApp.importFromText();
-                
-            } catch(e) {
-                alert("Error contactando a la IA. Verifica tu llave.");
-            } finally {
-                btnAi.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">smart_toy</span> Ask AI`;
-                btnAi.disabled = false;
+                parsed = JSON.parse(aiText);
+            } catch(err) {
+                parsed = {
+                    title: query,
+                    artist: "Desconocido",
+                    chords: aiText
+                };
             }
-        });
-    }
+            
+            RepertorioApp.setSong(parsed.title, parsed.artist, parsed.chords);
+            if (queryInput) queryInput.value = '';
+            
+        } catch(e) {
+            console.error(e);
+            alert("Error al buscar o procesar la canción. Verifica tu conexión o API Key.");
+        } finally {
+            btnAi.innerText = "Buscar canción";
+            btnAi.disabled = false;
+        }
+    });
+}
 
-    const btnSaveCloud = document.getElementById('lib-btn-save-cloud');
-    if(btnSaveCloud) {
-        btnSaveCloud.addEventListener('click', async () => {
-            const pat = localStorage.getItem('github_pat');
-            if(!pat) {
-                alert("Por favor ve a PRESETS y configura tu GitHub PAT para guardar en la nube.");
-                document.querySelector('[data-target="view-settings"]').click();
-                return;
-            }
+const btnSaveCloud = document.getElementById('lib-btn-save-cloud');
+if (btnSaveCloud) {
+    btnSaveCloud.addEventListener('click', async () => {
+        const pat = localStorage.getItem('github_pat');
+        if (!pat) {
+            alert("Por favor ve a PRESETS y configura tu GitHub PAT para guardar en la nube.");
+            document.querySelector('[data-target="view-settings"]')?.click();
+            return;
+        }
+        
+        if (!RepertorioApp.currentSong || !RepertorioApp.currentSong.title) {
+            return alert("No hay ninguna canción activa para guardar.");
+        }
+        
+        const title = RepertorioApp.currentSong.title;
+        const artist = RepertorioApp.currentSong.artist;
+        const rawText = RepertorioApp.currentSong.rawText || '';
+        const id = title.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now().toString().slice(-4);
+        
+        btnSaveCloud.innerText = "Guardando...";
+        btnSaveCloud.disabled = true;
+        
+        try {
+            // 1. Guardar meta.json
+            const metaStr = JSON.stringify({ id, title, artist, original_key: "C", genre: "" }, null, 2);
+            await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/${id}/meta.json`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Add ${title} meta`,
+                    content: btoa(unescape(encodeURIComponent(metaStr)))
+                })
+            });
             
-            if(!RepertorioApp.currentSong || !RepertorioApp.currentSong.title) {
-                return alert("Primero procesa una canción antes de guardarla.");
-            }
+            // 2. Guardar chords.txt
+            await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/${id}/chords.txt`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Add ${title} chords`,
+                    content: btoa(unescape(encodeURIComponent(rawText)))
+                })
+            });
             
-            const title = RepertorioApp.currentSong.title;
-            const artist = RepertorioApp.currentSong.artist;
-            const content = RepertorioApp.currentSong.originalContent;
-            const id = title.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now().toString().slice(-4);
+            // 3. Actualizar index.json
+            const idxRes = await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/index.json`);
+            const idxData = await idxRes.json();
+            const idxContent = JSON.parse(decodeURIComponent(escape(atob(idxData.content))));
             
-            btnSaveCloud.innerText = "Guardando...";
+            idxContent.push({ id, title, artist });
             
-            try {
-                // 1. Guardar meta.json
-                const metaStr = JSON.stringify({id, title, artist, original_key: "C", genre: ""}, null, 2);
-                await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/${id}/meta.json`, {
-                    method: 'PUT',
-                    headers: {'Authorization': `token ${pat}`, 'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        message: `Add ${title} meta`,
-                        content: btoa(unescape(encodeURIComponent(metaStr)))
-                    })
-                });
-                
-                // 2. Guardar chords.txt (usamos el texto crudo del input, o el content html?)
-                // El HTML es mejor porque ya tiene los spans. Pero el texto crudo es editable.
-                // Guardaremos el html procesado para lectura rápida.
-                const rawText = document.getElementById('lib-raw-text-input').value;
-                await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/${id}/chords.txt`, {
-                    method: 'PUT',
-                    headers: {'Authorization': `token ${pat}`, 'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        message: `Add ${title} chords`,
-                        content: btoa(unescape(encodeURIComponent(rawText)))
-                    })
-                });
-                
-                // 3. Actualizar index.json
-                const idxRes = await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/index.json`);
-                const idxData = await idxRes.json();
-                const idxContent = JSON.parse(decodeURIComponent(escape(atob(idxData.content))));
-                
-                idxContent.push({id, title, artist});
-                
-                await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/index.json`, {
-                    method: 'PUT',
-                    headers: {'Authorization': `token ${pat}`, 'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        message: `Update library index with ${title}`,
-                        content: btoa(unescape(encodeURIComponent(JSON.stringify(idxContent, null, 2)))),
-                        sha: idxData.sha
-                    })
-                });
-                
-                alert("¡Canción guardada exitosamente en tu nube!");
-                RepertoireSync.loadIndex();
-                
-            } catch(e) {
-                console.error(e);
-                alert("Error al guardar en GitHub. Verifica tu Token y permisos.");
-            } finally {
-                btnSaveCloud.innerHTML = `<span class="material-symbols-outlined" style="font-size: 24px;">cloud_upload</span><span style="font-weight:bold; font-size:11px;">Save to<br>Cloud</span>`;
-            }
-        });
-    }
+            await fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/index.json`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Update library index with ${title}`,
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(idxContent, null, 2)))),
+                    sha: idxData.sha
+                })
+            });
+            
+            alert("¡Canción guardada en tu nube exitosamente!");
+            RepertoireSync.loadIndex();
+            
+        } catch(e) {
+            console.error(e);
+            alert("Error al guardar en GitHub. Verifica tu Token y permisos.");
+        } finally {
+            btnSaveCloud.innerText = "Guardar en nube";
+            btnSaveCloud.disabled = false;
+        }
+    });
+}
