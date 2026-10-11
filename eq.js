@@ -10,11 +10,11 @@
     {
         // CC102/103/104 are not in the CT-S500 MIDI Implementation — no verified effect on hardware.
         // These CCs shape the tone in PC Synth mode (SpessaSynth) only.
-        title: 'Master EQ (PC Synth)',
+        title: 'Master EQ',
         controls: [
-            { label: 'LOWS',  cc: 104, def: 64, tip: 'Low Shelf EQ — PC Synth only (unverified on CT-S500 hardware)' },
-            { label: 'MIDS',  cc: 103, def: 64, tip: 'Mid Peaking EQ — PC Synth only (unverified on CT-S500 hardware)' },
-            { label: 'HIGHS', cc: 102, def: 64, tip: 'High Shelf EQ — PC Synth only (unverified on CT-S500 hardware)' },
+            { label: 'LOWS',  cc: 104, def: 64, tip: 'Low Shelf EQ' },
+            { label: 'MIDS',  cc: 103, def: 64, tip: 'Mid Peaking EQ' },
+            { label: 'HIGHS', cc: 102, def: 64, tip: 'High Shelf EQ' },
         ]
     },
     {
@@ -29,14 +29,6 @@
         controls: [
             { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (ADSR)' },
             { label: 'DECAY',   cc: 75, def: 64, tip: 'Decay Time (ADSR)' },
-        ]
-    },
-    {
-        // CC95 is not in the CT-S500 MIDI Implementation — has no effect on hardware.
-        // It controls harmonic saturation in SpessaSynth (PC Synth mode only).
-        title: 'DSP Drive (PC Synth)',
-        controls: [
-            { label: 'DSP DRIVE', cc: 95, def: 0, tip: 'Harmonic saturation — PC Synth only (no effect on CT-S500 hardware)' },
         ]
     },
     {
