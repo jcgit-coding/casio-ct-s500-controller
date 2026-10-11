@@ -289,6 +289,10 @@ const RepertoireSync = {
 window.RepertoireSync = RepertoireSync;
 initCloudSync();
 
+document.addEventListener('DOMContentLoaded', () => {
+    RepertorioApp.init();
+});
+
 
 // ================= AI GENERATOR & CLOUD SAVE =================
 const btnAi = document.getElementById('lib-btn-ai');
