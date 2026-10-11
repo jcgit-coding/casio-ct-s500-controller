@@ -1,5 +1,5 @@
 ﻿// ======================================================================
-//  MIDI INIT â€” always-on with auto-reconnect
+//  MIDI INIT -- always-on with auto-reconnect
 // ======================================================================
 function initMIDI() {
     if (!navigator.requestMIDIAccess) {
@@ -7,7 +7,7 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    // Android requires sysex:false â€” sysex:true triggers platform init failure, and async
+    // Android requires sysex:false -- sysex:true triggers platform init failure, and async
     // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
     const sysex = !/android/i.test(navigator.userAgent);
     navigator.requestMIDIAccess({ sysex }).then(access => {
@@ -32,7 +32,7 @@ function initMIDI() {
 }
 
 function reconnectMIDI() {
-    // Detach old input handler first â€” prevents ghost messages and PC Synth duplicate notes
+    // Detach old input handler first -- prevents ghost messages and PC Synth duplicate notes
     if (midiInput) { midiInput.onmidimessage = null; }
     midiInput  = null;
     midiOutput = null;
@@ -70,9 +70,9 @@ function reconnectMIDI() {
 
     if (midiOutput || midiInput) {
         const name = (midiOutput || midiInput).name;
-        const label = midiOutput && midiInput ? "âœ“ " + name
-                    : midiOutput ? "âœ“ " + name + " (output only)"
-                    : "âœ“ " + name + " (input only)";
+        const label = midiOutput && midiInput ? name
+                    : midiOutput ? name + “ (output only)”
+                    : name + “ (input only)”;
         setStatus(label, !!(midiOutput || midiInput));
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
@@ -119,14 +119,14 @@ function onMIDIMessage(e) {
 
                 pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // unscaled velocity â€” el synth maneja su propio Volume
+                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // unscaled velocity -- el synth maneja su propio Volume
             } else {
                 pcNoteOff(noteCh, d1);
             }
         } else if (cmd === 0x80) { // Note Off
             pcNoteOff(noteCh, d1);
         } else if (cmd === 0xB0 && d1 === 64) {
-            // Physical damper pedal is global on the Casio â†’ hold all 3 PC synth parts (native CC64)
+            // Physical damper pedal is global on the Casio -> hold all 3 PC synth parts (native CC64)
             Object.values(CHANNEL).forEach(ch => window.pcSynth.applyCC(64, d2, ch));
         }
     }
@@ -138,7 +138,7 @@ function onMIDIMessage(e) {
 
         if (!part) return;
 
-        // CC7 is a per-channel (per-part) volume â€” mirror it to that part's PC synth channel
+        // CC7 is a per-channel (per-part) volume -- mirror it to that part's PC synth channel
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
 
         // Catch Bank Select MSB (CC0)
@@ -204,4 +204,4 @@ function onMIDIMessage(e) {
 // ======================================================================
 //  EQ PANEL
 // ======================================================================
-// EQ sections â€” grouped logically with readable titles
+// EQ sections -- grouped logically with readable titles

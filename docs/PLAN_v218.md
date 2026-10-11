@@ -285,3 +285,15 @@ Para confirmar hipótesis de hardware (CT-S500 conectado por USB-MIDI):
 | 8 | Limpiar archivos muertos (`fix_*.js` inactivos, `,`, `.OBSIDIANTEST`, `repertorio.js` si es legacy) | raíz |
 | 9 | Migrar claves de ambiente de español a inglés (`Studio/Live/Hall/Jazz`) — cambio coordinado | `eq.js`, `app.js`, `index.html` |
 | 10 | Evaluar SysEx para Active DSP si se quiere EQ real sobre el CT-S500 | nuevo módulo |
+
+---
+
+## Pendientes post-v219
+
+### 🟠 SysEx Active DSP (CT-S500)
+
+**Estado:** pendiente — no implementado.
+
+Implementar control del Active DSP real del CT-S500 vía SysEx Casio. CC95/102/103/104 no están en el MIDI Implementation oficial del CT-S500 y no tienen efecto verificado sobre el hardware. El Active DSP real (reverb, chorus, delay, flanger, etc.) se controla exclusivamente por SysEx según la **sección 13.3 del MIDI Implementation del CT-S500** (disponible en casio.com).
+
+**Referencia:** Anexo A de este plan, fila "Active DSP real"; hallazgo V2.

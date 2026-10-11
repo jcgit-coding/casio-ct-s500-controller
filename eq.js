@@ -322,7 +322,7 @@ function getToneEnvPreset(tone, cat, env) {
         if (e === 'Hall')    return { '104':80, '103':66, '102':74, '74':68, '71':64, '73':64, '75':76, '95':15, '76':64, '77':64, '78':64, '91':68, '93':15, '94':18 };
         return { '104':76, '103':74, '102':62, '74':62, '71':64, '73':62, '75':70, '95':24, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 };
     }
-    // Stage/Grand piano: warm, clean, professional â€” natural acoustic body
+    // Stage/Grand piano: warm, clean, professional -- natural acoustic body
     if (name.includes('STAGE PIANO') || name.includes('GRAND PIANO') || name.includes('CLASSIC GRAND') || name.includes('CONCERT')) {
         if (e === 'Studio') return { '104':74, '103':68, '102':72, '74':70, '71':64, '73':60, '75':72, '95':14, '76':64, '77':64, '78':64, '91':26, '93':0,  '94':0 };
         if (e === 'Live')    return { '104':78, '103':74, '102':78, '74':76, '71':66, '73':58, '75':70, '95':26, '76':64, '77':64, '78':64, '91':42, '93':8,  '94':0 };
@@ -773,7 +773,7 @@ function applySmartProfile(part, category) {
     if (category) activeCategories[part] = category;
     const cat = activeCategories[part];
 
-    // 1. Reset tone/env parameters to generic defaults â€” skip live performance CCs
+    // 1. Reset tone/env parameters to generic defaults -- skip live performance CCs
     EQ_CONTROLS.forEach(ctrl => {
         if (PERFORMANCE_CCS.has(ctrl.cc)) return;
         eqState[part][ctrl.cc] = ctrl.def;
@@ -794,7 +794,7 @@ function applySmartProfile(part, category) {
         }
     }
 
-    // 3. Part Mix Rules always applied â€” CC7 is per-part balance, not per-tone character.
+    // 3. Part Mix Rules always applied -- CC7 is per-part balance, not per-tone character.
     if (part === 'U1') eqState[part][7] = 100;
     if (part === 'U2') eqState[part][7] = 75;
     if (part === 'L')  eqState[part][7] = 100;
@@ -802,7 +802,7 @@ function applySmartProfile(part, category) {
     // Ensure CC72 (Release) is never in eqState
     delete eqState[part][72]; delete eqState[part]['72'];
 
-    // 4. Send to keyboard and update UI â€” skip performance CCs
+    // 4. Send to keyboard and update UI -- skip performance CCs
     if (activePart === part) beginEqProgrammatic();
     EQ_CONTROLS.forEach(ctrl => {
         if (PERFORMANCE_CCS.has(ctrl.cc)) return;
@@ -826,7 +826,7 @@ function applySmartProfile(part, category) {
     });
 
     // 5. Sustain: ONLY assert if sustain is ON in app.
-    // When OFF, do NOT send CC 72 â€” preserve tone's native envelope and keyboard state!
+    // When OFF, do NOT send CC 72 -- preserve tone's native envelope and keyboard state!
     if (tuning[part].sus) {
         sendCC(part, 72, SUS_RELEASE);
     }

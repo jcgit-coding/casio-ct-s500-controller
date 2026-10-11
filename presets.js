@@ -13,7 +13,7 @@ function updateSyncStatus(msg) {
 
 function ghToken() { return localStorage.getItem('casioGhToken') || ''; }
 
-// Merge two preset stores by timestamp â€” most recent entry wins.
+// Merge two preset stores by timestamp -- most recent entry wins.
 // Tombstones ({_deleted,_ts}) are kept so deletions propagate across devices.
 // Old presets without _ts lose to any timestamped version (_ts ?? 0 = epoch).
 function mergePresetStores(local, cloud) {
@@ -30,7 +30,7 @@ function mergePresetStores(local, cloud) {
 
 async function syncPull() {
     try {
-        // Public read â€” no auth needed
+        // Public read -- no auth needed
         const res = await fetch(GH_API + '?t=' + Date.now(), {
             headers: { 'Accept': 'application/vnd.github.v3+json' }
         });
@@ -46,7 +46,7 @@ async function syncPull() {
     } catch { return false; }
 }
 
-// Serialized push queue â€” prevents concurrent PUTs racing on the same SHA
+// Serialized push queue -- prevents concurrent PUTs racing on the same SHA
 let _syncQueue = Promise.resolve();
 function syncPush() {
     _syncQueue = _syncQueue.catch(() => {}).then(() => _syncPushOnce());
@@ -73,7 +73,7 @@ async function _syncPushOnce(retried = false) {
             body: JSON.stringify(body)
         });
         if (res.status === 409 && !retried) {
-            // SHA conflict from a concurrent write â€” re-fetch, merge, retry once
+            // SHA conflict from a concurrent write -- re-fetch, merge, retry once
             ghFileSha = null;
             await syncPull();
             return _syncPushOnce(true);
@@ -95,9 +95,9 @@ async function autoSyncInit() {
     updateSyncStatus('Loading presets...');
     const ok = await syncPull();
     if (ok) {
-        updateSyncStatus(ghToken() ? 'âœ“ GitHub connected' : 'âœ“ Presets loaded (read only)');
+        updateSyncStatus(ghToken() ? 'GitHub connected' : 'Presets loaded (read only)');
     } else {
-        updateSyncStatus('Offline â€” using local presets');
+        updateSyncStatus('Offline - using local presets');
     }
     // Show token status in UI
     const tokenEl = document.getElementById('syncTokenDisplay');
@@ -184,8 +184,8 @@ function initPresets() {
 
 function captureAndSavePreset(name) {
     const eqSnap = JSON.parse(JSON.stringify(eqState));
-    // CC7 (Volume) is governed by Part Mix Rules â€” not per-preset character
-    // CC72 (Release/Sustain) is a live toggle â€” not per-preset state
+    // CC7 (Volume) is governed by Part Mix Rules -- not per-preset character
+    // CC72 (Release/Sustain) is a live toggle -- not per-preset state
     ['U1','U2','L'].forEach(p => {
         delete eqSnap[p][7];  delete eqSnap[p]['7'];
         delete eqSnap[p][72]; delete eqSnap[p]['72'];
@@ -225,7 +225,7 @@ function loadPreset(data) {
             delete eqState[part][72]; delete eqState[part]['72'];
         }
     });
-    // CC7 (Volume) comes from the saved eqState â€” no longer forced here.
+    // CC7 (Volume) comes from the saved eqState -- no longer forced here.
     ['U1','U2','L'].forEach(part => {
         if (data.tuning?.[part]) {
             tuning[part].oct = data.tuning[part].oct || 0;
@@ -240,7 +240,7 @@ function loadPreset(data) {
                 susBtn.classList.toggle('sus-on', tuning[part].sus);
             }
         }
-        // Restore tone selection â€” new presets store numeric id, old ones stored text.
+        // Restore tone selection -- new presets store numeric id, old ones stored text.
         // Restore filter first so the tone appears in context (and the chip highlights).
         if (data.tones?.[part] !== undefined && data.tones[part] !== '') {
             const ts = window.toneSearch?.[part];
@@ -287,7 +287,7 @@ function renderPresets() {
     list.innerHTML = '';
 
     for (const [name, data] of Object.entries(presets)) {
-        if (data?._deleted) continue; // tombstone â€” deleted on another device
+        if (data?._deleted) continue; // tombstone -- deleted on another device
         const item = document.createElement('div');
         item.className = 'preset-item';
 
@@ -329,7 +329,7 @@ function renderPresets() {
 }
 
 function saveAppState() {
-    // Deep-copy eqState excluding PERFORMANCE_CCS (live-state â€” must not be forced on reload)
+    // Deep-copy eqState excluding PERFORMANCE_CCS (live-state -- must not be forced on reload)
     const eqSnap = {};
     ['U1','U2','L'].forEach(p => {
         eqSnap[p] = {};
@@ -368,13 +368,13 @@ function loadAppState() {
         
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
-            // Purge CC72 (Release) â€” never apply from saved state; CC72 is managed by tuning.sus
+            // Purge CC72 (Release) -- never apply from saved state; CC72 is managed by tuning.sus
             ['U1','U2','L'].forEach(p => { delete eqState[p][72]; delete eqState[p]['72']; });
         }
         if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
         if (saved.tuning) Object.assign(tuning, saved.tuning);
         // Tuning UI must follow the restored state even when the preset has no
-        // tones (or an old/absent appState) â€” otherwise the SUSTAIN button can
+        // tones (or an old/absent appState) -- otherwise the SUSTAIN button can
         // show OFF while tuning.sus is ON and the hardware gets CC72=100.
         ['U1','U2','L'].forEach(part => {
             const octEl = document.getElementById('oct-' + part);
@@ -417,7 +417,7 @@ function loadAppState() {
                     ts.searchEl.value = saved.searchFilters[part];
                     ts.searchEl.dispatchEvent(new Event('input'));
                 }
-                // UI only â€” no 'change' event (would wipe saved eqState) and no changeTone
+                // UI only -- no 'change' event (would wipe saved eqState) and no changeTone
                 // (disabled on boot so we don't force the keyboard).
                 if (saved.tones[part] !== undefined) {
                     selectToneInList(part, d => d.id === saved.tones[part]);

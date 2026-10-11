@@ -6,18 +6,18 @@ let midiInput   = null;
 let midiOutput  = null;
 
 // PC Synth active notes. Sustain pedal (CC64) is handled natively by SpessaSynth per channel.
-const pcActiveNotes = {};     // "ch:note" â†’ { ch, shiftedNote }
-let pcSynthEnabled = false;  // OFF by default â€” user must toggle on
-let mctrlEnabled = false;    // MIDI Ctrl ON/OFF â€” off by default
+const pcActiveNotes = {};     // "ch:note" -> { ch, shiftedNote }
+let pcSynthEnabled = false;  // OFF by default -- user must toggle on
+let mctrlEnabled = false;    // MIDI Ctrl ON/OFF -- off by default
 
 // App SUSTAIN button emulates the Casio panel SUSTAIN (long release, notes fade out
-// naturally) via CC72 Release Time â€” NOT a damper hold (CC64 is left to the physical pedal).
+// naturally) via CC72 Release Time -- NOT a damper hold (CC64 is left to the physical pedal).
 const SUS_RELEASE = 110;
 const RELEASE_NEUTRAL = 64;
 // Taps used to re-send CC72 after ANY burst of CCs. The CT-S500 resets its
 // controllers (on every channel) after a large burst, and over Bluetooth the
 // outgoing queue can still be draining hundreds of ms after the app finished
-// writing â€” hence the deliberately late last tap.
+// writing -- hence the deliberately late last tap.
 const SUSTAIN_TAPS = [150, 400, 700, 1300];
 // Per-category CC72 neutral: these instruments have long natural decay;
 // sending 64 after a tone load would shorten it below the preset's intent.
@@ -30,7 +30,7 @@ const CAT_RELEASE_NEUTRAL = {
 function releaseNeutral(part) {
     return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
 }
-// CCs that represent live performance state â€” never save to toneEQ, never reset on tone/env change.
+// CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
 // CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal
 const PERFORMANCE_CCS = new Set([1, 65, 66, 67]);
 
@@ -106,7 +106,7 @@ function buildGMSelectors() {
             cat.programs.forEach(([prog, name]) => {
                 const opt = document.createElement('option');
                 opt.value = prog;
-                opt.textContent = prog + ' â€“ ' + name;
+                opt.textContent = prog + ' - ' + name;
                 if (prog === pcPartProgram[part]) opt.selected = true;
                 grp.appendChild(opt);
             });
@@ -153,7 +153,7 @@ function saveToneEQ() {
 function loadToneEQ() {
     try {
         toneEQ = JSON.parse(localStorage.getItem('casioToneEQ') || '{}');
-        // Purge any CC7 (Volume) values saved by older versions â€” volume is now always
+        // Purge any CC7 (Volume) values saved by older versions -- volume is now always
         // governed by Part Mix Rules and must never be locked per-tone.
         for (const id of Object.keys(toneEQ)) {
             for (const env of Object.keys(toneEQ[id])) {
@@ -171,11 +171,11 @@ function saveToneEQForPart(part) {
     const id = tone.id;
     if (!toneEQ[id]) toneEQ[id] = {};
     const profile = Object.assign({}, eqState[part]);
-    // CC7 (Volume) is per-part mix balance â€” never persist in toneEQ
+    // CC7 (Volume) is per-part mix balance -- never persist in toneEQ
     delete profile[7]; delete profile['7'];
-    // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button â€” never persist
+    // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button -- never persist
     delete profile[72]; delete profile['72'];
-    // Performance CCs (modulation, pedal switches) are live state â€” never persist
+    // Performance CCs (modulation, pedal switches) are live state -- never persist
     PERFORMANCE_CCS.forEach(cc => { delete profile[cc]; delete profile[String(cc)]; });
     toneEQ[id][currentEnv] = profile;
     saveToneEQ();
@@ -198,7 +198,7 @@ let _midiConnectTimer = null;
 let _lastMidiOutputId = null;
 // Guard: until this timestamp, the EQ fader 'input' events are ignored.
 // Some mobile browsers (Android Chrome) fire 'input' on programmatic .value
-// changes â€” and those events can arrive on a later task, after the synchronous
+// changes -- and those events can arrive on a later task, after the synchronous
 // guard would already have been cleared. Windowed guard covers both.
 // Cost of the window: a genuine user drag within ~100 ms of a programmatic
 // write is swallowed (the fader still shows the value, MIDI is re-sent by the
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!loadAppState()) ['U1','U2','L'].forEach(part => applySmartProfile(part));
     setInterval(saveAppState, 1000);
 
-    // On desktop Chrome, MIDI doesn't require a user gesture â€” init right away.
+    // On desktop Chrome, MIDI doesn't require a user gesture -- init right away.
     // On Android Chrome, requestMIDIAccess needs a user gesture to show the permission dialog.
     const isAndroid = /android/i.test(navigator.userAgent);
     if (!isAndroid) {
@@ -299,12 +299,12 @@ document.addEventListener("DOMContentLoaded", () => {
         envSel.addEventListener('change', (e) => {
             currentEnv = e.target.value;
             localStorage.setItem('casioEnv', currentEnv);
-            // Reapply profiles to all parts (applySmartProfile already sends the CCs â€”
+            // Reapply profiles to all parts (applySmartProfile already sends the CCs --
             // no pushAllToKeyboard here: it would re-send Program Changes and force the tones)
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
-            // Re-send CC72 on every part â€” a ~57-CC burst from 3Ã—applySmartProfile
+            // Re-send CC72 on every part -- a ~57-CC burst from 3xapplySmartProfile
             // triggers the CT-S500 hardware controller reset multiple times.
             resyncAllSustain();
             switchEQ(activePart);
@@ -333,15 +333,15 @@ document.addEventListener("DOMContentLoaded", () => {
 // ======================================================================
 //  TONE SEARCH (filterable select)
 // ======================================================================
-// Per-part tone search refs â€” used by loadAppState / loadPreset / onMIDIMessage
+// Per-part tone search refs -- used by loadAppState / loadPreset / onMIDIMessage
 // to reset the filter before searching the full tone list.
 window.toneSearch = {};
 
-// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push â€”
+// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push --
 // the list's selectedIndex is only a view and is -1 whenever the filter hides the tone.
 const currentTone = { U1: null, U2: null, L: null };
 
-// Per-part cancellable timers â€” shared by scheduleProfile and scheduleSustainResync.
+// Per-part cancellable timers -- shared by scheduleProfile and scheduleSustainResync.
 const _pendingProfile = { U1: [], U2: [], L: [] };
 const _pendingSustain = { U1: [], U2: [], L: [] };
 
@@ -372,7 +372,7 @@ function scheduleProfile(part, catName) {
             applySmartProfile(part, catName);
             // Resync AFTER the burst so taps arrive after the CT-S500 hardware reset,
             // not racing with it. Calling before the burst had the first tap (150ms)
-            // compete with applySmartProfile â€” undefined ordering, unreliable.
+            // compete with applySmartProfile -- undefined ordering, unreliable.
             resyncAllSustain();
         }, 150),
     ];
@@ -448,7 +448,7 @@ function initToneSearch() {
             try { localStorage.setItem('searchPreset_' + part, searchEl.value); } catch(e) {}
         });
 
-        // Search preset chips â€” filter list only, never auto-change the tone
+        // Search preset chips -- filter list only, never auto-change the tone
         document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`).forEach(btn => {
             btn.addEventListener('click', () => {
                 searchEl.value = btn.dataset.q;
@@ -759,12 +759,12 @@ function initArranger() {
 
     // â”€â”€ ACCOMP (toggle via SysEx-like approach using CC) â”€
     document.getElementById('btnAccomp')?.addEventListener('click', () => {
-        // No standard MIDI CC â€” toggle visual feedback only
+        // No standard MIDI CC -- toggle visual feedback only
         const b = document.getElementById('btnAccomp');
         b.classList.toggle('active-rhythm');
     });
 
-    // â”€â”€ INTRO / VAR / ENDING â€” CC on ch9 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â”€â”€ INTRO / VAR / ENDING -- CC on ch9 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Based on Casio CT-S500 MIDI implementation (CC 86-89 channel 9)
     document.getElementById('btnIntro')?.addEventListener('click', () => {
         if (midiOutput) midiOutput.send([0xB9, 86, 1]);
@@ -868,7 +868,7 @@ function pushAllToKeyboard(skipTones = false) {
     setTimeout(() => {
         ['U1','U2','L'].forEach(part => {
             EQ_CONTROLS.forEach(ctrl => {
-                if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state â€” never force on reconnect
+                if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state -- never force on reconnect
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCoarseTuning(part);
@@ -896,7 +896,7 @@ function _getSavedToneId(part) {
 }
 
 
-// --- PC SYNTH â€” SpessaSynth: AudioWorklet (thread separado), SF2 nativo ---
+// --- PC SYNTH -- SpessaSynth: AudioWorklet (thread separado), SF2 nativo ---
 window.pcSynth = null;
 window.sf2Ready = false;
 
@@ -928,7 +928,7 @@ let spessaSynth = null;
 
 async function sf2Init(source, name) {
     const statusEl = document.getElementById('sf2-status');
-    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Loading SpessaSynthâ€¦</span>';
+    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Loading SpessaSynth...</span>';
     try {
         const { WorkletSynthesizer } = await import('https://esm.sh/spessasynth_lib@4.3.14');
 
@@ -955,7 +955,7 @@ async function sf2Init(source, name) {
         await spessaSynth.soundBankManager.addSoundBank(sf2Buffer, 'main');
         await spessaSynth.isReady;
 
-        // Master gain at unity â€” per-part volume is CC7 on each channel.
+        // Master gain at unity -- per-part volume is CC7 on each channel.
         // Disconnect the previous gain node first to avoid parallel audio paths on SF2 reload.
         if (window.pcSynth?._master) { try { window.pcSynth._master.disconnect(); } catch(e) {} }
         const masterGain = spessaCtx.createGain();
@@ -1003,7 +1003,7 @@ async function sf2Init(source, name) {
     }
 }
 
-// Auto-load SF2: IndexedDB cache â†’ GeneralUser GS CDN â†’ local fallback
+// Auto-load SF2: IndexedDB cache -> GeneralUser GS CDN -> local fallback
 (async () => {
     const statusEl = document.getElementById('sf2-status');
     const cached = await sf2LoadCache();
@@ -1016,7 +1016,7 @@ async function sf2Init(source, name) {
 
     for (const [url, name] of [[GUGS_URL, 'GeneralUser GS'], [LOCAL_URL, 'soundfont.sf2']]) {
         try {
-            if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent);">Downloading ${name}â€¦</span>`;
+            if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent);">Downloading ${name}...</span>`;
             const res = await fetch(url);
             if (!res.ok) throw new Error('not found');
             const buffer = await res.arrayBuffer();
@@ -1035,14 +1035,14 @@ document.getElementById('sf2-file')?.addEventListener('change', async e => {
 });
 
 // ======================================================================
-//  MIDI CONTROLLER â€” Virtual Keyboard + Per-part controls
+//  MIDI CONTROLLER -- Virtual Keyboard + Per-part controls
 // ======================================================================
 
 // Per-part octave offset for the MIDI controller (separate from mixer octave)
 const mctrlOct = { U1: 0, U2: 0, L: 0 };
 let vkActivePart = 'U1';   // which part the virtual keyboard plays
 let vkOctave = 4;           // base octave for virtual keyboard (C4 = MIDI 60)
-const vkActiveKeys = {};    // note â†’ channel number while held (captured at press time)
+const vkActiveKeys = {};    // note -> channel number while held (captured at press time)
 
 function initMidiController() {
     // Per-part volume sliders
@@ -1051,7 +1051,7 @@ function initMidiController() {
         const volVal = document.getElementById('mctrl-vol-' + part + '-val');
         if (volSlider) {
             const cap = part === 'U2' ? 75 : 100;
-            volSlider.max = cap; // slider range matches Part Mix Rules â€” no dead zone above cap
+            volSlider.max = cap; // slider range matches Part Mix Rules -- no dead zone above cap
             volSlider.addEventListener('input', () => {
                 const v = parseInt(volSlider.value);
                 if (volVal) volVal.innerText = v;
@@ -1090,7 +1090,7 @@ function initMidiController() {
             });
         });
 
-        // Card click â†’ select active card highlight
+        // Card click -> select active card highlight
         const card = document.getElementById('mctrl-card-' + part);
         if (card) {
             card.addEventListener('click', (e) => {
@@ -1198,9 +1198,9 @@ function vkNoteOn(midiNote, ch) {
     const shift = globalTranspose + globalOctave * 12;
     const shiftedNote = Math.max(0, Math.min(127, midiNote + shift));
     vkActiveKeys[midiNote] = { ch, shiftedNote };
-    // Send to MIDI output (Casio) â€” only when EXT MIDI is ON
+    // Send to MIDI output (Casio) -- only when EXT MIDI is ON
     if (mctrlEnabled && midiOutput) midiOutput.send([0x90 | ch, midiNote, vel]);
-    // Send to PC synth â€” independent of EXT MIDI toggle
+    // Send to PC synth -- independent of EXT MIDI toggle
     if (pcSynthEnabled && window.pcSynth) {
         if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
         window.pcSynth.noteOn(ch, shiftedNote, vel);
@@ -1237,7 +1237,7 @@ function attachKeyEvents(el, k) {
     el.addEventListener('touchcancel',() => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); });
 }
 
-// Initialize MIDI controller (DOM already ready â€” script is at bottom of body)
+// Initialize MIDI controller (DOM already ready -- script is at bottom of body)
 initMidiController();
 
 
@@ -1279,7 +1279,7 @@ document.getElementById('mctrlToggle')?.addEventListener('change', e => {
     }
 });
 
-// Build GM instrument selectors (script runs after body â€” DOM elements exist)
+// Build GM instrument selectors (script runs after body -- DOM elements exist)
 buildGMSelectors();
 
 
