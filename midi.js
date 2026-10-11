@@ -70,9 +70,9 @@ function reconnectMIDI() {
 
     if (midiOutput || midiInput) {
         const name = (midiOutput || midiInput).name;
-        const label = midiOutput && midiInput ? name
-                    : midiOutput ? name + “ (output only)”
-                    : name + “ (input only)”;
+        const label = midiOutput && midiInput ? “✔ “ + name
+                    : midiOutput ? “✔ “ + name + “ (output only)”
+                    : “✔ “ + name + “ (input only)”;
         setStatus(label, !!(midiOutput || midiInput));
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
