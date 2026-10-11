@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v212">
+    <link rel="stylesheet" href="style.css?v213">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v212 &middot; dom 11 oct 01:24 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v213 &middot; dom 11 oct 01:49 &middot; COT</span>
             </div>
         </div>
 
@@ -753,72 +753,107 @@
         <!-- =========== VIEW: TRAINER =========== -->
         <div class="app-view" id="view-trainer">
             
-            <div class="panel panel-toolbar">
-                <input type="text" id="trainer-search-input" class="search-input" placeholder="Search song in database (e.g. Chopin Nocturne)..." style="flex:1; font-family: var(--main-font);">
+            <!-- Toolbar: Quick Search and Import -->
+            <div class="panel panel-toolbar" style="align-items: center; gap: 12px;">
+                <input type="text" id="trainer-search-input" class="search-input" placeholder="Search piece or composer (e.g. Chopin, Mozart, Interstellar)..." style="flex:1; font-family: var(--main-font);">
                 
-                <button class="btn btn-primary" id="trainer-btn-search" style="display:flex; align-items:center; gap:8px;">
-                    <span class="material-symbols-outlined">search</span> Search
-                </button>
-                <div style="width:1px; background:var(--border-color); margin:0 5px;"></div>
-                <label for="trainer-file-import" class="btn" style="display:flex; align-items:center; gap:8px; cursor:pointer; background:var(--accent-dim); color:var(--accent); border-color:var(--accent);">
+                <label for="trainer-file-import" class="btn" style="display:flex; align-items:center; gap:8px; cursor:pointer; background:var(--accent-dim); color:var(--accent); border-color:var(--accent); padding: 8px 18px; font-weight:600; white-space:nowrap;">
                     <span class="material-symbols-outlined">file_upload</span> Import Local MIDI
                 </label>
                 <input type="file" id="trainer-file-import" accept=".mid,.midi" style="display:none;">
-
             </div>
 
-            <!-- DAW-STYLE TRANSPORT BAR -->
-            <div class="daw-transport-bar">
+            <div class="app-layout-split">
                 
-                <div class="daw-btn-group">
-                    <button class="btn daw-btn-play" id="trainer-btn-play" style="display:flex; align-items:center; gap:5px;">
-                        <span class="material-symbols-outlined">play_arrow</span> Play
-                    </button>
-                    <button class="btn daw-btn-stop" id="trainer-btn-stop" style="display:flex; align-items:center; gap:5px;">
-                        <span class="material-symbols-outlined">stop</span> Stop
-                    </button>
-                    <button class="btn" id="trainer-btn-wait" style="display:flex; align-items:center; gap:5px;">
-                        <span class="material-symbols-outlined">front_hand</span> Wait Mode
-                    </button>
+                <!-- SIDEBAR: PIECES CATALOGUE & FILTERS -->
+                <div class="sidebar-col">
+                    <div class="panel" style="flex: 1; display:flex; flex-direction:column; gap:12px;">
+                        
+                        <!-- Difficulty Filter Chips -->
+                        <div style="display:flex; gap:4px; background:rgba(0,0,0,0.25); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); overflow-x:auto;">
+                            <button class="btn trainer-filter-btn active-tab" data-diff="all" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">ALL</button>
+                            <button class="btn trainer-filter-btn" data-diff="beginner" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">EASY</button>
+                            <button class="btn trainer-filter-btn" data-diff="intermediate" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">MID</button>
+                            <button class="btn trainer-filter-btn" data-diff="advanced" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">ADV</button>
+                        </div>
+
+                        <!-- Pieces List Container -->
+                        <div id="trainer-song-list-container" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:480px; max-height:calc(100vh - 290px); display:flex; flex-direction:column; gap:6px;">
+                            <div style="color:var(--text-muted); font-size:12px; padding:10px;">Loading trainer pieces...</div>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="daw-control-group">
-                    <!-- Tempo -->
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="daw-control-label">Tempo</span>
-                        <div class="daw-stepper">
-                            <button id="trainer-tempo-minus">-</button>
-                            <input type="text" id="trainer-tempo-val" class="search-input" value="120" style="border: none; padding: 4px; width: 45px; text-align:center; font-weight:bold; min-height:auto; color: var(--text);">
-                            <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">BPM</span>
-                            <button id="trainer-tempo-plus">+</button>
+                <!-- MAIN: ACTIVE PIECE + DAW TRANSPORT + PIANO ROLL -->
+                <div class="panel main-col" style="gap: 15px;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap:15px;">
+                        <div>
+                            <h2 id="trainer-current-song-title" style="margin: 0 0 4px 0; font-size: 24px; font-family: var(--main-font); color: var(--text);">No Piece Selected</h2>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span id="trainer-current-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Choose a piece from the catalog or import a MIDI file</span>
+                                <span id="trainer-current-song-diff" class="tone-badge" style="display:none; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:4px;"></span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Pitch / MIDI Transpose -->
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="daw-control-label">Pitch</span>
-                        <div class="daw-stepper">
-                            <button id="trainer-pitch-minus">-</button>
-                            <input type="text" id="trainer-pitch-val" class="search-input" value="0" style="border: none; padding: 4px; width: 35px; text-align:center; font-weight:bold; color: var(--accent); min-height:auto;">
-                            <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">Semi</span>
-                            <button id="trainer-pitch-plus">+</button>
+                    <!-- DAW-STYLE TRANSPORT BAR -->
+                    <div class="daw-transport-bar" style="margin-bottom:0;">
+                        
+                        <div class="daw-btn-group">
+                            <button class="btn daw-btn-play" id="trainer-btn-play" style="display:flex; align-items:center; gap:5px;">
+                                <span class="material-symbols-outlined">play_arrow</span> Play
+                            </button>
+                            <button class="btn daw-btn-stop" id="trainer-btn-stop" style="display:flex; align-items:center; gap:5px;">
+                                <span class="material-symbols-outlined">stop</span> Stop
+                            </button>
+                            <button class="btn" id="trainer-btn-wait" style="display:flex; align-items:center; gap:5px;">
+                                <span class="material-symbols-outlined">front_hand</span> Wait Mode
+                            </button>
+                        </div>
+
+                        <div class="daw-control-group">
+                            <!-- Tempo -->
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="daw-control-label">Tempo</span>
+                                <div class="daw-stepper">
+                                    <button id="trainer-tempo-minus">-</button>
+                                    <input type="text" id="trainer-tempo-val" class="search-input" value="120" style="border: none; padding: 4px; width: 45px; text-align:center; font-weight:bold; min-height:auto; color: var(--text);">
+                                    <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">BPM</span>
+                                    <button id="trainer-tempo-plus">+</button>
+                                </div>
+                            </div>
+
+                            <!-- Pitch / MIDI Transpose -->
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="daw-control-label">Pitch</span>
+                                <div class="daw-stepper">
+                                    <button id="trainer-pitch-minus">-</button>
+                                    <input type="text" id="trainer-pitch-val" class="search-input" value="0" style="border: none; padding: 4px; width: 35px; text-align:center; font-weight:bold; color: var(--accent); min-height:auto;">
+                                    <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">Semi</span>
+                                    <button id="trainer-pitch-plus">+</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- PIANO ROLL RENDERER -->
-            <div class="piano-roll-container">
-                <div id="trainer-piano-roll-canvas" class="piano-roll-canvas">
-                    <span class="piano-roll-placeholder">(Interactive MIDI Score & Piano Roll will render here)</span>
+                    <!-- PIANO ROLL RENDERER -->
+                    <div class="piano-roll-container" style="min-height:480px; height: calc(100vh - 360px);">
+                        <div id="trainer-piano-roll-canvas" class="piano-roll-canvas">
+                            <span class="piano-roll-placeholder">(Interactive MIDI Score & Piano Roll will render here)</span>
+                        </div>
+                        
+                        <!-- Simple Keyboard Mockup for structural spacing -->
+                        <div class="piano-roll-keys">
+                            <div class="piano-roll-key-mock"></div>
+                            <div class="piano-roll-key-mock"></div>
+                            <div class="piano-roll-key-mock"></div>
+                        </div>
+                    </div>
+
                 </div>
-                
-                <!-- Simple Keyboard Mockup for structural spacing -->
-                <div class="piano-roll-keys">
-                    <div class="piano-roll-key-mock"></div>
-                    <div class="piano-roll-key-mock"></div>
-                    <div class="piano-roll-key-mock"></div>
-                </div>
+
             </div>
 
         </div>
@@ -828,9 +863,9 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v212"></script>
-    <script src="fix_swap.js?v212"></script>
-    <script src="harmony.js?v212"></script>
+    <script src="app.js?v213"></script>
+    <script src="fix_swap.js?v213"></script>
+    <script src="harmony.js?v213"></script>
     <script src="library.js"></script>
     <script src="trainer.js"></script>
 </body>
