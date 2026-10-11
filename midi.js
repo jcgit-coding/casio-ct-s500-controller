@@ -1,4 +1,4 @@
-﻿// ======================================================================
+﻿﻿// ======================================================================
 //  MIDI INIT -- always-on with auto-reconnect
 // ======================================================================
 function initMIDI() {
@@ -70,9 +70,10 @@ function reconnectMIDI() {
 
     if (midiOutput || midiInput) {
         const name = (midiOutput || midiInput).name;
-        const label = midiOutput && midiInput ? “✔ “ + name
-                    : midiOutput ? “✔ “ + name + “ (output only)”
-                    : “✔ “ + name + “ (input only)”;
+        const check = String.fromCharCode(0x2714) + " ";
+        const label = midiOutput && midiInput ? check + name
+                    : midiOutput ? check + name + " (output only)"
+                    : check + name + " (input only)";
         setStatus(label, !!(midiOutput || midiInput));
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');

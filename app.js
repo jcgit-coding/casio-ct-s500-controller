@@ -1,4 +1,4 @@
-﻿// ======================================================================
+﻿﻿// ======================================================================
 //  MIDI state
 // ======================================================================
 let midiAccess  = null;
@@ -642,7 +642,7 @@ function initArranger() {
     let bpm          = 120;
     let clockTimer   = null;
 
-    // â”€â”€ Rhythm list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ Rhythm list â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     function buildRhythmList(filter = '', cat = 'ALL') {
         const list = document.getElementById('rhythmList');
         if (!list || !window.RAW_RHYTHMS) return;
@@ -689,7 +689,7 @@ function initArranger() {
         buildRhythmList(e.target.value, document.getElementById('rhythmCatFilter')?.value || 'ALL');
     });
 
-    // â”€â”€ MIDI Clock â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ MIDI Clock â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     function startClock() {
         stopClock();
         const interval = (60000 / bpm) / 24; // ms per pulse
@@ -705,7 +705,7 @@ function initArranger() {
         if (e.target.checked) startClock(); else stopClock();
     });
 
-    // â”€â”€ BPM controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ BPM controls â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     function updateBpm(delta) {
         bpm = Math.min(250, Math.max(20, bpm + delta));
         const el = document.getElementById('bpmVal');
@@ -715,7 +715,7 @@ function initArranger() {
     document.getElementById('bpmMinus')?.addEventListener('click', () => updateBpm(-1));
     document.getElementById('bpmPlus')?.addEventListener('click',  () => updateBpm(+1));
 
-    // â”€â”€ Rhythm volume (CC7 ch9) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ Rhythm volume (CC7 ch9) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     const volSlider = document.getElementById('rhythmVol');
     const volVal    = document.getElementById('rhythmVolVal');
     volSlider?.addEventListener('input', () => {
@@ -724,7 +724,7 @@ function initArranger() {
         if (midiOutput) midiOutput.send([0xB9, 7, v]); // ch9 = 0xB9
     });
 
-    // â”€â”€ START / STOP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ START / STOP â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     const btnSS = document.getElementById('btnStartStop');
     btnSS?.addEventListener('click', () => {
         if (!midiOutput) return;
@@ -743,20 +743,20 @@ function initArranger() {
         btnSS.classList.toggle('btn-stop', isPlaying);
     });
 
-    // â”€â”€ SYNC START â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ SYNC START â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     document.getElementById('btnSyncStart')?.addEventListener('click', () => {
         if (!midiOutput) return;
         midiOutput.send([0xFA]); // MIDI Start (Synchro Start)
     });
 
-    // â”€â”€ ACCOMP (toggle via SysEx-like approach using CC) â”€
+    // â"€â"€ ACCOMP (toggle via SysEx-like approach using CC) â"€
     document.getElementById('btnAccomp')?.addEventListener('click', () => {
         // No standard MIDI CC -- toggle visual feedback only
         const b = document.getElementById('btnAccomp');
         b.classList.toggle('active-rhythm');
     });
 
-    // â”€â”€ INTRO / VAR / ENDING -- CC on ch9 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ INTRO / VAR / ENDING -- CC on ch9 â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     // Based on Casio CT-S500 MIDI implementation (CC 86-89 channel 9)
     document.getElementById('btnIntro')?.addEventListener('click', () => {
         if (midiOutput) midiOutput.send([0xB9, 86, 1]);
@@ -986,7 +986,7 @@ async function sf2Init(source, name) {
         if (statusEl) {
             statusEl.dataset.sf2loaded = '1';
             const sp = document.createElement('span'); sp.style.color = '#4CAF50';
-            sp.textContent = 'âœ“ SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
+            sp.textContent = 'âœ" SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
             statusEl.innerHTML = ''; statusEl.appendChild(sp);
         }
     } catch(err) {
