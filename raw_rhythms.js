@@ -260,5 +260,7 @@ const RAW_RHYTHMS = [
   { id: 240, name: "Ballad 9",            cat: "Ballad" },
   { id: 241, name: "World 6",             cat: "World" },
   { id: 242, name: "World 7",             cat: "World" },
-  { id: 243, name: "World 8",             cat: "World" },
+  { id: 243, name: "World 8",             cat: "World" }
 ];
+
+window.RAW_RHYTHMS = RAW_RHYTHMS;

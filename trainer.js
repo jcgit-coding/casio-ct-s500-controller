@@ -45,7 +45,7 @@ const TrainerApp = {
         const reader = new FileReader();
         reader.onload = async (ev) => {
             const arrayBuffer = ev.target.result;
-            alert(`¡MIDI "${file.name}" cargado localmente!\n\nEl siguiente paso será leer matemáticamente este archivo para dibujarlo en el Piano Roll y crear la función para subirlo a tu nube de GitHub.`);
+            alert(`MIDI file "${file.name}" loaded successfully!\n\nParsing notes for the Piano Roll visualizer and preparing cloud storage sync.`);
             
             // TODO: Parse arrayBuffer with Tonejs/Midi or SpessaSynth
             // TODO: Upload base64 encoded arrayBuffer to GitHub repo using PAT

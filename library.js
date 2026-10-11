@@ -48,9 +48,9 @@ const RepertorioApp = {
 
     populateTransposeDropdown() {
         const select = document.getElementById('lib-transpose-select');
-        select.innerHTML = '<option value="0">Tono Original</option>';
-        for(let i=1; i<=11; i++) select.innerHTML += `<option value="${i}">+${i} Semitonos</option>`;
-        for(let i=-1; i>=-11; i--) select.innerHTML += `<option value="${i}">${i} Semitonos</option>`;
+        select.innerHTML = '<option value="0">Original Key</option>';
+        for(let i=1; i<=11; i++) select.innerHTML += `<option value="${i}">+${i} Semitones</option>`;
+        for(let i=-1; i>=-11; i--) select.innerHTML += `<option value="${i}">${i} Semitones</option>`;
     },
 
     setSong(title, artist, rawText) {
@@ -59,8 +59,8 @@ const RepertorioApp = {
         let parsedHTML = this.parseRawTextToChords(rawText);
 
         this.currentSong = {
-            title: title || "Canción",
-            artist: artist || "Artista",
+            title: title || "Song",
+            artist: artist || "Artist",
             rawText: rawText,
             originalContent: parsedHTML
         };
@@ -76,12 +76,12 @@ const RepertorioApp = {
     },
 
     importFromText() {
-        const title = document.getElementById('lib-song-title-input').value.trim() || "Canción Personalizada";
-        const artist = document.getElementById('lib-song-artist-input').value.trim() || "Artista Desconocido";
+        const title = document.getElementById('lib-song-title-input').value.trim() || "Custom Song";
+        const artist = document.getElementById('lib-song-artist-input').value.trim() || "Unknown Artist";
         const rawText = document.getElementById('lib-raw-text-input').value;
         
         if (!rawText.trim()) {
-            return alert("Por favor pega la letra y acordes en el cuadro de texto.");
+            return alert("Please paste lyrics and chords into the text box.");
         }
 
         const titleEl = document.getElementById('lib-song-title');
@@ -226,8 +226,8 @@ const RepertoireSync = {
             this.renderSongList(this.allSongs);
             this.initSearchFilter();
         } catch(e) {
-            console.error('Error cargando catálogo:', e);
-            if (container) container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:10px;'>Aún no hay canciones en la base de datos.</div>";
+            console.error('Error loading catalogue:', e);
+            if (container) container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:10px;'>No songs found in database yet.</div>";
         }
     },
 
@@ -254,14 +254,14 @@ const RepertoireSync = {
         if (!container) return;
         
         if (!songs || songs.length === 0) {
-            container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>Sin canciones coincidentes.</div>";
+            container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>No matching songs found.</div>";
             return;
         }
 
         container.innerHTML = songs.map(s => `
-            <div class='song-item' style='padding:8px 10px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); cursor:pointer; transition:all .2s;' onclick='RepertoireSync.openSong("${s.id}")'>
-                <div style='font-weight:600; font-size:13px; color:var(--text);'>${s.title}</div>
-                <div style='font-size:11px; color:var(--text-muted);'>${s.artist || "Desconocido"}</div>
+            <div class='song-item' style='padding:10px 12px; border-radius:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); cursor:pointer; transition:all .2s;' onclick='RepertoireSync.openSong("${s.id}")'>
+                <div style='font-weight:600; font-size:14px; color:var(--text);'>${s.title}</div>
+                <div style='font-size:12px; color:var(--text-muted); margin-top:2px;'>${s.artist || "Unknown Artist"}</div>
             </div>
         `).join('');
     },
@@ -270,8 +270,8 @@ const RepertoireSync = {
         try {
             const res = await fetch(`library/${id}/chords.txt?v=` + Date.now());
             const text = await res.text();
-            let title = "Canción";
-            let artist = "Artista";
+            let title = "Song";
+            let artist = "Artist";
             
             const metaRes = await fetch(`library/${id}/meta.json?v=` + Date.now());
             if(metaRes.ok) {
@@ -282,7 +282,7 @@ const RepertoireSync = {
             
             RepertorioApp.setSong(title, artist, text);
         } catch(e) {
-            alert('Error abriendo canción desde la nube');
+            alert('Error loading song from cloud');
         }
     }
 };
@@ -309,14 +309,14 @@ if (btnAi) {
         btnAi.disabled = true;
         
         try {
-            const prompt = `Analiza la siguiente búsqueda o enlace de YouTube: "${query}".
-Determina el título exacto de la canción y el artista.
-Luego escribe la letra completa con sus acordes encima de cada verso (acordes en inglés: C, D, Em, F#m, G/B).
-Devuelve únicamente un JSON con este formato exacto, sin explicaciones ni formato markdown extra:
+            const prompt = `Analyze the following search query or YouTube link: "${query}".
+Determine the exact song title and artist.
+Then write the complete lyrics with their musical chords positioned directly above each verse (standard chords: C, D, Em, F#m, G/B).
+Return strictly valid JSON with this exact schema, without extra explanations or markdown blocks:
 {
-  "title": "Título de la canción",
-  "artist": "Nombre del Artista",
-  "chords": "Letra completa con acordes encima..."
+  "title": "Song Title",
+  "artist": "Artist Name",
+  "chords": "Full lyrics with chords above..."
 }`;
             
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
@@ -327,7 +327,7 @@ Devuelve únicamente un JSON con este formato exacto, sin explicaciones ni forma
                 })
             });
             
-            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            if (!response.ok) throw new Error("API response error");
             const data = await response.json();
             let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
             
@@ -338,7 +338,7 @@ Devuelve únicamente un JSON con este formato exacto, sin explicaciones ni forma
             } catch(err) {
                 parsed = {
                     title: query,
-                    artist: "Desconocido",
+                    artist: "Unknown Artist",
                     chords: aiText
                 };
             }
@@ -348,7 +348,7 @@ Devuelve únicamente un JSON con este formato exacto, sin explicaciones ni forma
             
         } catch(e) {
             console.error(e);
-            alert("Error al buscar o procesar la canción. Verifica tu conexión o API Key.");
+            alert("Error searching or processing song. Please check your network or API Key.");
         } finally {
             btnAi.innerText = "Search Song";
             btnAi.disabled = false;

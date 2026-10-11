@@ -566,6 +566,15 @@ const EQ_SECTIONS = [
         ]
     },
     {
+        title: 'DSP & Acoustic Character',
+        controls: [
+            { label: 'DSP DRIVE', cc: 95, def: 0,  tip: 'DSP Harmonic Drive & Character' },
+            { label: 'BODY',      cc: 104, def: 64, tip: 'Acoustic Wood Body (Low-Shelf EQ)' },
+            { label: 'AIR',       cc: 102, def: 64, tip: 'Studio High-Frequency Air Band' },
+            { label: 'TRAIL',     cc: 75,  def: 64, tip: 'Natural Acoustic Decay & Release Trail' },
+        ]
+    },
+    {
         title: 'Vibrato (LFO)',
         controls: [
             { label: 'RATE',  cc: 76, def: 64, tip: 'Vibrato Rate' },
@@ -1720,6 +1729,11 @@ function initArranger() {
             div.addEventListener('click', () => {
                 document.querySelectorAll('.rhythm-item').forEach(d => d.classList.remove('active'));
                 div.classList.add('active');
+                const badge = document.getElementById('activeRhythmBadge');
+                if (badge) {
+                    badge.innerText = `SELECTED: [${String(r.id).padStart(3,'0')}] ${r.name} (${r.cat})`;
+                    badge.style.display = 'block';
+                }
             });
             list.appendChild(div);
         });

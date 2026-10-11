@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v208">
+    <link rel="stylesheet" href="style.css?v209">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v208 &middot; dom 11 oct 00:15 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v209 &middot; dom 11 oct 00:36 &middot; COT</span>
             </div>
         </div>
 
@@ -283,6 +283,7 @@
             <!-- Transport + Tempo + Volume -->
             <div class="panel">
                 <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">tune</span> Rhythm Control</div>
+                <div id="activeRhythmBadge" style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:14px; padding:8px 12px; background:var(--accent-dim); border-radius:6px; border:1px solid var(--accent); display:none;"></div>
 
                 <!-- Tempo row -->
                 <div class="arranger-row" style="margin-bottom:16px;">
@@ -689,20 +690,20 @@
                         </div>
 
                         <!-- SUB-PANEL: SONGS -->
-                        <div id="lib-subpanel-songs" style="display:flex; flex-direction:column; gap:10px; flex:1;">
-                            <input type="text" id="lib-song-search-filter" class="search-input" placeholder="Filter by title or artist..." style="padding: 8px 12px; font-size: 12px;">
-                            <div id="cloud-song-list-container" style="overflow-y:auto; flex:1; max-height:480px; display:flex; flex-direction:column; gap:6px;">
+                        <div id="lib-subpanel-songs" style="display:flex; flex-direction:column; gap:10px; flex:1; min-height:0;">
+                            <input type="text" id="lib-song-search-filter" class="search-input" placeholder="Filter by title or artist..." style="padding: 8px 12px; font-size: 13px;">
+                            <div id="cloud-song-list-container" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:450px; display:flex; flex-direction:column; gap:6px;">
                                 <div style="color:var(--text-muted); font-size:12px; padding:10px;">Loading song library...</div>
                             </div>
                         </div>
 
                         <!-- SUB-PANEL: EVENTS -->
-                        <div id="lib-subpanel-events" style="display:none; flex-direction:column; gap:12px; flex:1;">
+                        <div id="lib-subpanel-events" style="display:none; flex-direction:column; gap:12px; flex:1; min-height:0;">
                             <div style="display: flex; gap: 8px;">
                                 <input type="date" id="lib-date-picker" class="search-input" style="flex: 1;">
                                 <button class="btn" id="lib-btn-add-event" style="padding: 0 14px;"><span class="material-symbols-outlined">add</span></button>
                             </div>
-                            <div id="lib-event-list" style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; max-height:440px;">
+                            <div id="lib-event-list" class="song-list-scroll" style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; flex:1; min-height:450px;">
                                 <div class="event-list-empty" style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">
                                     No events scheduled.<br>Select a date above.
                                 </div>
@@ -809,7 +810,7 @@
             <!-- PIANO ROLL RENDERER -->
             <div class="piano-roll-container">
                 <div id="trainer-piano-roll-canvas" class="piano-roll-canvas">
-                    <span class="piano-roll-placeholder">(El visualizador MIDI de partituras se renderizará aquí)</span>
+                    <span class="piano-roll-placeholder">(Interactive MIDI Score & Piano Roll will render here)</span>
                 </div>
                 
                 <!-- Simple Keyboard Mockup for structural spacing -->
@@ -827,9 +828,9 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v208"></script>
-    <script src="fix_swap.js?v208"></script>
-    <script src="harmony.js?v208"></script>
+    <script src="app.js?v209"></script>
+    <script src="fix_swap.js?v209"></script>
+    <script src="harmony.js?v209"></script>
     <script src="library.js"></script>
     <script src="trainer.js"></script>
 </body>
