@@ -7,14 +7,23 @@ const RepertorioApp = {
     db: { canciones: [], calendario: [] },
     currentSong: null,
     
-    // Escala cromática para el motor matemático de transposición
-    notes: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+    notes:      ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+    noteLabels: ["C", "C# / Db", "D", "D# / Eb", "E", "F", "F# / Gb", "G", "G# / Ab", "A", "A# / Bb", "B"],
 
     init() {
         this.bindEvents();
         this.initSubTabs();
-        this.populateTransposeDropdown();
+        this.populateTransposeDropdown(null);
         console.log("Library Module Initialized.");
+    },
+
+    // Extracts root note from keys like "Bm", "F#m", "C#m", "D", "Bb", etc.
+    normalizeNoteRoot(key) {
+        if (!key) return 'C';
+        const flatToSharp = { 'Bb': 'A#', 'Eb': 'D#', 'Ab': 'G#', 'Db': 'C#', 'Gb': 'F#' };
+        const m = (key + '').match(/^([A-G][#b]?)/);
+        if (!m) return 'C';
+        return flatToSharp[m[1]] || m[1];
     },
 
     initSubTabs() {
@@ -42,18 +51,28 @@ const RepertorioApp = {
 
     bindEvents() {
         document.getElementById('lib-btn-import')?.addEventListener('click', () => this.importFromText());
-        document.getElementById('lib-transpose-select').addEventListener('change', (e) => this.applyTranspose(parseInt(e.target.value)));
+        document.getElementById('lib-transpose-select').addEventListener('change', (e) => {
+            if (!this.currentSong) return;
+            const targetNote = e.target.value;
+            const fromIdx = this.notes.indexOf(this.normalizeNoteRoot(this.currentSong.originalKey));
+            const toIdx   = this.notes.indexOf(targetNote);
+            if (fromIdx === -1 || toIdx === -1) return;
+            const steps = (toIdx - fromIdx + 12) % 12;
+            this.applyTranspose(steps);
+        });
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
     },
 
-    populateTransposeDropdown() {
+    populateTransposeDropdown(originalKey) {
         const select = document.getElementById('lib-transpose-select');
-        select.innerHTML = '<option value="0">Original Key</option>';
-        for(let i=1; i<=11; i++) select.innerHTML += `<option value="${i}">+${i} Semitones</option>`;
-        for(let i=-1; i>=-11; i--) select.innerHTML += `<option value="${i}">${i} Semitones</option>`;
+        const root = originalKey ? this.normalizeNoteRoot(originalKey) : 'C';
+        select.innerHTML = this.noteLabels.map((label, i) =>
+            `<option value="${this.notes[i]}">${label}</option>`
+        ).join('');
+        select.value = root;
     },
 
-    setSong(title, artist, rawText) {
+    setSong(title, artist, rawText, originalKey) {
         const titleEl = document.getElementById('lib-song-title');
         const artistEl = document.getElementById('lib-song-artist');
         let parsedHTML = this.parseRawTextToChords(rawText);
@@ -62,13 +81,13 @@ const RepertorioApp = {
             title: title || "Song",
             artist: artist || "Artist",
             rawText: rawText,
-            originalContent: parsedHTML
+            originalContent: parsedHTML,
+            originalKey: originalKey || 'C'
         };
 
         if (titleEl) titleEl.innerText = this.currentSong.title;
         if (artistEl) artistEl.innerText = this.currentSong.artist;
-        const trSelect = document.getElementById('lib-transpose-select');
-        if (trSelect) trSelect.value = "0";
+        this.populateTransposeDropdown(this.currentSong.originalKey);
         this.renderChords(this.currentSong.originalContent);
 
         const btnSave = document.getElementById('lib-btn-save-cloud');
@@ -272,15 +291,17 @@ const RepertoireSync = {
             const text = await res.text();
             let title = "Song";
             let artist = "Artist";
-            
+            let originalKey = 'C';
+
             const metaRes = await fetch(`library/${id}/meta.json?v=` + Date.now());
             if(metaRes.ok) {
                 const meta = await metaRes.json();
                 title = meta.title;
                 artist = meta.artist;
+                originalKey = meta.original_key || 'C';
             }
-            
-            RepertorioApp.setSong(title, artist, text);
+
+            RepertorioApp.setSong(title, artist, text, originalKey);
         } catch(e) {
             alert('Error loading song from cloud');
         }
