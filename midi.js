@@ -7,9 +7,9 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    // Android requires sysex:false -- sysex:true triggers platform init failure, and async
-    // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
-    const sysex = !/android/i.test(navigator.userAgent);
+    // sysex:false avoids the Chrome permission prompt -- SysEx is not yet implemented.
+    // When SysEx Active DSP is added, request sysex:true only after a user gesture.
+    const sysex = false;
 
     function onAccess(access) {
         midiAccess = access;
