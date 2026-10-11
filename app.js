@@ -1002,6 +1002,10 @@ function buildEQ() {
                     btn.innerText = newVal > 63 ? 'ON' : 'OFF';
                     btn.classList.toggle('sus-on', newVal > 63);
                     sendCC(activePart, ctrl.cc, newVal);
+                    if (tuning[activePart].sus) {
+                        sendCC(activePart, 72, SUS_RELEASE);
+                        scheduleSustainResync(activePart, [40, 150]);
+                    }
                     saveToneEQForPart(activePart);
                     if (typeof saveAppState === 'function') saveAppState();
                 });
@@ -1049,6 +1053,10 @@ function buildEQ() {
                     if ((cur !== undefined ? cur : ctrl.def) === v) return;
                     eqState[_faderPart][ctrl.cc] = v;
                     sendCC(_faderPart, ctrl.cc, v);
+                    // Re-assert sustain if active so CT-S500 voice block does not drop release tail
+                    if (tuning[_faderPart].sus) {
+                        sendCC(_faderPart, 72, SUS_RELEASE);
+                    }
                 });
                 fader.addEventListener('change', () => {
                     const v = parseInt(fader.value);
@@ -1062,6 +1070,10 @@ function buildEQ() {
                         document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
                             if (other !== fader) other.value = v;
                         });
+                    }
+                    if (tuning[_faderPart].sus) {
+                        sendCC(_faderPart, 72, SUS_RELEASE);
+                        scheduleSustainResync(_faderPart, [30, 120, 300]);
                     }
                     saveToneEQForPart(_faderPart);
                     if (typeof saveAppState === 'function') saveAppState();
