@@ -1,4 +1,4 @@
-﻿﻿// ======================================================================
+﻿// ======================================================================
 const GH_OWNER = 'jcgit-coding';
 const GH_REPO  = 'casio-ct-s500-controller';
 const GH_FILE  = 'presets.json';
@@ -84,7 +84,7 @@ async function _syncPushOnce(retried = false) {
         }
         const data = await res.json();
         ghFileSha = data.content.sha;
-        updateSyncStatus('âœ" Guardado en GitHub');
+        updateSyncStatus('✔ Guardado en GitHub');
     } catch(e) {
         console.error('syncPush:', e);
         updateSyncStatus('Error: ' + e.message);
@@ -101,7 +101,7 @@ async function autoSyncInit() {
     }
     // Show token status in UI
     const tokenEl = document.getElementById('syncTokenDisplay');
-    if (tokenEl) tokenEl.innerText = ghToken() ? 'âœ" Token configurado' : 'No token (read only)';
+    if (tokenEl) tokenEl.innerText = ghToken() ? '✔ Token configurado' : 'No token (read only)';
 }
 
 function initPresets() {
@@ -161,7 +161,7 @@ function initPresets() {
         if (trimmed) {
             localStorage.setItem('casioGhToken', trimmed);
             const tokenEl = document.getElementById('syncTokenDisplay');
-            if (tokenEl) tokenEl.innerText = 'âœ" Token configurado';
+            if (tokenEl) tokenEl.innerText = '✔ Token configurado';
             await syncPush();
         } else {
             localStorage.removeItem('casioGhToken');
@@ -175,7 +175,7 @@ function initPresets() {
     document.getElementById('btnSyncPush')?.addEventListener('click', () => syncPush());
     document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
         const ok = await syncPull();
-        updateSyncStatus(ok ? 'âœ" Presets updated' : 'Offline');
+        updateSyncStatus(ok ? '✔ Presets updated' : 'Offline');
     });
 
     renderPresets();

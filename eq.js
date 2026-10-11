@@ -1,4 +1,4 @@
-﻿﻿const EQ_SECTIONS = [
+﻿const EQ_SECTIONS = [
     {
         title: 'Volume & Panning',
         controls: [

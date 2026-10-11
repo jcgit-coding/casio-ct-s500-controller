@@ -1,4 +1,4 @@
-﻿﻿// ======================================================================
+﻿// ======================================================================
 //  MIDI state
 // ======================================================================
 let midiAccess  = null;
@@ -986,7 +986,7 @@ async function sf2Init(source, name) {
         if (statusEl) {
             statusEl.dataset.sf2loaded = '1';
             const sp = document.createElement('span'); sp.style.color = '#4CAF50';
-            sp.textContent = 'âœ" SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
+            sp.textContent = '✔ SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
             statusEl.innerHTML = ''; statusEl.appendChild(sp);
         }
     } catch(err) {
