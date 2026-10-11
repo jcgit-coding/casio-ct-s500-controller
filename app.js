@@ -1,4 +1,4 @@
-// ======================================================================
+﻿// ======================================================================
 //  MIDI state
 // ======================================================================
 let midiAccess  = null;
@@ -6,18 +6,18 @@ let midiInput   = null;
 let midiOutput  = null;
 
 // PC Synth active notes. Sustain pedal (CC64) is handled natively by SpessaSynth per channel.
-const pcActiveNotes = {};     // "ch:note" → { ch, shiftedNote }
-let pcSynthEnabled = false;  // OFF by default — user must toggle on
-let mctrlEnabled = false;    // MIDI Ctrl ON/OFF — off by default
+const pcActiveNotes = {};     // "ch:note" â†’ { ch, shiftedNote }
+let pcSynthEnabled = false;  // OFF by default â€” user must toggle on
+let mctrlEnabled = false;    // MIDI Ctrl ON/OFF â€” off by default
 
 // App SUSTAIN button emulates the Casio panel SUSTAIN (long release, notes fade out
-// naturally) via CC72 Release Time — NOT a damper hold (CC64 is left to the physical pedal).
+// naturally) via CC72 Release Time â€” NOT a damper hold (CC64 is left to the physical pedal).
 const SUS_RELEASE = 110;
 const RELEASE_NEUTRAL = 64;
 // Taps used to re-send CC72 after ANY burst of CCs. The CT-S500 resets its
 // controllers (on every channel) after a large burst, and over Bluetooth the
 // outgoing queue can still be draining hundreds of ms after the app finished
-// writing — hence the deliberately late last tap.
+// writing â€” hence the deliberately late last tap.
 const SUSTAIN_TAPS = [150, 400, 700, 1300];
 // Per-category CC72 neutral: these instruments have long natural decay;
 // sending 64 after a tone load would shorten it below the preset's intent.
@@ -30,7 +30,7 @@ const CAT_RELEASE_NEUTRAL = {
 function releaseNeutral(part) {
     return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
 }
-// CCs that represent live performance state — never save to toneEQ, never reset on tone/env change.
+// CCs that represent live performance state â€” never save to toneEQ, never reset on tone/env change.
 // CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal
 const PERFORMANCE_CCS = new Set([1, 65, 66, 67]);
 
@@ -106,7 +106,7 @@ function buildGMSelectors() {
             cat.programs.forEach(([prog, name]) => {
                 const opt = document.createElement('option');
                 opt.value = prog;
-                opt.textContent = prog + ' – ' + name;
+                opt.textContent = prog + ' â€“ ' + name;
                 if (prog === pcPartProgram[part]) opt.selected = true;
                 grp.appendChild(opt);
             });
@@ -153,7 +153,7 @@ function saveToneEQ() {
 function loadToneEQ() {
     try {
         toneEQ = JSON.parse(localStorage.getItem('casioToneEQ') || '{}');
-        // Purge any CC7 (Volume) values saved by older versions — volume is now always
+        // Purge any CC7 (Volume) values saved by older versions â€” volume is now always
         // governed by Part Mix Rules and must never be locked per-tone.
         for (const id of Object.keys(toneEQ)) {
             for (const env of Object.keys(toneEQ[id])) {
@@ -171,11 +171,11 @@ function saveToneEQForPart(part) {
     const id = tone.id;
     if (!toneEQ[id]) toneEQ[id] = {};
     const profile = Object.assign({}, eqState[part]);
-    // CC7 (Volume) is per-part mix balance — never persist in toneEQ
+    // CC7 (Volume) is per-part mix balance â€” never persist in toneEQ
     delete profile[7]; delete profile['7'];
-    // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button — never persist
+    // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button â€” never persist
     delete profile[72]; delete profile['72'];
-    // Performance CCs (modulation, pedal switches) are live state — never persist
+    // Performance CCs (modulation, pedal switches) are live state â€” never persist
     PERFORMANCE_CCS.forEach(cc => { delete profile[cc]; delete profile[String(cc)]; });
     toneEQ[id][currentEnv] = profile;
     saveToneEQ();
@@ -198,7 +198,7 @@ let _midiConnectTimer = null;
 let _lastMidiOutputId = null;
 // Guard: until this timestamp, the EQ fader 'input' events are ignored.
 // Some mobile browsers (Android Chrome) fire 'input' on programmatic .value
-// changes — and those events can arrive on a later task, after the synchronous
+// changes â€” and those events can arrive on a later task, after the synchronous
 // guard would already have been cleared. Windowed guard covers both.
 // Cost of the window: a genuine user drag within ~100 ms of a programmatic
 // write is swallowed (the fader still shows the value, MIDI is re-sent by the
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!loadAppState()) ['U1','U2','L'].forEach(part => applySmartProfile(part));
     setInterval(saveAppState, 1000);
 
-    // On desktop Chrome, MIDI doesn't require a user gesture — init right away.
+    // On desktop Chrome, MIDI doesn't require a user gesture â€” init right away.
     // On Android Chrome, requestMIDIAccess needs a user gesture to show the permission dialog.
     const isAndroid = /android/i.test(navigator.userAgent);
     if (!isAndroid) {
@@ -296,12 +296,12 @@ document.addEventListener("DOMContentLoaded", () => {
         envSel.addEventListener('change', (e) => {
             currentEnv = e.target.value;
             localStorage.setItem('casioEnv', currentEnv);
-            // Reapply profiles to all parts (applySmartProfile already sends the CCs —
+            // Reapply profiles to all parts (applySmartProfile already sends the CCs â€”
             // no pushAllToKeyboard here: it would re-send Program Changes and force the tones)
             ['U1', 'U2', 'L'].forEach(part => {
                 if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
             });
-            // Re-send CC72 on every part — a ~57-CC burst from 3×applySmartProfile
+            // Re-send CC72 on every part â€” a ~57-CC burst from 3Ã—applySmartProfile
             // triggers the CT-S500 hardware controller reset multiple times.
             resyncAllSustain();
             switchEQ(activePart);
@@ -328,1201 +328,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // ======================================================================
-//  MIDI INIT — always-on with auto-reconnect
-// ======================================================================
-function initMIDI() {
-    if (!navigator.requestMIDIAccess) {
-        setStatus("Web MIDI not supported (Use Chrome or Edge)", false);
-        return;
-    }
-    setStatus("Connecting...", false);
-    // Android requires sysex:false — sysex:true triggers platform init failure, and async
-    // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
-    const sysex = !/android/i.test(navigator.userAgent);
-    navigator.requestMIDIAccess({ sysex }).then(access => {
-        midiAccess = access;
-        // Debounce: statechange fires for every port open/close; batch into one reconnect
-        access.onstatechange = () => {
-            clearTimeout(_midiConnectTimer);
-            _midiConnectTimer = setTimeout(() => reconnectMIDI(), 300);
-        };
-        reconnectMIDI();
-    }, err => {
-        const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
-        console.error('[MIDI] error:', err.name, err.message);
-        if (permDenied) {
-            setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
-        } else {
-            setStatus("MIDI Error: " + err.message, false);
-        }
-        const warn = document.getElementById('midiPermissionWarn');
-        if (warn) warn.style.display = 'block';
-    });
-}
-
-function reconnectMIDI() {
-    // Detach old input handler first — prevents ghost messages and PC Synth duplicate notes
-    if (midiInput) { midiInput.onmidimessage = null; }
-    midiInput  = null;
-    midiOutput = null;
-
-    const allOuts = [...midiAccess.outputs.values()];
-    const allIns  = [...midiAccess.inputs.values()];
-    console.log('[MIDI] outputs:', allOuts.map(o => o.name + ' state=' + o.state + ' conn=' + o.connection));
-    console.log('[MIDI] inputs:', allIns.map(i => i.name + ' state=' + i.state + ' conn=' + i.connection));
-
-    // Pick the best port by priority: CASIO/CT-S > Bluetooth adapter > USB > generic MIDI > any.
-    // Virtual ports (loopMIDI, rtpMIDI...) contain "MIDI" too, so they must never outrank the Casio.
-    const portScore = p => {
-        const n = p.name.toUpperCase();
-        if (n.includes("CASIO") || n.includes("CT-S")) return 5;
-        if (n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) return 4;
-        if (n.includes("LOOPMIDI") || n.includes("RTPMIDI") || n.includes("VIRTUAL")) return 1;
-        if (n.includes("USB")) return 3;
-        if (n.includes("MIDI")) return 2;
-        return 1;
-    };
-    const pickPort = ports => ports
-        .filter(p => p.state === 'connected' && !p.name.toUpperCase().includes("THROUGH"))
-        .reduce((best, p) => (!best || portScore(p) > portScore(best)) ? p : best, null);
-    midiOutput = pickPort(allOuts);
-    midiInput  = pickPort(allIns);
-    console.log('[MIDI] selected output:', midiOutput?.name, '| selected input:', midiInput?.name);
-
-    if (midiOutput) {
-        midiOutput.open().catch(console.error);
-    }
-
-    if (midiInput) {
-        midiInput.onmidimessage = onMIDIMessage;
-    }
-
-    if (midiOutput || midiInput) {
-        const name = (midiOutput || midiInput).name;
-        const label = midiOutput && midiInput ? "✓ " + name
-                    : midiOutput ? "✓ " + name + " (output only)"
-                    : "✓ " + name + " (input only)";
-        setStatus(label, !!(midiOutput || midiInput));
-        document.getElementById("connectBtn").innerText = "Reconnect";
-        const warn = document.getElementById('midiPermissionWarn');
-        if (warn) warn.style.display = 'none';
-        if (midiOutput) {
-            const newId = midiOutput.id;
-            _lastMidiOutputId = newId;
-            // Always push tones and CCs so the Casio accurately reflects the app's initial/current instruments
-            pushAllToKeyboard(false);
-        }
-    } else {
-        const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
-        const ins  = [...midiAccess.inputs.values()].filter(i => i.state === 'connected').length;
-        setStatus("No MIDI devices (" + ins + " in / " + outs + " out)", false);
-        document.getElementById("connectBtn").innerText = "Connect";
-    }
-}
-
-function setStatus(text, connected) {
-    document.getElementById("statusText").innerText = text;
-    document.getElementById("statusIndicator").classList.toggle("connected", connected);
-}
-
-
-
-// ======================================================================
-//  INCOMING MIDI (bidireccional)
-// ======================================================================
-function onMIDIMessage(e) {
-    const [status, d1, d2] = e.data;
-    
-    // --- PC SYNTH HOOK ---
-    if (pcSynthEnabled && window.sf2Ready && window.pcSynth) {
-        const cmd    = status & 0xF0;
-        const noteCh = status & 0x0F;
-
-        if (cmd === 0x90) { // Note On
-            if (d2 > 0) {
-                // Same shift the Casio gets via RPN Coarse Tuning (global octave + transpose)
-                // Per-part octave removed: sendCoarseTuning ignores tuning[part].oct and
-                // applying it only here would desync PC Synth pitch from the Casio.
-                const shift = globalTranspose + globalOctave * 12;
-                const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
-
-                pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
-                if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
-                window.pcSynth.noteOn(noteCh, shiftedNote, d2); // unscaled velocity — el synth maneja su propio Volume
-            } else {
-                pcNoteOff(noteCh, d1);
-            }
-        } else if (cmd === 0x80) { // Note Off
-            pcNoteOff(noteCh, d1);
-        } else if (cmd === 0xB0 && d1 === 64) {
-            // Physical damper pedal is global on the Casio → hold all 3 PC synth parts (native CC64)
-            Object.values(CHANNEL).forEach(ch => window.pcSynth.applyCC(64, d2, ch));
-        }
-    }
-    
-    // Control Change
-    if (status >= 0xB0 && status <= 0xBF) {
-        const ch   = status & 0x0F;
-        const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
-
-        if (!part) return;
-
-        // CC7 is a per-channel (per-part) volume — mirror it to that part's PC synth channel
-        if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
-
-        // Catch Bank Select MSB (CC0)
-        if (d1 === 0) {
-            pendingBank[part] = d2;
-        }
-
-        // Update EQ memory (exclude CC64=damper pedal, CC72=app sustain, CC0=bank-select)
-        if (d1 !== 64 && d1 !== 72 && d1 !== 0) eqState[part][d1] = d2;
-
-        // If EQ panel is showing this part, update fader UI
-        if (part === activePart) {
-            const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
-            if (ctrl) {
-                if (ctrl.type === 'switch') {
-                    document.querySelectorAll(`.eq-switch[data-cc="${d1}"]`).forEach(btn => {
-                        btn.innerText = d2 > 63 ? 'ON' : 'OFF';
-                        btn.classList.toggle('sus-on', d2 > 63);
-                    });
-                } else {
-                    beginEqProgrammatic();
-                    document.querySelectorAll(`.eq-fader[data-cc="${d1}"]`).forEach(f => {
-                        f.value = d2;
-                    });
-                }
-                document.querySelectorAll(`.eq-val-${d1}`).forEach(valEl => {
-                    valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
-                });
-            }
-        }
-    }
-
-    // Program Change
-    if (status >= 0xC0 && status <= 0xCF) {
-        const ch = status & 0x0F;
-        const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
-        if (!part) return;
-        // Mirror program to SF2 synth so PC sound matches keyboard tone
-        if (window.pcSynth && window.pcSynth.programChange) {
-            window.pcSynth.programChange(ch, d1);
-            // Also update instrument picker UI for this part
-            const sel = document.getElementById('sf2-prog-' + part);
-            if (sel) sel.value = d1;
-            pcPartProgram[part] = d1;
-        }
-
-        const pc = d1;
-        const bank = pendingBank[part] || 0;
-
-        // Update UI and apply tone+environment acoustic profile for the new tone.
-        const pcOpt = selectToneInList(part, d => d.bank === bank && d.program === pc);
-        if (pcOpt) {
-            const pcCat = pcOpt.parentElement?.tagName === 'OPTGROUP'
-                ? pcOpt.parentElement.label
-                : (activeCategories[part] || 'PIANO');
-            scheduleProfile(part, pcCat); // scheduleProfile calls resyncAllSustain internally
-        } else if (tuning[part].sus) {
-            scheduleSustainResync(part, SUSTAIN_TAPS);
-        }
-    }
-}
-
-// ======================================================================
-//  EQ PANEL
-// ======================================================================
-// EQ sections — grouped logically with readable titles
-const EQ_SECTIONS = [
-    {
-        title: 'Volume & Panning',
-        controls: [
-            { label: 'Volume',  cc: 7,  def: 100, tip: 'Volume' },
-            { label: 'EXPRESSION',  cc: 11, def: 127, tip: 'EXPRESSION (dynamics)' },
-            { label: 'PAN',  cc: 10, def: 64,  tip: 'Pan (left/right)' },
-        ]
-    },
-    {
-        // CC102/103/104 are Casio AiX proprietary — not in the GM spec.
-        // Behavior observed as EQ shelves; unverified against CT-S500 MIDI Implementation PDF.
-        title: 'Master EQ',
-        controls: [
-            { label: 'LOWS',   cc: 104, def: 64, tip: 'Low Shelf Filter (Body/Bass)' },
-            { label: 'MIDS',   cc: 103, def: 64, tip: 'Peaking Filter (Presence/Mids)' },
-            { label: 'HIGHS',   cc: 102, def: 64, tip: 'High Shelf Filter (Brightness/Air)' },
-        ]
-    },
-    {
-        title: 'Filters',
-        controls: [
-            { label: 'CUTOFF', cc: 74, def: 64, tip: 'Filter Cutoff Frequency' },
-            { label: 'RESONANCE',   cc: 71, def: 64, tip: 'Filter Resonance' },
-        ]
-    },
-    {
-        title: 'Envelope',
-        controls: [
-            { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (ADSR)' },
-            { label: 'DECAY',   cc: 75, def: 64, tip: 'Decay Time (ADSR)' },
-        ]
-    },
-    {
-        title: 'DSP & Acoustic Character',
-        controls: [
-            { label: 'DSP DRIVE', cc: 95, def: 0,  tip: 'DSP Harmonic Drive & Character' },
-            { label: 'BODY',      cc: 104, def: 64, tip: 'Acoustic Wood Body (Low-Shelf EQ)' },
-            { label: 'AIR',       cc: 102, def: 64, tip: 'Studio High-Frequency Air Band' },
-            { label: 'TRAIL',     cc: 75,  def: 64, tip: 'Natural Acoustic Decay & Release Trail' },
-        ]
-    },
-    {
-        title: 'Vibrato (LFO)',
-        controls: [
-            { label: 'RATE',  cc: 76, def: 64, tip: 'Vibrato Rate' },
-            { label: 'DEPTH', cc: 77, def: 64, tip: 'Vibrato Depth' },
-            { label: 'DELAY', cc: 78, def: 64, tip: 'Vibrato Delay' },
-        ]
-    },
-    {
-        title: 'Spatial Effects',
-        controls: [
-            { label: 'REVERB', cc: 91, def: 40, tip: 'Reverb Send' },
-            { label: 'CHORUS', cc: 93, def: 0,  tip: 'Chorus Send' },
-            { label: 'ECHO',    cc: 94, def: 0,  tip: 'Delay Send' },
-        ]
-    },
-    {
-        title: 'Modulation & Pedals',
-        controls: [
-            { label: 'MODULATION',       cc: 1,  def: 0, tip: 'Rueda de MODULATION' },
-            { label: 'PORTAMENTO', cc: 65, def: 0, tip: 'Portamento On/Off', type: 'switch' },
-            { label: 'PORT. TIME', cc: 5,  def: 0, tip: 'Portamento Time (glide)' },
-            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
-            { label: 'SOFT',      cc: 67, def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
-        ]
-    },
-];
-
-// Flatten for easy CC lookup
-const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
-
-
-let currentEnv = 'Estudio';
-// CCs: 74=Brillo/Cutoff 71=Resonancia 73=Ataque 75=Decay 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Eco
-// CC72 (Release) eliminado del EQ — el teclado lo maneja internamente por instrumento
-// Casio Categories (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
-//   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
-//   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES
-// SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como Casio categories)
-const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
-
-// ======================================================================
-//  TONE + ENVIRONMENT PRESET MATRIX (33 CASIO INSTRUMENT CATEGORIES)
-//  Acoustically tuned, physically faithful soundboard, resonance & DSP
-//  profiles across Estudio, Vivo, Sala, and Jazz. NO DEFAULT 64 FLAT CURVES!
-// ======================================================================
-const TONE_ENV_MATRIX = {
-    "PIANO": {
-        "Estudio": { '104':72, '103':66, '102':74, '74':72, '71':64, '73':62, '75':68, '95':18, '76':64, '77':64, '78':64, '91':20, '93':0,  '94':0 },
-        "Vivo":    { '104':76, '103':72, '102':82, '74':78, '71':66, '73':60, '75':66, '95':34, '76':64, '77':64, '78':64, '91':36, '93':10, '94':0 },
-        "Sala":    { '104':80, '103':62, '102':72, '74':66, '71':64, '73':64, '75':76, '95':16, '76':64, '77':64, '78':64, '91':68, '93':0,  '94':12 },
-        "Jazz":    { '104':76, '103':70, '102':58, '74':60, '71':64, '73':64, '75':70, '95':25, '76':64, '77':64, '78':64, '91':25, '93':0,  '94':0 }
-    },
-    "HARPSICHORD": {
-        "Estudio": { '104':66, '103':74, '102':80, '74':78, '71':70, '73':58, '75':62, '95':16, '76':64, '77':64, '78':64, '91':14, '93':0,  '94':0 },
-        "Vivo":    { '104':70, '103':78, '102':86, '74':82, '71':72, '73':56, '75':62, '95':30, '76':64, '77':64, '78':64, '91':28, '93':10, '94':0 },
-        "Sala":    { '104':72, '103':66, '102':78, '74':72, '71':68, '73':60, '75':72, '95':18, '76':64, '77':64, '78':64, '91':68, '93':0,  '94':15 },
-        "Jazz":    { '104':70, '103':72, '102':68, '74':68, '71':66, '73':58, '75':66, '95':22, '76':64, '77':64, '78':64, '91':22, '93':0,  '94':0 }
-    },
-    "ELEC.PIANO": {
-        "Estudio": { '104':72, '103':66, '102':72, '74':72, '71':64, '73':62, '75':68, '95':28, '76':68, '77':66, '78':64, '91':22, '93':28, '94':0 },
-        "Vivo":    { '104':76, '103':74, '102':80, '74':78, '71':66, '73':60, '75':66, '95':52, '76':72, '77':70, '78':64, '91':35, '93':38, '94':15 },
-        "Sala":    { '104':76, '103':62, '102':74, '74':70, '71':64, '73':64, '75':74, '95':22, '76':66, '77':64, '78':68, '91':62, '93':40, '94':25 },
-        "Jazz":    { '104':76, '103':72, '102':60, '74':64, '71':64, '73':62, '75':70, '95':34, '76':70, '77':68, '78':64, '91':28, '93':24, '94':0 }
-    },
-    "CLAVI": {
-        "Estudio": { '104':68, '103':78, '102':78, '74':80, '71':74, '73':56, '75':60, '95':45, '76':66, '77':66, '78':64, '91':15, '93':20, '94':0 },
-        "Vivo":    { '104':72, '103':84, '102':84, '74':86, '71':78, '73':54, '75':58, '95':68, '76':70, '77':70, '78':64, '91':28, '93':30, '94':15 },
-        "Sala":    { '104':72, '103':70, '102':74, '74':74, '71':70, '73':58, '75':68, '95':32, '76':64, '77':64, '78':64, '91':55, '93':22, '94':20 },
-        "Jazz":    { '104':72, '103':76, '102':66, '74':70, '71':70, '73':56, '75':64, '95':48, '76':68, '77':68, '78':64, '91':22, '93':18, '94':0 }
-    },
-    "VIB./CHROM.PERC.": {
-        "Estudio": { '104':72, '103':68, '102':76, '74':74, '71':66, '73':58, '75':70, '95':18, '76':74, '77':70, '78':64, '91':22, '93':15, '94':0 },
-        "Vivo":    { '104':76, '103':74, '102':84, '74':80, '71':68, '73':56, '75':68, '95':32, '76':76, '77':74, '78':64, '91':35, '93':22, '94':10 },
-        "Sala":    { '104':78, '103':64, '102':78, '74':72, '71':66, '73':60, '75':78, '95':16, '76':72, '77':68, '78':66, '91':70, '93':20, '94':20 },
-        "Jazz":    { '104':76, '103':72, '102':64, '74':66, '71':64, '73':60, '75':74, '95':25, '76':76, '77':72, '78':64, '91':28, '93':15, '94':0 }
-    },
-    "ELEC.ORGAN": {
-        "Estudio": { '104':70, '103':70, '102':74, '74':74, '71':64, '73':60, '75':64, '95':38, '76':76, '77':72, '78':64, '91':24, '93':26, '94':0 },
-        "Vivo":    { '104':76, '103':76, '102':82, '74':80, '71':66, '73':58, '75':64, '95':65, '76':80, '77':76, '78':64, '91':36, '93':32, '94':12 },
-        "Sala":    { '104':76, '103':66, '102':74, '74':70, '71':64, '73':62, '75':72, '95':26, '76':74, '77':68, '78':66, '91':62, '93':30, '94':22 },
-        "Jazz":    { '104':74, '103':74, '102':64, '74':66, '71':64, '73':60, '75':66, '95':44, '76':78, '77':74, '78':64, '91':28, '93':24, '94':0 }
-    },
-    "PIPE ORGAN": {
-        "Estudio": { '104':78, '103':68, '102':72, '74':72, '71':64, '73':66, '75':72, '95':12, '76':64, '77':64, '78':64, '91':45, '93':0,  '94':12 },
-        "Vivo":    { '104':82, '103':74, '102':78, '74':76, '71':66, '73':64, '75':70, '95':22, '76':64, '77':64, '78':64, '91':58, '93':0,  '94':18 },
-        "Sala":    { '104':86, '103':66, '102':76, '74':70, '71':64, '73':68, '75':80, '95':15, '76':64, '77':64, '78':64, '91':85, '93':0,  '94':24 },
-        "Jazz":    { '104':78, '103':70, '102':66, '74':66, '71':64, '73':66, '75':74, '95':18, '76':64, '77':64, '78':64, '91':44, '93':0,  '94':0 }
-    },
-    "ACCORDION": {
-        // Bellows instrument: nasal midrange character, reduced bass, tight articulation
-        "Estudio": { '104':64, '103':78, '102':68, '74':74, '71':68, '73':56, '75':64, '95':24, '76':72, '77':70, '78':64, '91':20, '93':16, '94':0 },
-        "Vivo":    { '104':68, '103':82, '102':74, '74':78, '71':70, '73':54, '75':62, '95':40, '76':74, '77':72, '78':62, '91':32, '93':24, '94':10 },
-        "Sala":    { '104':66, '103':72, '102':66, '74':70, '71':66, '73':60, '75':72, '95':22, '76':70, '77':68, '78':66, '91':62, '93':20, '94':18 },
-        "Jazz":    { '104':66, '103':80, '102':62, '74':68, '71':68, '73':56, '75':68, '95':30, '76':72, '77':70, '78':64, '91':24, '93':14, '94':0 }
-    },
-    "ACOUS.GUITAR": {
-        "Estudio": { '104':74, '103':68, '102':78, '74':76, '71':66, '73':60, '75':66, '95':20, '76':64, '77':64, '78':64, '91':20, '93':15, '94':0 },
-        "Vivo":    { '104':78, '103':74, '102':84, '74':82, '71':68, '73':58, '75':64, '95':35, '76':64, '77':64, '78':64, '91':34, '93':25, '94':12 },
-        "Sala":    { '104':80, '103':64, '102':76, '74':70, '71':64, '73':62, '75':74, '95':16, '76':64, '77':64, '78':64, '91':66, '93':18, '94':20 },
-        "Jazz":    { '104':76, '103':72, '102':64, '74':64, '71':64, '73':60, '75':68, '95':26, '76':64, '77':64, '78':64, '91':24, '93':16, '94':0 }
-    },
-    "ELEC.GUITAR": {
-        "Estudio": { '104':70, '103':74, '102':74, '74':74, '71':68, '73':58, '75':64, '95':48, '76':66, '77':64, '78':64, '91':24, '93':25, '94':12 },
-        "Vivo":    { '104':76, '103':80, '102':82, '74':82, '71':72, '73':56, '75':64, '95':74, '76':70, '77':68, '78':64, '91':38, '93':32, '94':24 },
-        "Sala":    { '104':74, '103':68, '102':72, '74':70, '71':66, '73':60, '75':72, '95':36, '76':66, '77':64, '78':66, '91':64, '93':28, '94':30 },
-        "Jazz":    { '104':76, '103':76, '102':60, '74':62, '71':64, '73':58, '75':68, '95':38, '76':66, '77':64, '78':64, '91':28, '93':18, '94':10 }
-    },
-    "ACOUS.BASS": {
-        "Estudio": { '104':90, '103':72, '102':58, '74':64, '71':64, '73':58, '75':66, '95':22, '76':64, '77':64, '78':64, '91':12, '93':0,  '94':0 },
-        "Vivo":    { '104':94, '103':76, '102':66, '74':70, '71':66, '73':56, '75':64, '95':40, '76':64, '77':64, '78':64, '91':18, '93':0,  '94':0 },
-        "Sala":    { '104':92, '103':64, '102':60, '74':60, '71':64, '73':60, '75':72, '95':18, '76':64, '77':64, '78':64, '91':36, '93':0,  '94':0 },
-        "Jazz":    { '104':92, '103':74, '102':50, '74':56, '71':64, '73':58, '75':68, '95':28, '76':64, '77':64, '78':64, '91':16, '93':0,  '94':0 }
-    },
-    "ELEC.BASS": {
-        "Estudio": { '104':86, '103':72, '102':64, '74':68, '71':66, '73':58, '75':64, '95':32, '76':64, '77':64, '78':64, '91':10, '93':0,  '94':0 },
-        "Vivo":    { '104':92, '103':78, '102':72, '74':76, '71':70, '73':56, '75':64, '95':55, '76':64, '77':64, '78':64, '91':18, '93':10, '94':0 },
-        "Sala":    { '104':88, '103':66, '102':62, '74':62, '71':64, '73':60, '75':70, '95':24, '76':64, '77':64, '78':64, '91':32, '93':0,  '94':0 },
-        "Jazz":    { '104':88, '103':74, '102':56, '74':58, '71':64, '73':58, '75':66, '95':35, '76':64, '77':64, '78':64, '91':15, '93':0,  '94':0 }
-    },
-    "SYNTH-BASS": {
-        "Estudio": { '104':92, '103':70, '102':68, '74':72, '71':76, '73':56, '75':64, '95':45, '76':64, '77':64, '78':64, '91':10, '93':0,  '94':0 },
-        "Vivo":    { '104':96, '103':76, '102':76, '74':80, '71':82, '73':54, '75':64, '95':68, '76':64, '77':64, '78':64, '91':18, '93':10, '94':0 },
-        "Sala":    { '104':92, '103':64, '102':66, '74':68, '71':72, '73':58, '75':70, '95':30, '76':64, '77':64, '78':64, '91':38, '93':0,  '94':0 },
-        "Jazz":    { '104':90, '103':72, '102':58, '74':62, '71':70, '73':56, '75':66, '95':40, '76':64, '77':64, '78':64, '91':16, '93':0,  '94':0 }
-    },
-    "SOLO STRINGS": {
-        "Estudio": { '104':74, '103':70, '102':76, '74':74, '71':66, '73':66, '75':70, '95':18, '76':70, '77':70, '78':66, '91':28, '93':15, '94':0 },
-        "Vivo":    { '104':78, '103':76, '102':82, '74':80, '71':68, '73':64, '75':68, '95':30, '76':72, '77':72, '78':64, '91':40, '93':20, '94':10 },
-        "Sala":    { '104':82, '103':64, '102':76, '74':70, '71':64, '73':68, '75':78, '95':16, '76':68, '77':68, '78':68, '91':76, '93':20, '94':18 },
-        "Jazz":    { '104':76, '103':72, '102':66, '74':64, '71':64, '73':66, '75':72, '95':22, '76':70, '77':70, '78':66, '91':30, '93':12, '94':0 }
-    },
-    "STRING ENSEMBLE": {
-        "Estudio": { '104':76, '103':66, '102':76, '74':72, '71':64, '73':70, '75':74, '95':15, '76':66, '77':64, '78':68, '91':36, '93':24, '94':0 },
-        "Vivo":    { '104':80, '103':72, '102':82, '74':78, '71':66, '73':68, '75':72, '95':26, '76':68, '77':66, '78':66, '91':48, '93':30, '94':15 },
-        "Sala":    { '104':84, '103':62, '102':78, '74':70, '71':64, '73':72, '75':82, '95':16, '76':66, '77':64, '78':70, '91':80, '93':28, '94':22 },
-        "Jazz":    { '104':78, '103':68, '102':64, '74':62, '71':64, '73':70, '75':74, '95':20, '76':66, '77':64, '78':68, '91':36, '93':18, '94':0 }
-    },
-    "SOLO BRASS": {
-        "Estudio": { '104':72, '103':74, '102':76, '74':74, '71':66, '73':62, '75':64, '95':24, '76':70, '77':68, '78':66, '91':24, '93':0,  '94':0 },
-        "Vivo":    { '104':78, '103':80, '102':84, '74':82, '71':70, '73':58, '75':64, '95':42, '76':72, '77':70, '78':64, '91':38, '93':10, '94':10 },
-        "Sala":    { '104':80, '103':66, '102':74, '74':68, '71':64, '73':64, '75':74, '95':18, '76':68, '77':66, '78':68, '91':72, '93':0,  '94':16 },
-        "Jazz":    { '104':74, '103':76, '102':64, '74':64, '71':64, '73':62, '75':66, '95':32, '76':72, '77':70, '78':64, '91':28, '93':0,  '94':0 }
-    },
-    "BRASS ENSEMBLE": {
-        "Estudio": { '104':76, '103':74, '102':78, '74':76, '71':66, '73':60, '75':64, '95':26, '76':66, '77':64, '78':66, '91':26, '93':12, '94':0 },
-        "Vivo":    { '104':82, '103':82, '102':86, '74':84, '71':72, '73':56, '75':64, '95':48, '76':68, '77':66, '78':64, '91':40, '93':20, '94':12 },
-        "Sala":    { '104':82, '103':66, '102':76, '74':70, '71':64, '73':64, '75':76, '95':20, '76':66, '77':64, '78':68, '91':74, '93':14, '94':18 },
-        "Jazz":    { '104':78, '103':78, '102':66, '74':66, '71':66, '73':60, '75':66, '95':35, '76':68, '77':66, '78':64, '91':30, '93':10, '94':0 }
-    },
-    "SYNTH-BRASS": {
-        "Estudio": { '104':74, '103':72, '102':78, '74':76, '71':72, '73':62, '75':68, '95':30, '76':68, '77':66, '78':64, '91':28, '93':28, '94':12 },
-        "Vivo":    { '104':80, '103':78, '102':86, '74':84, '71':76, '73':58, '75':66, '95':50, '76':70, '77':68, '78':64, '91':42, '93':36, '94':20 },
-        "Sala":    { '104':78, '103':66, '102':76, '74':72, '71':70, '73':64, '75':76, '95':22, '76':66, '77':64, '78':66, '91':68, '93':32, '94':24 },
-        "Jazz":    { '104':76, '103':72, '102':64, '74':64, '71':68, '73':62, '75':70, '95':34, '76':68, '77':66, '78':64, '91':32, '93':22, '94':0 }
-    },
-    "SAX": {
-        "Estudio": { '104':74, '103':74, '102':76, '74':74, '71':66, '73':62, '75':64, '95':28, '76':72, '77':72, '78':66, '91':24, '93':10, '94':0 },
-        "Vivo":    { '104':80, '103':80, '102':84, '74':82, '71':70, '73':58, '75':64, '95':48, '76':74, '77':74, '78':64, '91':38, '93':18, '94':12 },
-        "Sala":    { '104':80, '103':66, '102':74, '74':68, '71':64, '73':64, '75':74, '95':20, '76':70, '77':68, '78':68, '91':68, '93':15, '94':18 },
-        "Jazz":    { '104':78, '103':78, '102':64, '74':64, '71':64, '73':62, '75':66, '95':38, '76':74, '77':74, '78':64, '91':30, '93':10, '94':0 }
-    },
-    "REED": {
-        // Oboe/clarinet: nasal midrange character, reduced bass, penetrating presence
-        "Estudio": { '104':60, '103':78, '102':70, '74':76, '71':70, '73':62, '75':66, '95':22, '76':70, '77':68, '78':66, '91':26, '93':0,  '94':0 },
-        "Vivo":    { '104':64, '103':82, '102':74, '74':82, '71':72, '73':58, '75':64, '95':36, '76':72, '77':70, '78':64, '91':40, '93':12, '94':10 },
-        "Sala":    { '104':62, '103':74, '102':68, '74':72, '71':66, '73':64, '75':76, '95':18, '76':68, '77':66, '78':68, '91':72, '93':0,  '94':16 },
-        "Jazz":    { '104':62, '103':80, '102':66, '74':68, '71':68, '73':62, '75':68, '95':28, '76':70, '77':68, '78':64, '91':28, '93':0,  '94':0 }
-    },
-    "PIPE": {
-        // Flute/recorder: airy, bright, breathed attack, natural space
-        "Estudio": { '104':62, '103':66, '102':82, '74':80, '71':60, '73':68, '75':70, '95':12, '76':72, '77':70, '78':68, '91':34, '93':8,  '94':0 },
-        "Vivo":    { '104':64, '103':70, '102':88, '74':84, '71':62, '73':64, '75':68, '95':22, '76':74, '77':72, '78':66, '91':48, '93':14, '94':14 },
-        "Sala":    { '104':64, '103':60, '102':84, '74':76, '71':60, '73':70, '75':80, '95':14, '76':70, '77':68, '78':70, '91':80, '93':10, '94':22 },
-        "Jazz":    { '104':64, '103':68, '102':78, '74':72, '71':60, '73':68, '75':72, '95':18, '76':72, '77':70, '78':66, '91':36, '93':8,  '94':0 }
-    },
-    "SYNTH-LEAD": {
-        "Estudio": { '104':72, '103':74, '102':78, '74':80, '71':74, '73':58, '75':66, '95':50, '76':72, '77':68, '78':64, '91':28, '93':26, '94':18 },
-        "Vivo":    { '104':78, '103':80, '102':86, '74':88, '71':78, '73':56, '75':64, '95':72, '76':74, '77':72, '78':64, '91':42, '93':36, '94':26 },
-        "Sala":    { '104':76, '103':68, '102':76, '74':74, '71':72, '73':62, '75':74, '95':36, '76':68, '77':66, '78':66, '91':66, '93':30, '94':32 },
-        "Jazz":    { '104':74, '103':74, '102':64, '74':68, '71':70, '73':60, '75':68, '95':52, '76':72, '77':68, '78':64, '91':30, '93':20, '94':15 }
-    },
-    "SYNTH-PAD": {
-        "Estudio": { '104':74, '103':66, '102':76, '74':72, '71':66, '73':76, '75':78, '95':22, '76':68, '77':66, '78':68, '91':45, '93':38, '94':20 },
-        "Vivo":    { '104':78, '103':70, '102':84, '74':78, '71':70, '73':72, '75':76, '95':35, '76':70, '77':68, '78':64, '91':56, '93':46, '94':26 },
-        "Sala":    { '104':82, '103':62, '102':78, '74':70, '71':66, '73':78, '75':84, '95':24, '76':68, '77':66, '78':70, '91':78, '93':42, '94':32 },
-        "Jazz":    { '104':76, '103':68, '102':62, '74':62, '71':66, '73':76, '75':78, '95':26, '76':68, '77':66, '78':68, '91':42, '93':30, '94':16 }
-    },
-    "CHOIR": {
-        // Human voices: slow breath attack, warm midrange, hall reverb, natural vibrato
-        "Estudio": { '104':70, '103':68, '102':72, '74':68, '71':64, '73':78, '75':76, '95':14, '76':68, '77':68, '78':68, '91':44, '93':18, '94':12 },
-        "Vivo":    { '104':74, '103':72, '102':76, '74':72, '71':66, '73':74, '75':74, '95':24, '76':70, '77':70, '78':66, '91':58, '93':24, '94':20 },
-        "Sala":    { '104':78, '103':62, '102':72, '74':66, '71':62, '73':80, '75':84, '95':16, '76':68, '77':70, '78':70, '91':86, '93':22, '94':28 },
-        "Jazz":    { '104':72, '103':68, '102':66, '74':62, '71':62, '73':76, '75':78, '95':18, '76':68, '77':68, '78':68, '91':44, '93':16, '94':0 }
-    },
-    "EDM SYNTH": {
-        "Estudio": { '104':76, '103':74, '102':82, '74':84, '71':76, '73':56, '75':64, '95':58, '76':70, '77':66, '78':64, '91':30, '93':30, '94':24 },
-        "Vivo":    { '104':82, '103':80, '102':88, '74':90, '71':80, '73':54, '75':62, '95':78, '76':72, '77':70, '78':64, '91':45, '93':40, '94':30 },
-        "Sala":    { '104':78, '103':68, '102':80, '74':78, '71':74, '73':58, '75':72, '95':40, '76':68, '77':64, '78':66, '91':68, '93':34, '94':35 },
-        "Jazz":    { '104':76, '103':74, '102':68, '74':72, '71':72, '73':58, '75':66, '95':50, '76':70, '77':66, '78':64, '91':32, '93':24, '94':18 }
-    },
-    "CASIO CLASSIC": {
-        "Estudio": { '104':70, '103':72, '102':74, '74':74, '71':70, '73':60, '75':66, '95':36, '76':68, '77':66, '78':64, '91':26, '93':28, '94':15 },
-        "Vivo":    { '104':76, '103':78, '102':82, '74':80, '71':74, '73':58, '75':64, '95':54, '76':70, '77':68, '78':64, '91':38, '93':36, '94':22 },
-        "Sala":    { '104':74, '103':66, '102':74, '74':70, '71':68, '73':62, '75':74, '95':25, '76':66, '77':64, '78':66, '91':64, '93':30, '94':26 },
-        "Jazz":    { '104':72, '103':72, '102':64, '74':64, '71':66, '73':60, '75':68, '95':38, '76':68, '77':66, '78':64, '91':28, '93':22, '94':12 }
-    },
-    "INDIAN": {
-        "Estudio": { '104':70, '103':76, '102':82, '74':80, '71':74, '73':58, '75':72, '95':25, '76':74, '77':72, '78':66, '91':26, '93':18, '94':16 },
-        "Vivo":    { '104':74, '103':80, '102':88, '74':86, '71':78, '73':56, '75':70, '95':40, '76':76, '77':76, '78':64, '91':38, '93':26, '94':24 },
-        "Sala":    { '104':76, '103':68, '102':80, '74':74, '71':72, '73':60, '75':78, '95':20, '76':72, '77':70, '78':68, '91':68, '93':22, '94':26 },
-        "Jazz":    { '104':72, '103':74, '102':70, '74':70, '71':70, '73':58, '75':72, '95':30, '76':74, '77':72, '78':66, '91':28, '93':16, '94':12 }
-    },
-    "INDONESIAN": {
-        "Estudio": { '104':72, '103':74, '102':80, '74':78, '71':72, '73':56, '75':74, '95':22, '76':68, '77':66, '78':64, '91':25, '93':16, '94':15 },
-        "Vivo":    { '104':76, '103':78, '102':86, '74':84, '71':76, '73':54, '75':72, '95':36, '76':70, '77':68, '78':64, '91':36, '93':24, '94':22 },
-        "Sala":    { '104':78, '103':66, '102':80, '74':74, '71':70, '73':58, '75':80, '95':18, '76':66, '77':64, '78':66, '91':70, '93':20, '94':25 },
-        "Jazz":    { '104':74, '103':72, '102':68, '74':68, '71':68, '73':56, '75':74, '95':26, '76':68, '77':66, '78':64, '91':28, '93':14, '94':10 }
-    },
-    "ARABIC": {
-        "Estudio": { '104':76, '103':74, '102':74, '74':74, '71':68, '73':58, '75':68, '95':24, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 },
-        "Vivo":    { '104':80, '103':78, '102':82, '74':80, '71':72, '73':56, '75':66, '95':38, '76':74, '77':72, '78':64, '91':36, '93':22, '94':18 },
-        "Sala":    { '104':82, '103':66, '102':74, '74':70, '71':66, '73':60, '75':76, '95':18, '76':70, '77':68, '78':68, '91':68, '93':18, '94':22 },
-        "Jazz":    { '104':78, '103':74, '102':64, '74':64, '71':66, '73':58, '75':70, '95':28, '76':72, '77':70, '78':66, '91':26, '93':12, '94':0 }
-    },
-    "CHINESE": {
-        "Estudio": { '104':72, '103':74, '102':78, '74':76, '71':70, '73':60, '75':70, '95':20, '76':74, '77':72, '78':66, '91':25, '93':15, '94':12 },
-        "Vivo":    { '104':76, '103':78, '102':86, '74':82, '71':74, '73':58, '75':68, '95':35, '76':76, '77':74, '78':64, '91':38, '93':22, '94':20 },
-        "Sala":    { '104':78, '103':66, '102':78, '74':72, '71':68, '73':62, '75':78, '95':18, '76':72, '77':70, '78':68, '91':72, '93':18, '94':24 },
-        "Jazz":    { '104':74, '103':74, '102':66, '74':66, '71':66, '73':60, '75':72, '95':26, '76':74, '77':72, '78':66, '91':28, '93':12, '94':0 }
-    },
-    "BRAZILIAN": {
-        "Estudio": { '104':74, '103':74, '102':80, '74':78, '71':68, '73':58, '75':64, '95':26, '76':66, '77':64, '78':64, '91':22, '93':15, '94':0 },
-        "Vivo":    { '104':78, '103':80, '102':86, '74':84, '71':72, '73':56, '75':62, '95':42, '76':68, '77':66, '78':64, '91':35, '93':22, '94':10 },
-        "Sala":    { '104':78, '103':68, '102':76, '74':72, '71':66, '73':60, '75':72, '95':20, '76':64, '77':64, '78':66, '91':62, '93':18, '94':16 },
-        "Jazz":    { '104':76, '103':76, '102':66, '74':66, '71':66, '73':58, '75':66, '95':32, '76':66, '77':64, '78':64, '91':25, '93':14, '94':0 }
-    },
-    "ETHNIC OTHERS": {
-        "Estudio": { '104':74, '103':72, '102':78, '74':76, '71':68, '73':60, '75':68, '95':20, '76':68, '77':66, '78':66, '91':24, '93':16, '94':10 },
-        "Vivo":    { '104':78, '103':76, '102':84, '74':82, '71':72, '73':58, '75':66, '95':34, '76':70, '77':68, '78':64, '91':36, '93':24, '94':18 },
-        "Sala":    { '104':80, '103':66, '102':78, '74':72, '71':66, '73':62, '75':76, '95':18, '76':66, '77':64, '78':68, '91':70, '93':20, '94':22 },
-        "Jazz":    { '104':76, '103':74, '102':66, '74':66, '71':66, '73':60, '75':70, '95':26, '76':68, '77':66, '78':66, '91':26, '93':14, '94':0 }
-    },
-    "GM TONES": {
-        "Estudio": { '104':72, '103':70, '102':74, '74':72, '71':66, '73':62, '75':66, '95':22, '76':66, '77':64, '78':64, '91':24, '93':15, '94':0 },
-        "Vivo":    { '104':78, '103':76, '102':82, '74':80, '71':70, '73':60, '75':64, '95':38, '76':68, '77':66, '78':64, '91':36, '93':22, '94':12 },
-        "Sala":    { '104':80, '103':64, '102':74, '74':68, '71':64, '73':64, '75':74, '95':18, '76':66, '77':64, '78':66, '91':68, '93':18, '94':18 },
-        "Jazz":    { '104':76, '103':74, '102':62, '74':62, '71':64, '73':62, '75':68, '95':28, '76':66, '77':64, '78':64, '91':26, '93':12, '94':0 }
-    }
-};
-
-// ======================================================================
-//  TONE + ENVIRONMENT PRESET RESOLVER
-//  Resolves signature tone models first, then falls back to category matrix.
-// ======================================================================
-function getToneEnvPreset(tone, cat, env) {
-    const name = (tone?.name || '').toUpperCase();
-    const c = (cat || tone?.category || 'PIANO').toUpperCase().trim();
-    const e = env || 'Estudio';
-
-    // 1. Signature Tone Specific Models
-    if (name.includes('BRIGHT') || name.includes('ROCK PIANO') || name.includes('POP PIANO')) {
-        if (e === 'Estudio') return { '104':68, '103':68, '102':78, '74':76, '71':66, '73':60, '75':64, '95':24, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':74, '103':76, '102':86, '74':82, '71':68, '73':58, '75':64, '95':42, '76':64, '77':64, '78':64, '91':38, '93':12, '94':0 };
-        if (e === 'Sala')    return { '104':76, '103':64, '102':76, '74':70, '71':64, '73':62, '75':72, '95':20, '76':64, '77':64, '78':64, '91':64, '93':0, '94':10 };
-        return { '104':72, '103':72, '102':64, '74':66, '71':64, '73':62, '75':66, '95':28, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    if (name.includes('MELLOW') || name.includes('BALLAD') || name.includes('AMBIENT PIANO')) {
-        if (e === 'Estudio') return { '104':74, '103':64, '102':66, '74':64, '71':64, '73':64, '75':70, '95':14, '76':64, '77':64, '78':64, '91':25, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':78, '103':70, '102':72, '74':70, '71':64, '73':62, '75':68, '95':25, '76':64, '77':64, '78':64, '91':42, '93':0, '94':0 };
-        if (e === 'Sala')    return { '104':82, '103':60, '102':68, '74':62, '71':64, '73':66, '75':78, '95':16, '76':64, '77':64, '78':64, '91':72, '93':0, '94':16 };
-        return { '104':78, '103':68, '102':52, '74':56, '71':64, '73':65, '75':72, '95':26, '76':64, '77':64, '78':64, '91':30, '93':0, '94':0 };
-    }
-    if (name.includes('HONKY') || name.includes('TACK')) {
-        if (e === 'Estudio') return { '104':66, '103':76, '102':78, '74':76, '71':68, '73':58, '75':60, '95':32, '76':72, '77':68, '78':64, '91':20, '93':22, '94':0 };
-        if (e === 'Vivo')    return { '104':72, '103':80, '102':84, '74':80, '71':70, '73':56, '75':60, '95':48, '76':74, '77':72, '78':64, '91':32, '93':28, '94':0 };
-        if (e === 'Sala')    return { '104':74, '103':68, '102':74, '74':70, '71':66, '73':60, '75':68, '95':22, '76':70, '77':66, '78':64, '91':55, '93':20, '94':12 };
-        return { '104':72, '103':74, '102':66, '74':66, '71':66, '73':60, '75':64, '95':35, '76':70, '77':68, '78':64, '91':24, '93':18, '94':0 };
-    }
-    if (name.includes('DYNO') || name.includes('GALAXIA') || name.includes('LUCENT')) {
-        if (e === 'Estudio') return { '104':68, '103':68, '102':82, '74':78, '71':68, '73':60, '75':66, '95':26, '76':68, '77':68, '78':64, '91':24, '93':35, '94':10 };
-        if (e === 'Vivo')    return { '104':72, '103':76, '102':88, '74':84, '71':70, '73':58, '75':64, '95':46, '76':72, '77':72, '78':64, '91':38, '93':45, '94':20 };
-        if (e === 'Sala')    return { '104':74, '103':64, '102':80, '74':74, '71':66, '73':62, '75':74, '95':20, '76':66, '77':66, '78':68, '91':65, '93':42, '94':28 };
-        return { '104':72, '103':70, '102':68, '74':68, '71':66, '73':62, '75':68, '95':30, '76':70, '77':68, '78':64, '91':30, '93':30, '94':10 };
-    }
-    if (name.includes('NYLON') || name.includes('SPANISH')) {
-        if (e === 'Estudio') return { '104':74, '103':70, '102':72, '74':72, '71':64, '73':62, '75':68, '95':16, '76':64, '77':64, '78':64, '91':20, '93':10, '94':0 };
-        if (e === 'Vivo')    return { '104':78, '103':76, '102':80, '74':78, '71':66, '73':60, '75':66, '95':30, '76':64, '77':64, '78':64, '91':32, '93':18, '94':10 };
-        if (e === 'Sala')    return { '104':80, '103':66, '102':74, '74':68, '71':64, '73':64, '75':76, '95':15, '76':64, '77':64, '78':64, '91':68, '93':15, '94':18 };
-        return { '104':76, '103':74, '102':62, '74':62, '71':64, '73':62, '75':70, '95':24, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 };
-    }
-    // Stage/Grand piano: warm, clean, professional — natural acoustic body
-    if (name.includes('STAGE PIANO') || name.includes('GRAND PIANO') || name.includes('CLASSIC GRAND') || name.includes('CONCERT')) {
-        if (e === 'Estudio') return { '104':74, '103':68, '102':72, '74':70, '71':64, '73':60, '75':72, '95':14, '76':64, '77':64, '78':64, '91':26, '93':0,  '94':0 };
-        if (e === 'Vivo')    return { '104':78, '103':74, '102':78, '74':76, '71':66, '73':58, '75':70, '95':26, '76':64, '77':64, '78':64, '91':42, '93':8,  '94':0 };
-        if (e === 'Sala')    return { '104':80, '103':62, '102':74, '74':68, '71':64, '73':62, '75':80, '95':16, '76':64, '77':64, '78':64, '91':74, '93':0,  '94':14 };
-        return { '104':76, '103':70, '102':62, '74':62, '71':64, '73':62, '75':74, '95':22, '76':64, '77':64, '78':64, '91':28, '93':0,  '94':0 };
-    }
-    // Wide stereo / strings-hybrid piano: lush, padded, wide reverb
-    if (name.includes('WIDE GRAND') || name.includes('STRINGS PIANO') || name.includes('PIANO PAD')) {
-        if (e === 'Estudio') return { '104':72, '103':64, '102':74, '74':68, '71':64, '73':66, '75':80, '95':14, '76':66, '77':66, '78':68, '91':40, '93':20, '94':0 };
-        if (e === 'Vivo')    return { '104':76, '103':70, '102':80, '74':72, '71':66, '73':64, '75':78, '95':22, '76':68, '77':68, '78':66, '91':54, '93':26, '94':12 };
-        if (e === 'Sala')    return { '104':80, '103':60, '102':76, '74':66, '71':64, '73':68, '75':86, '95':16, '76':66, '77':66, '78':70, '91':82, '93':24, '94':22 };
-        return { '104':74, '103':66, '102':66, '74':60, '71':64, '73':68, '75':82, '95':20, '76':66, '77':66, '78':68, '91':42, '93':18, '94':0 };
-    }
-    // New Age / ambient / modulated piano: dreamy, spatial, long tail
-    if (name.includes('NEW AGE') || name.includes('VOICE PIANO') || name.includes('MODULATED') || name.includes('AMBIENT GRAND')) {
-        if (e === 'Estudio') return { '104':70, '103':64, '102':76, '74':66, '71':64, '73':70, '75':84, '95':22, '76':68, '77':66, '78':70, '91':54, '93':30, '94':18 };
-        if (e === 'Vivo')    return { '104':74, '103':68, '102':82, '74':70, '71':66, '73':68, '75':82, '95':34, '76':70, '77':68, '78':68, '91':64, '93':38, '94':26 };
-        if (e === 'Sala')    return { '104':76, '103':60, '102':78, '74':64, '71':64, '73':72, '75':90, '95':18, '76':68, '77':66, '78':72, '91':86, '93':34, '94':32 };
-        return { '104':72, '103':64, '102':68, '74':62, '71':64, '73':72, '75':86, '95':28, '76':68, '77':66, '78':70, '91':46, '93':26, '94':14 };
-    }
-    // Dance / pop / electronic piano: bright attack, chorus, contemporary
-    if (name.includes('DANCE PIANO') || name.includes('LA PIANO') || (name.includes('POP PIANO') && !name.includes('POP PIANO') === false)) {
-        if (e === 'Estudio') return { '104':68, '103':72, '102':80, '74':76, '71':66, '73':56, '75':62, '95':28, '76':64, '77':64, '78':64, '91':22, '93':26, '94':0 };
-        if (e === 'Vivo')    return { '104':72, '103':78, '102':86, '74':82, '71':70, '73':54, '75':60, '95':46, '76':64, '77':64, '78':64, '91':36, '93':36, '94':12 };
-        if (e === 'Sala')    return { '104':72, '103':64, '102':78, '74':70, '71':64, '73':58, '75':70, '95':22, '76':64, '77':64, '78':64, '91':62, '93':30, '94':24 };
-        return { '104':70, '103':74, '102':72, '74':70, '71':66, '73':58, '75':66, '95':34, '76':64, '77':64, '78':64, '91':26, '93':24, '94':0 };
-    }
-    // Layered / padded piano with synth element
-    if (name.includes('ADV PIANO') || name.includes('OCTAVE PIANO') || name.includes('BASS/PIANO')) {
-        if (e === 'Estudio') return { '104':74, '103':68, '102':74, '74':72, '71':66, '73':60, '75':78, '95':20, '76':70, '77':66, '78':68, '91':38, '93':30, '94':14 };
-        if (e === 'Vivo')    return { '104':78, '103':74, '102':80, '74':78, '71':68, '73':58, '75':76, '95':32, '76':72, '77':68, '78':66, '91':50, '93':38, '94':22 };
-        if (e === 'Sala')    return { '104':80, '103':62, '102':76, '74':70, '71':64, '73':62, '75':84, '95':18, '76':68, '77':66, '78':70, '91':76, '93':34, '94':28 };
-        return { '104':76, '103':70, '102':66, '74':64, '71':64, '73':62, '75':80, '95':26, '76':70, '77':66, '78':68, '91':34, '93':26, '94':10 };
-    }
-    // Solo violin/cello/viola: bowing articulation, expressive vibrato
-    if (name.includes('VIOLIN') || name.includes('CELLO') || name.includes('VIOLA') || name.includes('FIDDLE')) {
-        if (e === 'Estudio') return { '104':72, '103':72, '102':74, '74':74, '71':66, '73':70, '75':72, '95':18, '76':72, '77':76, '78':64, '91':32, '93':12, '94':0 };
-        if (e === 'Vivo')    return { '104':76, '103':78, '102':80, '74':80, '71':70, '73':66, '75':70, '95':28, '76':74, '77':80, '78':62, '91':44, '93':18, '94':10 };
-        if (e === 'Sala')    return { '104':80, '103':66, '102':76, '74':70, '71':66, '73':72, '75':80, '95':16, '76':70, '77':76, '78':66, '91':80, '93':16, '94':18 };
-        return { '104':74, '103':74, '102':66, '74':64, '71':64, '73':70, '75':74, '95':22, '76':72, '77':76, '78':64, '91':34, '93':10, '94':0 };
-    }
-    // Trumpet/trombone: bright metallic attack, directional projection
-    if (name.includes('TRUMPET') || name.includes('TROMBONE') || name.includes('FLUGELHORN') || name.includes('CORNET')) {
-        if (e === 'Estudio') return { '104':68, '103':76, '102':78, '74':76, '71':68, '73':58, '75':64, '95':22, '76':70, '77':68, '78':66, '91':26, '93':0,  '94':0 };
-        if (e === 'Vivo')    return { '104':72, '103':82, '102':84, '74':82, '71':72, '73':54, '75':62, '95':40, '76':72, '77':70, '78':64, '91':40, '93':10, '94':10 };
-        if (e === 'Sala')    return { '104':72, '103':68, '102':76, '74':70, '71':66, '73':60, '75':72, '95':18, '76':68, '77':66, '78':68, '91':74, '93':0,  '94':16 };
-        return { '104':70, '103':78, '102':66, '74':66, '71':66, '73':60, '75':66, '95':28, '76':70, '77':68, '78':66, '91':28, '93':0,  '94':0 };
-    }
-    // Saxophone specific models by register
-    if (name.includes('ALTO SAX') || name.includes('SOPRANO SAX')) {
-        if (e === 'Estudio') return { '104':68, '103':80, '102':80, '74':80, '71':70, '73':56, '75':64, '95':30, '76':74, '77':76, '78':64, '91':28, '93':14, '94':0 };
-        if (e === 'Vivo')    return { '104':72, '103':86, '102':86, '74':86, '71':74, '73':52, '75':62, '95':50, '76':76, '77':78, '78':62, '91':42, '93':22, '94':12 };
-        if (e === 'Sala')    return { '104':70, '103':70, '102':74, '74':70, '71':66, '73':60, '75':74, '95':22, '76':70, '77':72, '78':68, '91':74, '93':18, '94':18 };
-        return { '104':70, '103':80, '102':66, '74':66, '71':68, '73':58, '75':68, '95':36, '76':74, '77':76, '78':64, '91':30, '93':12, '94':0 };
-    }
-    if (name.includes('TENOR SAX') || name.includes('BARITONE SAX')) {
-        if (e === 'Estudio') return { '104':76, '103':76, '102':72, '74':72, '71':68, '73':58, '75':66, '95':28, '76':72, '77':72, '78':66, '91':26, '93':10, '94':0 };
-        if (e === 'Vivo')    return { '104':80, '103':82, '102':78, '74':80, '71':72, '73':54, '75':64, '95':48, '76':74, '77':74, '78':64, '91':40, '93':18, '94':12 };
-        if (e === 'Sala')    return { '104':78, '103':68, '102':70, '74':66, '71':66, '73':62, '75':76, '95':20, '76':70, '77':70, '78':68, '91':72, '93':16, '94':18 };
-        return { '104':76, '103':76, '102':62, '74':62, '71':66, '73':60, '75':70, '95':34, '76':72, '77':72, '78':64, '91':28, '93':10, '94':0 };
-    }
-    // ── HARPSICHORD: percussive pluck, very bright, no natural sustain
-    if (name.includes('HARPSICHORD') || name.includes('COUPLED HARPSI')) {
-        if (e === 'Estudio') return { '104':58, '103':76, '102':86, '74':82, '71':70, '73':52, '75':56, '95':12, '76':64, '77':64, '78':64, '91':18, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':62, '103':80, '102':90, '74':86, '71':72, '73':50, '75':54, '95':22, '76':64, '77':64, '78':64, '91':28, '93':0, '94':0 };
-        if (e === 'Sala')    return { '104':60, '103':70, '102':84, '74':76, '71':68, '73':54, '75':64, '95':14, '76':64, '77':64, '78':64, '91':60, '93':0, '94':16 };
-        return { '104':60, '103':74, '102':76, '74':72, '71':66, '73':54, '75':60, '95':18, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-    }
-    // ── STAGE E.PIANO / AMP E.PIANO / 60'S: electromechanical warmth with bark
-    if (name.includes('STAGE E.PIANO') || name.includes('AMP E.') || name.includes('AMP 60') || name.includes('TREM 60') || name.includes("60'S E.PIANO")) {
-        if (e === 'Estudio') return { '104':68, '103':72, '102':70, '74':68, '71':66, '73':60, '75':68, '95':38, '76':70, '77':68, '78':66, '91':22, '93':20, '94':0 };
-        if (e === 'Vivo')    return { '104':72, '103':78, '102':76, '74':74, '71':68, '73':58, '75':66, '95':56, '76':72, '77':72, '78':64, '91':36, '93':30, '94':14 };
-        if (e === 'Sala')    return { '104':72, '103':66, '102':72, '74':66, '71':64, '73':62, '75':74, '95':28, '76':68, '77':66, '78':68, '91':58, '93':26, '94':22 };
-        return { '104':70, '103':74, '102':62, '74':62, '71':64, '73':60, '75':70, '95':40, '76':70, '77':68, '78':66, '91':26, '93':18, '94':0 };
-    }
-    // ── PHASER / CRUNCH / WAH / DIZZY E.PIANO: modulated or driven EP
-    if (name.includes('PHASER E.') || name.includes('CRUNCH E.') || name.includes('WAH E.') || name.includes('DIZZY E.')) {
-        if (e === 'Estudio') return { '104':70, '103':76, '102':76, '74':74, '71':70, '73':58, '75':66, '95':52, '76':76, '77':72, '78':64, '91':24, '93':34, '94':18 };
-        if (e === 'Vivo')    return { '104':74, '103':82, '102':82, '74':80, '71':74, '73':56, '75':64, '95':70, '76':78, '77':74, '78':64, '91':38, '93':44, '94':26 };
-        if (e === 'Sala')    return { '104':72, '103':68, '102':74, '74':68, '71':68, '73':60, '75':72, '95':36, '76':72, '77':68, '78':66, '91':62, '93':38, '94':30 };
-        return { '104':70, '103':76, '102':66, '74':66, '71':68, '73':58, '75':68, '95':52, '76':74, '77':70, '78':64, '91':28, '93':28, '94':12 };
-    }
-    // ── DIGITAL / WIDE / MELLOW / PAN E.PIANO: clean modern electric piano
-    if (name.includes('DIGITAL E.PIANO') || name.includes('WIDE E.PIANO') || name.includes('MELLOW E.PIANO') || name.includes('PAN E.PIANO')) {
-        if (e === 'Estudio') return { '104':70, '103':66, '102':72, '74':70, '71':64, '73':62, '75':72, '95':24, '76':66, '77':64, '78':66, '91':24, '93':24, '94':0 };
-        if (e === 'Vivo')    return { '104':74, '103':72, '102':78, '74':76, '71':66, '73':60, '75':70, '95':40, '76':68, '77':66, '78':64, '91':38, '93':32, '94':12 };
-        if (e === 'Sala')    return { '104':74, '103':62, '102':74, '74':68, '71':64, '73':64, '75':78, '95':20, '76':64, '77':64, '78':68, '91':60, '93':28, '94':20 };
-        return { '104':72, '103':68, '102':64, '74':62, '71':64, '73':62, '75':74, '95':28, '76':66, '77':64, '78':66, '91':26, '93':20, '94':0 };
-    }
-    // ── E.PIANO PAD / ADV E.PIANO PAD: ambient layered electric piano
-    if (name.includes('E.PIANO PAD') || name.includes('ADV E.PIANO PAD')) {
-        if (e === 'Estudio') return { '104':70, '103':64, '102':74, '74':66, '71':64, '73':70, '75':84, '95':20, '76':68, '77':66, '78':70, '91':42, '93':32, '94':14 };
-        if (e === 'Vivo')    return { '104':74, '103':68, '102':80, '74':70, '71':66, '73':68, '75':82, '95':30, '76':70, '77':68, '78':68, '91':54, '93':40, '94':22 };
-        if (e === 'Sala')    return { '104':76, '103':60, '102':76, '74':64, '71':64, '73':72, '75':90, '95':18, '76':66, '77':66, '78':72, '91':80, '93':36, '94':28 };
-        return { '104':72, '103':64, '102':66, '74':60, '71':64, '73':70, '75':86, '95':24, '76':68, '77':66, '78':70, '91':44, '93':28, '94':10 };
-    }
-    // ── CLAVI / WAH CLAV: percussive, clicky funk character
-    if (name.includes('CLAVI') || name.includes('CLAV')) {
-        if (e === 'Estudio') return { '104':64, '103':82, '102':80, '74':82, '71':76, '73':52, '75':58, '95':50, '76':66, '77':68, '78':64, '91':14, '93':22, '94':0 };
-        if (e === 'Vivo')    return { '104':68, '103':88, '102':86, '74':88, '71':80, '73':50, '75':56, '95':72, '76':68, '77':70, '78':64, '91':26, '93':32, '94':16 };
-        if (e === 'Sala')    return { '104':64, '103':76, '102':76, '74':76, '71':72, '73':54, '75':66, '95':34, '76':64, '77':64, '78':64, '91':52, '93':24, '94':20 };
-        return { '104':64, '103':80, '102':70, '74':72, '71':72, '73':54, '75':62, '95':54, '76':66, '77':68, '78':64, '91':20, '93':20, '94':0 };
-    }
-    // ── VIBRAPHONE: metallic bell sustain, motor vibrato
-    if (name.includes('VIBRAPHONE')) {
-        if (e === 'Estudio') return { '104':66, '103':70, '102':84, '74':80, '71':66, '73':60, '75':78, '95':20, '76':76, '77':72, '78':62, '91':28, '93':16, '94':0 };
-        if (e === 'Vivo')    return { '104':70, '103':76, '102':90, '74':86, '71':68, '73':58, '75':76, '95':32, '76':78, '77':76, '78':60, '91':42, '93':22, '94':12 };
-        if (e === 'Sala')    return { '104':70, '103':64, '102':86, '74':78, '71':64, '73':62, '75':84, '95':18, '76':74, '77':72, '78':64, '91':74, '93':18, '94':18 };
-        return { '104':68, '103':70, '102':78, '74':72, '71':64, '73':60, '75':80, '95':24, '76':76, '77':72, '78':62, '91':32, '93':14, '94':0 };
-    }
-    // ── MARIMBA: warm, wooden, natural resonance decay
-    if (name.includes('MARIMBA')) {
-        if (e === 'Estudio') return { '104':72, '103':72, '102':74, '74':72, '71':64, '73':58, '75':62, '95':16, '76':64, '77':64, '78':64, '91':20, '93':10, '94':0 };
-        if (e === 'Vivo')    return { '104':76, '103':76, '102':80, '74':78, '71':66, '73':56, '75':60, '95':28, '76':64, '77':64, '78':64, '91':32, '93':16, '94':10 };
-        if (e === 'Sala')    return { '104':78, '103':66, '102':76, '74':68, '71':64, '73':60, '75':68, '95':14, '76':64, '77':64, '78':64, '91':60, '93':12, '94':16 };
-        return { '104':74, '103':72, '102':68, '74':62, '71':64, '73':58, '75':64, '95':20, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-    }
-    // ── XYLOPHONE: very bright, staccato percussive
-    if (name.includes('XYLOPHONE')) {
-        if (e === 'Estudio') return { '104':60, '103':70, '102':92, '74':88, '71':68, '73':50, '75':52, '95':12, '76':64, '77':64, '78':64, '91':18, '93':8, '94':0 };
-        if (e === 'Vivo')    return { '104':64, '103':74, '102':96, '74':92, '71':70, '73':48, '75':50, '95':22, '76':64, '77':64, '78':64, '91':28, '93':14, '94':10 };
-        if (e === 'Sala')    return { '104':62, '103':62, '102':90, '74':84, '71':66, '73':52, '75':58, '95':12, '76':64, '77':64, '78':64, '91':56, '93':8, '94':14 };
-        return { '104':62, '103':68, '102':84, '74':78, '71':64, '73':52, '75':54, '95':16, '76':64, '77':64, '78':64, '91':20, '93':8, '94':0 };
-    }
-    // ── GLOCKENSPIEL / MUSIC BOX / ORGEL / CELESTA: tinkling bell tone
-    if (name.includes('GLOCKEN') || name.includes('MUSIC BOX') || name.includes('ORGEL') || name.includes('CELESTA')) {
-        if (e === 'Estudio') return { '104':54, '103':68, '102':96, '74':90, '71':64, '73':52, '75':70, '95':12, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 };
-        if (e === 'Vivo')    return { '104':58, '103':72, '102':100,'74':94, '71':66, '73':50, '75':68, '95':20, '76':64, '77':64, '78':64, '91':40, '93':18, '94':12 };
-        if (e === 'Sala')    return { '104':56, '103':60, '102':96, '74':86, '71':62, '73':54, '75':76, '95':14, '76':64, '77':64, '78':64, '91':68, '93':10, '94':18 };
-        return { '104':56, '103':66, '102':88, '74':80, '71':62, '73':54, '75':72, '95':16, '76':64, '77':64, '78':64, '91':28, '93':10, '94':0 };
-    }
-    // ── TUBULAR BELL / CHURCH BELL: deep resonant metallic bell
-    if (name.includes('TUBULAR') || name.includes('CHURCH BELL')) {
-        if (e === 'Estudio') return { '104':68, '103':66, '102':88, '74':82, '71':64, '73':56, '75':86, '95':14, '76':64, '77':64, '78':64, '91':40, '93':0, '94':20 };
-        if (e === 'Vivo')    return { '104':72, '103':70, '102':92, '74':86, '71':66, '73':54, '75':84, '95':24, '76':64, '77':64, '78':64, '91':54, '93':0, '94':28 };
-        if (e === 'Sala')    return { '104':70, '103':60, '102':88, '74':78, '71':62, '73':58, '75':90, '95':16, '76':64, '77':64, '78':64, '91':80, '93':0, '94':32 };
-        return { '104':70, '103':64, '102':82, '74':74, '71':62, '73':58, '75':88, '95':18, '76':64, '77':64, '78':64, '91':40, '93':0, '94':16 };
-    }
-    // ── ROCK ORGAN / HARD ROCK ORGAN / JS ORGAN / AMP ORGAN: Hammond bite, full mids
-    if (name.includes('ROCK ORGAN') || name.includes('HARD ROCK ORGAN') || name.includes('JS ORGAN') || name.includes('AMP ORGAN')) {
-        if (e === 'Estudio') return { '104':72, '103':78, '102':76, '74':78, '71':66, '73':56, '75':64, '95':54, '76':80, '77':74, '78':64, '91':22, '93':28, '94':0 };
-        if (e === 'Vivo')    return { '104':78, '103':84, '102':82, '74':84, '71':70, '73':54, '75':62, '95':76, '76':82, '77':78, '78':64, '91':36, '93':36, '94':14 };
-        if (e === 'Sala')    return { '104':74, '103':72, '102':74, '74':72, '71':64, '73':58, '75':70, '95':40, '76':76, '77':70, '78':66, '91':60, '93':30, '94':22 };
-        return { '104':72, '103':80, '102':68, '74':70, '71':64, '73':56, '75':64, '95':60, '76':80, '77':74, '78':64, '91':28, '93':26, '94':0 };
-    }
-    // ── JAZZ ORGAN / PERC.ORGAN / GOSPEL ORGAN / 70'S ORGAN: smooth Hammond
-    if (name.includes('JAZZ ORGAN') || name.includes('PERC.ORGAN') || name.includes("70'S ORGAN") || name.includes('GOSPEL ORGAN')) {
-        if (e === 'Estudio') return { '104':70, '103':74, '102':72, '74':72, '71':64, '73':58, '75':66, '95':46, '76':74, '77':70, '78':66, '91':26, '93':22, '94':0 };
-        if (e === 'Vivo')    return { '104':76, '103':80, '102':78, '74':78, '71':66, '73':56, '75':64, '95':64, '76':76, '77':72, '78':64, '91':38, '93':30, '94':12 };
-        if (e === 'Sala')    return { '104':72, '103':68, '102':70, '74':68, '71':64, '73':60, '75':72, '95':32, '76':72, '77':68, '78':66, '91':62, '93':26, '94':20 };
-        return { '104':70, '103':76, '102':64, '74':64, '71':64, '73':58, '75':66, '95':50, '76':74, '77':70, '78':66, '91':28, '93':20, '94':0 };
-    }
-    // ── ROTARY / TREMOLO / F-ORGAN / V-ORGAN / DP ORGAN: tonewheel with rotation
-    if (name.includes('ROTARY') || name.includes('TREMOLO ORGAN') || name.includes('F-ORGAN') || name.includes('V-ORGAN') || name.includes('DP ORGAN')) {
-        if (e === 'Estudio') return { '104':68, '103':72, '102':70, '74':70, '71':64, '73':58, '75':64, '95':56, '76':78, '77':76, '78':64, '91':24, '93':24, '94':15 };
-        if (e === 'Vivo')    return { '104':74, '103':78, '102':76, '74':76, '71':66, '73':56, '75':62, '95':74, '76':80, '77':78, '78':64, '91':36, '93':32, '94':22 };
-        if (e === 'Sala')    return { '104':70, '103':66, '102':68, '74':66, '71':62, '73':60, '75':70, '95':42, '76':74, '77':72, '78':66, '91':58, '93':28, '94':26 };
-        return { '104':68, '103':74, '102':64, '74':62, '71':62, '73':58, '75':64, '95':60, '76':78, '77':76, '78':64, '91':26, '93':22, '94':12 };
-    }
-    // ── ORGAN PAD / ORGAN FLUTE / PUFF ORGAN / REED ORGAN / THEATER ORGAN: pipe-like sustained
-    if (name.includes('ORGAN PAD') || name.includes('ORGAN FLUTE') || name.includes('PUFF ORGAN') || name.includes('REED ORGAN') || name.includes('THEATER ORGAN')) {
-        if (e === 'Estudio') return { '104':76, '103':68, '102':72, '74':70, '71':64, '73':64, '75':70, '95':14, '76':64, '77':64, '78':64, '91':40, '93':0, '94':14 };
-        if (e === 'Vivo')    return { '104':80, '103':72, '102':76, '74':74, '71':66, '73':62, '75':68, '95':22, '76':64, '77':64, '78':64, '91':54, '93':0, '94':20 };
-        if (e === 'Sala')    return { '104':82, '103':62, '102':74, '74':68, '71':64, '73':66, '75':78, '95':16, '76':64, '77':64, '78':64, '91':82, '93':0, '94':26 };
-        return { '104':76, '103':70, '102':66, '74':62, '71':64, '73':64, '75':72, '95':18, '76':64, '77':64, '78':64, '91':42, '93':0, '94':10 };
-    }
-    // ── BANDONEON / HARMONICA: expressive bellows/mouth reed
-    if (name.includes('BANDONEON') || name.includes('HARMONICA')) {
-        if (e === 'Estudio') return { '104':62, '103':76, '102':72, '74':72, '71':68, '73':58, '75':62, '95':28, '76':72, '77':70, '78':64, '91':22, '93':14, '94':0 };
-        if (e === 'Vivo')    return { '104':66, '103':80, '102':76, '74':78, '71':70, '73':56, '75':60, '95':44, '76':74, '77':72, '78':62, '91':34, '93':22, '94':10 };
-        if (e === 'Sala')    return { '104':64, '103':70, '102':70, '74':68, '71':66, '73':60, '75':70, '95':22, '76':70, '77':68, '78':66, '91':62, '93':18, '94':18 };
-        return { '104':64, '103':78, '102':66, '74':64, '71':66, '73':58, '75':64, '95':32, '76':72, '77':70, '78':64, '91':24, '93':12, '94':0 };
-    }
-    // ── STEEL GUITAR variants: bright chimey, slightly twangy
-    if (name.includes('STEEL') && (name.includes('GUITAR') || name.includes('STR.GUITAR'))) {
-        if (e === 'Estudio') return { '104':72, '103':70, '102':82, '74':80, '71':66, '73':58, '75':64, '95':18, '76':64, '77':64, '78':64, '91':22, '93':18, '94':0 };
-        if (e === 'Vivo')    return { '104':76, '103':76, '102':88, '74':84, '71':68, '73':56, '75':62, '95':32, '76':64, '77':64, '78':64, '91':36, '93':26, '94':14 };
-        if (e === 'Sala')    return { '104':78, '103':66, '102':82, '74':74, '71':64, '73':60, '75':72, '95':16, '76':64, '77':64, '78':64, '91':66, '93':20, '94':20 };
-        return { '104':74, '103':72, '102':72, '74':66, '71':64, '73':58, '75':66, '95':22, '76':64, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // ── MANDOLIN / UKULELE: bright pluck, short sustain
-    if (name.includes('MANDOLIN') || name.includes('UKULELE')) {
-        if (e === 'Estudio') return { '104':66, '103':70, '102':86, '74':82, '71':66, '73':54, '75':56, '95':14, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-        if (e === 'Vivo')    return { '104':70, '103':74, '102':90, '74':86, '71':68, '73':52, '75':54, '95':26, '76':64, '77':64, '78':64, '91':28, '93':20, '94':10 };
-        if (e === 'Sala')    return { '104':70, '103':64, '102':84, '74':76, '71':64, '73':56, '75':62, '95':14, '76':64, '77':64, '78':64, '91':56, '93':16, '94':16 };
-        return { '104':68, '103':70, '102':78, '74':70, '71':64, '73':54, '75':58, '95':18, '76':64, '77':64, '78':64, '91':20, '93':12, '94':0 };
-    }
-    // ── JAZZ GUITAR: dark, warm, hollow-body tone
-    if (name.includes('JAZZ GUITAR')) {
-        if (e === 'Estudio') return { '104':76, '103':72, '102':62, '74':60, '71':64, '73':60, '75':68, '95':30, '76':64, '77':64, '78':64, '91':24, '93':14, '94':0 };
-        if (e === 'Vivo')    return { '104':80, '103':76, '102':68, '74':66, '71':66, '73':58, '75':66, '95':46, '76':64, '77':64, '78':64, '91':36, '93':22, '94':10 };
-        if (e === 'Sala')    return { '104':80, '103':64, '102':60, '74':56, '71':62, '73':62, '75':76, '95':22, '76':64, '77':64, '78':64, '91':64, '93':16, '94':18 };
-        return { '104':78, '103':74, '102':56, '74':54, '71':62, '73':60, '75':70, '95':34, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 };
-    }
-    // ── CLEAN GUITAR / CHORUS CLEAN: bright, glassy, bell-like
-    if (name.includes('CLEAN') && name.includes('GUITAR')) {
-        if (e === 'Estudio') return { '104':68, '103':72, '102':82, '74':80, '71':66, '73':58, '75':64, '95':36, '76':66, '77':64, '78':64, '91':22, '93':24, '94':10 };
-        if (e === 'Vivo')    return { '104':72, '103':78, '102':88, '74':86, '71':70, '73':56, '75':62, '95':54, '76':68, '77':66, '78':64, '91':36, '93':32, '94':18 };
-        if (e === 'Sala')    return { '104':70, '103':66, '102':82, '74':74, '71':64, '73':60, '75':72, '95':26, '76':64, '77':64, '78':64, '91':62, '93':26, '94':24 };
-        return { '104':70, '103':72, '102':70, '74':64, '71':64, '73':60, '75':68, '95':38, '76':64, '77':64, '78':64, '91':26, '93':20, '94':10 };
-    }
-    // ── CRUNCH / OD GUITAR: pushed amp, mid-heavy
-    if (name.includes('CRUNCH') || (name.includes('OD ') && name.includes('GUITAR')) || name.includes('OD OCT')) {
-        if (e === 'Estudio') return { '104':70, '103':80, '102':76, '74':76, '71':70, '73':56, '75':62, '95':52, '76':68, '77':64, '78':64, '91':22, '93':18, '94':14 };
-        if (e === 'Vivo')    return { '104':74, '103':86, '102':82, '74':82, '71':74, '73':54, '75':60, '95':72, '76':70, '77':66, '78':64, '91':36, '93':26, '94':22 };
-        if (e === 'Sala')    return { '104':72, '103':72, '102':72, '74':68, '71':66, '73':58, '75':68, '95':38, '76':66, '77':64, '78':66, '91':58, '93':20, '94':28 };
-        return { '104':70, '103':80, '102':66, '74':66, '71':68, '73':58, '75':64, '95':54, '76':68, '77':64, '78':64, '91':26, '93':16, '94':12 };
-    }
-    // ── DISTORTION / METAL / FEEDBACK / FRONT DRIVE GUITAR: high gain, compressed
-    if (name.includes('DISTORTION') || (name.includes('METAL') && name.includes('GUITAR')) || name.includes('FEEDBACK') || name.includes('FRONT DRIVE')) {
-        if (e === 'Estudio') return { '104':72, '103':82, '102':78, '74':74, '71':72, '73':54, '75':60, '95':58, '76':66, '77':64, '78':64, '91':20, '93':14, '94':16 };
-        if (e === 'Vivo')    return { '104':76, '103':88, '102':84, '74':80, '71':76, '73':52, '75':58, '95':78, '76':68, '77':66, '78':64, '91':32, '93':22, '94':24 };
-        if (e === 'Sala')    return { '104':74, '103':74, '102':74, '74':66, '71':68, '73':56, '75':66, '95':44, '76':64, '77':64, '78':64, '91':54, '93':18, '94':30 };
-        return { '104':72, '103':82, '102':68, '74':64, '71':70, '73':56, '75':62, '95':58, '76':66, '77':64, '78':64, '91':24, '93':12, '94':14 };
-    }
-    // ── MUTE GUITAR: percussive palm-muted attack
-    if (name.includes('MUTE GUITAR') || name.includes('AMBIENT MUTE')) {
-        if (e === 'Estudio') return { '104':68, '103':76, '102':72, '74':72, '71':66, '73':52, '75':52, '95':32, '76':64, '77':64, '78':64, '91':16, '93':16, '94':0 };
-        if (e === 'Vivo')    return { '104':72, '103':80, '102':78, '74':78, '71':68, '73':50, '75':50, '95':48, '76':64, '77':64, '78':64, '91':26, '93':24, '94':12 };
-        if (e === 'Sala')    return { '104':70, '103':68, '102':70, '74':66, '71':62, '73':54, '75':58, '95':24, '76':64, '77':64, '78':64, '91':50, '93':18, '94':18 };
-        return { '104':70, '103':76, '102':62, '74':60, '71':64, '73':54, '75':54, '95':36, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-    }
-    // ── ACOUSTIC BASS: upright double bass, round woody thump
-    if (name.includes('ACOUSTIC BASS') || name.includes('RIDE BASS')) {
-        if (e === 'Estudio') return { '104':92, '103':70, '102':54, '74':60, '71':64, '73':60, '75':68, '95':20, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':96, '103':74, '102':60, '74':66, '71':66, '73':58, '75':66, '95':34, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Sala')    return { '104':94, '103':62, '102':52, '74':56, '71':64, '73':62, '75':74, '95':16, '76':64, '77':64, '78':64, '91':38, '93':0, '94':0 };
-        return { '104':94, '103':72, '102':46, '74':52, '71':64, '73':60, '75':70, '95':26, '76':64, '77':64, '78':64, '91':18, '93':0, '94':0 };
-    }
-    // ── SLAP BASS: bright percussive pop-and-slap
-    if (name.includes('SLAP BASS') || name.includes('FINGER SLAP') || name.includes('WAH SLAP')) {
-        if (e === 'Estudio') return { '104':82, '103':76, '102':78, '74':80, '71':68, '73':52, '75':60, '95':38, '76':64, '77':64, '78':64, '91':12, '93':18, '94':0 };
-        if (e === 'Vivo')    return { '104':86, '103':82, '102':84, '74':86, '71':72, '73':50, '75':58, '95':56, '76':64, '77':64, '78':64, '91':20, '93':26, '94':12 };
-        if (e === 'Sala')    return { '104':84, '103':68, '102':76, '74':74, '71':66, '73':54, '75':66, '95':28, '76':64, '77':64, '78':64, '91':34, '93':20, '94':16 };
-        return { '104':84, '103':76, '102':68, '74':70, '71':68, '73':54, '75':62, '95':42, '76':64, '77':64, '78':64, '91':16, '93':16, '94':0 };
-    }
-    // ── FRETLESS BASS: smooth, singing tone with portamento feel
-    if (name.includes('FRETLESS')) {
-        if (e === 'Estudio') return { '104':86, '103':74, '102':62, '74':68, '71':64, '73':62, '75':72, '95':24, '76':68, '77':66, '78':66, '91':16, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':90, '103':78, '102':68, '74':74, '71':66, '73':60, '75':70, '95':38, '76':70, '77':68, '78':64, '91':24, '93':10, '94':0 };
-        if (e === 'Sala')    return { '104':88, '103':66, '102':60, '74':64, '71':64, '73':64, '75':78, '95':20, '76':66, '77':64, '78':68, '91':40, '93':0, '94':0 };
-        return { '104':88, '103':74, '102':54, '74':60, '71':64, '73':62, '75':74, '95':30, '76':68, '77':66, '78':66, '91':18, '93':0, '94':0 };
-    }
-    // ── PICKED BASS / VERSATILE BASS: mid-bright articulation
-    if (name.includes('PICKED BASS') || name.includes('MUTE PICKED') || (name.includes('VERSATILE') && name.includes('BASS'))) {
-        if (e === 'Estudio') return { '104':82, '103':74, '102':72, '74':72, '71':66, '73':56, '75':62, '95':28, '76':64, '77':64, '78':64, '91':10, '93':14, '94':0 };
-        if (e === 'Vivo')    return { '104':86, '103':80, '102':78, '74':78, '71':68, '73':54, '75':60, '95':44, '76':64, '77':64, '78':64, '91':18, '93':22, '94':10 };
-        if (e === 'Sala')    return { '104':84, '103':66, '102':70, '74':66, '71':64, '73':58, '75':68, '95':20, '76':64, '77':64, '78':64, '91':30, '93':16, '94':16 };
-        return { '104':82, '103':72, '102':62, '74':62, '71':64, '73':56, '75':64, '95':30, '76':64, '77':64, '78':64, '91':12, '93':12, '94':0 };
-    }
-    // ── HARP: clear pluck, natural resonance, blooming sustain
-    if (name.includes('HARP')) {
-        if (e === 'Estudio') return { '104':66, '103':68, '102':84, '74':80, '71':64, '73':58, '75':74, '95':16, '76':64, '77':64, '78':64, '91':30, '93':12, '94':0 };
-        if (e === 'Vivo')    return { '104':70, '103':72, '102':90, '74':84, '71':66, '73':56, '75':72, '95':26, '76':64, '77':64, '78':64, '91':44, '93':18, '94':12 };
-        if (e === 'Sala')    return { '104':68, '103':62, '102':86, '74':76, '71':62, '73':60, '75':80, '95':14, '76':64, '77':64, '78':64, '91':72, '93':14, '94':18 };
-        return { '104':68, '103':68, '102':76, '74':70, '71':62, '73':58, '75':76, '95':20, '76':64, '77':64, '78':64, '91':34, '93':10, '94':0 };
-    }
-    // ── PIZZICATO STRINGS: short, plucked string section
-    if (name.includes('PIZZICATO')) {
-        if (e === 'Estudio') return { '104':70, '103':68, '102':72, '74':68, '71':64, '73':56, '75':50, '95':14, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-        if (e === 'Vivo')    return { '104':74, '103':72, '102':76, '74':72, '71':66, '73':54, '75':48, '95':24, '76':64, '77':64, '78':64, '91':32, '93':16, '94':10 };
-        if (e === 'Sala')    return { '104':72, '103':62, '102':70, '74':64, '71':62, '73':58, '75':56, '95':14, '76':64, '77':64, '78':64, '91':58, '93':10, '94':16 };
-        return { '104':72, '103':68, '102':64, '74':58, '71':62, '73':56, '75':52, '95':18, '76':64, '77':64, '78':64, '91':24, '93':8, '94':0 };
-    }
-    // ── FRENCH HORN: warm, round, mellower than trumpet
-    if (name.includes('FRENCH HORN')) {
-        if (e === 'Estudio') return { '104':78, '103':70, '102':68, '74':66, '71':64, '73':64, '75':68, '95':18, '76':68, '77':66, '78':68, '91':30, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':82, '103':76, '102':72, '74':70, '71':66, '73':62, '75':66, '95':30, '76':70, '77':68, '78':66, '91':44, '93':0, '94':10 };
-        if (e === 'Sala')    return { '104':84, '103':64, '102':66, '74':62, '71':62, '73':66, '75':76, '95':16, '76':66, '77':64, '78':70, '91':76, '93':0, '94':16 };
-        return { '104':80, '103':72, '102':60, '74':58, '71':62, '73':64, '75':70, '95':22, '76':68, '77':66, '78':68, '91':32, '93':0, '94':0 };
-    }
-    // ── TUBA: deep, dark, very low brass
-    if (name.includes('TUBA')) {
-        if (e === 'Estudio') return { '104':96, '103':68, '102':52, '74':52, '71':64, '73':66, '75':68, '95':16, '76':64, '77':64, '78':64, '91':24, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':100,'103':72, '102':58, '74':58, '71':66, '73':64, '75':66, '95':26, '76':64, '77':64, '78':64, '91':36, '93':0, '94':0 };
-        if (e === 'Sala')    return { '104':98, '103':62, '102':50, '74':48, '71':62, '73':68, '75':74, '95':14, '76':64, '77':64, '78':64, '91':64, '93':0, '94':10 };
-        return { '104':96, '103':70, '102':46, '74':44, '71':62, '73':66, '75':70, '95':18, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    // ── MUTE TRUMPET: nasal muted brass buzz
-    if (name.includes('MUTE TRUMPET')) {
-        if (e === 'Estudio') return { '104':64, '103':80, '102':76, '74':76, '71':68, '73':58, '75':64, '95':24, '76':70, '77':68, '78':66, '91':22, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':68, '103':86, '102':82, '74':82, '71':72, '73':54, '75':62, '95':40, '76':72, '77':70, '78':64, '91':36, '93':10, '94':10 };
-        if (e === 'Sala')    return { '104':66, '103':70, '102':74, '74':68, '71':66, '73':60, '75':72, '95':18, '76':68, '77':66, '78':68, '91':66, '93':0, '94':16 };
-        return { '104':64, '103':78, '102':64, '74':62, '71':66, '73':60, '75':66, '95':28, '76':70, '77':68, '78':66, '91':24, '93':0, '94':0 };
-    }
-    // ── PAN FLUTE: breathy, smooth, woody
-    if (name.includes('PAN FLUTE')) {
-        if (e === 'Estudio') return { '104':58, '103':62, '102':86, '74':82, '71':58, '73':70, '75':76, '95':14, '76':72, '77':68, '78':68, '91':38, '93':10, '94':0 };
-        if (e === 'Vivo')    return { '104':62, '103':66, '102':92, '74':86, '71':60, '73':66, '75':74, '95':22, '76':74, '77':70, '78':66, '91':52, '93':14, '94':16 };
-        if (e === 'Sala')    return { '104':60, '103':56, '102':88, '74':78, '71':58, '73':72, '75':82, '95':14, '76':70, '77':66, '78':70, '91':82, '93':10, '94':24 };
-        return { '104':60, '103':62, '102':80, '74':72, '71':58, '73':70, '75':78, '95':18, '76':72, '77':68, '78':68, '91':40, '93':8, '94':0 };
-    }
-    // ── PICCOLO: very bright, high piercing flute
-    if (name.includes('PICCOLO')) {
-        if (e === 'Estudio') return { '104':54, '103':60, '102':96, '74':92, '71':60, '73':64, '75':68, '95':10, '76':70, '77':68, '78':70, '91':32, '93':8, '94':0 };
-        if (e === 'Vivo')    return { '104':58, '103':64, '102':100,'74':96, '71':62, '73':62, '75':66, '95':18, '76':72, '77':70, '78':68, '91':46, '93':12, '94':14 };
-        if (e === 'Sala')    return { '104':56, '103':54, '102':96, '74':88, '71':58, '73':66, '75':74, '95':12, '76':68, '77':66, '78':72, '91':76, '93':8, '94':22 };
-        return { '104':56, '103':60, '102':88, '74':82, '71':58, '73':66, '75':70, '95':14, '76':70, '77':68, '78':70, '91':34, '93':8, '94':0 };
-    }
-    // ── SHAKUHACHI: Japanese bamboo flute, very breathy, unstable vibrato
-    if (name.includes('SHAKUHACHI')) {
-        if (e === 'Estudio') return { '104':60, '103':64, '102':84, '74':78, '71':58, '73':72, '75':72, '95':16, '76':66, '77':72, '78':72, '91':36, '93':8, '94':0 };
-        if (e === 'Vivo')    return { '104':64, '103':68, '102':90, '74':82, '71':60, '73':70, '75':70, '95':26, '76':68, '77':74, '78':70, '91':50, '93':12, '94':18 };
-        if (e === 'Sala')    return { '104':62, '103':58, '102':86, '74':74, '71':56, '73':74, '75':78, '95':16, '76':64, '77':70, '78':74, '91':78, '93':8, '94':26 };
-        return { '104':62, '103':62, '102':78, '74':68, '71':56, '73':72, '75':74, '95':20, '76':66, '77':72, '78':72, '91':38, '93':8, '94':0 };
-    }
-    // ── RECORDER / WHISTLE / OCARINA / BOTTLE: ethnic/folk winds, earthy
-    if (name.includes('RECORDER') || name.includes('WHISTLE') || name.includes('OCARINA') || name.includes('BOTTLE')) {
-        if (e === 'Estudio') return { '104':60, '103':62, '102':86, '74':80, '71':58, '73':68, '75':70, '95':14, '76':68, '77':66, '78':68, '91':30, '93':8, '94':0 };
-        if (e === 'Vivo')    return { '104':64, '103':66, '102':92, '74':84, '71':60, '73':66, '75':68, '95':22, '76':70, '77':68, '78':66, '91':44, '93':12, '94':14 };
-        if (e === 'Sala')    return { '104':62, '103':56, '102':88, '74':76, '71':56, '73':70, '75':76, '95':14, '76':66, '77':64, '78':70, '91':72, '93':8, '94':22 };
-        return { '104':62, '103':62, '102':80, '74':72, '71':56, '73':68, '75':72, '95':18, '76':68, '77':66, '78':68, '91':32, '93':6, '94':0 };
-    }
-    // ── OBOE / ENGLISH HORN: double reed, nasal, singing
-    if (name.includes('OBOE') || name.includes('ENGLISH HORN')) {
-        if (e === 'Estudio') return { '104':58, '103':80, '102':72, '74':78, '71':70, '73':62, '75':66, '95':22, '76':70, '77':70, '78':66, '91':28, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':62, '103':84, '102':76, '74':84, '71':72, '73':58, '75':64, '95':36, '76':72, '77':72, '78':64, '91':42, '93':10, '94':10 };
-        if (e === 'Sala')    return { '104':60, '103':74, '102':70, '74':74, '71':68, '73':64, '75':76, '95':18, '76':68, '77':68, '78':68, '91':74, '93':0, '94':16 };
-        return { '104':60, '103':82, '102':66, '74':68, '71':68, '73':62, '75':68, '95':28, '76':70, '77':70, '78':66, '91':30, '93':0, '94':0 };
-    }
-    // ── CLARINET / VELO.CLARINET: single reed, woody-to-bright, wide range
-    if (name.includes('CLARINET')) {
-        if (e === 'Estudio') return { '104':62, '103':74, '102':74, '74':72, '71':66, '73':64, '75':68, '95':20, '76':68, '77':66, '78':68, '91':26, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':66, '103':78, '102':80, '74':78, '71':68, '73':60, '75':66, '95':32, '76':70, '77':68, '78':66, '91':40, '93':10, '94':10 };
-        if (e === 'Sala')    return { '104':64, '103':66, '102':74, '74':68, '71':64, '73':66, '75':76, '95':16, '76':66, '77':64, '78':70, '91':70, '93':0, '94':16 };
-        return { '104':64, '103':76, '102':68, '74':64, '71':64, '73':64, '75':70, '95':24, '76':68, '77':66, '78':68, '91':28, '93':0, '94':0 };
-    }
-    // ── BASSOON: dark, reedy, deep register
-    if (name.includes('BASSOON')) {
-        if (e === 'Estudio') return { '104':78, '103':72, '102':60, '74':60, '71':66, '73':66, '75':68, '95':20, '76':68, '77':66, '78':68, '91':26, '93':0, '94':0 };
-        if (e === 'Vivo')    return { '104':82, '103':76, '102':66, '74':66, '71':68, '73':64, '75':66, '95':32, '76':70, '77':68, '78':66, '91':40, '93':0, '94':10 };
-        if (e === 'Sala')    return { '104':80, '103':64, '102':58, '74':56, '71':64, '73':68, '75':76, '95':16, '76':66, '77':64, '78':70, '91':70, '93':0, '94':16 };
-        return { '104':80, '103':74, '102':54, '74':52, '71':64, '73':66, '75':70, '95':24, '76':68, '77':66, '78':68, '91':28, '93':0, '94':0 };
-    }
-    // ── SYNTH VOICE / CHURCH LEAD / DOUBLE VOICE: synthetic vocal ethereal
-    if (name.includes('SYNTH-VOICE') || name.includes('CHURCH LEAD') || name.includes('DOUBLE VOICE') || name.includes('VOCAL CHOP')) {
-        if (e === 'Estudio') return { '104':68, '103':66, '102':72, '74':66, '71':64, '73':76, '75':80, '95':16, '76':68, '77':70, '78':70, '91':48, '93':24, '94':14 };
-        if (e === 'Vivo')    return { '104':72, '103':70, '102':78, '74':70, '71':66, '73':74, '75':78, '95':26, '76':70, '77':72, '78':68, '91':60, '93':30, '94':22 };
-        if (e === 'Sala')    return { '104':74, '103':60, '102':74, '74':64, '71':62, '73':80, '75':86, '95':16, '76':66, '77':70, '78':72, '91':84, '93':26, '94':28 };
-        return { '104':70, '103':66, '102':66, '74':60, '71':62, '73':76, '75':82, '95':20, '76':68, '77':70, '78':70, '91':46, '93':20, '94':12 };
-    }
-
-    // 2. Exact Category Lookup
-    if (TONE_ENV_MATRIX[c] && TONE_ENV_MATRIX[c][e]) {
-        return { ...TONE_ENV_MATRIX[c][e] };
-    }
-
-    // 3. Normalized Category Lookup
-    for (const [key, envMap] of Object.entries(TONE_ENV_MATRIX)) {
-        if (c.includes(key) || key.includes(c)) {
-            if (envMap[e]) return { ...envMap[e] };
-        }
-    }
-
-    // 4. Acoustic Fallback (Never flat 64s!)
-    if (e === 'Estudio') return { '104':72, '103':68, '102':74, '74':72, '71':66, '73':62, '75':66, '95':22, '76':66, '77':64, '78':64, '91':22, '93':15, '94':0 };
-    if (e === 'Vivo')    return { '104':78, '103':76, '102':82, '74':80, '71':70, '73':60, '75':64, '95':42, '76':68, '77':66, '78':64, '91':36, '93':22, '94':12 };
-    if (e === 'Sala')    return { '104':80, '103':64, '102':74, '74':68, '71':64, '73':64, '75':76, '95':18, '76':66, '77':64, '78':66, '91':68, '93':18, '94':18 };
-    return { '104':76, '103':74, '102':62, '74':62, '71':64, '73':62, '75':68, '95':30, '76':66, '77':64, '78':64, '91':26, '93':12, '94':0 };
-}
-
-function applySmartProfile(part, category) {
-    if (category) activeCategories[part] = category;
-    const cat = activeCategories[part];
-
-    // 1. Reset tone/env parameters to generic defaults — skip live performance CCs
-    EQ_CONTROLS.forEach(ctrl => {
-        if (PERFORMANCE_CCS.has(ctrl.cc)) return;
-        eqState[part][ctrl.cc] = ctrl.def;
-    });
-
-    // 2. Resolve Tone + Environment Profile
-    const tone = currentTone[part];
-    const toneId = tone?.id;
-    const userOverride = toneId != null && toneEQ[toneId]?.[currentEnv];
-    
-    // Fallback to rich Tone + Environment Preset Engine
-    const profile = userOverride || getToneEnvPreset(tone, cat, currentEnv);
-
-    if (profile) {
-        for (const [cc, val] of Object.entries(profile)) {
-            if (PERFORMANCE_CCS.has(Number(cc))) continue;
-            eqState[part][cc] = val;
-        }
-    }
-
-    // 3. Part Mix Rules always applied — CC7 is per-part balance, not per-tone character.
-    if (part === 'U1') eqState[part][7] = 100;
-    if (part === 'U2') eqState[part][7] = 75;
-    if (part === 'L')  eqState[part][7] = 100;
-
-    // Ensure CC72 (Release) is never in eqState
-    delete eqState[part][72]; delete eqState[part]['72'];
-
-    // 4. Send to keyboard and update UI — skip performance CCs
-    if (activePart === part) beginEqProgrammatic();
-    EQ_CONTROLS.forEach(ctrl => {
-        if (PERFORMANCE_CCS.has(ctrl.cc)) return;
-        const val = eqState[part][ctrl.cc];
-        sendCC(part, ctrl.cc, val);
-        if (activePart === part) {
-            if (ctrl.type === 'switch') {
-                document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
-                    btn.innerText = val > 63 ? 'ON' : 'OFF';
-                    btn.classList.toggle('sus-on', val > 63);
-                });
-            } else {
-                document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(f => {
-                    f.value = val;
-                });
-                document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(valEl => {
-                    valEl.innerText = formatVal(ctrl.label, val);
-                });
-            }
-        }
-    });
-
-    // 5. Sustain: ONLY assert if sustain is ON in app.
-    // When OFF, do NOT send CC 72 — preserve tone's native envelope and keyboard state!
-    if (tuning[part].sus) {
-        sendCC(part, 72, SUS_RELEASE);
-    }
-}
-
-function buildEQ() {
-    ['U1','U2','L'].forEach(part => {
-        EQ_CONTROLS.forEach(ctrl => { 
-            let defVal = ctrl.def;
-            if (part === 'U2' && ctrl.cc === 7) defVal = 75;
-            eqState[part][ctrl.cc] = defVal; 
-        });
-    });
-
-    const container = document.getElementById('eqFaders');
-    if (!container) return;
-    container.innerHTML = '';
-
-    EQ_SECTIONS.forEach(section => {
-        const secEl = document.createElement('div');
-        secEl.className = 'fader-section';
-
-        const titleEl = document.createElement('div');
-        titleEl.className = 'fader-section-title';
-        titleEl.innerText = section.title;
-        secEl.appendChild(titleEl);
-
-        const switchesEl = document.createElement('div');
-        switchesEl.className = 'fader-section-switches';
-        switchesEl.style.display = 'flex';
-        switchesEl.style.justifyContent = 'center';
-        switchesEl.style.gap = '8px';
-        switchesEl.style.marginBottom = '12px';
-        switchesEl.style.flexWrap = 'wrap';
-        
-        const innerEl = document.createElement('div');
-        innerEl.className = 'fader-section-inner';
-
-        section.controls.forEach(ctrl => {
-            if (ctrl.type === 'switch') {
-                const sWrap = document.createElement('div');
-                sWrap.style.display = 'flex';
-                sWrap.style.flexDirection = 'column';
-                sWrap.style.alignItems = 'center';
-                sWrap.style.gap = '4px';
-                
-                const sLbl = document.createElement('span');
-                sLbl.style.fontSize = '8.5px';
-                sLbl.style.fontWeight = 'bold';
-                sLbl.style.color = 'var(--text-muted)';
-                sLbl.innerText = ctrl.label;
-                
-                const btn = document.createElement('button');
-                btn.className = 'sus-btn eq-switch';
-                btn.dataset.cc = ctrl.cc;
-                btn.title = ctrl.tip;
-                btn.innerText = ctrl.def > 63 ? 'ON' : 'OFF';
-                if (ctrl.def > 63) btn.classList.add('sus-on');
-                btn.style.padding = '4px 12px';
-                btn.style.fontSize = '10px';
-                
-                btn.addEventListener('click', () => {
-                    const currentVal = eqState[activePart][ctrl.cc] || 0;
-                    const newVal = currentVal > 63 ? 0 : 127;
-                    eqState[activePart][ctrl.cc] = newVal;
-                    btn.innerText = newVal > 63 ? 'ON' : 'OFF';
-                    btn.classList.toggle('sus-on', newVal > 63);
-                    sendCC(activePart, ctrl.cc, newVal);
-                    if (tuning[activePart].sus) {
-                        sendCC(activePart, 72, SUS_RELEASE);
-                        scheduleSustainResync(activePart, [40, 150]);
-                    }
-                    saveToneEQForPart(activePart);
-                    if (typeof saveAppState === 'function') saveAppState();
-                });
-                
-                sWrap.appendChild(sLbl);
-                sWrap.appendChild(btn);
-                switchesEl.appendChild(sWrap);
-            } else {
-                const group = document.createElement('div');
-                group.className = 'fader-group';
-    
-                const lbl = document.createElement('span');
-                lbl.className = 'fader-label';
-                lbl.innerText = ctrl.label;
-                lbl.title     = ctrl.tip;
-    
-                const valSpan = document.createElement('span');
-                valSpan.className = 'fader-value eq-val-' + ctrl.cc;
-                valSpan.dataset.cc = ctrl.cc;
-                valSpan.innerText = formatVal(ctrl.label, ctrl.def);
-    
-                const fader = document.createElement('input');
-                fader.type = 'range';
-                fader.className  = 'eq-fader';
-                fader.dataset.cc = ctrl.cc;
-                fader.title      = ctrl.tip;
-                fader.min = 0; fader.max = 127;
-                fader.value = ctrl.def;
-    
-                // Capture the active part when the drag starts so both 'input' and 'change'
-                // use the same part even if the user switches EQ target mid-drag.
-                let _faderPart = activePart;
-                fader.addEventListener('input', e => {
-                    const v = parseInt(e.target.value);
-                    _faderPart = activePart; // refresh on every real user move
-                    document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
-                        sp.innerText = formatVal(ctrl.label, v);
-                    });
-                    document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
-                        if (other !== fader) other.value = v;
-                    });
-                    // Programmatic writes must not echo back
-                    if (isEqProgrammatic()) return;
-                    const cur = eqState[_faderPart][ctrl.cc];
-                    if ((cur !== undefined ? cur : ctrl.def) === v) return;
-                    eqState[_faderPart][ctrl.cc] = v;
-                    sendCC(_faderPart, ctrl.cc, v);
-                    // Re-assert sustain if active so CT-S500 voice block does not drop release tail
-                    if (tuning[_faderPart].sus) {
-                        sendCC(_faderPart, 72, SUS_RELEASE);
-                    }
-                });
-                fader.addEventListener('change', () => {
-                    const v = parseInt(fader.value);
-                    const cur = eqState[_faderPart][ctrl.cc];
-                    if ((cur !== undefined ? cur : ctrl.def) !== v) {
-                        eqState[_faderPart][ctrl.cc] = v;
-                        sendCC(_faderPart, ctrl.cc, v);
-                        document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
-                            sp.innerText = formatVal(ctrl.label, v);
-                        });
-                        document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
-                            if (other !== fader) other.value = v;
-                        });
-                    }
-                    if (tuning[_faderPart].sus) {
-                        sendCC(_faderPart, 72, SUS_RELEASE);
-                        scheduleSustainResync(_faderPart, [30, 120, 300]);
-                    }
-                    saveToneEQForPart(_faderPart);
-                    if (typeof saveAppState === 'function') saveAppState();
-                });
-    
-                const note = document.createElement('div');
-                note.className = 'fader-note';
-                note.innerText = ctrl.tip;
-    
-                group.appendChild(lbl);
-                group.appendChild(fader);
-                group.appendChild(valSpan);
-                group.appendChild(note);
-                
-                innerEl.appendChild(group);
-            }
-        });
-        
-        if (switchesEl.children.length > 0) secEl.appendChild(switchesEl);
-        if (innerEl.children.length > 0) secEl.appendChild(innerEl);
-        container.appendChild(secEl);
-    });
-}
-
-function switchEQ(part) {
-    activePart = part;
-    const labels = { U1: 'UPPER 1', U2: 'UPPER 2', L: 'LOWER' };
-    const badge = document.getElementById('eqTargetBadge');
-    if (badge) badge.innerText = labels[part];
-
-    document.querySelectorAll('.btn-eq').forEach(b => b.classList.remove('active-eq'));
-    const activeEqBtn = document.querySelector('.btn-eq[data-part="' + part + '"]');
-    if (activeEqBtn) activeEqBtn.classList.add('active-eq');
-
-    document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active-track'));
-    const card = document.getElementById('card-' + part);
-    if (card) card.classList.add('active-track');
-
-    beginEqProgrammatic();
-    EQ_CONTROLS.forEach(ctrl => {
-        const val = eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def;
-
-        if (ctrl.type === 'switch') {
-            document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
-                btn.innerText = val > 63 ? 'ON' : 'OFF';
-                btn.classList.toggle('sus-on', val > 63);
-            });
-        } else {
-            document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(fader => {
-                fader.value = val;
-            });
-            document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(valEl => {
-                valEl.innerText = formatVal(ctrl.label, val);
-            });
-        }
-    });
-    // Switching EQ view does NOT disrupt sustain or touch CC72!
-}
-
-function resetEQ() {
-    const part = activePart;
-    resetToneEQForPart(part); // Clear user override in localStorage for this tone+env
-    applySmartProfile(part);  // Re-apply authentic tone+env preset (does not touch sustain)
-}
-
-function formatVal(label, val) {
-    if (label === 'PAN') {
-        if (val === 64) return 'C';
-        return val < 64 ? 'L' + (64 - val) : 'R' + (val - 64);
-    }
-    // Switch-style controls (on/off)
-    if (['PORTAMENTO','SOSTENUTO','SOFT'].includes(label)) {
-        return val >= 64 ? 'ON' : 'OFF';
-    }
-    return val;
-}
-
-// ======================================================================
 //  TONE SEARCH (filterable select)
 // ======================================================================
-// Per-part tone search refs — used by loadAppState / loadPreset / onMIDIMessage
+// Per-part tone search refs â€” used by loadAppState / loadPreset / onMIDIMessage
 // to reset the filter before searching the full tone list.
 window.toneSearch = {};
 
-// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push —
+// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push â€”
 // the list's selectedIndex is only a view and is -1 whenever the filter hides the tone.
 const currentTone = { U1: null, U2: null, L: null };
 
-// Per-part cancellable timers — shared by scheduleProfile and scheduleSustainResync.
+// Per-part cancellable timers â€” shared by scheduleProfile and scheduleSustainResync.
 const _pendingProfile = { U1: [], U2: [], L: [] };
 const _pendingSustain = { U1: [], U2: [], L: [] };
 
 function scheduleSustainResync(part, delays) {
     _pendingSustain[part].forEach(clearTimeout);
     _pendingSustain[part] = [];
-    // If sustain is OFF, NEVER send CC 72 — preserve tone's native envelope and keyboard state!
+    // If sustain is OFF, NEVER send CC 72 â€” preserve tone's native envelope and keyboard state!
     if (!tuning[part].sus) return;
     _pendingSustain[part] = delays.map(d =>
         setTimeout(() => {
@@ -1544,7 +367,7 @@ function scheduleProfile(part, catName) {
             applySmartProfile(part, catName);
             // Resync AFTER the burst so taps arrive after the CT-S500 hardware reset,
             // not racing with it. Calling before the burst had the first tap (150ms)
-            // compete with applySmartProfile — undefined ordering, unreliable.
+            // compete with applySmartProfile â€” undefined ordering, unreliable.
             resyncAllSustain();
         }, 150),
     ];
@@ -1620,7 +443,7 @@ function initToneSearch() {
             try { localStorage.setItem('searchPreset_' + part, searchEl.value); } catch(e) {}
         });
 
-        // Search preset chips — filter list only, never auto-change the tone
+        // Search preset chips â€” filter list only, never auto-change the tone
         document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`).forEach(btn => {
             btn.addEventListener('click', () => {
                 searchEl.value = btn.dataset.q;
@@ -1815,336 +638,6 @@ function initQuickControls() {
 // ======================================================================
 //  PRESETS + GITHUB STORAGE
 // ======================================================================
-const GH_OWNER = 'jcgit-coding';
-const GH_REPO  = 'casio-ct-s500-controller';
-const GH_FILE  = 'presets.json';
-const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
-
-let ghFileSha = null; // current SHA of presets.json on GitHub (needed for PUT)
-
-function updateSyncStatus(msg) {
-    const el = document.getElementById('syncAutoStatus');
-    if (el) el.innerText = msg;
-}
-
-function ghToken() { return localStorage.getItem('casioGhToken') || ''; }
-
-// Merge two preset stores by timestamp — most recent entry wins.
-// Tombstones ({_deleted,_ts}) are kept so deletions propagate across devices.
-// Old presets without _ts lose to any timestamped version (_ts ?? 0 = epoch).
-function mergePresetStores(local, cloud) {
-    const merged = {};
-    const keys = new Set([...Object.keys(local), ...Object.keys(cloud)]);
-    for (const key of keys) {
-        const l = local[key], c = cloud[key];
-        if (!l) { merged[key] = c; continue; }
-        if (!c) { merged[key] = l; continue; }
-        merged[key] = (c._ts ?? 0) >= (l._ts ?? 0) ? c : l;
-    }
-    return merged;
-}
-
-async function syncPull() {
-    try {
-        // Public read — no auth needed
-        const res = await fetch(GH_API + '?t=' + Date.now(), {
-            headers: { 'Accept': 'application/vnd.github.v3+json' }
-        });
-        if (!res.ok) return false;
-        const json = await res.json();
-        ghFileSha = json.sha;
-        const cloud = JSON.parse(decodeURIComponent(escape(atob(json.content.replace(/\n/g, '')))));
-        const local = readPresetsStore();
-        const merged = mergePresetStores(local, cloud);
-        localStorage.setItem('casioPresets', JSON.stringify(merged));
-        renderPresets();
-        return true;
-    } catch { return false; }
-}
-
-// Serialized push queue — prevents concurrent PUTs racing on the same SHA
-let _syncQueue = Promise.resolve();
-function syncPush() {
-    _syncQueue = _syncQueue.catch(() => {}).then(() => _syncPushOnce());
-    return _syncQueue;
-}
-
-async function _syncPushOnce(retried = false) {
-    const token = ghToken();
-    if (!token) { updateSyncStatus('No GitHub token'); return; }
-    try {
-        updateSyncStatus('Saving...');
-        if (!ghFileSha) await syncPull();
-        const presets = readPresetsStore();
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(presets, null, 2))));
-        const body = { message: 'Update presets', content };
-        if (ghFileSha) body.sha = ghFileSha;
-        const res = await fetch(GH_API, {
-            method: 'PUT',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-        if (res.status === 409 && !retried) {
-            // SHA conflict from a concurrent write — re-fetch, merge, retry once
-            ghFileSha = null;
-            await syncPull();
-            return _syncPushOnce(true);
-        }
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.message || res.status);
-        }
-        const data = await res.json();
-        ghFileSha = data.content.sha;
-        updateSyncStatus('✓ Guardado en GitHub');
-    } catch(e) {
-        console.error('syncPush:', e);
-        updateSyncStatus('Error: ' + e.message);
-    }
-}
-
-async function autoSyncInit() {
-    updateSyncStatus('Loading presets...');
-    const ok = await syncPull();
-    if (ok) {
-        updateSyncStatus(ghToken() ? '✓ GitHub connected' : '✓ Presets loaded (read only)');
-    } else {
-        updateSyncStatus('Offline — using local presets');
-    }
-    // Show token status in UI
-    const tokenEl = document.getElementById('syncTokenDisplay');
-    if (tokenEl) tokenEl.innerText = ghToken() ? '✓ Token configurado' : 'No token (read only)';
-}
-
-function initPresets() {
-    document.getElementById("btnSavePreset").addEventListener("click", () => {
-        const input = document.getElementById("presetName");
-        const name  = input.value.trim();
-        if (!name) { alert("Enter a name for the preset."); return; }
-        const presets = readPresetsStore();
-        if (presets[name] && !confirm(`"${name}" already exists. Overwrite?`)) return;
-        captureAndSavePreset(name);
-        input.value = '';
-    });
-
-    // ── Exportar a archivo JSON ──────────────────────────────────────────
-    document.getElementById('btnExportPresets')?.addEventListener('click', () => {
-        const json = localStorage.getItem('casioPresets') || '{}';
-        const blob = new Blob([json], { type: 'application/json' });
-        const url  = URL.createObjectURL(blob);
-        const a    = document.createElement('a');
-        a.href = url; a.download = 'casio-presets.json'; a.click();
-        URL.revokeObjectURL(url);
-    });
-
-    // ── Importar desde archivo JSON ──────────────────────────────────────
-    document.getElementById('btnImportPresets')?.addEventListener('click', () => {
-        document.getElementById('fileImportPresets')?.click();
-    });
-    document.getElementById('fileImportPresets')?.addEventListener('change', e => {
-        const file = e.target.files[0]; if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            try {
-                const imported = JSON.parse(ev.target.result);
-                if (typeof imported !== 'object' || Array.isArray(imported)) throw new Error();
-                const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
-                const collisions = Object.keys(imported).filter(k => k in existing);
-                if (collisions.length > 0) {
-                    if (!confirm(`Import will overwrite ${collisions.length} existing preset(s): ${collisions.join(',')} Continue?`)) return;
-                }
-                Object.assign(existing, imported);
-                localStorage.setItem('casioPresets', JSON.stringify(existing));
-                renderPresets();
-                // Do not call syncPush here: syncPull dentro de syncPush puede pisar los datos importados
-            } catch { alert('Invalid file.'); }
-        };
-        reader.readAsText(file);
-        e.target.value = '';
-    });
-
-    // ── Configurar token GitHub ──────────────────────────────────────────
-    document.getElementById('btnSyncCreate')?.addEventListener('click', async e => {
-        e.preventDefault();
-        const current = ghToken();
-        const t = prompt('GitHub Token (scope: contents):\n(Leave empty to clear)', current);
-        if (t === null) return;
-        const trimmed = t.trim();
-        if (trimmed) {
-            localStorage.setItem('casioGhToken', trimmed);
-            const tokenEl = document.getElementById('syncTokenDisplay');
-            if (tokenEl) tokenEl.innerText = '✓ Token configurado';
-            await syncPush();
-        } else {
-            localStorage.removeItem('casioGhToken');
-            const tokenEl = document.getElementById('syncTokenDisplay');
-            if (tokenEl) tokenEl.innerText = 'No token (read only)';
-            updateSyncStatus('Token eliminado');
-        }
-    });
-
-    // ── Subir / Bajar manual ─────────────────────────────────────────────
-    document.getElementById('btnSyncPush')?.addEventListener('click', () => syncPush());
-    document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
-        const ok = await syncPull();
-        updateSyncStatus(ok ? '✓ Presets updated' : 'Offline');
-    });
-
-    renderPresets();
-    autoSyncInit();
-}
-
-function captureAndSavePreset(name) {
-    const eqSnap = JSON.parse(JSON.stringify(eqState));
-    // CC7 (Volume) is governed by Part Mix Rules — not per-preset character
-    // CC72 (Release/Sustain) is a live toggle — not per-preset state
-    ['U1','U2','L'].forEach(p => {
-        delete eqSnap[p][7];  delete eqSnap[p]['7'];
-        delete eqSnap[p][72]; delete eqSnap[p]['72'];
-    });
-    const data = {
-        _ts:              Date.now(),
-        eqState:          eqSnap,
-        tuning:           JSON.parse(JSON.stringify(tuning)),
-        globalTranspose:  globalTranspose,
-        globalOctave:     globalOctave,
-        activeCategories: JSON.parse(JSON.stringify(activeCategories)),
-        tones: {
-            U1: currentTone.U1?.id ?? '',
-            U2: currentTone.U2?.id ?? '',
-            L:  currentTone.L?.id  ?? '',
-        },
-        searchFilters: {
-            U1: window.toneSearch?.U1?.searchEl?.value ?? 'Piano',
-            U2: window.toneSearch?.U2?.searchEl?.value ?? 'Pad',
-            L:  window.toneSearch?.L?.searchEl?.value  ?? 'String',
-        }
-    };
-    const presets = readPresetsStore();
-    presets[name] = data;
-    localStorage.setItem("casioPresets", JSON.stringify(presets));
-    renderPresets();
-    syncPush();
-}
-
-function loadPreset(data) {
-    if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
-    ['U1','U2','L'].forEach(part => {
-        if (data.eqState?.[part]) {
-            // Start from defaults so CCs missing in older presets don't keep the previous values
-            EQ_CONTROLS.forEach(ctrl => { eqState[part][ctrl.cc] = ctrl.def; });
-            Object.assign(eqState[part], data.eqState[part]);
-            delete eqState[part][72]; delete eqState[part]['72'];
-        }
-    });
-    // CC7 (Volume) comes from the saved eqState — no longer forced here.
-    ['U1','U2','L'].forEach(part => {
-        if (data.tuning?.[part]) {
-            tuning[part].oct = data.tuning[part].oct || 0;
-            tuning[part].sus = data.tuning[part].sus || false;
-
-            const octEl = document.getElementById('oct-' + part);
-            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
-
-            const susBtn = document.getElementById('sus-' + part);
-            if (susBtn) {
-                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-                susBtn.classList.toggle('sus-on', tuning[part].sus);
-            }
-        }
-        // Restore tone selection — new presets store numeric id, old ones stored text.
-        // Restore filter first so the tone appears in context (and the chip highlights).
-        if (data.tones?.[part] !== undefined && data.tones[part] !== '') {
-            const ts = window.toneSearch?.[part];
-            if (ts && data.searchFilters?.[part] !== undefined) {
-                ts.searchEl.value = data.searchFilters[part];
-                ts.searchEl.dispatchEvent(new Event('input'));
-            }
-            const byId = typeof data.tones[part] === 'number';
-            selectToneInList(part, byId
-                ? (d)    => d.id === data.tones[part]
-                : (d, o) => o.text === data.tones[part]);
-        }
-    });
-
-    // Restore global transpose
-    if (data.globalTranspose !== undefined) {
-        globalTranspose = data.globalTranspose;
-        const valEl = document.getElementById('gTrnVal');
-        if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
-    }
-
-    if (data.globalOctave !== undefined) {
-        globalOctave = data.globalOctave;
-        const octEl = document.getElementById('gOctVal');
-        if (octEl) octEl.innerText = globalOctave > 0 ? '+' + globalOctave : globalOctave;
-    }
-
-    switchEQ(activePart);
-    pushAllToKeyboard();
-}
-
-function readPresetsStore() {
-    try { return JSON.parse(localStorage.getItem("casioPresets") || "{}") || {}; }
-    catch(e) {
-        console.error('[presets] corrupted storage, backing up:', e);
-        try { localStorage.setItem('casioPresets.corrupt.' + Date.now(), localStorage.getItem('casioPresets')); } catch(_) {}
-        return {};
-    }
-}
-
-function renderPresets() {
-    const list    = document.getElementById("presetsList");
-    const presets = readPresetsStore();
-    list.innerHTML = '';
-
-    for (const [name, data] of Object.entries(presets)) {
-        if (data?._deleted) continue; // tombstone — deleted on another device
-        const item = document.createElement('div');
-        item.className = 'preset-item';
-
-        const nameSpan = document.createElement('span');
-        nameSpan.className = 'preset-item-name';
-        nameSpan.title     = name;
-        nameSpan.innerText = name;
-
-        const actions = document.createElement('div');
-        actions.className = 'preset-actions';
-
-        const loadBtn = document.createElement('button');
-        loadBtn.innerText = 'Load'; loadBtn.title = 'Load preset';
-        loadBtn.onclick = () => loadPreset(data);
-
-        const overBtn = document.createElement('button');
-        overBtn.innerText = 'Save'; overBtn.title = 'Overwrite with current state';
-        overBtn.onclick = () => { if (confirm(`Overwrite "${name}"?`)) captureAndSavePreset(name); };
-
-        const delBtn = document.createElement('button');
-        delBtn.innerText = 'Delete'; delBtn.title = 'Delete preset';
-        delBtn.className   = 'del-btn';
-        delBtn.onclick = () => {
-            if (!confirm(`Delete "${name}"?`)) return;
-            const p = readPresetsStore();
-            p[name] = { _deleted: true, _ts: Date.now() }; // tombstone so deletion propagates to other devices
-            localStorage.setItem("casioPresets", JSON.stringify(p));
-            renderPresets();
-            syncPush();
-        };
-
-        actions.appendChild(loadBtn);
-        actions.appendChild(overBtn);
-        actions.appendChild(delBtn);
-        item.appendChild(nameSpan);
-        item.appendChild(actions);
-        list.appendChild(item);
-    }
-}
-
-// ======================================================================
 //  ARRANGER
 // ======================================================================
 function initArranger() {
@@ -2152,7 +645,7 @@ function initArranger() {
     let bpm          = 120;
     let clockTimer   = null;
 
-    // ── Rhythm list ──────────────────────────────────
+    // â”€â”€ Rhythm list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function buildRhythmList(filter = '', cat = 'ALL') {
         const list = document.getElementById('rhythmList');
         if (!list || !window.RAW_RHYTHMS) return;
@@ -2199,7 +692,7 @@ function initArranger() {
         buildRhythmList(e.target.value, document.getElementById('rhythmCatFilter')?.value || 'ALL');
     });
 
-    // ── MIDI Clock ───────────────────────────────────
+    // â”€â”€ MIDI Clock â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function startClock() {
         stopClock();
         const interval = (60000 / bpm) / 24; // ms per pulse
@@ -2215,7 +708,7 @@ function initArranger() {
         if (e.target.checked) startClock(); else stopClock();
     });
 
-    // ── BPM controls ─────────────────────────────────
+    // â”€â”€ BPM controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function updateBpm(delta) {
         bpm = Math.min(250, Math.max(20, bpm + delta));
         const el = document.getElementById('bpmVal');
@@ -2225,7 +718,7 @@ function initArranger() {
     document.getElementById('bpmMinus')?.addEventListener('click', () => updateBpm(-1));
     document.getElementById('bpmPlus')?.addEventListener('click',  () => updateBpm(+1));
 
-    // ── Rhythm volume (CC7 ch9) ───────────────────────
+    // â”€â”€ Rhythm volume (CC7 ch9) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const volSlider = document.getElementById('rhythmVol');
     const volVal    = document.getElementById('rhythmVolVal');
     volSlider?.addEventListener('input', () => {
@@ -2234,7 +727,7 @@ function initArranger() {
         if (midiOutput) midiOutput.send([0xB9, 7, v]); // ch9 = 0xB9
     });
 
-    // ── START / STOP ─────────────────────────────────
+    // â”€â”€ START / STOP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const btnSS = document.getElementById('btnStartStop');
     btnSS?.addEventListener('click', () => {
         if (!midiOutput) return;
@@ -2253,20 +746,20 @@ function initArranger() {
         btnSS.classList.toggle('btn-stop', isPlaying);
     });
 
-    // ── SYNC START ───────────────────────────────────
+    // â”€â”€ SYNC START â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     document.getElementById('btnSyncStart')?.addEventListener('click', () => {
         if (!midiOutput) return;
         midiOutput.send([0xFA]); // MIDI Start (Synchro Start)
     });
 
-    // ── ACCOMP (toggle via SysEx-like approach using CC) ─
+    // â”€â”€ ACCOMP (toggle via SysEx-like approach using CC) â”€
     document.getElementById('btnAccomp')?.addEventListener('click', () => {
-        // No standard MIDI CC — toggle visual feedback only
+        // No standard MIDI CC â€” toggle visual feedback only
         const b = document.getElementById('btnAccomp');
         b.classList.toggle('active-rhythm');
     });
 
-    // ── INTRO / VAR / ENDING — CC on ch9 ─────────────
+    // â”€â”€ INTRO / VAR / ENDING â€” CC on ch9 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Based on Casio CT-S500 MIDI implementation (CC 86-89 channel 9)
     document.getElementById('btnIntro')?.addEventListener('click', () => {
         if (midiOutput) midiOutput.send([0xB9, 86, 1]);
@@ -2315,7 +808,7 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
     midiOutput.send([0xB0 | ch, 100, 0x7F]);
 }
-// Swap sustain state between two parts after a UI swap — called by fix_swap.js.
+// Swap sustain state between two parts after a UI swap â€” called by fix_swap.js.
 // EQ and categories are rebuilt by the scheduleProfile calls the change events already fire.
 window.swapPartState = function(partA, partB) {
     [tuning[partA].sus, tuning[partB].sus] = [tuning[partB].sus, tuning[partA].sus];
@@ -2339,7 +832,7 @@ function pushAllToKeyboard(skipTones = false) {
     setTimeout(() => {
         ['U1','U2','L'].forEach(part => {
             EQ_CONTROLS.forEach(ctrl => {
-                if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state — never force on reconnect
+                if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state â€” never force on reconnect
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCoarseTuning(part);
@@ -2366,123 +859,8 @@ function _getSavedToneId(part) {
     return currentTone[part]?.id ?? 0;
 }
 
-function saveAppState() {
-    // Deep-copy eqState excluding PERFORMANCE_CCS (live-state — must not be forced on reload)
-    const eqSnap = {};
-    ['U1','U2','L'].forEach(p => {
-        eqSnap[p] = {};
-        Object.entries(eqState[p]).forEach(([cc, v]) => {
-            if (!PERFORMANCE_CCS.has(Number(cc))) eqSnap[p][cc] = v;
-        });
-    });
-    const appState = {
-        v: 195,
-        eqState: eqSnap,
-        tuning,
-        activeCategories,
-        globalTranspose,
-        globalOctave,
-        activePart,
-        pcSynthEnabled,
-        tones: {
-            U1: _getSavedToneId('U1'),
-            U2: _getSavedToneId('U2'),
-            L: _getSavedToneId('L')
-        },
-        searchFilters: {
-            U1: window.toneSearch?.U1?.searchEl?.value ?? 'Piano',
-            U2: window.toneSearch?.U2?.searchEl?.value ?? 'Pad',
-            L:  window.toneSearch?.L?.searchEl?.value  ?? 'String',
-        }
-    };
-    try { localStorage.setItem('casioAppState', JSON.stringify(appState)); }
-    catch(e) { console.warn('[state] save failed:', e); }
-}
 
-function loadAppState() {
-    try {
-        const saved = JSON.parse(localStorage.getItem('casioAppState'));
-        if (!saved) return false;
-        
-        if (saved.eqState) {
-            Object.assign(eqState, saved.eqState);
-            // Purge CC72 (Release) — never apply from saved state; CC72 is managed by tuning.sus
-            ['U1','U2','L'].forEach(p => { delete eqState[p][72]; delete eqState[p]['72']; });
-        }
-        if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
-        if (saved.tuning) Object.assign(tuning, saved.tuning);
-        // Tuning UI must follow the restored state even when the preset has no
-        // tones (or an old/absent appState) — otherwise the SUSTAIN button can
-        // show OFF while tuning.sus is ON and the hardware gets CC72=100.
-        ['U1','U2','L'].forEach(part => {
-            const octEl = document.getElementById('oct-' + part);
-            const octVal = tuning[part].oct || 0;
-            if (octEl) octEl.innerText = octVal > 0 ? '+' + octVal : octVal;
-
-            const susBtn = document.getElementById('sus-' + part);
-            if (susBtn) {
-                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-                susBtn.classList.toggle('sus-on', tuning[part].sus);
-            }
-        });
-        if (saved.globalTranspose !== undefined) {
-            globalTranspose = saved.globalTranspose;
-            const trnEl = document.getElementById('gTrnVal');
-            if (trnEl) trnEl.innerText = (globalTranspose>0?'+':'')+globalTranspose;
-        }
-
-        if (saved.globalOctave !== undefined) {
-            globalOctave = saved.globalOctave;
-            const octEl = document.getElementById('gOctVal');
-            if (octEl) octEl.innerText = (globalOctave>0?'+':'')+globalOctave;
-        }
-
-        if (saved.activePart) {
-            activePart = saved.activePart;
-            // Update UI buttons
-            document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
-        }
-        
-        // Only restore specific tones from v194+ saves (first version that saves correct
-        // tones + searchFilters together). Saves from v192/v193 may still carry
-        // OpenCode-era tone IDs (e.g. 687 GM SYNTH-STRINGS instead of 24 STRINGS PIANO);
-        // in that case let initToneSearch's first-in-filter default stand.
-        if (saved.tones && saved.v >= 194) {
-            ['U1', 'U2', 'L'].forEach(part => {
-                // Restore the search filter first so the tone is selected within the right context.
-                const ts = window.toneSearch?.[part];
-                if (ts && saved.searchFilters[part] !== undefined) {
-                    ts.searchEl.value = saved.searchFilters[part];
-                    ts.searchEl.dispatchEvent(new Event('input'));
-                }
-                // UI only — no 'change' event (would wipe saved eqState) and no changeTone
-                // (disabled on boot so we don't force the keyboard).
-                if (saved.tones[part] !== undefined) {
-                    selectToneInList(part, d => d.id === saved.tones[part]);
-                }
-            });
-        }
-
-        if (saved.pcSynthEnabled !== undefined) {
-            pcSynthEnabled = saved.pcSynthEnabled;
-            const pcToggle = document.getElementById('pcSynthToggle');
-            if (pcToggle) pcToggle.checked = pcSynthEnabled;
-        }
-
-        switchEQ(activePart); // updates sliders on screen
-
-        // If MIDI is already connected (USB was not unplugged between reloads),
-        // send tones and CCs so the Casio accurately matches the instruments on screen.
-        if (midiOutput) pushAllToKeyboard(false);
-
-        return true;
-    } catch (e) {
-        console.error("Error loading app state:", e);
-        return false;
-    }
-}
-
-// --- PC SYNTH — SpessaSynth: AudioWorklet (thread separado), SF2 nativo ---
+// --- PC SYNTH â€” SpessaSynth: AudioWorklet (thread separado), SF2 nativo ---
 window.pcSynth = null;
 window.sf2Ready = false;
 
@@ -2514,7 +892,7 @@ let spessaSynth = null;
 
 async function sf2Init(source, name) {
     const statusEl = document.getElementById('sf2-status');
-    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Loading SpessaSynth…</span>';
+    if (statusEl) statusEl.innerHTML = '<span style="color:var(--accent);">Loading SpessaSynthâ€¦</span>';
     try {
         const { WorkletSynthesizer } = await import('https://esm.sh/spessasynth_lib@4.3.14');
 
@@ -2541,7 +919,7 @@ async function sf2Init(source, name) {
         await spessaSynth.soundBankManager.addSoundBank(sf2Buffer, 'main');
         await spessaSynth.isReady;
 
-        // Master gain at unity — per-part volume is CC7 on each channel.
+        // Master gain at unity â€” per-part volume is CC7 on each channel.
         // Disconnect the previous gain node first to avoid parallel audio paths on SF2 reload.
         if (window.pcSynth?._master) { try { window.pcSynth._master.disconnect(); } catch(e) {} }
         const masterGain = spessaCtx.createGain();
@@ -2580,7 +958,7 @@ async function sf2Init(source, name) {
         if (statusEl) {
             statusEl.dataset.sf2loaded = '1';
             const sp = document.createElement('span'); sp.style.color = '#4CAF50';
-            sp.textContent = '✓ SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
+            sp.textContent = 'âœ“ SF2: ' + (name || 'soundfont.sf2'); // textContent avoids XSS from user filename
             statusEl.innerHTML = ''; statusEl.appendChild(sp);
         }
     } catch(err) {
@@ -2589,7 +967,7 @@ async function sf2Init(source, name) {
     }
 }
 
-// Auto-load SF2: IndexedDB cache → GeneralUser GS CDN → local fallback
+// Auto-load SF2: IndexedDB cache â†’ GeneralUser GS CDN â†’ local fallback
 (async () => {
     const statusEl = document.getElementById('sf2-status');
     const cached = await sf2LoadCache();
@@ -2602,7 +980,7 @@ async function sf2Init(source, name) {
 
     for (const [url, name] of [[GUGS_URL, 'GeneralUser GS'], [LOCAL_URL, 'soundfont.sf2']]) {
         try {
-            if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent);">Downloading ${name}…</span>`;
+            if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent);">Downloading ${name}â€¦</span>`;
             const res = await fetch(url);
             if (!res.ok) throw new Error('not found');
             const buffer = await res.arrayBuffer();
@@ -2621,14 +999,14 @@ document.getElementById('sf2-file')?.addEventListener('change', async e => {
 });
 
 // ======================================================================
-//  MIDI CONTROLLER — Virtual Keyboard + Per-part controls
+//  MIDI CONTROLLER â€” Virtual Keyboard + Per-part controls
 // ======================================================================
 
 // Per-part octave offset for the MIDI controller (separate from mixer octave)
 const mctrlOct = { U1: 0, U2: 0, L: 0 };
 let vkActivePart = 'U1';   // which part the virtual keyboard plays
 let vkOctave = 4;           // base octave for virtual keyboard (C4 = MIDI 60)
-const vkActiveKeys = {};    // note → channel number while held (captured at press time)
+const vkActiveKeys = {};    // note â†’ channel number while held (captured at press time)
 
 function initMidiController() {
     // Per-part volume sliders
@@ -2637,7 +1015,7 @@ function initMidiController() {
         const volVal = document.getElementById('mctrl-vol-' + part + '-val');
         if (volSlider) {
             const cap = part === 'U2' ? 75 : 100;
-            volSlider.max = cap; // slider range matches Part Mix Rules — no dead zone above cap
+            volSlider.max = cap; // slider range matches Part Mix Rules â€” no dead zone above cap
             volSlider.addEventListener('input', () => {
                 const v = parseInt(volSlider.value);
                 if (volVal) volVal.innerText = v;
@@ -2676,7 +1054,7 @@ function initMidiController() {
             });
         });
 
-        // Card click → select active card highlight
+        // Card click â†’ select active card highlight
         const card = document.getElementById('mctrl-card-' + part);
         if (card) {
             card.addEventListener('click', (e) => {
@@ -2784,9 +1162,9 @@ function vkNoteOn(midiNote, ch) {
     const shift = globalTranspose + globalOctave * 12;
     const shiftedNote = Math.max(0, Math.min(127, midiNote + shift));
     vkActiveKeys[midiNote] = { ch, shiftedNote };
-    // Send to MIDI output (Casio) — only when EXT MIDI is ON
+    // Send to MIDI output (Casio) â€” only when EXT MIDI is ON
     if (mctrlEnabled && midiOutput) midiOutput.send([0x90 | ch, midiNote, vel]);
-    // Send to PC synth — independent of EXT MIDI toggle
+    // Send to PC synth â€” independent of EXT MIDI toggle
     if (pcSynthEnabled && window.pcSynth) {
         if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
         window.pcSynth.noteOn(ch, shiftedNote, vel);
@@ -2823,7 +1201,7 @@ function attachKeyEvents(el, k) {
     el.addEventListener('touchcancel',() => { if (heldNote !== null) { vkNoteOff(heldNote); heldNote = null; } el.classList.remove('vk-active'); });
 }
 
-// Initialize MIDI controller (DOM already ready — script is at bottom of body)
+// Initialize MIDI controller (DOM already ready â€” script is at bottom of body)
 initMidiController();
 
 
@@ -2865,7 +1243,7 @@ document.getElementById('mctrlToggle')?.addEventListener('change', e => {
     }
 });
 
-// Build GM instrument selectors (script runs after body — DOM elements exist)
+// Build GM instrument selectors (script runs after body â€” DOM elements exist)
 buildGMSelectors();
 
 
