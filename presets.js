@@ -338,7 +338,7 @@ function saveAppState() {
         });
     });
     const appState = {
-        v: 195,
+        v: 196,
         eqState: eqSnap,
         tuning,
         activeCategories,
@@ -350,6 +350,11 @@ function saveAppState() {
             U1: _getSavedToneId('U1'),
             U2: _getSavedToneId('U2'),
             L: _getSavedToneId('L')
+        },
+        searchFilters: {
+            U1: window.toneSearch?.['U1']?.searchEl?.value ?? '',
+            U2: window.toneSearch?.['U2']?.searchEl?.value ?? '',
+            L:  window.toneSearch?.['L']?.searchEl?.value  ?? ''
         }
     };
     try { localStorage.setItem('casioAppState', JSON.stringify(appState)); }
@@ -406,11 +411,12 @@ function loadAppState() {
         // in that case let initToneSearch's first-in-filter default stand.
         if (saved.tones && saved.v >= 194) {
             ['U1', 'U2', 'L'].forEach(part => {
-                // UI only -- no 'change' event (would wipe saved eqState) and no changeTone
-                // (disabled on boot so we don't force the keyboard).
-                // Search filter is NOT restored here; initToneSearch always sets Piano/Pad/String
-                // so the chips are reliably active. selectToneInList clears the filter if the
-                // saved tone is not in the default filtered list.
+                const ts = window.toneSearch?.[part];
+                // Restore saved search filter so the active chip matches (v196+)
+                if (ts && saved.searchFilters?.[part] !== undefined) {
+                    ts.searchEl.value = saved.searchFilters[part];
+                    ts.searchEl.dispatchEvent(new Event('input'));
+                }
                 if (saved.tones[part] !== undefined) {
                     selectToneInList(part, d => d.id === saved.tones[part]);
                 }
