@@ -418,18 +418,11 @@ function initToneSearch() {
             }
         }
 
-        // Restore last used search value per part; defaults used only on first run
-        {
-            let saved = null;
-            try { saved = localStorage.getItem('searchPreset_' + part); } catch(e) {}
-            if (saved !== null) {
-                searchEl.value = saved;
-            } else {
-                if (part === 'U1') searchEl.value = 'Piano';
-                if (part === 'U2') searchEl.value = 'Pad';
-                if (part === 'L')  searchEl.value = 'String';
-            }
-        }
+        // Always reset to startup defaults (Piano/Pad/String) so chips are reliably active.
+        // The saved tone ID is restored later by loadAppState -> selectToneInList.
+        if (part === 'U1') searchEl.value = 'Piano';
+        if (part === 'U2') searchEl.value = 'Pad';
+        if (part === 'L')  searchEl.value = 'String';
 
         searchEl.addEventListener('input', () => {
             const q = searchEl.value.trim().toLowerCase();
@@ -445,7 +438,6 @@ function initToneSearch() {
             // Sync active chip
             const chips = document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`);
             chips.forEach(c => c.classList.toggle('active', c.dataset.q.toLowerCase() === searchEl.value.trim().toLowerCase()));
-            try { localStorage.setItem('searchPreset_' + part, searchEl.value); } catch(e) {}
         });
 
         // Search preset chips -- filter list only, never auto-change the tone

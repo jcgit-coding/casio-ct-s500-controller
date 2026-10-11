@@ -350,11 +350,6 @@ function saveAppState() {
             U1: _getSavedToneId('U1'),
             U2: _getSavedToneId('U2'),
             L: _getSavedToneId('L')
-        },
-        searchFilters: {
-            U1: window.toneSearch?.U1?.searchEl?.value ?? 'Piano',
-            U2: window.toneSearch?.U2?.searchEl?.value ?? 'Pad',
-            L:  window.toneSearch?.L?.searchEl?.value  ?? 'String',
         }
     };
     try { localStorage.setItem('casioAppState', JSON.stringify(appState)); }
@@ -411,14 +406,11 @@ function loadAppState() {
         // in that case let initToneSearch's first-in-filter default stand.
         if (saved.tones && saved.v >= 194) {
             ['U1', 'U2', 'L'].forEach(part => {
-                // Restore the search filter first so the tone is selected within the right context.
-                const ts = window.toneSearch?.[part];
-                if (ts && saved.searchFilters[part] !== undefined) {
-                    ts.searchEl.value = saved.searchFilters[part];
-                    ts.searchEl.dispatchEvent(new Event('input'));
-                }
                 // UI only -- no 'change' event (would wipe saved eqState) and no changeTone
                 // (disabled on boot so we don't force the keyboard).
+                // Search filter is NOT restored here; initToneSearch always sets Piano/Pad/String
+                // so the chips are reliably active. selectToneInList clears the filter if the
+                // saved tone is not in the default filtered list.
                 if (saved.tones[part] !== undefined) {
                     selectToneInList(part, d => d.id === saved.tones[part]);
                 }
