@@ -12,5 +12,54 @@
     "artist": "Bethel Music",
     "genre": "Worship",
     "original_key": "D"
+  },
+  {
+    "id": "marco_preciosa_sangre",
+    "title": "Preciosa Sangre",
+    "artist": "Marco Barrientos",
+    "genre": "Worship",
+    "original_key": "Bm"
+  },
+  {
+    "id": "hillsong_por_mi_murio",
+    "title": "Por mi murió",
+    "artist": "Hillsong United",
+    "genre": "Worship",
+    "original_key": "D"
+  },
+  {
+    "id": "marco_poderoso_israel",
+    "title": "El poderoso de Israel",
+    "artist": "Marco Barrientos",
+    "genre": "Worship",
+    "original_key": "F#m"
+  },
+  {
+    "id": "newwine_incomprensible_amor",
+    "title": "Incomprensible Amor",
+    "artist": "New Wine",
+    "genre": "Worship",
+    "original_key": "B"
+  },
+  {
+    "id": "kabed_inundanos",
+    "title": "Inúndanos",
+    "artist": "Kabed",
+    "genre": "Worship",
+    "original_key": "Dm"
+  },
+  {
+    "id": "newwine_aceite_fresco",
+    "title": "Aceite Fresco",
+    "artist": "New Wine",
+    "genre": "Worship",
+    "original_key": "C#m"
+  },
+  {
+    "id": "grupograce_brazos_papa",
+    "title": "Los brazos de papá",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "F#"
   }
 ]
