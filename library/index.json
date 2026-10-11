@@ -61,5 +61,12 @@
     "artist": "Grupo Grace",
     "genre": "Worship",
     "original_key": "F#"
+  },
+  {
+    "id": "tomlin_santo_por_siempre",
+    "title": "Santo por siempre",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "D"
   }
 ]
