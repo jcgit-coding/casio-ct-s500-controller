@@ -12,7 +12,7 @@ let mctrlEnabled = false;    // MIDI Ctrl ON/OFF — off by default
 
 // App SUSTAIN button emulates the Casio panel SUSTAIN (long release, notes fade out
 // naturally) via CC72 Release Time — NOT a damper hold (CC64 is left to the physical pedal).
-const SUS_RELEASE = 100;
+const SUS_RELEASE = 110;
 const RELEASE_NEUTRAL = 64;
 // Taps used to re-send CC72 after ANY burst of CCs. The CT-S500 resets its
 // controllers (on every channel) after a large burst, and over Bluetooth the
@@ -483,19 +483,19 @@ function onMIDIMessage(e) {
             const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
             if (ctrl) {
                 if (ctrl.type === 'switch') {
-                    const btn = document.querySelector(`.eq-switch[data-cc="${d1}"]`);
-                    if (btn) {
+                    document.querySelectorAll(`.eq-switch[data-cc="${d1}"]`).forEach(btn => {
                         btn.innerText = d2 > 63 ? 'ON' : 'OFF';
                         btn.classList.toggle('sus-on', d2 > 63);
-                    }
+                    });
                 } else {
-                    const fader = document.querySelector(`.eq-fader[data-cc="${d1}"]`);
-                    // Guard: writing .value may fire 'input' on some engines, which
-                    // would echo the same CC straight back to the keyboard.
-                    if (fader) { beginEqProgrammatic(); fader.value = d2; }
+                    beginEqProgrammatic();
+                    document.querySelectorAll(`.eq-fader[data-cc="${d1}"]`).forEach(f => {
+                        f.value = d2;
+                    });
                 }
-                const valEl = document.getElementById('eq-val-' + d1);
-                if (valEl) valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
+                document.querySelectorAll(`.eq-val-${d1}`).forEach(valEl => {
+                    valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
+                });
             }
         }
     }
@@ -773,6 +773,109 @@ const ENVIRONMENTS = {
 };
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
 
+// ======================================================================
+//  TONE + ENVIRONMENT PRESET ENGINE
+//  Provides dedicated, musically crafted acoustic & DSP profiles
+//  for every Tone + Environment combination.
+// ======================================================================
+function getToneEnvPreset(tone, cat, env) {
+    const name = (tone?.name || '').toUpperCase();
+    const c = (cat || tone?.category || 'PIANO').toUpperCase();
+    const e = env || 'Estudio';
+
+    // Baseline neutral curve
+    let p = {
+        '104': 64, '103': 64, '102': 64,
+        '74': 64,  '71': 64,  '73': 64,  '75': 64,
+        '95': 15,  '76': 64,  '77': 64,  '78': 64,
+        '91': 20,  '93': 0,   '94': 0
+    };
+
+    if (c.includes('PIANO')) {
+        if (c.includes('ELEC') || name.includes('E.PIANO') || name.includes('RHODES') || name.includes('WURLI') || name.includes('CLAVI')) {
+            if (e === 'Estudio') p = { '104':68, '103':66, '102':70, '74':70, '71':64, '73':64, '75':66, '95':26, '76':68, '77':66, '78':64, '91':22, '93':25, '94':0 };
+            else if (e === 'Vivo') p = { '104':74, '103':72, '102':78, '74':76, '71':66, '73':64, '75':64, '95':48, '76':72, '77':70, '78':64, '91':34, '93':35, '94':15 };
+            else if (e === 'Sala') p = { '104':72, '103':62, '102':72, '74':68, '71':64, '73':66, '75':72, '95':20, '76':66, '77':64, '78':68, '91':58, '93':38, '94':25 };
+            else p = { '104':72, '103':70, '102':60, '74':62, '71':64, '73':64, '75':68, '95':32, '76':70, '77':68, '78':64, '91':26, '93':22, '94':0 };
+        } else {
+            if (name.includes('BRIGHT') || name.includes('POP') || name.includes('ROCK')) {
+                if (e === 'Estudio') p = { '104':68, '103':66, '102':76, '74':74, '71':66, '73':62, '75':64, '95':20, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
+                else if (e === 'Vivo') p = { '104':74, '103':74, '102':84, '74':80, '71':68, '73':60, '75':64, '95':35, '76':64, '77':64, '78':64, '91':38, '93':12, '94':0 };
+                else if (e === 'Sala') p = { '104':76, '103':62, '102':74, '74':68, '71':64, '73':64, '75':72, '95':18, '76':64, '77':64, '78':64, '91':64, '93':0, '94':10 };
+                else p = { '104':72, '103':70, '102':62, '74':64, '71':64, '73':64, '75':66, '95':22, '76':64, '77':64, '78':64, '91':25, '93':0, '94':0 };
+            } else if (name.includes('MELLOW') || name.includes('BALLAD')) {
+                if (e === 'Estudio') p = { '104':72, '103':64, '102':64, '74':62, '71':64, '73':65, '75':68, '95':12, '76':64, '77':64, '78':64, '91':24, '93':0, '94':0 };
+                else if (e === 'Vivo') p = { '104':76, '103':70, '102':70, '74':68, '71':64, '73':64, '75':66, '95':22, '76':64, '77':64, '78':64, '91':40, '93':0, '94':0 };
+                else if (e === 'Sala') p = { '104':80, '103':60, '102':66, '74':60, '71':64, '73':66, '75':76, '95':15, '76':64, '77':64, '78':64, '91':68, '93':0, '94':15 };
+                else p = { '104':76, '103':68, '102':52, '74':54, '71':64, '73':65, '75':70, '95':25, '76':64, '77':64, '78':64, '91':28, '93':0, '94':0 };
+            } else {
+                if (e === 'Estudio') p = { '104':70, '103':64, '102':72, '74':70, '71':64, '73':64, '75':66, '95':15, '76':64, '77':64, '78':64, '91':20, '93':0, '94':0 };
+                else if (e === 'Vivo') p = { '104':76, '103':72, '102':80, '74':76, '71':66, '73':62, '75':64, '95':30, '76':64, '77':64, '78':64, '91':36, '93':10, '94':0 };
+                else if (e === 'Sala') p = { '104':78, '103':60, '102':70, '74':64, '71':64, '73':65, '75':74, '95':18, '76':64, '77':64, '78':64, '91':66, '93':0, '94':12 };
+                else p = { '104':74, '103':70, '102':56, '74':58, '71':64, '73':64, '75':68, '95':24, '76':64, '77':64, '78':64, '91':24, '93':0, '94':0 };
+            }
+        }
+    } else if (c.includes('ORGAN')) {
+        if (c.includes('PIPE') || name.includes('PIPE') || name.includes('CHURCH')) {
+            if (e === 'Estudio') p = { '104':74, '103':66, '102':70, '74':70, '71':64, '73':66, '75':70, '95':10, '76':64, '77':64, '78':64, '91':45, '93':0, '94':10 };
+            else if (e === 'Vivo') p = { '104':78, '103':72, '102':76, '74':74, '71':64, '73':65, '75':68, '95':20, '76':64, '77':64, '78':64, '91':55, '93':0, '94':15 };
+            else if (e === 'Sala') p = { '104':82, '103':66, '102':74, '74':68, '71':64, '73':68, '75':78, '95':15, '76':64, '77':64, '78':64, '91':80, '93':0, '94':20 };
+            else p = { '104':76, '103':68, '102':64, '74':64, '71':64, '73':66, '75':72, '95':18, '76':64, '77':64, '78':64, '91':42, '93':0, '94':0 };
+        } else {
+            if (e === 'Estudio') p = { '104':70, '103':68, '102':72, '74':72, '71':64, '73':62, '75':64, '95':38, '76':76, '77':70, '78':64, '91':24, '93':25, '94':0 };
+            else if (e === 'Vivo') p = { '104':76, '103':74, '102':80, '74':78, '71':66, '73':60, '75':64, '95':62, '76':80, '77':74, '78':64, '91':35, '93':30, '94':10 };
+            else if (e === 'Sala') p = { '104':74, '103':64, '102':72, '74':68, '71':64, '73':64, '75':72, '95':25, '76':72, '77':66, '78':66, '91':60, '93':28, '94':20 };
+            else p = { '104':72, '103':72, '102':62, '74':64, '71':64, '73':62, '75':66, '95':42, '76':78, '77':72, '78':64, '91':28, '93':22, '94':0 };
+        }
+    } else if (c.includes('GUITAR')) {
+        if (c.includes('ACOUS') || name.includes('NYLON') || name.includes('STEEL')) {
+            if (e === 'Estudio') p = { '104':72, '103':66, '102':78, '74':74, '71':64, '73':62, '75':64, '95':18, '76':64, '77':64, '78':64, '91':22, '93':15, '94':0 };
+            else if (e === 'Vivo') p = { '104':76, '103':72, '102':84, '74':80, '71':66, '73':60, '75':64, '95':32, '76':64, '77':64, '78':64, '91':34, '93':25, '94':10 };
+            else if (e === 'Sala') p = { '104':76, '103':62, '102':74, '74':68, '71':64, '73':64, '75':72, '95':15, '76':64, '77':64, '78':64, '91':62, '93':20, '94':18 };
+            else p = { '104':74, '103':70, '102':60, '74':62, '71':64, '73':62, '75':66, '95':25, '76':64, '77':64, '78':64, '91':26, '93':18, '94':0 };
+        } else {
+            if (e === 'Estudio') p = { '104':70, '103':72, '102':74, '74':74, '71':66, '73':60, '75':64, '95':48, '76':66, '77':64, '78':64, '91':25, '93':25, '94':15 };
+            else if (e === 'Vivo') p = { '104':76, '103':78, '102':82, '74':82, '71':70, '73':58, '75':64, '95':72, '76':68, '77':66, '78':64, '91':38, '93':32, '94':25 };
+            else if (e === 'Sala') p = { '104':74, '103':66, '102':72, '74':70, '71':64, '73':62, '75':72, '95':35, '76':64, '77':64, '78':64, '91':64, '93':30, '94':30 };
+            else p = { '104':74, '103':74, '102':62, '74':64, '71':64, '73':60, '75':66, '95':40, '76':66, '77':64, '78':64, '91':28, '93':20, '94':10 };
+        }
+    } else if (c.includes('BASS')) {
+        if (e === 'Estudio') p = { '104':84, '103':68, '102':60, '74':66, '71':64, '73':60, '75':64, '95':25, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
+        else if (e === 'Vivo') p = { '104':90, '103':74, '102':68, '74':72, '71':66, '73':58, '75':64, '95':45, '76':64, '77':64, '78':64, '91':16, '93':10, '94':0 };
+        else if (e === 'Sala') p = { '104':86, '103':62, '102':62, '74':62, '71':64, '73':62, '75':70, '95':20, '76':64, '77':64, '78':64, '91':35, '93':0, '94':0 };
+        else p = { '104':86, '103':72, '102':52, '74':56, '71':64, '73':60, '75':66, '95':30, '76':64, '77':64, '78':64, '91':15, '93':0, '94':0 };
+    } else if (c.includes('STRINGS') || c.includes('CHOIR')) {
+        if (e === 'Estudio') p = { '104':72, '103':66, '102':74, '74':70, '71':64, '73':70, '75':72, '95':15, '76':68, '77':66, '78':66, '91':35, '93':20, '94':0 };
+        else if (e === 'Vivo') p = { '104':76, '103':72, '102':80, '74':76, '71':66, '73':68, '75':70, '95':25, '76':70, '77':68, '78':64, '91':48, '93':28, '94':15 };
+        else if (e === 'Sala') p = { '104':80, '103':62, '102':76, '74':68, '71':64, '73':72, '75':78, '95':18, '76':68, '77':66, '78':68, '91':75, '93':25, '94':20 };
+        else p = { '104':74, '103':68, '102':62, '74':62, '71':64, '73':70, '75':72, '95':20, '76':68, '77':66, '78':66, '91':35, '93':15, '94':0 };
+    } else if (c.includes('BRASS') || c.includes('SAX') || c.includes('REED') || c.includes('PIPE')) {
+        if (e === 'Estudio') p = { '104':72, '103':70, '102':74, '74':72, '71':64, '73':64, '75':64, '95':22, '76':68, '77':66, '78':66, '91':25, '93':10, '94':0 };
+        else if (e === 'Vivo') p = { '104':78, '103':76, '102':82, '74':80, '71':66, '73':62, '75':64, '95':38, '76':70, '77':68, '78':64, '91':40, '93':18, '94':12 };
+        else if (e === 'Sala') p = { '104':78, '103':64, '102':72, '74':66, '71':64, '73':66, '75':74, '95':18, '76':68, '77':66, '78':68, '91':68, '93':15, '94':18 };
+        else p = { '104':74, '103':74, '102':60, '74':60, '71':64, '73':64, '75':66, '95':30, '76':70, '77':68, '78':64, '91':28, '93':10, '94':0 };
+    } else if (c.includes('SYNTH')) {
+        if (c.includes('PAD') || name.includes('PAD')) {
+            if (e === 'Estudio') p = { '104':72, '103':66, '102':74, '74':70, '71':66, '73':74, '75':76, '95':22, '76':68, '77':66, '78':66, '91':45, '93':35, '94':20 };
+            else if (e === 'Vivo') p = { '104':76, '103':70, '102':82, '74':78, '71':70, '73':72, '75':74, '95':36, '76':70, '77':68, '78':64, '91':55, '93':45, '94':25 };
+            else if (e === 'Sala') p = { '104':80, '103':62, '102':76, '74':68, '71':66, '73':76, '75':80, '95':25, '76':68, '77':66, '78':68, '91':75, '93':40, '94':30 };
+            else p = { '104':74, '103':68, '102':62, '74':62, '71':66, '73':74, '75':76, '95':28, '76':68, '77':66, '78':66, '91':40, '93':30, '94':15 };
+        } else {
+            if (e === 'Estudio') p = { '104':70, '103':72, '102':76, '74':78, '71':72, '73':60, '75':66, '95':45, '76':70, '77':66, '78':64, '91':28, '93':25, '94':20 };
+            else if (e === 'Vivo') p = { '104':76, '103':78, '102':86, '74':86, '71':76, '73':58, '75':64, '95':65, '76':72, '77':70, '78':64, '91':42, '93':35, '94':28 };
+            else if (e === 'Sala') p = { '104':74, '103':66, '102':74, '74':72, '71':70, '73':62, '75':74, '95':35, '76':68, '77':64, '78':66, '91':65, '93':30, '94':32 };
+            else p = { '104':72, '103':74, '102':64, '74':66, '71':68, '73':60, '75':68, '95':48, '76':70, '77':66, '78':64, '91':30, '93':20, '94':15 };
+        }
+    } else {
+        if (e === 'Estudio') p = { '104':70, '103':68, '102':74, '74':72, '71':66, '73':62, '75':64, '95':25, '76':66, '77':64, '78':64, '91':25, '93':15, '94':10 };
+        else if (e === 'Vivo') p = { '104':76, '103':74, '102':82, '74':78, '71':68, '73':60, '75':64, '95':42, '76':68, '77':66, '78':64, '91':38, '93':22, '94':18 };
+        else if (e === 'Sala') p = { '104':76, '103':64, '102':74, '74':68, '71':64, '73':64, '75':74, '95':20, '76':66, '77':64, '78':66, '91':65, '93':20, '94':22 };
+        else p = { '104':74, '103':72, '102':62, '74':62, '71':64, '73':62, '75':66, '95':30, '76':66, '77':64, '78':64, '91':28, '93':15, '94':10 };
+    }
+
+    return p;
+}
+
 function applySmartProfile(part, category) {
     if (category) activeCategories[part] = category;
     const cat = activeCategories[part];
@@ -783,35 +886,30 @@ function applySmartProfile(part, category) {
         eqState[part][ctrl.cc] = ctrl.def;
     });
 
-    // 2a. Per-tone+environment override (user-saved) — takes priority over category profile
-    const toneId = currentTone[part]?.id;
-    const savedProfile = toneId != null && toneEQ[toneId]?.[currentEnv];
-    if (savedProfile) {
-        for (const [cc, val] of Object.entries(savedProfile)) {
+    // 2. Resolve Tone + Environment Profile
+    const tone = currentTone[part];
+    const toneId = tone?.id;
+    const userOverride = toneId != null && toneEQ[toneId]?.[currentEnv];
+    
+    // Fallback to rich Tone + Environment Preset Engine
+    const profile = userOverride || getToneEnvPreset(tone, cat, currentEnv);
+
+    if (profile) {
+        for (const [cc, val] of Object.entries(profile)) {
             if (PERFORMANCE_CCS.has(Number(cc))) continue;
             eqState[part][cc] = val;
         }
-    } else {
-        // 2b. Category Sound Profile (fallback)
-        if (ENVIRONMENTS[currentEnv] && ENVIRONMENTS[currentEnv][cat]) {
-            for (const [cc, val] of Object.entries(ENVIRONMENTS[currentEnv][cat])) {
-                eqState[part][cc] = val;
-            }
-        }
     }
+
     // 3. Part Mix Rules always applied — CC7 is per-part balance, not per-tone character.
-    // A saved toneEQ must never lock in a low volume from a different part or an
-    // accidental fader touch. Users can still adjust volume live via the fader.
     if (part === 'U1') eqState[part][7] = 100;
     if (part === 'U2') eqState[part][7] = 75;
     if (part === 'L')  eqState[part][7] = 100;
 
-    // Ensure CC72 (Release) is never in eqState — send a neutral value to keyboard instead
+    // Ensure CC72 (Release) is never in eqState
     delete eqState[part][72]; delete eqState[part]['72'];
 
-    // 4. Send to keyboard and update UI — skip performance CCs (preserve live state)
-    // CC72 sent LAST so it isn't overwritten by the EQ burst or Casio's internal PC reset
-    // Writing fader.value can fire 'input' on some engines — guard the window first.
+    // 4. Send to keyboard and update UI — skip performance CCs
     if (activePart === part) beginEqProgrammatic();
     EQ_CONTROLS.forEach(ctrl => {
         if (PERFORMANCE_CCS.has(ctrl.cc)) return;
@@ -819,23 +917,26 @@ function applySmartProfile(part, category) {
         sendCC(part, ctrl.cc, val);
         if (activePart === part) {
             if (ctrl.type === 'switch') {
-                const btn = document.querySelector(`.eq-switch[data-cc="${ctrl.cc}"]`);
-                if (btn) {
+                document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
                     btn.innerText = val > 63 ? 'ON' : 'OFF';
                     btn.classList.toggle('sus-on', val > 63);
-                }
+                });
             } else {
-                const f = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
-                const valEl = document.getElementById('eq-val-' + ctrl.cc);
-                if (f && valEl) {
+                document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(f => {
                     f.value = val;
+                });
+                document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(valEl => {
                     valEl.innerText = formatVal(ctrl.label, val);
-                }
+                });
             }
         }
     });
-    // Sustain (CC72) sent after all EQ CCs so a tone change never drops it
-    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
+
+    // 5. Sustain: ONLY assert if sustain is ON in app.
+    // When OFF, do NOT send CC 72 — preserve tone's native envelope and keyboard state!
+    if (tuning[part].sus) {
+        sendCC(part, 72, SUS_RELEASE);
+    }
 }
 
 function buildEQ() {
@@ -918,8 +1019,8 @@ function buildEQ() {
                 lbl.title     = ctrl.tip;
     
                 const valSpan = document.createElement('span');
-                valSpan.className = 'fader-value';
-                valSpan.id        = 'eq-val-' + ctrl.cc;
+                valSpan.className = 'fader-value eq-val-' + ctrl.cc;
+                valSpan.dataset.cc = ctrl.cc;
                 valSpan.innerText = formatVal(ctrl.label, ctrl.def);
     
                 const fader = document.createElement('input');
@@ -936,34 +1037,31 @@ function buildEQ() {
                 fader.addEventListener('input', e => {
                     const v = parseInt(e.target.value);
                     _faderPart = activePart; // refresh on every real user move
-                    valSpan.innerText = formatVal(ctrl.label, v);
-                    // Programmatic writes (switchEQ / applySmartProfile / incoming CC)
-                    // must not echo back: a spurious ~17-CC burst resets CC72 on EVERY
-                    // channel of the CT-S500 and drops sustain on all three parts.
+                    document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
+                        sp.innerText = formatVal(ctrl.label, v);
+                    });
+                    document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
+                        if (other !== fader) other.value = v;
+                    });
+                    // Programmatic writes must not echo back
                     if (isEqProgrammatic()) return;
-                    // No-op move: the part already has this value — don't re-send.
                     const cur = eqState[_faderPart][ctrl.cc];
                     if ((cur !== undefined ? cur : ctrl.def) === v) return;
-                    if (ctrl.cc === 7) {
-                        // Volume: solo al part activo
-                        eqState[_faderPart][7] = v;
-                        sendCC(_faderPart, 7, v);
-                    } else {
-                        eqState[_faderPart][ctrl.cc] = v;
-                        sendCC(_faderPart, ctrl.cc, v);
-                    }
+                    eqState[_faderPart][ctrl.cc] = v;
+                    sendCC(_faderPart, ctrl.cc, v);
                 });
                 fader.addEventListener('change', () => {
-                    // Use _faderPart (set during the last real input event) so the save
-                    // targets the part that was active when the user was actually dragging.
-                    // Reconcile: 'change' is the committed position, so it wins even if the
-                    // 'input' stream was swallowed by the programmatic-write guard.
                     const v = parseInt(fader.value);
                     const cur = eqState[_faderPart][ctrl.cc];
                     if ((cur !== undefined ? cur : ctrl.def) !== v) {
                         eqState[_faderPart][ctrl.cc] = v;
                         sendCC(_faderPart, ctrl.cc, v);
-                        valSpan.innerText = formatVal(ctrl.label, v);
+                        document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
+                            sp.innerText = formatVal(ctrl.label, v);
+                        });
+                        document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
+                            if (other !== fader) other.value = v;
+                        });
                     }
                     saveToneEQForPart(_faderPart);
                     if (typeof saveAppState === 'function') saveAppState();
@@ -1002,43 +1100,31 @@ function switchEQ(part) {
     const card = document.getElementById('card-' + part);
     if (card) card.classList.add('active-track');
 
-    // Raise the guard BEFORE touching fader.value and keep it open for a short
-    // window: some mobile browsers fire 'input' on programmatic changes, and the
-    // event can arrive on a later task (after a synchronous guard was cleared).
-    // Those spurious events would send a ~17-CC burst to the Casio and reset
-    // CC72 on every channel.
     beginEqProgrammatic();
     EQ_CONTROLS.forEach(ctrl => {
         const val = eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def;
 
         if (ctrl.type === 'switch') {
-            const btn = document.querySelector(`.eq-switch[data-cc="${ctrl.cc}"]`);
-            if (btn) {
+            document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
                 btn.innerText = val > 63 ? 'ON' : 'OFF';
                 btn.classList.toggle('sus-on', val > 63);
-            }
+            });
         } else {
-            const fader = document.querySelector(`.eq-fader[data-cc="${ctrl.cc}"]`);
-            if (fader) fader.value = val;
-
-            const valEl = document.getElementById('eq-val-' + ctrl.cc);
-            if (valEl) valEl.innerText = formatVal(ctrl.label, val);
+            document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(fader => {
+                fader.value = val;
+            });
+            document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(valEl => {
+                valEl.innerText = formatVal(ctrl.label, val);
+            });
         }
     });
-
-    // Sustain for the part being switched to (covers a burst that slipped past
-    // the guard), then resync ALL parts: switching U1 → U2 → L is exactly the
-    // operation that used to leave the other two parts without sustain.
-    sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
-    resyncAllSustain();
+    // Switching EQ view does NOT disrupt sustain or touch CC72!
 }
+
 function resetEQ() {
-    // Capture activePart now — it may change before the async timers fire if the
-    // user switches parts within the window.
     const part = activePart;
-    resetToneEQForPart(part);
-    applySmartProfile(part); // ~18 CCs — burst, so resync every part
-    resyncAllSustain();
+    resetToneEQForPart(part); // Clear user override in localStorage for this tone+env
+    applySmartProfile(part);  // Re-apply authentic tone+env preset (does not touch sustain)
 }
 
 function formatVal(label, val) {
@@ -1065,23 +1151,25 @@ window.toneSearch = {};
 const currentTone = { U1: null, U2: null, L: null };
 
 // Per-part cancellable timers — shared by scheduleProfile and scheduleSustainResync.
-// This ensures rapid tone navigation, env changes, and resets all cancel each other's
-// pending CC72 re-sends instead of piling up stale timers.
 const _pendingProfile = { U1: [], U2: [], L: [] };
 const _pendingSustain = { U1: [], U2: [], L: [] };
 
 function scheduleSustainResync(part, delays) {
     _pendingSustain[part].forEach(clearTimeout);
+    _pendingSustain[part] = [];
+    // If sustain is OFF, NEVER send CC 72 — preserve tone's native envelope and keyboard state!
+    if (!tuning[part].sus) return;
     _pendingSustain[part] = delays.map(d =>
-        setTimeout(() => sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part)), d)
+        setTimeout(() => {
+            if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
+        }, d)
     );
 }
 
-// Every burst source resyncs ALL three parts: a burst on one channel can reset
-// the controllers of the other two, which is exactly how one part's sustain
-// silently disappears while another part is being edited.
 function resyncAllSustain() {
-    ['U1', 'U2', 'L'].forEach(p => scheduleSustainResync(p, SUSTAIN_TAPS));
+    ['U1', 'U2', 'L'].forEach(p => {
+        if (tuning[p].sus) scheduleSustainResync(p, SUSTAIN_TAPS);
+    });
 }
 
 function scheduleProfile(part, catName) {
@@ -1351,21 +1439,14 @@ function initQuickControls() {
             btn.innerText = isOn ? 'ON' : 'OFF';
             btn.classList.toggle('sus-on', isOn);
 
-            sendCC(part, 72, isOn ? SUS_RELEASE : releaseNeutral(part));
-
-            if (!isOn) {
-                // Clear any damper hold left by the old CC64-based sustain / a stuck pedal.
+            if (isOn) {
+                sendCC(part, 72, SUS_RELEASE);
+                scheduleSustainResync(part, [40, 150, 400]);
+            } else {
+                // Sustain turned OFF: return release to standard neutral and clear damper
+                sendCC(part, 72, RELEASE_NEUTRAL);
                 sendCC(part, 64, 0);
             }
-            // Casio CT-S500 sometimes ignores a single CC if its buffer is busy —
-            // retry once for BOTH directions (ON used to be sent only once, so
-            // "sustain doesn't turn on" was a real failure mode). Re-read the state
-            // at fire time so a rapid double-tap can't undo the newer decision.
-            setTimeout(() => {
-                if (tuning[part].sus === isOn) {
-                    sendCC(part, 72, isOn ? SUS_RELEASE : releaseNeutral(part));
-                }
-            }, 20);
         });
     });
 }
@@ -1855,6 +1936,10 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xB0 | ch, 0x00, msb]);
     midiOutput.send([0xB0 | ch, 0x20, lsb || 0]);
     midiOutput.send([0xC0 | ch, pc]);
+    // If sustain is active on this part, immediately re-assert it so tone changes never drop sustain
+    if (tuning[part].sus) {
+        scheduleSustainResync(part, [30, 120, 300, 700]);
+    }
 }
 
 window.sendCoarseTuning = function sendCoarseTuning(part) {
@@ -1876,7 +1961,7 @@ window.swapPartState = function(partA, partB) {
     [partA, partB].forEach(p => {
         const btn = document.getElementById('sus-' + p);
         if (btn) { btn.innerText = tuning[p].sus ? 'ON' : 'OFF'; btn.classList.toggle('sus-on', tuning[p].sus); }
-        sendCC(p, 72, tuning[p].sus ? SUS_RELEASE : releaseNeutral(p));
+        if (tuning[p].sus) sendCC(p, 72, SUS_RELEASE);
         sendCoarseTuning(p);
     });
 };
@@ -1897,24 +1982,20 @@ function pushAllToKeyboard(skipTones = false) {
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCoarseTuning(part);
-            sendCC(part, 72, tuning[part].sus ? SUS_RELEASE : releaseNeutral(part));
+            if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
         });
     }, skipTones ? 0 : 150);
-    // Re-send CC72 afterwards — CT-S500 resets controllers after tone load AND
-    // after a big CC burst. The skipTones path (statechange with the same port)
-    // sends 81 CCs in a single tick, so it needs the resync just as much:
-    // without it, U1/U2 lose sustain while only the last part keeps it.
     resyncAllSustain();
 }
 
 
 function debugMidiPorts() {
     if (!midiAccess) { alert('MIDI not yet initialized. Touch screen to retry.'); return; }
-    let msg = 'Entradas:\n';
+    let msg = 'Inputs:\n';
     for (let i of midiAccess.inputs.values()) msg += '- ' + i.name + ' (' + i.state + ')\n';
-    msg += '\nSalidas:\n';
+    msg += '\nOutputs:\n';
     for (let o of midiAccess.outputs.values()) msg += '- ' + o.name + ' (' + o.state + ')\n';
-    alert(msg || 'Sin puertos MIDI.');
+    alert(msg || 'No MIDI ports found.');
 }
 document.querySelector('.status-badge')?.addEventListener('click', () => {
     midiInitAttempted = true; // prevent double init from the document {once} listener
