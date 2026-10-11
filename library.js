@@ -12,8 +12,32 @@ const RepertorioApp = {
 
     init() {
         this.bindEvents();
+        this.initSubTabs();
         this.populateTransposeDropdown();
-        console.log("Módulo Repertorio Iniciado.");
+        console.log("Library Module Initialized.");
+    },
+
+    initSubTabs() {
+        const btnSongs = document.getElementById('lib-tab-btn-songs');
+        const btnEvents = document.getElementById('lib-tab-btn-events');
+        const panelSongs = document.getElementById('lib-subpanel-songs');
+        const panelEvents = document.getElementById('lib-subpanel-events');
+
+        if (btnSongs && btnEvents) {
+            btnSongs.addEventListener('click', () => {
+                btnSongs.classList.add('active-tab');
+                btnEvents.classList.remove('active-tab');
+                if (panelSongs) panelSongs.style.display = 'flex';
+                if (panelEvents) panelEvents.style.display = 'none';
+            });
+
+            btnEvents.addEventListener('click', () => {
+                btnEvents.classList.add('active-tab');
+                btnSongs.classList.remove('active-tab');
+                if (panelSongs) panelSongs.style.display = 'none';
+                if (panelEvents) panelEvents.style.display = 'flex';
+            });
+        }
     },
 
     bindEvents() {
@@ -272,16 +296,16 @@ if (btnAi) {
     btnAi.addEventListener('click', async () => {
         const queryInput = document.getElementById('lib-ai-query');
         const query = queryInput ? queryInput.value.trim() : '';
-        if (!query) return alert("Por favor escribe el nombre de la canción o pega el enlace de YouTube.");
+        if (!query) return alert("Please enter a song name or paste a YouTube link.");
         
         const apiKey = localStorage.getItem('gemini_api_key');
         if (!apiKey) {
-            alert("Por favor ve a PRESETS y configura tu llave Gemini API Key.");
+            alert("Please go to PRESETS and configure your free Gemini API Key.");
             document.querySelector('[data-target="view-settings"]')?.click();
             return;
         }
         
-        btnAi.innerText = "Buscando...";
+        btnAi.innerText = "Searching...";
         btnAi.disabled = true;
         
         try {
@@ -326,7 +350,7 @@ Devuelve únicamente un JSON con este formato exacto, sin explicaciones ni forma
             console.error(e);
             alert("Error al buscar o procesar la canción. Verifica tu conexión o API Key.");
         } finally {
-            btnAi.innerText = "Buscar canción";
+            btnAi.innerText = "Search Song";
             btnAi.disabled = false;
         }
     });
@@ -337,13 +361,13 @@ if (btnSaveCloud) {
     btnSaveCloud.addEventListener('click', async () => {
         const pat = localStorage.getItem('github_pat');
         if (!pat) {
-            alert("Por favor ve a PRESETS y configura tu GitHub PAT para guardar en la nube.");
+            alert("Please go to PRESETS and configure your GitHub PAT to save to the cloud.");
             document.querySelector('[data-target="view-settings"]')?.click();
             return;
         }
         
         if (!RepertorioApp.currentSong || !RepertorioApp.currentSong.title) {
-            return alert("No hay ninguna canción activa para guardar.");
+            return alert("No active song loaded to save.");
         }
         
         const title = RepertorioApp.currentSong.title;
@@ -351,7 +375,7 @@ if (btnSaveCloud) {
         const rawText = RepertorioApp.currentSong.rawText || '';
         const id = title.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now().toString().slice(-4);
         
-        btnSaveCloud.innerText = "Guardando...";
+        btnSaveCloud.innerText = "Saving...";
         btnSaveCloud.disabled = true;
         
         try {
@@ -393,14 +417,14 @@ if (btnSaveCloud) {
                 })
             });
             
-            alert("¡Canción guardada en tu nube exitosamente!");
+            alert("Song saved to your cloud library successfully!");
             RepertoireSync.loadIndex();
             
         } catch(e) {
             console.error(e);
-            alert("Error al guardar en GitHub. Verifica tu Token y permisos.");
+            alert("Error saving to GitHub. Please check your GitHub Token and permissions.");
         } finally {
-            btnSaveCloud.innerText = "Guardar en nube";
+            btnSaveCloud.innerText = "Save to Cloud";
             btnSaveCloud.disabled = false;
         }
     });

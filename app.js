@@ -1702,12 +1702,12 @@ function initArranger() {
     let clockTimer   = null;
 
     // ── Rhythm list ──────────────────────────────────
-    function buildRhythmList(filter = '', cat = 'Todos') {
+    function buildRhythmList(filter = '', cat = 'ALL') {
         const list = document.getElementById('rhythmList');
         if (!list || !window.RAW_RHYTHMS) return;
 
         const items = RAW_RHYTHMS.filter(r => {
-            const matchCat = cat === 'Todos' || r.cat === cat;
+            const matchCat = cat === 'ALL' || r.cat === cat;
             const matchQ   = r.name.toLowerCase().includes(filter.toLowerCase());
             return matchCat && matchQ;
         });
@@ -1729,7 +1729,7 @@ function initArranger() {
     function buildCatFilter() {
         const sel = document.getElementById('rhythmCatFilter');
         if (!sel || !window.RAW_RHYTHMS) return;
-        const cats = ['Todos', ...new Set(RAW_RHYTHMS.map(r => r.cat))];
+        const cats = ['ALL', ...new Set(RAW_RHYTHMS.map(r => r.cat))];
         sel.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
         sel.addEventListener('change', () => buildRhythmList(
             document.getElementById('rhythmSearch')?.value || '', sel.value
@@ -1740,7 +1740,7 @@ function initArranger() {
     buildRhythmList();
 
     document.getElementById('rhythmSearch')?.addEventListener('input', e => {
-        buildRhythmList(e.target.value, document.getElementById('rhythmCatFilter')?.value || 'Todos');
+        buildRhythmList(e.target.value, document.getElementById('rhythmCatFilter')?.value || 'ALL');
     });
 
     // ── MIDI Clock ───────────────────────────────────

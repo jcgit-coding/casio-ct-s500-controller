@@ -6,7 +6,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v207">
+    <link rel="stylesheet" href="style.css?v208">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v207 &middot; sáb 10 oct 23:59 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v208 &middot; dom 11 oct 00:15 &middot; COT</span>
             </div>
         </div>
 
@@ -668,71 +668,79 @@
         <!-- =========== VIEW: LIBRARY =========== -->
         <div class="app-view" id="view-library">
             
-            <!-- Barra Superior: Búsqueda Limpia y Sobria -->
+            <!-- Toolbar: Clean Search -->
             <div class="panel panel-toolbar" style="align-items: center; gap: 12px;">
-                <input type="text" id="lib-ai-query" class="search-input" placeholder="Pega el enlace de YouTube o nombre de la canción..." style="flex:1;">
+                <input type="text" id="lib-ai-query" class="search-input" placeholder="Paste YouTube link or type song name..." style="flex:1;">
                 <button class="btn btn-primary" id="lib-btn-ai" style="padding: 10px 24px; font-weight: 600; white-space: nowrap;">
-                    Buscar canción
+                    Search Song
                 </button>
             </div>
 
             <div class="app-layout-split">
                 
-                <!-- SIDEBAR: EVENTOS -->
+                <!-- SIDEBAR: SUB-TABS (SONGS / EVENTS) -->
                 <div class="sidebar-col">
-                    <!-- PANEL: CANCIONES / REPERTORIO GENERAL -->
-                    <div class="panel" style="flex: 1; display:flex; flex-direction:column; gap:10px;">
-                        <div class="panel-title" style="margin-bottom:0;">Canciones</div>
-                        <input type="text" id="lib-song-search-filter" class="search-input" placeholder="Filtrar por canción o artista..." style="padding: 6px 10px; font-size: 12px;">
-                        <div id="cloud-song-list-container" style="overflow-y:auto; max-height:280px; display:flex; flex-direction:column; gap:4px;">
-                            <div style="color:var(--text-muted); font-size:12px;">Cargando canciones...</div>
+                    <div class="panel" style="flex: 1; display:flex; flex-direction:column; gap:12px;">
+                        
+                        <!-- Sub-Tabs Navigation -->
+                        <div style="display:flex; gap:6px; background:rgba(0,0,0,0.2); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+                            <button id="lib-tab-btn-songs" class="btn active-tab" style="flex:1; padding:6px 12px; font-size:12px; font-weight:bold;">SONGS</button>
+                            <button id="lib-tab-btn-events" class="btn" style="flex:1; padding:6px 12px; font-size:12px; font-weight:bold;">EVENTS</button>
                         </div>
-                    </div>
 
-                    <!-- PANEL: PRÓXIMOS EVENTOS -->
-                    <div class="panel" style="flex: 1;">
-                        <div class="panel-title">Próximos Eventos</div>
-                        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                            <input type="date" id="lib-date-picker" class="search-input" style="flex: 1;">
-                            <button class="btn" id="lib-btn-add-event"><span class="material-symbols-outlined">add</span></button>
-                        </div>
-                        <div id="lib-event-list" style="display:flex; flex-direction:column; gap:10px;">
-                            <div class="event-list-empty">
-                                No hay eventos programados.<br>Selecciona una fecha arriba.
+                        <!-- SUB-PANEL: SONGS -->
+                        <div id="lib-subpanel-songs" style="display:flex; flex-direction:column; gap:10px; flex:1;">
+                            <input type="text" id="lib-song-search-filter" class="search-input" placeholder="Filter by title or artist..." style="padding: 8px 12px; font-size: 12px;">
+                            <div id="cloud-song-list-container" style="overflow-y:auto; flex:1; max-height:480px; display:flex; flex-direction:column; gap:6px;">
+                                <div style="color:var(--text-muted); font-size:12px; padding:10px;">Loading song library...</div>
                             </div>
                         </div>
+
+                        <!-- SUB-PANEL: EVENTS -->
+                        <div id="lib-subpanel-events" style="display:none; flex-direction:column; gap:12px; flex:1;">
+                            <div style="display: flex; gap: 8px;">
+                                <input type="date" id="lib-date-picker" class="search-input" style="flex: 1;">
+                                <button class="btn" id="lib-btn-add-event" style="padding: 0 14px;"><span class="material-symbols-outlined">add</span></button>
+                            </div>
+                            <div id="lib-event-list" style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; max-height:440px;">
+                                <div class="event-list-empty" style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">
+                                    No events scheduled.<br>Select a date above.
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <!-- MAIN: VISOR DE CANCIÓN -->
+                <!-- MAIN: SONG VIEWER -->
                 <div class="panel main-col">
                     
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap:15px;">
                         <div>
                             <h2 id="lib-song-title" style="margin: 0 0 4px 0; font-size: 26px; font-family: var(--main-font); color: var(--text);">Empty Library</h2>
-                            <span id="lib-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Add a song to begin</span>
+                            <span id="lib-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Select a song or search above</span>
                         </div>
 
                         <div style="display: flex; gap: 12px; align-items: center;">
-                            <!-- Control Transposición -->
+                            <!-- Transpose Control -->
                             <div style="display: flex; flex-direction: column; gap: 4px; background: var(--input-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);">
-                                <span class="daw-control-label">Transponer</span>
+                                <span class="daw-control-label">TRANSPOSE</span>
                                 <select id="lib-transpose-select" class="search-input" style="color: var(--accent); padding: 4px 8px; min-height: auto; width: 140px; font-weight: bold; cursor: pointer;">
-                                    <option value="0">Tono Original</option>
+                                    <option value="0">Original Key</option>
                                 </select>
                             </div>
 
-                            <!-- Botón Maximizar -->
+                            <!-- Action Buttons -->
                             <button class="btn" id="lib-btn-save-cloud" style="padding: 8px 16px; font-weight: 600; color: #33cc66; border-color: rgba(51, 204, 102, 0.4); display: none;">
-                                Guardar en nube
+                                Save to Cloud
                             </button>
                             <button class="btn" id="lib-btn-fullscreen" style="padding: 8px 16px; font-weight: 600;">
-                                Maximizar
+                                Maximize
                             </button>
                         </div>
                     </div>
 
-                    <!-- Lienzo de Letra y Acordes -->
+                    <!-- Chords & Lyrics Sheet -->
                     <div id="lib-chords-view" class="chords-canvas">
                         
                     </div>
@@ -748,28 +756,28 @@
                 <input type="text" id="trainer-search-input" class="search-input" placeholder="Search song in database (e.g. Chopin Nocturne)..." style="flex:1; font-family: var(--main-font);">
                 
                 <button class="btn btn-primary" id="trainer-btn-search" style="display:flex; align-items:center; gap:8px;">
-                    <span class="material-symbols-outlined">search</span> Buscar
+                    <span class="material-symbols-outlined">search</span> Search
                 </button>
                 <div style="width:1px; background:var(--border-color); margin:0 5px;"></div>
                 <label for="trainer-file-import" class="btn" style="display:flex; align-items:center; gap:8px; cursor:pointer; background:var(--accent-dim); color:var(--accent); border-color:var(--accent);">
-                    <span class="material-symbols-outlined">file_upload</span> Importar MIDI Local
+                    <span class="material-symbols-outlined">file_upload</span> Import Local MIDI
                 </label>
                 <input type="file" id="trainer-file-import" accept=".mid,.midi" style="display:none;">
 
             </div>
 
-            <!-- TRANSPORT BAR ESTILO DAW -->
+            <!-- DAW-STYLE TRANSPORT BAR -->
             <div class="daw-transport-bar">
                 
                 <div class="daw-btn-group">
                     <button class="btn daw-btn-play" id="trainer-btn-play" style="display:flex; align-items:center; gap:5px;">
-                        <span class="material-symbols-outlined">play_arrow</span> Reproducir
+                        <span class="material-symbols-outlined">play_arrow</span> Play
                     </button>
                     <button class="btn daw-btn-stop" id="trainer-btn-stop" style="display:flex; align-items:center; gap:5px;">
-                        <span class="material-symbols-outlined">stop</span> Detener
+                        <span class="material-symbols-outlined">stop</span> Stop
                     </button>
                     <button class="btn" id="trainer-btn-wait" style="display:flex; align-items:center; gap:5px;">
-                        <span class="material-symbols-outlined">front_hand</span> Activar Modo Espera (Wait)
+                        <span class="material-symbols-outlined">front_hand</span> Wait Mode
                     </button>
                 </div>
 
@@ -785,9 +793,9 @@
                         </div>
                     </div>
 
-                    <!-- Pitch / Transposición MIDI -->
+                    <!-- Pitch / MIDI Transpose -->
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="daw-control-label">Pitch (Tono)</span>
+                        <span class="daw-control-label">Pitch</span>
                         <div class="daw-stepper">
                             <button id="trainer-pitch-minus">-</button>
                             <input type="text" id="trainer-pitch-val" class="search-input" value="0" style="border: none; padding: 4px; width: 35px; text-align:center; font-weight:bold; color: var(--accent); min-height:auto;">
@@ -819,9 +827,9 @@
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
     <script src="spessasynth_processor.min.js"></script>
-    <script src="app.js?v207"></script>
-    <script src="fix_swap.js?v207"></script>
-    <script src="harmony.js?v207"></script>
+    <script src="app.js?v208"></script>
+    <script src="fix_swap.js?v208"></script>
+    <script src="harmony.js?v208"></script>
     <script src="library.js"></script>
     <script src="trainer.js"></script>
 </body>
