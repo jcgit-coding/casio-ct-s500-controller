@@ -190,33 +190,56 @@ function initCloudSync() {
 
 const RepertoireSync = {
     repoPath: 'jcgit-coding/casio-ct-s500-controller',
+    allSongs: [],
     
     async loadIndex() {
+        const container = document.getElementById('cloud-song-list-container');
         try {
-            // Fetch directo, sin autenticación (ya que es público o usamos Pages)
             const res = await fetch('library/index.json?v=' + Date.now());
             if(!res.ok) throw new Error('No index found');
             const songs = await res.json();
-            this.renderSongList(songs);
+            this.allSongs = Array.isArray(songs) ? songs : [];
+            this.renderSongList(this.allSongs);
+            this.initSearchFilter();
         } catch(e) {
-            console.error('Error cargando repertorio:', e);
-            document.querySelector('.sidebar-col').innerHTML += `<div style='color:#ff3366; margin-top:10px;'>Aún no hay canciones en la nube.</div>`;
+            console.error('Error cargando catálogo:', e);
+            if (container) container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:10px;'>Aún no hay canciones en la base de datos.</div>";
         }
+    },
+
+    initSearchFilter() {
+        const input = document.getElementById('lib-song-search-filter');
+        if (!input || input._bound) return;
+        input._bound = true;
+        input.addEventListener('input', () => {
+            const q = input.value.trim().toLowerCase();
+            if (!q) {
+                this.renderSongList(this.allSongs);
+            } else {
+                const filtered = this.allSongs.filter(s => 
+                    (s.title && s.title.toLowerCase().includes(q)) || 
+                    (s.artist && s.artist.toLowerCase().includes(q))
+                );
+                this.renderSongList(filtered);
+            }
+        });
     },
     
     renderSongList(songs) {
-        const listHTML = songs.map(s => `
-            <div class='song-item' style='padding:10px; border-bottom:1px solid rgba(255,255,255,0.1); cursor:pointer;' onclick='RepertoireSync.openSong("${s.id}")'>
-                <div style='font-weight:bold;'>${s.title}</div>
-                <div style='font-size:12px; color:var(--text-muted);'>${s.artist}</div>
+        const container = document.getElementById('cloud-song-list-container');
+        if (!container) return;
+        
+        if (!songs || songs.length === 0) {
+            container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>Sin canciones coincidentes.</div>";
+            return;
+        }
+
+        container.innerHTML = songs.map(s => `
+            <div class='song-item' style='padding:8px 10px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); cursor:pointer; transition:all .2s;' onclick='RepertoireSync.openSong("${s.id}")'>
+                <div style='font-weight:600; font-size:13px; color:var(--text);'>${s.title}</div>
+                <div style='font-size:11px; color:var(--text-muted);'>${s.artist || "Desconocido"}</div>
             </div>
         `).join('');
-        
-        let sidebar = document.querySelector('.sidebar-col');
-        
-        let existingCloud = document.getElementById('cloud-rep-panel');
-        if(existingCloud) existingCloud.remove();
-        sidebar.insertAdjacentHTML('beforeend', "<div class='panel' id='cloud-rep-panel' style='flex:1; margin-top:12px;'><div class='panel-title'>Repertorio (Cloud)</div><div style='overflow-y:auto; max-height:400px;'>" + listHTML + "</div></div>");
     },
     
     async openSong(id) {
