@@ -1217,14 +1217,25 @@ function initToneSearch() {
         const searchEl = document.getElementById('search-' + part);
         const listEl   = document.getElementById('list-' + part);
 
-        function populateList(tones) {
+        function populateList(tones, queryTokens = []) {
             listEl.innerHTML = '';
             const grouped = {};
             tones.forEach(t => {
                 if (!grouped[t.category]) grouped[t.category] = [];
                 grouped[t.category].push(t);
             });
-            for (const [cat, items] of Object.entries(grouped)) {
+            // Prioritize optgroups whose category name directly matches the search query tokens
+            const sortedCatKeys = Object.keys(grouped).sort((a, b) => {
+                if (queryTokens && queryTokens.length > 0) {
+                    const aCatMatch = queryTokens.some(k => a.toLowerCase().includes(k));
+                    const bCatMatch = queryTokens.some(k => b.toLowerCase().includes(k));
+                    if (aCatMatch && !bCatMatch) return -1;
+                    if (!aCatMatch && bCatMatch) return 1;
+                }
+                return 0; // preserve original db order within tiers
+            });
+            for (const cat of sortedCatKeys) {
+                const items = grouped[cat];
                 const grp = document.createElement('optgroup');
                 grp.label = cat;
                 items.forEach(t => {
@@ -1243,11 +1254,12 @@ function initToneSearch() {
 
         searchEl.addEventListener('input', () => {
             const q = searchEl.value.trim().toLowerCase();
+            const tokens = q ? q.split('|').map(s => s.trim()).filter(Boolean) : [];
             populateList(q ? allTones.filter(t => {
                 const name = t.name.toLowerCase();
                 const cat  = t.category.toLowerCase();
-                return q.split('|').some(k => name.includes(k.trim()) || cat.includes(k.trim()));
-            }) : allTones);
+                return tokens.some(k => name.includes(k) || cat.includes(k));
+            }) : allTones, tokens);
             // Keep the applied tone highlighted if it's in the filtered list (filtering must not "lose" it)
             const cur = currentTone[part];
             listEl.selectedIndex = cur ? [...listEl.options].findIndex(o => JSON.parse(o.value).id === cur.id) : -1;
@@ -1262,20 +1274,13 @@ function initToneSearch() {
                 searchEl.value = btn.dataset.q;
                 searchEl.dispatchEvent(new Event('input'));
                 searchEl.blur();
-                // If current tone is not visible in the new filter, select the first tone
-                // and send it to the Casio — otherwise the UI and hardware would desync.
-                const cur = currentTone[part];
-                const inList = cur && [...listEl.options].some(o => {
-                    try { return JSON.parse(o.value).id === cur.id; } catch(e) { return false; }
-                });
-                if (!inList) {
-                    const opt = selectToneInList(part, () => true, true);
-                    if (opt) {
-                        const d = JSON.parse(opt.value);
-                        changeTone(part, d.bank, d.lsb, d.program);
-                        const catName = opt.parentElement?.tagName === 'OPTGROUP' ? opt.parentElement.label : 'PIANO';
-                        scheduleProfile(part, catName);
-                    }
+                // Select the first tone of the newly filtered category and apply it
+                const opt = selectToneInList(part, () => true, true);
+                if (opt) {
+                    const d = JSON.parse(opt.value);
+                    changeTone(part, d.bank, d.lsb, d.program);
+                    const catName = opt.parentElement?.tagName === 'OPTGROUP' ? opt.parentElement.label : 'PIANO';
+                    scheduleProfile(part, catName);
                 }
             });
         });
