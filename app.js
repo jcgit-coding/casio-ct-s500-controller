@@ -288,9 +288,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Theme Toggle Logic
     const envSel = document.getElementById('envSelector');
     if (envSel) {
-        // Load saved env
-        if (localStorage.getItem('casioEnv')) {
-            currentEnv = localStorage.getItem('casioEnv');
+        // Load saved env — migrate legacy Spanish keys to English
+        const _envMigrate = { 'Estudio': 'Studio', 'Vivo': 'Live', 'Sala': 'Hall' };
+        let _savedEnv = localStorage.getItem('casioEnv');
+        if (_savedEnv) {
+            if (_envMigrate[_savedEnv]) { _savedEnv = _envMigrate[_savedEnv]; localStorage.setItem('casioEnv', _savedEnv); }
+            currentEnv = _savedEnv;
             envSel.value = currentEnv;
         }
         envSel.addEventListener('change', (e) => {
@@ -808,8 +811,39 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
     midiOutput.send([0xB0 | ch, 100, 0x7F]);
 }
-// Swap sustain state between two parts after a UI swap â€” called by fix_swap.js.
-// EQ and categories are rebuilt by the scheduleProfile calls the change events already fire.
+// Swap two track-card DOM elements and restore their instrument state.
+// Wired directly here — no separate fix_swap.js needed.
+document.addEventListener('DOMContentLoaded', () => {
+    const titlesByOrder = { '1': 'INSTRUMENT 1', '2': 'INSTRUMENT 2', '3': 'INSTRUMENT 3' };
+    document.querySelectorAll('.btn-swap').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetPart  = btn.getAttribute('data-target');
+            const currentPart = btn.closest('.track-card').getAttribute('data-part');
+            if (targetPart === currentPart) return;
+            const cardA = document.getElementById('card-' + currentPart);
+            const cardB = document.getElementById('card-' + targetPart);
+            if (!cardA || !cardB) return;
+            const searchA = cardA.querySelector('.search-input'), listA = cardA.querySelector('.tone-list');
+            const searchB = cardB.querySelector('.search-input'), listB = cardB.querySelector('.tone-list');
+            const valA = searchA.value, valB = searchB.value;
+            const selA = listA.selectedIndex >= 0 ? listA.options[listA.selectedIndex].value : null;
+            const selB = listB.selectedIndex >= 0 ? listB.options[listB.selectedIndex].value : null;
+            const orderA = cardA.style.order || getComputedStyle(cardA).order;
+            const orderB = cardB.style.order || getComputedStyle(cardB).order;
+            cardA.style.order = orderB;
+            cardB.style.order = orderA;
+            const titleA = cardA.querySelector('.inst-title'), titleB = cardB.querySelector('.inst-title');
+            if (titleA && titlesByOrder[orderB]) titleA.innerHTML = titlesByOrder[orderB];
+            if (titleB && titlesByOrder[orderA]) titleB.innerHTML = titlesByOrder[orderA];
+            searchA.value = valB; searchB.value = valA;
+            searchA.dispatchEvent(new Event('input')); searchB.dispatchEvent(new Event('input'));
+            if (selB) { Array.from(listA.options).forEach((o, i) => { if (o.value === selB) listA.selectedIndex = i; }); listA.dispatchEvent(new Event('change')); }
+            if (selA) { Array.from(listB.options).forEach((o, i) => { if (o.value === selA) listB.selectedIndex = i; }); listB.dispatchEvent(new Event('change')); }
+            if (window.swapPartState) window.swapPartState(currentPart, targetPart);
+        });
+    });
+});
+
 window.swapPartState = function(partA, partB) {
     [tuning[partA].sus, tuning[partB].sus] = [tuning[partB].sus, tuning[partA].sus];
     [partA, partB].forEach(p => {
