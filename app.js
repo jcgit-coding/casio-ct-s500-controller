@@ -795,7 +795,7 @@ function initQuickControls() {
                 scheduleSustainResync(part, [40, 150, 400]);
             } else {
                 // Sustain turned OFF: return release to standard neutral and clear damper
-                sendCC(part, 72, RELEASE_NEUTRAL);
+                sendCC(part, 72, releaseNeutral(part));
                 sendCC(part, 64, 0);
             }
         });
