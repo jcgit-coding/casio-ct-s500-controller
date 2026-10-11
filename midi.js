@@ -10,7 +10,8 @@ function initMIDI() {
     // Android requires sysex:false -- sysex:true triggers platform init failure, and async
     // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
     const sysex = !/android/i.test(navigator.userAgent);
-    navigator.requestMIDIAccess({ sysex }).then(access => {
+
+    function onAccess(access) {
         midiAccess = access;
         // Debounce: statechange fires for every port open/close; batch into one reconnect
         access.onstatechange = () => {
@@ -18,9 +19,22 @@ function initMIDI() {
             _midiConnectTimer = setTimeout(() => reconnectMIDI(), 300);
         };
         reconnectMIDI();
-    }, err => {
+    }
+
+    function onError(err) {
         const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
-        console.error('[MIDI] error:', err.name, err.message);
+        console.error('[MIDI] error (sysex=' + sysex + '):', err.name, err.message);
+        // If sysex=true was denied, retry without sysex -- basic MIDI still works
+        if (permDenied && sysex) {
+            console.warn('[MIDI] sysex denied, retrying without sysex...');
+            navigator.requestMIDIAccess({ sysex: false }).then(onAccess, err2 => {
+                console.error('[MIDI] retry error:', err2.name, err2.message);
+                setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
+                const warn = document.getElementById('midiPermissionWarn');
+                if (warn) warn.style.display = 'block';
+            });
+            return;
+        }
         if (permDenied) {
             setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
         } else {
@@ -28,7 +42,9 @@ function initMIDI() {
         }
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'block';
-    });
+    }
+
+    navigator.requestMIDIAccess({ sysex }).then(onAccess, onError);
 }
 
 function reconnectMIDI() {
