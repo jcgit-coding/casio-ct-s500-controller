@@ -115,21 +115,41 @@ const TrainerApp = {
             this.allSongs = Array.isArray(data) ? data : [];
             this.filterAndRender();
         } catch(e) {
-            console.error("Error loading trainer index:", e);
-            if (container) {
-                container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; padding:12px;">Failed to load pieces catalog.</div>';
-            }
+            console.warn("Fetch failed, using embedded catalog:", e.message);
+            this.allSongs = TrainerApp._embeddedCatalog;
+            this.filterAndRender();
         }
     },
+
+    // Embedded fallback catalog — used when fetch fails (e.g. file:// protocol)
+    _embeddedCatalog: [
+        { id: "bach_prelude_c",        title: "Prelude in C Major",                   artist: "J.S. Bach",          difficulty: "Beginner" },
+        { id: "beethoven_fur_elise",   title: "Für Elise",                            artist: "L. van Beethoven",   difficulty: "Beginner" },
+        { id: "satie_gymnopedie_1",    title: "Gymnopédie No. 1",                     artist: "Erik Satie",         difficulty: "Beginner" },
+        { id: "mozart_rondo",          title: "Rondo Alla Turca",                     artist: "W.A. Mozart",        difficulty: "Intermediate" },
+        { id: "mozart_lacrimosa",      title: "Lacrimosa (Requiem)",                  artist: "W.A. Mozart",        difficulty: "Intermediate" },
+        { id: "beethoven_moonlight",   title: "Moonlight Sonata",                     artist: "L. van Beethoven",   difficulty: "Intermediate" },
+        { id: "zimmer_interstellar",   title: "Interstellar (Main Theme)",            artist: "Hans Zimmer",        difficulty: "Intermediate" },
+        { id: "tiersen_amelie",        title: "Comptine d'un autre été",              artist: "Yann Tiersen",       difficulty: "Intermediate" },
+        { id: "schubert_ave_maria",    title: "Ave Maria",                            artist: "Franz Schubert",     difficulty: "Intermediate" },
+        { id: "chopin_nocturne_9_2",   title: "Nocturne Op. 9 No. 2",                artist: "Frederic Chopin",    difficulty: "Advanced" },
+        { id: "barber_adagio",         title: "Adagio for Strings",                   artist: "Samuel Barber",      difficulty: "Advanced" },
+        { id: "puccini_nessun_dorma",  title: "Nessun Dorma",                         artist: "Giacomo Puccini",    difficulty: "Advanced" },
+        { id: "debussy_clair_de_lune", title: "Clair de Lune",                        artist: "Claude Debussy",     difficulty: "Advanced" },
+        { id: "goransson_oppenheimer", title: "Can You Hear The Music (Oppenheimer)", artist: "Ludwig Göransson",   difficulty: "Advanced" },
+        { id: "chopin_fantaisie",      title: "Fantaisie-Impromptu",                  artist: "Frederic Chopin",    difficulty: "Expert" },
+    ],
 
     filterAndRender() {
         let filtered = this.allSongs;
 
-        // Difficulty filter
+        // Difficulty filter — "advanced" also includes "expert" level pieces
         if (this.currentFilter !== 'all') {
             filtered = filtered.filter(s => {
                 const diff = (s.difficulty || '').toLowerCase();
-                return diff.includes(this.currentFilter.toLowerCase());
+                const f = this.currentFilter.toLowerCase();
+                if (f === 'advanced') return diff.includes('advanced') || diff.includes('expert');
+                return diff.includes(f);
             });
         }
 
