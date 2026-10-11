@@ -58,11 +58,11 @@
 
 | # | Item | Estado |
 |---|------|--------|
-| 1 | Presets tono+ambiente | ⚠️ Parcial — 4 categorías + ~9 tonos por nombre. Falta revisión por instrumento individual. |
-| 2 | Trainer UI/UX | ⚠️ Listados funcionan (fallback embebido). Play/Stop/PianoRoll sin funcionalidad real. |
+| 1 | Presets tono+ambiente | ✅ Resuelto en v217–v218 — 50+ familias de instrumentos cubiertas con 4 ambientes cada una |
+| 2 | Trainer UI/UX | ✅ Resuelto en v218 — Reproducción MIDI via SpessaSynth MIDIFileSequencer, progress bar, import .mid |
 | 3 | Search chips — no auto-cambiar, guardar último, EQ desde Casio | ✅ Resuelto en v215 |
 | 4 | Sustain isolation | ✅ Confirmado sólido — CC72 excluido de eqState y re-asertado post-profile |
-| 5 | Partir app.js | ❌ Pendiente — ver Item C |
+| 5 | Partir app.js | ✅ Resuelto en v218 — 4 módulos: midi.js, eq.js, presets.js, app.js |
 | — | Category prioritization (nunca pedida) | ✅ Revertida en v214 |
 | — | Library transpose por nombre de nota | ✅ Resuelto en v216 |
 | — | Library Maximize/Transpose sin listeners | ✅ Resuelto en v216 |
