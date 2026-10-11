@@ -218,11 +218,10 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    // sysex:false avoids the Chrome permission prompt -- SysEx is not yet implemented.
-    // When SysEx Active DSP is added, request sysex:true only after a user gesture.
-    const sysex = false;
-
-    function onAccess(access) {
+    // Android requires sysex:false -- sysex:true triggers platform init failure, and async
+    // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
+    const sysex = !/android/i.test(navigator.userAgent);
+    navigator.requestMIDIAccess({ sysex }).then(access => {
         midiAccess = access;
         // Debounce: statechange fires for every port open/close; batch into one reconnect
         access.onstatechange = () => {
@@ -230,11 +229,9 @@ function initMIDI() {
             _midiConnectTimer = setTimeout(() => reconnectMIDI(), 300);
         };
         reconnectMIDI();
-    }
-
-    function onError(err) {
+    }, err => {
         const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
-        console.error('[MIDI] error (sysex=' + sysex + '):', err.name, err.message);
+        console.error('[MIDI] error:', err.name, err.message);
         if (permDenied) {
             setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
         } else {
@@ -242,9 +239,7 @@ function initMIDI() {
         }
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'block';
-    }
-
-    navigator.requestMIDIAccess({ sysex }).then(onAccess, onError);
+    });
 }
 
 function reconnectMIDI() {
@@ -284,10 +279,9 @@ function reconnectMIDI() {
 
     if (midiOutput || midiInput) {
         const name = (midiOutput || midiInput).name;
-        const check = String.fromCharCode(0x2714) + " ";
-        const label = midiOutput && midiInput ? check + name
-                    : midiOutput ? check + name + " (output only)"
-                    : check + name + " (input only)";
+        const label = midiOutput && midiInput ? "✓ " + name
+                    : midiOutput ? "✓ " + name + " (output only)"
+                    : "✓ " + name + " (input only)";
         setStatus(label, !!(midiOutput || midiInput));
         document.getElementById("connectBtn").innerText = "Reconnect";
         const warn = document.getElementById('midiPermissionWarn');
