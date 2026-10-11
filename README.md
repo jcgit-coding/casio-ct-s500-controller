@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v195
+# Casio CT-S500 Pro Controller — v219
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -12,7 +12,12 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 - `index.html`: La estructura visual, construida semánticamente. Carga iconos Material UI y la tipografía Montserrat.
 - `style.css`: Motor de diseño. Utiliza CSS Variables (`--panel-bg`, `--accent`, etc.) para gestionar dinámicamente un Tema Claro / Tema Oscuro. Usa una arquitectura puramente basada en Flexbox para lograr un diseño "Responsive" extremo (funciona igual de bien en monitores 4K que en smartphones verticales).
 - `app.js`: El cerebro de la aplicación. Gestiona la conexión MIDI, el "State Management" global, los listeners de la interfaz y la inyección en el DOM.
-- `fix_swap.js`: Maneja el swap visual de partes (U1/U2/L) y llama a `window.swapPartState` para sincronizar el estado MIDI.
+- `eq.js`: Motor EQ, `TONE_ENV_MATRIX` (33 categorías × 4 ambientes), `getToneEnvPreset`, `applySmartProfile`. Los CCs 102/103/104 operan sobre el PC Synth; el Active DSP real del CT-S500 requiere SysEx.
+- `midi.js`: Conexión y routing MIDI (Web MIDI API).
+- `presets.js`: Persistencia local y sincronización GitHub de presets de usuario.
+- `harmony.js`: Motor de armonía y acordes.
+- `library.js`: Panel de biblioteca de timbres con transposición por tonalidad.
+- `trainer.js`: Piano Trainer (importar .mid manualmente — sin archivos .mid incluidos).
 - `raw_tones.js` y `raw_rhythms.js`: Bases de datos crudas del manual oficial de Casio. Contienen listas de texto sin formato que `app.js` "parsea" al arrancar para construir los catálogos lógicos.
 
 ---

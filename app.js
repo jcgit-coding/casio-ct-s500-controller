@@ -346,15 +346,17 @@ const _pendingProfile = { U1: [], U2: [], L: [] };
 const _pendingSustain = { U1: [], U2: [], L: [] };
 
 function scheduleSustainResync(part, delays) {
-    _pendingSustain[part].forEach(clearTimeout);
-    _pendingSustain[part] = [];
-    // If sustain is OFF, NEVER send CC 72 â€” preserve tone's native envelope and keyboard state!
+    // Do NOT cancel existing taps — a new burst may arrive while previous taps are still
+    // pending (e.g. rapid tone changes). Accumulating ensures CC72 survives every burst.
     if (!tuning[part].sus) return;
-    _pendingSustain[part] = delays.map(d =>
-        setTimeout(() => {
+    delays.forEach(d => {
+        const id = setTimeout(() => {
+            // Remove self from list so it doesn't grow unboundedly
+            _pendingSustain[part] = _pendingSustain[part].filter(t => t !== id);
             if (tuning[part].sus) sendCC(part, 72, SUS_RELEASE);
-        }, d)
-    );
+        }, d);
+        _pendingSustain[part].push(id);
+    });
 }
 
 function resyncAllSustain() {

@@ -8,13 +8,13 @@
         ]
     },
     {
-        // CC102/103/104 are Casio AiX proprietary â€” not in the GM spec.
-        // Behavior observed as EQ shelves; unverified against CT-S500 MIDI Implementation PDF.
-        title: 'Master EQ',
+        // CC102/103/104 are not in the CT-S500 MIDI Implementation — no verified effect on hardware.
+        // These CCs shape the tone in PC Synth mode (SpessaSynth) only.
+        title: 'Master EQ (PC Synth)',
         controls: [
-            { label: 'LOWS',   cc: 104, def: 64, tip: 'Low Shelf Filter (Body/Bass)' },
-            { label: 'MIDS',   cc: 103, def: 64, tip: 'Peaking Filter (Presence/Mids)' },
-            { label: 'HIGHS',   cc: 102, def: 64, tip: 'High Shelf Filter (Brightness/Air)' },
+            { label: 'LOWS',  cc: 104, def: 64, tip: 'Low Shelf EQ — PC Synth only (unverified on CT-S500 hardware)' },
+            { label: 'MIDS',  cc: 103, def: 64, tip: 'Mid Peaking EQ — PC Synth only (unverified on CT-S500 hardware)' },
+            { label: 'HIGHS', cc: 102, def: 64, tip: 'High Shelf EQ — PC Synth only (unverified on CT-S500 hardware)' },
         ]
     },
     {
