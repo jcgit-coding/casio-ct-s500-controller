@@ -5,5 +5,12 @@
     "artist": "Coldplay",
     "genre": "Pop Rock",
     "original_key": "B"
+  },
+  {
+    "id": "bethel_eres_digno",
+    "title": "Eres Digno de Adorar",
+    "artist": "Bethel Music",
+    "genre": "Worship",
+    "original_key": "D"
   }
 ]
