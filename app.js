@@ -1222,25 +1222,14 @@ function initToneSearch() {
         const searchEl = document.getElementById('search-' + part);
         const listEl   = document.getElementById('list-' + part);
 
-        function populateList(tones, queryTokens = []) {
+        function populateList(tones) {
             listEl.innerHTML = '';
             const grouped = {};
             tones.forEach(t => {
                 if (!grouped[t.category]) grouped[t.category] = [];
                 grouped[t.category].push(t);
             });
-            // Prioritize optgroups whose category name directly matches the search query tokens
-            const sortedCatKeys = Object.keys(grouped).sort((a, b) => {
-                if (queryTokens && queryTokens.length > 0) {
-                    const aCatMatch = queryTokens.some(k => a.toLowerCase().includes(k));
-                    const bCatMatch = queryTokens.some(k => b.toLowerCase().includes(k));
-                    if (aCatMatch && !bCatMatch) return -1;
-                    if (!aCatMatch && bCatMatch) return 1;
-                }
-                return 0; // preserve original db order within tiers
-            });
-            for (const cat of sortedCatKeys) {
-                const items = grouped[cat];
+            for (const [cat, items] of Object.entries(grouped)) {
                 const grp = document.createElement('optgroup');
                 grp.label = cat;
                 items.forEach(t => {
@@ -1264,7 +1253,7 @@ function initToneSearch() {
                 const name = t.name.toLowerCase();
                 const cat  = t.category.toLowerCase();
                 return tokens.some(k => name.includes(k) || cat.includes(k));
-            }) : allTones, tokens);
+            }) : allTones);
             // Keep the applied tone highlighted if it's in the filtered list (filtering must not "lose" it)
             const cur = currentTone[part];
             listEl.selectedIndex = cur ? [...listEl.options].findIndex(o => JSON.parse(o.value).id === cur.id) : -1;
