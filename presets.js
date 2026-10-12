@@ -1,4 +1,4 @@
-﻿// ======================================================================
+// ======================================================================
 const GH_OWNER = 'jcgit-coding';
 const GH_REPO  = 'casio-ct-s500-controller';
 const GH_FILE  = 'presets.json';
@@ -423,15 +423,13 @@ function loadAppState() {
             });
         }
 
-        // Default tones on first run (no saved state or old version)
-        if (!saved?.tones) {
-            const defaults = { U1: 1, U2: 8, L: 24 };
-            ['U1', 'U2', 'L'].forEach(part => {
-                if (!currentTone[part]) {
-                    selectToneInList(part, d => d.id === defaults[part]);
-                }
-            });
-        }
+        // Guarantee default tones if not loaded, missing or id is 0
+        const defaults = { U1: 1, U2: 8, L: 24 };
+        ['U1', 'U2', 'L'].forEach(part => {
+            if (!currentTone[part] || !currentTone[part].id) {
+                selectToneInList(part, d => d.id === defaults[part]);
+            }
+        });
 
         if (saved.pcSynthEnabled !== undefined) {
             pcSynthEnabled = saved.pcSynthEnabled;

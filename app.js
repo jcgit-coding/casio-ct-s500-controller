@@ -1,4 +1,4 @@
-﻿// ======================================================================
+// ======================================================================
 //  MIDI state
 // ======================================================================
 let midiAccess  = null;
@@ -18,46 +18,8 @@ const RELEASE_NEUTRAL = 64;
 // outgoing queue can still be draining hundreds of ms after the app finished
 // writing -- hence the deliberately late last tap.
 const SUSTAIN_TAPS = [150, 400, 700, 1300];
-// Per-category CC72 when SUSTAIN is ON: tuned per instrument family.
-const CAT_SUS_RELEASE = {
-    'PIANO':              100,
-    'HARPSICHORD':        100,
-    'ELEC.PIANO':         100,
-    'CLAVI':              100,
-    'VIB./CHROM.PERC.':   105,
-    'ELEC.ORGAN':          85,
-    'PIPE ORGAN':          85,
-    'ACCORDION':           85,
-    'ACOUS.GUITAR':       105,
-    'ELEC.GUITAR':        105,
-    'ACOUS.BASS':          95,
-    'ELEC.BASS':           95,
-    'SYNTH-BASS':          95,
-    'SOLO STRINGS':       112,
-    'STRING ENSEMBLE':    112,
-    'SYNTH-PAD':          118,
-    'CHOIR':              112,
-    'SOLO BRASS':          98,
-    'BRASS ENSEMBLE':      98,
-    'SAX':                 96,
-    'REED':                96,
-    'PIPE':                96,
-    'EDM':                105,
-    'SYNTH':              105,
-    'CASIO CLASSIC':      105,
-    'INDIAN':             100,
-    'INDONESIAN':         100,
-    'ARABIC':             100,
-    'CHINESE':            100,
-    'BRAZILIAN':          100,
-    'ETHNIC':             100,
-    'OTHERS':             100,
-    'GM TONES':           100,
-    'PERCUSSION':         100,
-};
-function susRelease(part) {
-    return CAT_SUS_RELEASE[activeCategories[part]] ?? 110;
-}
+// Note: CAT_SUS_RELEASE and susRelease(part) are defined in eq.js (loaded before app.js)
+
 // Per-category CC72 neutral: these instruments have long natural decay;
 // sending 64 after a tone load would shorten it below the preset's intent.
 const CAT_RELEASE_NEUTRAL = {
@@ -186,6 +148,16 @@ const physCC64 = { U1: 0, U2: 0, L: 0 };
 // In-memory EQ values per part
 const eqState = { U1: {}, U2: {}, L: {} };
 
+// Per-part tone search refs -- used by loadAppState / loadPreset / onMIDIMessage
+window.toneSearch = {};
+
+// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push --
+const currentTone = { U1: null, U2: null, L: null };
+
+// Per-part cancellable timers -- shared by scheduleProfile and scheduleSustainResync.
+const _pendingProfile = { U1: [], U2: [], L: [] };
+const _pendingSustain = { U1: [], U2: [], L: [] };
+
 // Per-tone+environment EQ overrides: toneEQ[toneId][environment] = { cc: val, ... }
 // Saved to localStorage 'casioToneEQ'. When set, overrides the category profile.
 let toneEQ = {};
@@ -261,10 +233,8 @@ function initMIDI() {
         return;
     }
     setStatus("Connecting...", false);
-    // Android requires sysex:false -- sysex:true triggers platform init failure, and async
-    // retries lose the user gesture context required by Android Chrome for requestMIDIAccess.
-    const sysex = !/android/i.test(navigator.userAgent);
-    navigator.requestMIDIAccess({ sysex }).then(access => {
+
+    function onAccess(access) {
         midiAccess = access;
         // Debounce: statechange fires for every port open/close; batch into one reconnect
         access.onstatechange = () => {
@@ -272,17 +242,17 @@ function initMIDI() {
             _midiConnectTimer = setTimeout(() => reconnectMIDI(), 300);
         };
         reconnectMIDI();
-    }, err => {
-        const permDenied = err.name === 'SecurityError' || err.name === 'NotAllowedError';
+    }
+
+    function onError(err) {
         console.error('[MIDI] error:', err.name, err.message);
-        if (permDenied) {
-            setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
-        } else {
-            setStatus("MIDI Error: " + err.message, false);
-        }
+        setStatus("MIDI blocked: Click 'Reconnect' or grant permissions in Chrome", false);
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'block';
-    });
+    }
+
+    // Use sysex: false to avoid Chrome permission prompt/blocking on load
+    navigator.requestMIDIAccess({ sysex: false }).then(onAccess, onError);
 }
 
 function reconnectMIDI() {
@@ -427,7 +397,7 @@ function onMIDIMessage(e) {
 //  INIT
 // ======================================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+function initApp() {
     buildEQ();          // also seeds eqState defaults
     initToneSearch();
     initQuickControls();
@@ -454,11 +424,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.pcSynth && typeof window.pcSynth._audio === 'function') window.pcSynth._audio();
     }, { once: true });
 
-    document.getElementById("connectBtn").addEventListener("click", () => {
-        midiInitAttempted = true; // avoid a second requestMIDIAccess from the document click
+    const handleConnectClick = () => {
+        midiInitAttempted = true;
         if (midiAccess) reconnectMIDI(); else initMIDI();
-    });
-
+    };
+    document.getElementById("connectBtn")?.addEventListener("click", handleConnectClick);
+    document.getElementById("btnConnectMidi")?.addEventListener("click", handleConnectClick);
 
     // EQ Part Target Logic
     document.querySelectorAll('.btn-eq').forEach(btn => {
@@ -541,23 +512,11 @@ document.addEventListener("DOMContentLoaded", () => {
             btnThemeToggle.innerHTML = '<span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">' + (next === 'light' ? 'dark_mode' : 'light_mode') + '</span>';
         });
     }
-});
-
+}
 
 // ======================================================================
 //  TONE SEARCH (filterable select)
 // ======================================================================
-// Per-part tone search refs -- used by loadAppState / loadPreset / onMIDIMessage
-// to reset the filter before searching the full tone list.
-window.toneSearch = {};
-
-// Tone applied to each part ({ id, bank, lsb, program, text }). Source of truth for save/presets/push --
-// the list's selectedIndex is only a view and is -1 whenever the filter hides the tone.
-const currentTone = { U1: null, U2: null, L: null };
-
-// Per-part cancellable timers -- shared by scheduleProfile and scheduleSustainResync.
-const _pendingProfile = { U1: [], U2: [], L: [] };
-const _pendingSustain = { U1: [], U2: [], L: [] };
 
 function scheduleSustainResync(part, delays) {
     // Do NOT cancel existing taps — a new burst may arrive while previous taps are still
@@ -1514,3 +1473,10 @@ buildGMSelectors();
     const pcToggle = document.getElementById('pcSynthToggle');
     if (pcToggle) pcToggle.checked = pcSynthEnabled;
 })();
+
+// Start application (DOM ready check)
+if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", initApp);
+} else {
+    initApp();
+}

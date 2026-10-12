@@ -1,4 +1,4 @@
-﻿const EQ_SECTIONS = [
+const EQ_SECTIONS = [
     {
         title: 'Volume & Panning',
         controls: [
@@ -72,16 +72,17 @@ let currentEnv = 'Studio';
 // SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como Casio categories)
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
 
-// Sustain CC72 per category (mirrors app.js CAT_SUS_RELEASE)
+// Sustain CC72 per category (loaded here before app.js)
 const CAT_SUS_RELEASE = {
     'PIANO': 100, 'HARPSICHORD': 100, 'ELEC.PIANO': 100, 'CLAVI': 100,
     'VIB./CHROM.PERC.': 105, 'ELEC.ORGAN': 85, 'PIPE ORGAN': 85, 'ACCORDION': 85,
     'ACOUS.GUITAR': 105, 'ELEC.GUITAR': 105, 'ACOUS.BASS': 95, 'ELEC.BASS': 95,
     'SYNTH-BASS': 95, 'SOLO STRINGS': 112, 'STRING ENSEMBLE': 112, 'SYNTH-PAD': 118,
     'CHOIR': 112, 'SOLO BRASS': 98, 'BRASS ENSEMBLE': 98, 'SAX': 96,
-    'REED': 96, 'PIPE': 96, 'EDM SYNTH': 105, 'SYNTH-LEAD': 105, 'SYNTH-BRASS': 105,
-    'CASIO CLASSIC': 105, 'INDIAN': 100, 'INDONESIAN': 100, 'ARABIC': 100,
-    'CHINESE': 100, 'BRAZILIAN': 100, 'ETHNIC OTHERS': 100, 'GM TONES': 100
+    'REED': 96, 'PIPE': 96, 'EDM': 105, 'SYNTH': 105, 'EDM SYNTH': 105,
+    'SYNTH-LEAD': 105, 'SYNTH-BRASS': 105, 'CASIO CLASSIC': 105, 'INDIAN': 100,
+    'INDONESIAN': 100, 'ARABIC': 100, 'CHINESE': 100, 'BRAZILIAN': 100,
+    'ETHNIC': 100, 'OTHERS': 100, 'ETHNIC OTHERS': 100, 'GM TONES': 100, 'PERCUSSION': 100
 };
 function susRelease(part) {
     return CAT_SUS_RELEASE[activeCategories[part]] ?? 110;
