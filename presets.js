@@ -368,8 +368,12 @@ function loadAppState() {
         
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
-            // Purge CC72 (Release) -- never apply from saved state; CC72 is managed by tuning.sus
-            ['U1','U2','L'].forEach(p => { delete eqState[p][72]; delete eqState[p]['72']; });
+            // Purge CC72 and phantom CCs (75, 95, 102, 103, 104)
+            ['U1','U2','L'].forEach(p => {
+                [72, 75, 95, 102, 103, 104].forEach(cc => {
+                    delete eqState[p][cc]; delete eqState[p][String(cc)];
+                });
+            });
         }
         if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
         if (saved.tuning) Object.assign(tuning, saved.tuning);

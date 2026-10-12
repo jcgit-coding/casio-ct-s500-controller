@@ -8,16 +8,6 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        // CC102/103/104 are not in the CT-S500 MIDI Implementation — no verified effect on hardware.
-        // These CCs shape the tone in PC Synth mode (SpessaSynth) only.
-        title: 'Master EQ',
-        controls: [
-            { label: 'LOWS',  cc: 104, def: 64, tip: 'Low Shelf EQ' },
-            { label: 'MIDS',  cc: 103, def: 64, tip: 'Mid Peaking EQ' },
-            { label: 'HIGHS', cc: 102, def: 64, tip: 'High Shelf EQ' },
-        ]
-    },
-    {
         title: 'Filters',
         controls: [
             { label: 'CUTOFF', cc: 74, def: 64, tip: 'Filter Cutoff Frequency' },
@@ -28,7 +18,6 @@ const EQ_SECTIONS = [
         title: 'Envelope',
         controls: [
             { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (ADSR)' },
-            { label: 'DECAY',   cc: 75, def: 64, tip: 'Decay Time (ADSR)' },
         ]
     },
     {
@@ -64,7 +53,7 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
 
 let currentEnv = 'Studio';
-// CCs: 74=Cutoff 71=Resonance 73=Attack 75=Decay 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Echo
+// Verified CT-S500 CCs: 74=Cutoff 71=Resonance 73=Attack 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Echo
 // CC72 (Release) excluded from EQ state — managed separately via the SUSTAIN button
 // Casio Categories (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
 //   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
