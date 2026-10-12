@@ -18,7 +18,6 @@ const EQ_SECTIONS = [
         title: 'Envelope',
         controls: [
             { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (hammer strike / bow)' },
-            { label: 'RELEASE', cc: 72, def: 64, tip: 'Release Time (Damper decay tail)' },
         ]
     },
     {
@@ -1057,7 +1056,8 @@ function applySmartProfile(part, category) {
     if (part === 'U2') eqState[part][7] = 75;
     if (part === 'L')  eqState[part][7] = 100;
 
-    // Part Mix Rules applied -- CC72 (Release) is now preserved as an Envelope fader
+    // CC72 (Release/Sustain) is governed exclusively by the SUSTAIN button -- never an EQ fader
+    delete eqState[part][72]; delete eqState[part]['72'];
 
     // 4. Send to keyboard and update UI -- skip performance CCs
     if (activePart === part) beginEqProgrammatic();
