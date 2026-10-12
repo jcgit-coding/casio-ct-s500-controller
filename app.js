@@ -852,14 +852,12 @@ function initQuickControls() {
 // ======================================================================
 //  PRESETS + GITHUB STORAGE
 // ======================================================================
-//  ARRANGER & REGISTRATIONS CONTROLLER (CT-S500)
+//  ARRANGER CONTROLLER (CT-S500)
 // ======================================================================
 function initArranger() {
     let isPlaying        = false;
     let bpm              = 120;
     let clockTimer       = null;
-    let currentRegBank   = 0; // 0..15 (Banks 1..16)
-    let currentRegSlot   = null; // 0..3 (Slots 1..4)
     let tapTimes         = [];
 
     // Accompaniment volumes & mute states
@@ -906,79 +904,6 @@ function initArranger() {
         helpContent.style.display = isShown ? 'none' : 'block';
         if (helpIcon) helpIcon.style.transform = isShown ? 'rotate(0deg)' : 'rotate(180deg)';
     });
-
-    // ── REGISTRATION SWITCHER (FW 1.06+) ────────────────────────
-    function sendRegistrationRecall(bank, slot) {
-        if (!midiOutput) return;
-        // Bank Select MSB = 116 (0x74) for Registration memory
-        midiOutput.send([0xB0, 0, 116]);
-        // Bank Select LSB = Bank index (0..15)
-        midiOutput.send([0xB0, 32, bank]);
-        // Program Change = Slot index (0..3) on Channel 1
-        midiOutput.send([0xC0, slot]);
-    }
-
-    function recallRegistration(bank, slot) {
-        currentRegBank = bank;
-        currentRegSlot = slot;
-        sendRegistrationRecall(bank, slot);
-
-        // Update UI
-        updateRegUI();
-        const badge = document.getElementById('activeRegBadge');
-        if (badge) {
-            badge.innerText = `ACTIVE: BANK ${bank + 1} • REG ${slot + 1}`;
-            badge.style.display = 'inline-block';
-        }
-    }
-
-    function updateRegUI() {
-        const sel = document.getElementById('regBankSelect');
-        if (sel && parseInt(sel.value, 10) !== currentRegBank) {
-            sel.value = currentRegBank;
-        }
-        document.querySelectorAll('#regSlotsGrid .btn-giant').forEach(btn => {
-            const slot = parseInt(btn.dataset.slot, 10);
-            btn.classList.toggle('active-reg', slot === currentRegSlot);
-        });
-    }
-
-    // Populate Banks 1 to 16
-    const regBankSel = document.getElementById('regBankSelect');
-    if (regBankSel) {
-        regBankSel.innerHTML = Array.from({ length: 16 }, (_, i) =>
-            `<option value="${i}">Bank ${String(i + 1).padStart(2, '0')}</option>`
-        ).join('');
-        regBankSel.addEventListener('change', e => {
-            currentRegBank = parseInt(e.target.value, 10);
-            currentRegSlot = null;
-            updateRegUI();
-        });
-    }
-
-    document.getElementById('regBankMinus')?.addEventListener('click', () => {
-        currentRegBank = Math.max(0, currentRegBank - 1);
-        currentRegSlot = null;
-        updateRegUI();
-    });
-
-    document.getElementById('regBankPlus')?.addEventListener('click', () => {
-        currentRegBank = Math.min(15, currentRegBank + 1);
-        currentRegSlot = null;
-        updateRegUI();
-    });
-
-    // 4 Slots
-    [0, 1, 2, 3].forEach(slot => {
-        const btn = document.getElementById(`btnReg${slot + 1}`);
-        btn?.addEventListener('click', () => recallRegistration(currentRegBank, slot));
-    });
-
-    // Backward compat aliases for old IDs if still clicked anywhere
-    document.getElementById('btnIntro')?.addEventListener('click', () => recallRegistration(currentRegBank, 0));
-    document.getElementById('btnVar1')?.addEventListener('click', () => recallRegistration(currentRegBank, 1));
-    document.getElementById('btnVar2')?.addEventListener('click', () => recallRegistration(currentRegBank, 2));
-    document.getElementById('btnEnding')?.addEventListener('click', () => recallRegistration(currentRegBank, 3));
 
     // ── MIDI CLOCK & REALTIME TRANSPORT ─────────────────────────
     function setClockBadge(text) {

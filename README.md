@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v245
+# Casio CT-S500 Pro Controller — v246
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,11 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v246 · lun 12 oct 2026 18:52 · COT
+- **cleanup(arranger):** Purga completa de Registraciones en la pestaña Arranger. El Arranger queda dedicado 100% y exclusivamente al acompañamiento rítmico, evitando cualquier interferencia o alteración sobre los tonos e instrumentos del Mixer.
+- **docs(arranger):** Documentación explícita sobre la limitación de hardware del Casio CT-S500 (el firmware del teclado no cuenta con comandos MIDI estándar para cambiar ritmos 001–243, requiriendo marcación en el dial físico).
+- **cache-bust:** `index.html` → v246.
 
 ### v245 · lun 12 oct 2026 18:39 · COT
 - **feat(arranger):** Suite completa de control del acompañamiento (Arranger) rediseñada para máxima potencia y compatibilidad MIDI con el Casio CT-S500:
