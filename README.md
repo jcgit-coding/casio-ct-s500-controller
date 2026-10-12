@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v219
+# Casio CT-S500 Pro Controller — v241
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,20 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v241 · lun 12 oct 2026 16:32 · COT
+- **fix(startup):** Garantía de arranque en limpio (Opción A). La app siempre inicia con: U1 (Piano → `1. STAGE PIANO`), U2 (Pad → `8. ADV PIANO PAD`), L (Strings → `24. STRINGS PIANO`) y sus chips activos.
+- **fix(storage):** Se excluyó la persistencia de instrumentos de sesión en `casioAppState` para evitar el secuestro del arranque en futuras recargas.
+- **fix(html):** Placeholders HTML limpios sin caracteres corruptos.
+- **cache-bust:** `index.html` → v241.
+
+### v240 · lun 12 oct 2026 16:05 · COT
+- **feat(eq):** Restaurado fader analógico continuo **RELEASE** (CC 72) en la sección `Envelope`.
+- **feat(tuning):** Nueva sección `Pitch & Tuning` con microafinación orgánica **DETUNE** vía RPN `00 01H` ($\pm50$ cents).
+- **feat(voicing):** Añadido selector **MONO / POLY** (CC 126 / CC 127) para articulación y legato realista en vientos y leads.
+- **feat(panic):** Botón de emergencia **PANIC** en la barra superior (CC 120 All Sound Off + CC 123 All Notes Off + CC 64 Off).
+- **cleanup:** Purga definitiva de controladores no soportados por el CT-S500 (CC 75 Decay, CC 95, CC 102/103/104 Master EQ).
+- **cache-bust:** `index.html` → v240.
 
 ### v195 · dom 04 oct 2026 07:24 · COT
 
