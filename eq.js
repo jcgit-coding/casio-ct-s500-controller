@@ -72,6 +72,21 @@ let currentEnv = 'Studio';
 // SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como Casio categories)
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
 
+// Sustain CC72 per category (mirrors app.js CAT_SUS_RELEASE)
+const CAT_SUS_RELEASE = {
+    'PIANO': 100, 'HARPSICHORD': 100, 'ELEC.PIANO': 100, 'CLAVI': 100,
+    'VIB./CHROM.PERC.': 105, 'ELEC.ORGAN': 85, 'PIPE ORGAN': 85, 'ACCORDION': 85,
+    'ACOUS.GUITAR': 105, 'ELEC.GUITAR': 105, 'ACOUS.BASS': 95, 'ELEC.BASS': 95,
+    'SYNTH-BASS': 95, 'SOLO STRINGS': 112, 'STRING ENSEMBLE': 112, 'SYNTH-PAD': 118,
+    'CHOIR': 112, 'SOLO BRASS': 98, 'BRASS ENSEMBLE': 98, 'SAX': 96,
+    'REED': 96, 'PIPE': 96, 'EDM SYNTH': 105, 'SYNTH-LEAD': 105, 'SYNTH-BRASS': 105,
+    'CASIO CLASSIC': 105, 'INDIAN': 100, 'INDONESIAN': 100, 'ARABIC': 100,
+    'CHINESE': 100, 'BRAZILIAN': 100, 'ETHNIC OTHERS': 100, 'GM TONES': 100
+};
+function susRelease(part) {
+    return CAT_SUS_RELEASE[activeCategories[part]] ?? 110;
+}
+
 // ======================================================================
 //  TONE + ENVIRONMENT PRESET MATRIX (33 CASIO INSTRUMENT CATEGORIES)
 //  Acoustically tuned, physically faithful soundboard, resonance & DSP
@@ -1073,7 +1088,7 @@ function applySmartProfile(part, category) {
     // 5. Sustain: ONLY assert if sustain is ON in app.
     // When OFF, do NOT send CC 72 -- preserve tone's native envelope and keyboard state!
     if (tuning[part].sus) {
-        sendCC(part, 72, SUS_RELEASE);
+        sendCC(part, 72, susRelease(part));
     }
 }
 
@@ -1141,7 +1156,7 @@ function buildEQ() {
                     btn.classList.toggle('sus-on', newVal > 63);
                     sendCC(activePart, ctrl.cc, newVal);
                     if (tuning[activePart].sus) {
-                        sendCC(activePart, 72, SUS_RELEASE);
+                        sendCC(activePart, 72, susRelease(activePart));
                         scheduleSustainResync(activePart, [40, 150]);
                     }
                     saveToneEQForPart(activePart);
@@ -1193,7 +1208,7 @@ function buildEQ() {
                     sendCC(_faderPart, ctrl.cc, v);
                     // Re-assert sustain if active so CT-S500 voice block does not drop release tail
                     if (tuning[_faderPart].sus) {
-                        sendCC(_faderPart, 72, SUS_RELEASE);
+                        sendCC(_faderPart, 72, susRelease(_faderPart));
                     }
                 });
                 fader.addEventListener('change', () => {
@@ -1210,7 +1225,7 @@ function buildEQ() {
                         });
                     }
                     if (tuning[_faderPart].sus) {
-                        sendCC(_faderPart, 72, SUS_RELEASE);
+                        sendCC(_faderPart, 72, susRelease(_faderPart));
                         scheduleSustainResync(_faderPart, [30, 120, 300]);
                     }
                     saveToneEQForPart(_faderPart);
