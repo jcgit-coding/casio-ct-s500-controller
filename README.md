@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v243
+# Casio CT-S500 Pro Controller — v244
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,10 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v244 · lun 12 oct 2026 17:16 · COT
+- **fix(midi-in):** Al cambiar de tono directamente en el teclado físico Casio, la app captura Bank MSB (CC 0) + Bank LSB (CC 32) + Program Change con fallback seguro, sincroniza automáticamente la vista del EQ a esa pista (`activePart`) y aplica el perfil acústico recalculando y enviando los CCs de modelado al teclado y faders.
+- **cache-bust:** `index.html` → v244.
 
 ### v243 · lun 12 oct 2026 17:12 · COT
 - **fix(smart-profiles):** Resuelto el bug por el cual `getToneEnvPreset` no reconocía el nombre del tono (`tone.name` era `undefined`), provocando que todos los tonos de una misma categoría compartieran valores genéricos idénticos.

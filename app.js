@@ -126,7 +126,8 @@ function buildGMSelectors() {
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
 let globalTranspose = 0;
 let globalOctave = -1;
-const pendingBank = { U1: 0, U2: 0, L: 0 };
+const pendingBank = { U1: 1, U2: 28, L: 34 };
+const pendingLSB  = { U1: 0, U2: 0, L: 0 };
 
 // Per-part state (octave and sustain are independent per channel)
 const tuning = {
@@ -348,8 +349,9 @@ function onMIDIMessage(e) {
         if (!part) return;
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
         if (d1 === 0) { pendingBank[part] = d2; }
+        if (d1 === 32) { pendingLSB[part] = d2; }
         if (d1 === 64) { physCC64[part] = d2; }
-        if (d1 !== 64 && d1 !== 72 && d1 !== 0) eqState[part][d1] = d2;
+        if (d1 !== 64 && d1 !== 72 && d1 !== 0 && d1 !== 32) eqState[part][d1] = d2;
         if (part === activePart) {
             const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
             if (ctrl) {
@@ -380,9 +382,20 @@ function onMIDIMessage(e) {
             pcPartProgram[part] = d1;
         }
         const pc = d1;
-        const bank = pendingBank[part] || 0;
-        const pcOpt = selectToneInList(part, d => d.bank === bank && d.program === pc);
+        const bank = pendingBank[part] ?? 0;
+        let pcOpt = selectToneInList(part, d => d.bank === bank && d.program === pc);
+        if (!pcOpt) {
+            // Fallback if Bank MSB was not sent prior to PC
+            pcOpt = selectToneInList(part, d => d.program === pc);
+        }
         if (pcOpt) {
+            // Automatically switch active UI view to this part so the screen reflects what you're playing on the Casio
+            activePart = part;
+            document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
+            document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active-track'));
+            const card = document.getElementById('card-' + part);
+            if (card) card.classList.add('active-track');
+
             const pcCat = pcOpt.parentElement?.tagName === 'OPTGROUP'
                 ? pcOpt.parentElement.label
                 : (activeCategories[part] || 'PIANO');
