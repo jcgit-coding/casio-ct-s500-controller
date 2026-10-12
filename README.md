@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v244
+# Casio CT-S500 Pro Controller — v245
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,15 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v245 · lun 12 oct 2026 18:39 · COT
+- **feat(arranger):** Suite completa de control del acompañamiento (Arranger) rediseñada para máxima potencia y compatibilidad MIDI con el Casio CT-S500:
+  - **Registration Memories (FW 1.06+):** Selector remoto de las 64 Registraciones del Casio (16 Bancos × 4 Botones de Registro). Permite cambiar instantáneamente por MIDI (CC 0 = 116, CC 32 = Banco, PC = Slot en Ch 1) el ritmo, variación, tempo, split y tonos completos desde la aplicación.
+  - **Accompaniment Multi-Channel Mixer:** Mesa de mezcla para el acompañamiento con faders y botones de MUTE independientes: Master Arranger (Canales 9–16), Drums & Percussion (Canales 9–10), Bass (Canal 11) y Chords & Harmony (Canales 12–16).
+  - **Realtime Transport & MIDI Clock:** Motor de reloj MIDI con Tap Tempo de alta precisión, pasos rápidos (`+/-5` y `+/-1` BPM) y control Start/Stop con disparo sincronizado de pulsos de reloj (0xF8).
+  - **Factory Rhythm Quick Dial HUD:** Asistente visual prominente que muestra el número exacto (001–243) para girar la rueda dial del Casio y botón de un solo toque para aplicar el BPM sugerido según el estilo musical.
+  - **Setup Guide Integrada:** Guía desplegable con los pasos para habilitar `MIDI In Clock` y `MIDI In Start/Stop` en el menú del teclado.
+- **cache-bust:** `index.html` → v245.
 
 ### v244 · lun 12 oct 2026 17:16 · COT
 - **fix(midi-in):** Al cambiar de tono directamente en el teclado físico Casio, la app captura Bank MSB (CC 0) + Bank LSB (CC 32) + Program Change con fallback seguro, sincroniza automáticamente la vista del EQ a esa pista (`activePart`) y aplica el perfil acústico recalculando y enviando los CCs de modelado al teclado y faders.

@@ -492,6 +492,21 @@ header h1 {
     color: #fff;
     box-shadow: 0 0 20px var(--accent-glow);
 }
+.btn-giant.active-reg {
+    background: var(--accent-dim) !important;
+    border-color: var(--accent) !important;
+    color: #fff !important;
+    box-shadow: 0 0 16px var(--accent-glow) !important;
+}
+.btn-mute {
+    transition: all 0.15s ease;
+}
+.btn-mute.muted {
+    background: rgba(255, 51, 102, 0.25) !important;
+    border-color: var(--danger) !important;
+    color: var(--danger) !important;
+    font-weight: 800 !important;
+}
 
 /* ── PANEL ───────────────────────────────────── */
 

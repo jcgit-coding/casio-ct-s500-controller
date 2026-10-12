@@ -852,14 +852,337 @@ function initQuickControls() {
 // ======================================================================
 //  PRESETS + GITHUB STORAGE
 // ======================================================================
-//  ARRANGER
+//  ARRANGER & REGISTRATIONS CONTROLLER (CT-S500)
 // ======================================================================
 function initArranger() {
-    let isPlaying    = false;
-    let bpm          = 120;
-    let clockTimer   = null;
+    let isPlaying        = false;
+    let bpm              = 120;
+    let clockTimer       = null;
+    let currentRegBank   = 0; // 0..15 (Banks 1..16)
+    let currentRegSlot   = null; // 0..3 (Slots 1..4)
+    let tapTimes         = [];
 
-    // â"€â"€ Rhythm list â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+    // Accompaniment volumes & mute states
+    const accompMute = {
+        master: false,
+        drums: false,
+        bass: false,
+        chords: false
+    };
+    const savedVol = {
+        master: 100,
+        drums: 100,
+        bass: 100,
+        chords: 100
+    };
+
+    // Category Typical Tempos
+    const CAT_SUGGESTED_BPM = {
+        '8 Beat': 120, '16 Beat': 96, 'Pop': 118, 'Rock': 128,
+        'Dance': 128, 'Jazz': 132, 'Ballad': 72, 'Latin': 124,
+        'Waltz': 110, 'March': 116, 'Country': 120, 'World': 105,
+        'Ballroom': 122, 'Kids': 115
+    };
+
+    function getSuggestedBpm(r) {
+        if (!r) return 120;
+        const n = (r.name || '').toLowerCase();
+        if (n.includes('slow')) return 70;
+        if (n.includes('ballad')) return 72;
+        if (n.includes('fast') || n.includes('speed')) return 140;
+        if (n.includes('disco') || n.includes('techno') || n.includes('house')) return 128;
+        if (n.includes('bossa')) return 125;
+        if (n.includes('samba')) return 130;
+        if (n.includes('waltz')) return 108;
+        return CAT_SUGGESTED_BPM[r.cat] || 120;
+    }
+
+    // ── Setup Guide Toggle ──────────────────────────────────────
+    const helpToggle = document.getElementById('arrangerHelpToggle');
+    const helpContent = document.getElementById('arrangerHelpContent');
+    const helpIcon = document.getElementById('arrangerHelpIcon');
+    helpToggle?.addEventListener('click', () => {
+        const isShown = helpContent.style.display !== 'none';
+        helpContent.style.display = isShown ? 'none' : 'block';
+        if (helpIcon) helpIcon.style.transform = isShown ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+
+    // ── REGISTRATION SWITCHER (FW 1.06+) ────────────────────────
+    function sendRegistrationRecall(bank, slot) {
+        if (!midiOutput) return;
+        // Bank Select MSB = 116 (0x74) for Registration memory
+        midiOutput.send([0xB0, 0, 116]);
+        // Bank Select LSB = Bank index (0..15)
+        midiOutput.send([0xB0, 32, bank]);
+        // Program Change = Slot index (0..3) on Channel 1
+        midiOutput.send([0xC0, slot]);
+    }
+
+    function recallRegistration(bank, slot) {
+        currentRegBank = bank;
+        currentRegSlot = slot;
+        sendRegistrationRecall(bank, slot);
+
+        // Update UI
+        updateRegUI();
+        const badge = document.getElementById('activeRegBadge');
+        if (badge) {
+            badge.innerText = `ACTIVE: BANK ${bank + 1} • REG ${slot + 1}`;
+            badge.style.display = 'inline-block';
+        }
+    }
+
+    function updateRegUI() {
+        const sel = document.getElementById('regBankSelect');
+        if (sel && parseInt(sel.value, 10) !== currentRegBank) {
+            sel.value = currentRegBank;
+        }
+        document.querySelectorAll('#regSlotsGrid .btn-giant').forEach(btn => {
+            const slot = parseInt(btn.dataset.slot, 10);
+            btn.classList.toggle('active-reg', slot === currentRegSlot);
+        });
+    }
+
+    // Populate Banks 1 to 16
+    const regBankSel = document.getElementById('regBankSelect');
+    if (regBankSel) {
+        regBankSel.innerHTML = Array.from({ length: 16 }, (_, i) =>
+            `<option value="${i}">Bank ${String(i + 1).padStart(2, '0')}</option>`
+        ).join('');
+        regBankSel.addEventListener('change', e => {
+            currentRegBank = parseInt(e.target.value, 10);
+            currentRegSlot = null;
+            updateRegUI();
+        });
+    }
+
+    document.getElementById('regBankMinus')?.addEventListener('click', () => {
+        currentRegBank = Math.max(0, currentRegBank - 1);
+        currentRegSlot = null;
+        updateRegUI();
+    });
+
+    document.getElementById('regBankPlus')?.addEventListener('click', () => {
+        currentRegBank = Math.min(15, currentRegBank + 1);
+        currentRegSlot = null;
+        updateRegUI();
+    });
+
+    // 4 Slots
+    [0, 1, 2, 3].forEach(slot => {
+        const btn = document.getElementById(`btnReg${slot + 1}`);
+        btn?.addEventListener('click', () => recallRegistration(currentRegBank, slot));
+    });
+
+    // Backward compat aliases for old IDs if still clicked anywhere
+    document.getElementById('btnIntro')?.addEventListener('click', () => recallRegistration(currentRegBank, 0));
+    document.getElementById('btnVar1')?.addEventListener('click', () => recallRegistration(currentRegBank, 1));
+    document.getElementById('btnVar2')?.addEventListener('click', () => recallRegistration(currentRegBank, 2));
+    document.getElementById('btnEnding')?.addEventListener('click', () => recallRegistration(currentRegBank, 3));
+
+    // ── MIDI CLOCK & REALTIME TRANSPORT ─────────────────────────
+    function setClockBadge(text) {
+        const el = document.getElementById('clockStatusBadge');
+        if (el) el.innerText = text;
+    }
+
+    function startClock() {
+        stopClock();
+        const interval = (60000 / bpm) / 24; // 24 pulses per quarter note
+        clockTimer = setInterval(() => {
+            if (midiOutput) midiOutput.send([0xF8]);
+        }, interval);
+    }
+
+    function stopClock() {
+        if (clockTimer) {
+            clearInterval(clockTimer);
+            clockTimer = null;
+        }
+    }
+
+    function setBpm(newBpm) {
+        bpm = Math.min(255, Math.max(20, Math.round(newBpm)));
+        const el = document.getElementById('bpmVal');
+        if (el) el.innerText = bpm;
+        if (isPlaying || document.getElementById('chkMidiClock')?.checked) {
+            startClock();
+        }
+    }
+
+    document.getElementById('bpmMinus5')?.addEventListener('click', () => setBpm(bpm - 5));
+    document.getElementById('bpmMinus')?.addEventListener('click',  () => setBpm(bpm - 1));
+    document.getElementById('bpmPlus')?.addEventListener('click',   () => setBpm(bpm + 1));
+    document.getElementById('bpmPlus5')?.addEventListener('click',  () => setBpm(bpm + 5));
+
+    // Tap Tempo
+    document.getElementById('btnTapTempo')?.addEventListener('click', () => {
+        const now = Date.now();
+        if (tapTimes.length && (now - tapTimes[tapTimes.length - 1] > 2500)) {
+            tapTimes = [];
+        }
+        tapTimes.push(now);
+        if (tapTimes.length > 5) tapTimes.shift();
+
+        const tapBtn = document.getElementById('btnTapTempo');
+        if (tapBtn) {
+            tapBtn.style.transform = 'scale(0.92)';
+            setTimeout(() => { if (tapBtn) tapBtn.style.transform = ''; }, 100);
+        }
+
+        if (tapTimes.length >= 2) {
+            const diffs = [];
+            for (let i = 1; i < tapTimes.length; i++) {
+                diffs.push(tapTimes[i] - tapTimes[i - 1]);
+            }
+            const avgMs = diffs.reduce((a, b) => a + b, 0) / diffs.length;
+            if (avgMs > 0) {
+                const calculatedBpm = Math.round(60000 / avgMs);
+                setBpm(calculatedBpm);
+            }
+        }
+    });
+
+    document.getElementById('chkMidiClock')?.addEventListener('change', e => {
+        if (e.target.checked) {
+            startClock();
+            setClockBadge(isPlaying ? 'CLOCK: RUNNING (PLAY)' : 'CLOCK: RUNNING (FREE)');
+        } else {
+            if (!isPlaying) {
+                stopClock();
+                setClockBadge('CLOCK: STANDBY');
+            }
+        }
+    });
+
+    // START / STOP
+    const btnSS = document.getElementById('btnStartStop');
+    btnSS?.addEventListener('click', () => {
+        if (!midiOutput) return;
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            startClock();
+            midiOutput.send([0xFA]); // Start
+            btnSS.querySelector('.icon').innerHTML = '<span class="material-symbols-outlined">stop</span>';
+            btnSS.querySelector('.text').innerText = 'STOP';
+            btnSS.classList.add('btn-stop');
+            btnSS.classList.remove('btn-start');
+            setClockBadge('CLOCK: RUNNING (PLAY)');
+        } else {
+            if (!document.getElementById('chkMidiClock')?.checked) {
+                stopClock();
+                setClockBadge('CLOCK: STOPPED');
+            } else {
+                setClockBadge('CLOCK: RUNNING (FREE)');
+            }
+            midiOutput.send([0xFC]); // Stop
+            btnSS.querySelector('.icon').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
+            btnSS.querySelector('.text').innerText = 'START / STOP';
+            btnSS.classList.remove('btn-stop');
+            btnSS.classList.add('btn-start');
+        }
+    });
+
+    // SYNC START
+    document.getElementById('btnSyncStart')?.addEventListener('click', () => {
+        if (!midiOutput) return;
+        midiOutput.send([0xFA]); // Synchro Start
+        startClock();
+        setClockBadge('CLOCK: ARMED (SYNC)');
+    });
+
+    // ── ACCOMPANIMENT MULTI-CHANNEL MIXER ───────────────────────
+    function sendAccompanimentCC(channels, val) {
+        if (!midiOutput) return;
+        channels.forEach(ch => {
+            midiOutput.send([0xB0 | ch, 7, val]);
+        });
+    }
+
+    const ACCOMP_CHANNELS = {
+        master: [8, 9, 10, 11, 12, 13, 14, 15], // Ch 9–16
+        drums:  [8, 9],                         // Ch 9 & 10
+        bass:   [10],                           // Ch 11
+        chords: [11, 12, 13, 14, 15]            // Ch 12–16
+    };
+
+    function setupAccompSlider(sliderId, valId, muteBtnId, groupKey) {
+        const slider  = document.getElementById(sliderId);
+        const valSpan = document.getElementById(valId);
+        const muteBtn = document.getElementById(muteBtnId);
+        if (!slider) return;
+
+        slider.addEventListener('input', () => {
+            const v = parseInt(slider.value, 10);
+            if (valSpan) valSpan.innerText = v;
+            savedVol[groupKey] = v;
+            if (accompMute[groupKey]) {
+                accompMute[groupKey] = false;
+                muteBtn?.classList.remove('muted');
+                if (muteBtn) muteBtn.innerText = 'MUTE';
+            }
+            sendAccompanimentCC(ACCOMP_CHANNELS[groupKey], v);
+        });
+
+        muteBtn?.addEventListener('click', () => {
+            accompMute[groupKey] = !accompMute[groupKey];
+            if (accompMute[groupKey]) {
+                savedVol[groupKey] = parseInt(slider.value, 10) || 100;
+                slider.value = 0;
+                if (valSpan) valSpan.innerText = 0;
+                muteBtn.classList.add('muted');
+                muteBtn.innerText = 'MUTED';
+                sendAccompanimentCC(ACCOMP_CHANNELS[groupKey], 0);
+            } else {
+                const restored = savedVol[groupKey] || 100;
+                slider.value = restored;
+                if (valSpan) valSpan.innerText = restored;
+                muteBtn.classList.remove('muted');
+                muteBtn.innerText = 'MUTE';
+                sendAccompanimentCC(ACCOMP_CHANNELS[groupKey], restored);
+            }
+        });
+    }
+
+    setupAccompSlider('rhythmVol',       'rhythmVolVal',       'muteAccompMaster', 'master');
+    setupAccompSlider('volAccompDrums',  'volAccompDrumsVal',  'muteAccompDrums',  'drums');
+    setupAccompSlider('volAccompBass',   'volAccompBassVal',   'muteAccompBass',   'bass');
+    setupAccompSlider('volAccompChords', 'volAccompChordsVal', 'muteAccompChords', 'chords');
+
+    // ── FACTORY RHYTHM LIST & DIAL HUD ──────────────────────────
+    let activeRhythm = null;
+
+    function selectRhythm(r) {
+        activeRhythm = r;
+        const suggestedBpm = getSuggestedBpm(r);
+
+        const titleEl = document.getElementById('activeRhythmTitle');
+        if (titleEl) {
+            titleEl.innerHTML = `[${String(r.id).padStart(3, '0')}] ${r.name} <span style="font-size:12px; color:var(--accent); font-weight:600;">(${r.cat})</span>`;
+        }
+
+        const dialTipEl = document.getElementById('activeRhythmDialTip');
+        if (dialTipEl) {
+            dialTipEl.innerHTML = `👉 Pon en la rueda del Casio: <span style="font-size:15px; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--accent);">${String(r.id).padStart(3, '0')}</span>`;
+        }
+
+        const sugVal = document.getElementById('suggestedBpmVal');
+        if (sugVal) sugVal.innerText = suggestedBpm;
+
+        // Keep legacy badge for compatibility
+        const legacyBadge = document.getElementById('activeRhythmBadge');
+        if (legacyBadge) {
+            legacyBadge.innerText = `SELECTED: [${String(r.id).padStart(3, '0')}] ${r.name} (${r.cat})`;
+            legacyBadge.style.display = 'block';
+        }
+    }
+
+    document.getElementById('btnApplySuggestedBpm')?.addEventListener('click', () => {
+        if (!activeRhythm) return;
+        const sBpm = getSuggestedBpm(activeRhythm);
+        setBpm(sBpm);
+    });
+
     function buildRhythmList(filter = '', cat = 'ALL') {
         const list = document.getElementById('rhythmList');
         if (!list || !window.RAW_RHYTHMS) return;
@@ -874,21 +1197,16 @@ function initArranger() {
         items.forEach(r => {
             const div = document.createElement('div');
             div.className = 'rhythm-item';
-            div.innerHTML = `<span class="rhythm-num">${String(r.id).padStart(3,'0')}</span><span class="rhythm-name">${r.name}</span><span class="rhythm-cat">${r.cat}</span>`;
+            div.innerHTML = `<span class="rhythm-num">${String(r.id).padStart(3, '0')}</span><span class="rhythm-name">${r.name}</span><span class="rhythm-cat">${r.cat}</span>`;
             div.addEventListener('click', () => {
                 document.querySelectorAll('.rhythm-item').forEach(d => d.classList.remove('active'));
                 div.classList.add('active');
-                const badge = document.getElementById('activeRhythmBadge');
-                if (badge) {
-                    badge.innerText = `SELECTED: [${String(r.id).padStart(3,'0')}] ${r.name} (${r.cat})`;
-                    badge.style.display = 'block';
-                }
+                selectRhythm(r);
             });
             list.appendChild(div);
         });
     }
 
-    // Populate category filter
     function buildCatFilter() {
         const sel = document.getElementById('rhythmCatFilter');
         if (!sel || !window.RAW_RHYTHMS) return;
@@ -902,90 +1220,13 @@ function initArranger() {
     buildCatFilter();
     buildRhythmList();
 
+    // Default selection to first rhythm
+    if (window.RAW_RHYTHMS && window.RAW_RHYTHMS.length > 0) {
+        selectRhythm(window.RAW_RHYTHMS[0]);
+    }
+
     document.getElementById('rhythmSearch')?.addEventListener('input', e => {
         buildRhythmList(e.target.value, document.getElementById('rhythmCatFilter')?.value || 'ALL');
-    });
-
-    // â"€â"€ MIDI Clock â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    function startClock() {
-        stopClock();
-        const interval = (60000 / bpm) / 24; // ms per pulse
-        clockTimer = setInterval(() => {
-            if (midiOutput) midiOutput.send([0xF8]);
-        }, interval);
-    }
-    function stopClock() {
-        if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
-    }
-
-    document.getElementById('chkMidiClock')?.addEventListener('change', e => {
-        if (e.target.checked) startClock(); else stopClock();
-    });
-
-    // â"€â"€ BPM controls â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    function updateBpm(delta) {
-        bpm = Math.min(250, Math.max(20, bpm + delta));
-        const el = document.getElementById('bpmVal');
-        if (el) el.innerText = bpm;
-        if (document.getElementById('chkMidiClock')?.checked) startClock(); // restart with new bpm
-    }
-    document.getElementById('bpmMinus')?.addEventListener('click', () => updateBpm(-1));
-    document.getElementById('bpmPlus')?.addEventListener('click',  () => updateBpm(+1));
-
-    // â"€â"€ Rhythm volume (CC7 ch9) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    const volSlider = document.getElementById('rhythmVol');
-    const volVal    = document.getElementById('rhythmVolVal');
-    volSlider?.addEventListener('input', () => {
-        const v = parseInt(volSlider.value);
-        if (volVal) volVal.innerText = v;
-        if (midiOutput) midiOutput.send([0xB9, 7, v]); // ch9 = 0xB9
-    });
-
-    // â"€â"€ START / STOP â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    const btnSS = document.getElementById('btnStartStop');
-    btnSS?.addEventListener('click', () => {
-        if (!midiOutput) return;
-        isPlaying = !isPlaying;
-        if (isPlaying) {
-            if (document.getElementById('chkMidiClock')?.checked) startClock();
-            midiOutput.send([0xFA]); // Start
-            btnSS.querySelector('.icon').innerHTML = '<span class="material-symbols-outlined">stop</span>';
-            btnSS.querySelector('.text').innerText = 'STOP';
-        } else {
-            stopClock();
-            midiOutput.send([0xFC]); // Stop
-            btnSS.querySelector('.icon').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
-            btnSS.querySelector('.text').innerText = 'START / STOP';
-        }
-        btnSS.classList.toggle('btn-stop', isPlaying);
-    });
-
-    // â"€â"€ SYNC START â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    document.getElementById('btnSyncStart')?.addEventListener('click', () => {
-        if (!midiOutput) return;
-        midiOutput.send([0xFA]); // MIDI Start (Synchro Start)
-    });
-
-    // â"€â"€ ACCOMP (toggle via SysEx-like approach using CC) â"€
-    document.getElementById('btnAccomp')?.addEventListener('click', () => {
-        // No standard MIDI CC -- toggle visual feedback only
-        const b = document.getElementById('btnAccomp');
-        b.classList.toggle('active-rhythm');
-    });
-
-    // â"€â"€ INTRO / VAR / ENDING -- CC on ch9 â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    // Based on Casio CT-S500 MIDI implementation (CC 86-89 channel 9)
-    document.getElementById('btnIntro')?.addEventListener('click', () => {
-        if (midiOutput) midiOutput.send([0xB9, 86, 1]);
-    });
-    document.getElementById('btnVar1')?.addEventListener('click', () => {
-        if (midiOutput) midiOutput.send([0xB9, 87, 1]);
-    });
-    document.getElementById('btnVar2')?.addEventListener('click', () => {
-        if (midiOutput) midiOutput.send([0xB9, 88, 1]);
-    });
-    document.getElementById('btnEnding')?.addEventListener('click', () => {
-        if (midiOutput) midiOutput.send([0xB9, 89, 1]);
     });
 }
 

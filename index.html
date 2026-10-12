@@ -7,12 +7,12 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    (function(){var V='v244';if(localStorage.getItem('_cv')!==V){localStorage.setItem('_cv',V);if(performance.navigation&&performance.navigation.type!==1)location.reload(true);}})();
+    (function(){var V='v245';if(localStorage.getItem('_cv')!==V){localStorage.setItem('_cv',V);if(performance.navigation&&performance.navigation.type!==1)location.reload(true);}})();
     </script>
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v244">
+    <link rel="stylesheet" href="style.css?v245">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -75,7 +75,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v244 &middot; lun 12 oct 17:16 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v245 &middot; lun 12 oct 18:39 &middot; COT</span>
             </div>
         </div>
 
@@ -275,77 +275,204 @@
         <!-- =========== VIEW: ARRANGER =========== -->
         <div class="app-view" id="view-arranger">
 
-            <!-- Rhythm Browser -->
+            <!-- 1. Setup / Sync Guide -->
+            <div class="panel" style="padding: 12px 16px; border-left: 3px solid var(--accent);">
+                <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" id="arrangerHelpToggle">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="material-symbols-outlined" style="color:var(--accent); font-size:20px;">info</span>
+                        <span style="font-weight:700; font-size:12px; letter-spacing:0.5px; text-transform:uppercase;">Casio CT-S500 Setup Guide</span>
+                    </div>
+                    <span class="material-symbols-outlined" id="arrangerHelpIcon" style="font-size:20px; color:var(--text-muted); transition:transform 0.2s;">expand_more</span>
+                </div>
+                <div id="arrangerHelpContent" style="display:none; margin-top:10px; font-size:12px; line-height:1.5; color:var(--text-muted); border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
+                    <div style="margin-bottom:6px;"><strong style="color:var(--text);">Para controlar Transporte y Tempo desde la app:</strong></div>
+                    <div style="margin-left:8px; display:flex; flex-direction:column; gap:4px;">
+                        <span>1. En el Casio presiona <b>MENU</b> &rarr; <b>MIDI</b>.</span>
+                        <span>2. <b>MIDI In Clock:</b> ponlo en <code>ON</code> o <code>AUTO</code> (para obedecer el tempo BPM de la app).</span>
+                        <span>3. <b>MIDI In Start/Stop:</b> ponlo en <code>ON</code> (para iniciar/detener ritmos con el bot&oacute;n START/STOP).</span>
+                        <span>4. <i>(Firmware 1.06+)</i> Usa las <b>Registraciones (Bancos 1&ndash;16)</b> para cambiar ritmos, variaciones, splits y sonidos completos directamente desde la pantalla.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. REGISTRATIONS CONTROLLER (64 Memories - 16 Banks x 4 Slots) -->
             <div class="panel">
-                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> Rhythm List <span style="font-weight:400;color:var(--muted);font-size:10px;">(select the number on the keyboard)</span></div>
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle; color:var(--accent);">memory</span>
+                        <span>Registration Memories (Rhythms &amp; Full Setups)</span>
+                    </div>
+                    <span id="activeRegBadge" style="font-size:11px; font-weight:700; color:var(--accent); padding:3px 8px; background:var(--accent-dim); border-radius:4px; border:1px solid var(--accent); display:none;"></span>
+                </div>
+
+                <!-- Bank selector row -->
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="arranger-label" style="min-width:auto;">BANK:</span>
+                        <div class="step-btns">
+                            <button class="step-btn" id="regBankMinus" style="width:38px;height:38px;font-size:18px;">-</button>
+                            <select id="regBankSelect" class="search-input" style="min-height:38px;font-size:13px;font-weight:700;padding:2px 8px;width:auto;">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <button class="step-btn" id="regBankPlus" style="width:38px;height:38px;font-size:18px;">+</button>
+                        </div>
+                    </div>
+                    <span style="font-size:11px; color:var(--text-muted); font-style:italic;">Firmware 1.06+ (MSB 116 / LSB Bank / PC Slot)</span>
+                </div>
+
+                <!-- 4 Registration Slot Buttons -->
+                <div class="arranger-transport" id="regSlotsGrid">
+                    <button class="btn-giant" id="btnReg1" data-slot="0">
+                        <div class="icon"><span class="material-symbols-outlined">looks_one</span></div>
+                        <div class="text">REG 1<br><span class="dim" style="font-size:10px;">MAIN / INTRO</span></div>
+                    </button>
+                    <button class="btn-giant" id="btnReg2" data-slot="1">
+                        <div class="icon"><span class="material-symbols-outlined">looks_two</span></div>
+                        <div class="text">REG 2<br><span class="dim" style="font-size:10px;">VAR 1 / FILL</span></div>
+                    </button>
+                    <button class="btn-giant" id="btnReg3" data-slot="2">
+                        <div class="icon"><span class="material-symbols-outlined">looks_3</span></div>
+                        <div class="text">REG 3<br><span class="dim" style="font-size:10px;">VAR 2 / SOLO</span></div>
+                    </button>
+                    <button class="btn-giant" id="btnReg4" data-slot="3">
+                        <div class="icon"><span class="material-symbols-outlined">looks_4</span></div>
+                        <div class="text">REG 4<br><span class="dim" style="font-size:10px;">ENDING</span></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. TRANSPORT, TEMPO & CLOCK -->
+            <div class="panel">
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle;">speed</span>
+                        <span>Transport &amp; Realtime Tempo</span>
+                    </div>
+                    <span id="clockStatusBadge" style="font-size:10px; font-weight:700; color:var(--text-muted);">CLOCK: STANDBY</span>
+                </div>
+
+                <!-- Tempo & Tap row -->
+                <div class="arranger-row" style="margin-bottom:16px; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <span class="arranger-label">TEMPO</span>
+                        <div class="step-btns">
+                            <button class="step-btn" id="bpmMinus5" style="width:38px;height:42px;font-size:14px;font-weight:700;" title="BPM -5">-5</button>
+                            <button class="step-btn" id="bpmMinus" style="width:38px;height:42px;font-size:20px;">-</button>
+                            <span class="step-val" id="bpmVal" style="min-width:64px;font-size:22px;font-weight:800;color:var(--accent);">120</span>
+                            <button class="step-btn" id="bpmPlus" style="width:38px;height:42px;font-size:20px;">+</button>
+                            <button class="step-btn" id="bpmPlus5" style="width:38px;height:42px;font-size:14px;font-weight:700;" title="BPM +5">+5</button>
+                        </div>
+                        <button class="btn" id="btnTapTempo" style="height:42px; padding:0 14px; font-weight:800; font-size:12px; letter-spacing:0.5px; border-color:var(--accent); color:var(--accent);" title="Tap repeatedly to set BPM">TAP TEMPO</button>
+                    </div>
+
+                    <label class="clock-toggle" title="Continuous MIDI Clock output">
+                        <input type="checkbox" id="chkMidiClock"> MIDI CLOCK
+                    </label>
+                </div>
+
+                <!-- Transport buttons -->
+                <div class="arranger-transport">
+                    <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></div>
+                        <div class="text">START / STOP</div>
+                    </button>
+                    <button class="btn-giant" id="btnSyncStart" style="flex:1;">
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">hourglass_empty</span></div>
+                        <div class="text">SYNC START</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. ACCOMPANIMENT MULTI-CHANNEL MIXER -->
+            <div class="panel">
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle;">equalizer</span>
+                        <span>Accompaniment Mixer (CC7 Multi-Channel)</span>
+                    </div>
+                </div>
+
+                <!-- Faders Grid -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
+                    <!-- Master Accompaniment -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--accent);">ARRANGER MASTER</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompMaster" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="rhythmVol" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="rhythmVolVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channels 9&ndash;16 (All accompaniment)</span>
+                    </div>
+
+                    <!-- Drums & Perc -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text);">DRUMS &amp; PERC</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompDrums" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="volAccompDrums" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="volAccompDrumsVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channels 9 &amp; 10 (Rhythm / Drums)</span>
+                    </div>
+
+                    <!-- Bass -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text);">BASS</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompBass" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="volAccompBass" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="volAccompBassVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channel 11 (Accompaniment Bass)</span>
+                    </div>
+
+                    <!-- Chords & Pads -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text);">CHORDS &amp; PADS</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompChords" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="volAccompChords" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="volAccompChordsVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channels 12&ndash;16 (Chord Harmony)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. RHYTHM BROWSER & QUICK DIAL HUD -->
+            <div class="panel">
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle;">queue_music</span>
+                        <span>Factory Rhythm Catalog (243 Styles)</span>
+                    </div>
+                </div>
+
+                <!-- HUD Card for Selected Rhythm -->
+                <div id="activeRhythmHUD" style="background:linear-gradient(135deg, rgba(0,255,204,0.1), rgba(59,130,246,0.1)); border:1px solid var(--accent); border-radius:10px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div>
+                        <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">RITMO SELECCIONADO</div>
+                        <div id="activeRhythmTitle" style="font-size:16px; font-weight:800; color:var(--text); margin:2px 0;">[001] 8 Beat 1 <span style="font-size:12px; color:var(--accent); font-weight:600;">(8 Beat)</span></div>
+                        <div id="activeRhythmDialTip" style="font-size:12px; color:var(--accent); font-weight:700;">👉 Pon en la rueda del Casio: <span style="font-size:15px; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--accent);">001</span></div>
+                    </div>
+                    <button class="btn btn-accent" id="btnApplySuggestedBpm" style="font-size:12px; padding:8px 14px;">APLICAR BPM SUGERIDO (<span id="suggestedBpmVal">120</span>)</button>
+                </div>
+
                 <div class="arranger-search-row">
                     <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
                     <input type="text" id="rhythmSearch" class="search-input" placeholder="Search rhythm..." autocomplete="off">
                 </div>
                 <div class="rhythm-list-wrap">
                     <div class="rhythm-list" id="rhythmList"></div>
-                </div>
-            </div>
-
-            <!-- Transport + Tempo + Volume -->
-            <div class="panel">
-                <div class="panel-title"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">tune</span> Rhythm Control</div>
-                <div id="activeRhythmBadge" style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:14px; padding:8px 12px; background:var(--accent-dim); border-radius:6px; border:1px solid var(--accent); display:none;"></div>
-
-                <!-- Tempo row -->
-                <div class="arranger-row" style="margin-bottom:16px;">
-                    <span class="arranger-label">TEMPO</span>
-                    <div class="step-btns">
-                        <button class="step-btn" id="bpmMinus" style="width:44px;height:44px;font-size:22px;">-</button>
-                        <span class="step-val" id="bpmVal" style="min-width:72px;font-size:20px;">120</span>
-                        <button class="step-btn" id="bpmPlus" style="width:44px;height:44px;font-size:22px;">+</button>
-                    </div>
-                    <span style="font-size:13px;color:var(--muted);">BPM</span>
-                    <label class="clock-toggle" title="Send MIDI Clock to keyboard">
-                        <input type="checkbox" id="chkMidiClock"> CLOCK
-                    </label>
-                </div>
-
-                <!-- Volume row -->
-                <div class="arranger-row" style="margin-bottom:20px;">
-                    <span class="arranger-label">RHYTHM VOL</span>
-                    <input type="range" id="rhythmVol" min="0" max="127" value="100" style="flex:1;height:44px;">
-                    <span class="step-val" id="rhythmVolVal" style="min-width:40px;font-size:16px;">100</span>
-                </div>
-
-                <!-- Transport buttons -->
-                <div class="arranger-transport">
-                    <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></div>
-                        <div class="text">START / STOP</div>
-                    </button>
-                    <button class="btn-giant" id="btnSyncStart">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">hourglass_empty</span></div>
-                        <div class="text">SYNC</div>
-                    </button>
-                    <button class="btn-giant" id="btnAccomp">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle; margin-right:5px;">piano</span></div>
-                        <div class="text">ACCOMPANIMENT</div>
-                    </button>
-                </div>
-
-                <div class="arranger-transport" style="margin-top:12px;">
-                    <button class="btn-giant" id="btnIntro">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">skip_previous</span></div>
-                        <div class="text">INTRO</div>
-                    </button>
-                    <button class="btn-giant" id="btnVar1">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">looks_one</span></div>
-                        <div class="text">VAR 1<br><span class="dim">FILL</span></div>
-                    </button>
-                    <button class="btn-giant" id="btnVar2">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">looks_two</span></div>
-                        <div class="text">VAR 2<br><span class="dim">FILL</span></div>
-                    </button>
-                    <button class="btn-giant" id="btnEnding">
-                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">skip_next</span></div>
-                        <div class="text">ENDING</div>
-                    </button>
                 </div>
             </div>
 
@@ -869,11 +996,11 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v244"></script>
-    <script src="presets.js?v244"></script>
-    <script src="app.js?v244"></script>
-    <script src="harmony.js?v244"></script>
-    <script src="library.js?v244"></script>
-    <script src="trainer.js?v244"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v245"></script>
+    <script src="presets.js?v245"></script>
+    <script src="app.js?v245"></script>
+    <script src="harmony.js?v245"></script>
+    <script src="library.js?v245"></script>
+    <script src="trainer.js?v245"></script>
 </body>
 </html>
