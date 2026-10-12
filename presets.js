@@ -338,24 +338,14 @@ function saveAppState() {
         });
     });
     const appState = {
-        v: 196,
+        v: 241,
         eqState: eqSnap,
         tuning,
         activeCategories,
         globalTranspose,
         globalOctave,
         activePart,
-        pcSynthEnabled,
-        tones: {
-            U1: _getSavedToneId('U1'),
-            U2: _getSavedToneId('U2'),
-            L: _getSavedToneId('L')
-        },
-        searchFilters: {
-            U1: window.toneSearch?.['U1']?.searchEl?.value ?? '',
-            U2: window.toneSearch?.['U2']?.searchEl?.value ?? '',
-            L:  window.toneSearch?.['L']?.searchEl?.value  ?? ''
-        }
+        pcSynthEnabled
     };
     try { localStorage.setItem('casioAppState', JSON.stringify(appState)); }
     catch(e) { console.warn('[state] save failed:', e); }
@@ -409,30 +399,23 @@ function loadAppState() {
             document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
         }
         
-        // Only restore specific tones from v194+ saves (first version that saves correct
-        // tones + searchFilters together). Saves from v192/v193 may still carry
-        // OpenCode-era tone IDs (e.g. 687 GM SYNTH-STRINGS instead of 24 STRINGS PIANO);
-        // in that case let initToneSearch's first-in-filter default stand.
-        if (saved.tones && saved.v >= 194) {
-            ['U1', 'U2', 'L'].forEach(part => {
-                const ts = window.toneSearch?.[part];
-                // Restore saved search filter so the active chip matches (v196+)
-                if (ts && saved.searchFilters?.[part] !== undefined) {
-                    ts.searchEl.value = saved.searchFilters[part];
-                    ts.searchEl.dispatchEvent(new Event('input'));
-                }
-                if (saved.tones[part] !== undefined) {
-                    selectToneInList(part, d => d.id === saved.tones[part]);
-                }
-            });
-        }
-
-        // Guarantee default tones if not loaded, missing or id is 0
-        const defaults = { U1: 1, U2: 8, L: 24 };
+        // Startup ALWAYS enforces default instruments and search filters (Option A):
+        // U1: Preset "Piano" -> Tone 1 "1. Stage Piano"
+        // U2: Preset "Pad" -> Tone 8 "8. ADV Piano PAD"
+        // L:  Preset "Strings" -> Tone 24 "24. Strings Piano"
+        const startupDefaults = {
+            U1: { filter: 'Piano', id: 1 },
+            U2: { filter: 'Pad', id: 8 },
+            L:  { filter: 'String', id: 24 }
+        };
         ['U1', 'U2', 'L'].forEach(part => {
-            if (!currentTone[part] || !currentTone[part].id) {
-                selectToneInList(part, d => d.id === defaults[part]);
+            const def = startupDefaults[part];
+            const ts = window.toneSearch?.[part];
+            if (ts) {
+                ts.searchEl.value = def.filter;
+                ts.searchEl.dispatchEvent(new Event('input'));
             }
+            selectToneInList(part, d => d.id === def.id, true);
         });
 
         if (saved.pcSynthEnabled !== undefined) {

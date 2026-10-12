@@ -706,8 +706,9 @@ function initToneSearch() {
             });
         });
         
-        // Default: select first tone shown by the initial search filter.
-        selectToneInList(part, () => true, true);
+        // Default: select default tone for each part (U1: 1, U2: 8, L: 24)
+        const startupDefaultTones = { U1: 1, U2: 8, L: 24 };
+        selectToneInList(part, d => d.id === startupDefaultTones[part], true);
     });
 }
 
