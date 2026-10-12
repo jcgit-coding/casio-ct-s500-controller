@@ -561,6 +561,7 @@ function scheduleProfile(part, catName) {
     _pendingProfile[part] = [
         setTimeout(() => {
             applySmartProfile(part, catName);
+            if (activePart === part) switchEQ(part);
             // Resync AFTER the burst so taps arrive after the CT-S500 hardware reset,
             // not racing with it. Calling before the burst had the first tap (150ms)
             // compete with applySmartProfile -- undefined ordering, unreliable.
@@ -601,7 +602,7 @@ function initToneSearch() {
                 grp.label = cat;
                 items.forEach(t => {
                     const opt = document.createElement('option');
-                    opt.value = JSON.stringify({ id: t.id, bank: t.bank, lsb: t.lsb, program: t.program });
+                    opt.value = JSON.stringify({ id: t.id, name: t.name, bank: t.bank, lsb: t.lsb, program: t.program });
                     opt.text  = t.label;
                     grp.appendChild(opt);
                 });
@@ -649,7 +650,8 @@ function initToneSearch() {
             const opt = listEl.options[listEl.selectedIndex];
             if (!opt) return;
             const data = JSON.parse(opt.value);
-            currentTone[part] = { ...data, text: opt.text };
+            const toneName = data.name || opt.text.replace(/^\d+\.\s*/, '');
+            currentTone[part] = { ...data, name: toneName, text: opt.text };
             changeTone(part, data.bank, data.lsb, data.program);
 
             // Extract category and apply smart acoustic profile
@@ -657,6 +659,14 @@ function initToneSearch() {
             if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {
                 catName = opt.parentElement.label;
             }
+
+            // Sync active EQ view to the track being adjusted so faders update visibly
+            activePart = part;
+            document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
+            document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active-track'));
+            const card = document.getElementById('card-' + part);
+            if (card) card.classList.add('active-track');
+
             scheduleProfile(part, catName);
 
             // Update the name shown in the card header
@@ -730,7 +740,9 @@ function selectToneInList(part, match, keepFilter = false) {
     if (idx < 0) return null;
     listEl.selectedIndex = idx;
     const opt = listEl.options[idx];
-    currentTone[part] = { ...JSON.parse(opt.value), text: opt.text };
+    const data = JSON.parse(opt.value);
+    const toneName = data.name || opt.text.replace(/^\d+\.\s*/, '');
+    currentTone[part] = { ...data, name: toneName, text: opt.text };
     const nameEl = document.getElementById('selectedTone-' + part);
     if (nameEl) nameEl.innerText = opt.text;
     if (opt.parentElement && opt.parentElement.tagName === 'OPTGROUP') {

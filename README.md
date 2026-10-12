@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v242
+# Casio CT-S500 Pro Controller — v243
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,12 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v243 · lun 12 oct 2026 17:12 · COT
+- **fix(smart-profiles):** Resuelto el bug por el cual `getToneEnvPreset` no reconocía el nombre del tono (`tone.name` era `undefined`), provocando que todos los tonos de una misma categoría compartieran valores genéricos idénticos.
+- **fix(smart-profiles):** Ahora se preserva el nombre real del tono en `currentTone` y `opt.value`, permitiendo que modelos de firma acústica específicos (Stage Piano, Bright, Mellow, Honky, Dyno, Violin, Sax, etc.) apliquen sus perfiles individuales de filtros, ataque, reverb, chorus y eco.
+- **fix(ux):** Al seleccionar un tono en cualquier pista (`U1`, `U2`, `L`), la vista del EQ Mixer cambia automáticamente a esa pista y refresca los faders en pantalla para reflejar visualmente la nueva ecualización.
+- **cache-bust:** `index.html` → v243.
 
 ### v242 · lun 12 oct 2026 17:04 · COT
 - **fix(envelope):** Eliminado el fader RELEASE (CC 72) del panel EQ para evitar conflictos con el botón SUSTAIN. CC 72 queda gobernado exclusivamente por el sistema de sustain (`susRelease`, `releaseNeutral` y `resyncAllSustain`).

@@ -299,7 +299,7 @@ const TONE_ENV_MATRIX = {
 //  Resolves signature tone models first, then falls back to category matrix.
 // ======================================================================
 function getToneEnvPreset(tone, cat, env) {
-    const name = (tone?.name || '').toUpperCase();
+    const name = (tone?.name || tone?.text || '').toUpperCase();
     const c = (cat || tone?.category || 'PIANO').toUpperCase().trim();
     const e = env || 'Studio';
 
