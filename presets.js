@@ -368,9 +368,9 @@ function loadAppState() {
         
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
-            // Purge CC72 and phantom CCs (75, 95, 102, 103, 104)
+            // Purge obsolete phantom CCs (75, 95, 102, 103, 104) -- CC72 (Release) is preserved
             ['U1','U2','L'].forEach(p => {
-                [72, 75, 95, 102, 103, 104].forEach(cc => {
+                [75, 95, 102, 103, 104].forEach(cc => {
                     delete eqState[p][cc]; delete eqState[p][String(cc)];
                 });
             });

@@ -431,6 +431,23 @@ function initApp() {
     document.getElementById("connectBtn")?.addEventListener("click", handleConnectClick);
     document.getElementById("btnConnectMidi")?.addEventListener("click", handleConnectClick);
 
+    // MIDI Panic Button
+    document.getElementById("btnPanic")?.addEventListener("click", () => {
+        ['U1', 'U2', 'L'].forEach(part => {
+            const ch = CHANNEL[part];
+            if (midiOutput) {
+                midiOutput.send([0xB0 | ch, 120, 0]); // All Sound Off
+                midiOutput.send([0xB0 | ch, 123, 0]); // All Notes Off
+                midiOutput.send([0xB0 | ch, 64,  0]); // Damper Off
+            }
+        });
+        if (window.pcSynth) {
+            for (let ch = 0; ch < 16; ch++) {
+                try { window.pcSynth.allNotesOff(ch); } catch(e) {}
+            }
+        }
+    });
+
     // EQ Part Target Logic
     document.querySelectorAll('.btn-eq').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -950,9 +967,31 @@ function initArranger() {
 //  MIDI SEND HELPERS
 // ======================================================================
 function sendCC(part, cc, value) {
-    if (midiOutput) midiOutput.send([0xB0 | CHANNEL[part], cc, value]);
+    if (!midiOutput && !window.pcSynth) return;
+    const ch = CHANNEL[part];
+
+    // Detune pseudo-CC: RPN 00 01H Fine Tuning (-50c to +50c, center 64 = 0c)
+    if (cc === 999 || cc === 'detune') {
+        if (midiOutput) {
+            midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
+            midiOutput.send([0xB0 | ch, 100, 0x01]); // RPN LSB (Fine Tuning)
+            midiOutput.send([0xB0 | ch,   6, value]); // Data Entry MSB
+            midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN Reset
+            midiOutput.send([0xB0 | ch, 100, 0x7F]);
+        }
+        return;
+    }
+
+    // Mono Mode: CC 126 (Mono Mode On) / CC 127 (Poly Mode On)
+    if (cc === 126) {
+        const targetCC = value > 63 ? 126 : 127;
+        if (midiOutput) midiOutput.send([0xB0 | ch, targetCC, 0]);
+        return;
+    }
+
+    if (midiOutput) midiOutput.send([0xB0 | ch, cc, value]);
     // Mirror CCs al PC Synth en el canal de ese part
-    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value, CHANNEL[part]);
+    if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value, ch);
 }
 
 function changeTone(part, msb, lsb, pc) {

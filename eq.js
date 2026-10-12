@@ -17,7 +17,14 @@ const EQ_SECTIONS = [
     {
         title: 'Envelope',
         controls: [
-            { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (ADSR)' },
+            { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (hammer strike / bow)' },
+            { label: 'RELEASE', cc: 72, def: 64, tip: 'Release Time (Damper decay tail)' },
+        ]
+    },
+    {
+        title: 'Pitch & Tuning',
+        controls: [
+            { label: 'DETUNE',  cc: 999, def: 64, tip: 'Fine Tuning RPN (-50c to +50c)' },
         ]
     },
     {
@@ -37,13 +44,14 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        title: 'Modulation & Pedals',
+        title: 'Modulation & Voicing',
         controls: [
-            { label: 'MODULATION',       cc: 1,  def: 0, tip: 'Modulation Wheel' },
-            { label: 'PORTAMENTO', cc: 65, def: 0, tip: 'Portamento On/Off', type: 'switch' },
-            { label: 'PORT. TIME', cc: 5,  def: 0, tip: 'Portamento Time (glide)' },
-            { label: 'SOSTENUTO', cc: 66, def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
-            { label: 'SOFT',      cc: 67, def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
+            { label: 'MODULATION', cc: 1,   def: 0, tip: 'Modulation Wheel' },
+            { label: 'PORTAMENTO', cc: 65,  def: 0, tip: 'Portamento On/Off', type: 'switch' },
+            { label: 'PORT. TIME', cc: 5,   def: 0, tip: 'Portamento Time (glide)' },
+            { label: 'MONO',       cc: 126, def: 0, tip: 'Mono Mode (Legato solos/vientos)', type: 'switch' },
+            { label: 'SOSTENUTO',  cc: 66,  def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
+            { label: 'SOFT',       cc: 67,  def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
         ]
     },
 ];
@@ -1049,8 +1057,7 @@ function applySmartProfile(part, category) {
     if (part === 'U2') eqState[part][7] = 75;
     if (part === 'L')  eqState[part][7] = 100;
 
-    // Ensure CC72 (Release) is never in eqState
-    delete eqState[part][72]; delete eqState[part]['72'];
+    // Part Mix Rules applied -- CC72 (Release) is now preserved as an Envelope fader
 
     // 4. Send to keyboard and update UI -- skip performance CCs
     if (activePart === part) beginEqProgrammatic();
@@ -1196,8 +1203,8 @@ function buildEQ() {
                     if ((cur !== undefined ? cur : ctrl.def) === v) return;
                     eqState[_faderPart][ctrl.cc] = v;
                     sendCC(_faderPart, ctrl.cc, v);
-                    // Re-assert sustain if active so CT-S500 voice block does not drop release tail
-                    if (tuning[_faderPart].sus) {
+                    // Re-assert sustain if active so CT-S500 voice block does not drop release tail (except when dragging RELEASE itself)
+                    if (tuning[_faderPart].sus && ctrl.cc !== 72) {
                         sendCC(_faderPart, 72, susRelease(_faderPart));
                     }
                 });
@@ -1214,7 +1221,7 @@ function buildEQ() {
                             if (other !== fader) other.value = v;
                         });
                     }
-                    if (tuning[_faderPart].sus) {
+                    if (tuning[_faderPart].sus && ctrl.cc !== 72) {
                         sendCC(_faderPart, 72, susRelease(_faderPart));
                         scheduleSustainResync(_faderPart, [30, 120, 300]);
                     }
@@ -1287,8 +1294,13 @@ function formatVal(label, val) {
         if (val === 64) return 'C';
         return val < 64 ? 'L' + (64 - val) : 'R' + (val - 64);
     }
+    if (label === 'DETUNE') {
+        if (val === 64) return '0c';
+        const cents = Math.round((val - 64) * 50 / (val > 64 ? 63 : 64));
+        return (cents > 0 ? '+' : '') + cents + 'c';
+    }
     // Switch-style controls (on/off)
-    if (['PORTAMENTO','SOSTENUTO','SOFT'].includes(label)) {
+    if (['PORTAMENTO','SOSTENUTO','SOFT','MONO'].includes(label)) {
         return val >= 64 ? 'ON' : 'OFF';
     }
     return val;
