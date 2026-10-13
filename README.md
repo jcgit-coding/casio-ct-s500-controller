@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v246
+# Casio CT-S500 Pro Controller — v247
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,13 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v247 · lun 12 oct 2026 22:40 · COT
+- **fix(tones):** Resuelto el problema por el cual la lista de tonos quedaba truncada y no permitía ver el catálogo completo de los 764 instrumentos:
+  - **Catálogo completo en arranque:** Eliminada la pre-carga restrictiva de texto en el buscador (`Piano`, `Pad`, `Strings`). La app arranca con los instrumentos por defecto (U1: Stage Piano, U2: ADV Piano Pad, L: Strings Piano) pero con la lista de los 764 tonos completamente accesible en las 33 categorías.
+  - **Auto-desbloqueo al mover desde el Casio:** Al cambiar de instrumento directamente en la rueda/panel del teclado físico, la app borra de inmediato cualquier filtro de búsqueda activo en esa pista, despliega la lista completa de 764 tonos y hace auto-scroll suave (`scrollIntoView`) al tono seleccionado.
+  - **Chips con toggle On/Off:** Hacer clic sobre un chip de búsqueda activo (ej. "Piano", "Organ", "Pad") ahora lo desactiva y restaura instantáneamente la lista completa con un solo toque.
+- **cache-bust:** `index.html` → v247.
 
 ### v246 · lun 12 oct 2026 18:52 · COT
 - **cleanup(arranger):** Purga completa de Registraciones en la pestaña Arranger. El Arranger queda dedicado 100% y exclusivamente al acompañamiento rítmico, evitando cualquier interferencia o alteración sobre los tonos e instrumentos del Mixer.

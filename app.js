@@ -375,6 +375,15 @@ function onMIDIMessage(e) {
         const ch = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
+
+        // When moving directly on the Casio keyboard, clear any active filter
+        // so the user can immediately see and browse the COMPLETE list of all 764 tones!
+        const ts = window.toneSearch?.[part];
+        if (ts && ts.searchEl && ts.searchEl.value) {
+            ts.searchEl.value = '';
+            ts.searchEl.dispatchEvent(new Event('input'));
+        }
+
         if (window.pcSynth && window.pcSynth.programChange) {
             window.pcSynth.programChange(ch, d1);
             const sel = document.getElementById('sf2-prog-' + part);
@@ -383,10 +392,14 @@ function onMIDIMessage(e) {
         }
         const pc = d1;
         const bank = pendingBank[part] ?? 0;
-        let pcOpt = selectToneInList(part, d => d.bank === bank && d.program === pc);
+        const lsb = pendingLSB[part] ?? 0;
+        let pcOpt = selectToneInList(part, d => d.bank === bank && (d.lsb === lsb || lsb === 0) && d.program === pc, false);
+        if (!pcOpt) {
+            pcOpt = selectToneInList(part, d => d.bank === bank && d.program === pc, false);
+        }
         if (!pcOpt) {
             // Fallback if Bank MSB was not sent prior to PC
-            pcOpt = selectToneInList(part, d => d.program === pc);
+            pcOpt = selectToneInList(part, d => d.program === pc, false);
         }
         if (pcOpt) {
             // Automatically switch active UI view to this part so the screen reflects what you're playing on the Casio
@@ -623,11 +636,8 @@ function initToneSearch() {
             }
         }
 
-        // Always reset to startup defaults (Piano/Pad/String) so chips are reliably active.
-        // The saved tone ID is restored later by loadAppState -> selectToneInList.
-        if (part === 'U1') searchEl.value = 'Piano';
-        if (part === 'U2') searchEl.value = 'Pad';
-        if (part === 'L')  searchEl.value = 'String';
+        // Startup: start with empty search filter so the complete list of all 764 tones is populated!
+        searchEl.value = '';
 
         searchEl.addEventListener('input', () => {
             const q = searchEl.value.trim().toLowerCase();
@@ -645,10 +655,16 @@ function initToneSearch() {
             chips.forEach(c => c.classList.toggle('active', c.dataset.q.toLowerCase() === searchEl.value.trim().toLowerCase()));
         });
 
-        // Search preset chips -- filter list only, never auto-change the tone
+        // Search preset chips -- filter list, or toggle off to restore full list if clicked again
         document.querySelectorAll(`.search-presets[data-search-target="search-${part}"] .search-preset-btn`).forEach(btn => {
             btn.addEventListener('click', () => {
-                searchEl.value = btn.dataset.q;
+                const targetQ = btn.dataset.q;
+                const isCurrentlyActive = targetQ && searchEl.value.trim().toLowerCase() === targetQ.toLowerCase();
+                if (isCurrentlyActive) {
+                    searchEl.value = ''; // Toggle off -> shows full list
+                } else {
+                    searchEl.value = targetQ;
+                }
                 searchEl.dispatchEvent(new Event('input'));
                 searchEl.blur();
             });
@@ -731,7 +747,7 @@ function initToneSearch() {
         
         // Default: select default tone for each part (U1: 1, U2: 8, L: 24)
         const startupDefaultTones = { U1: 1, U2: 8, L: 24 };
-        selectToneInList(part, d => d.id === startupDefaultTones[part], true);
+        selectToneInList(part, d => d.id === startupDefaultTones[part], false);
     });
 }
 
@@ -753,6 +769,9 @@ function selectToneInList(part, match, keepFilter = false) {
     if (idx < 0) return null;
     listEl.selectedIndex = idx;
     const opt = listEl.options[idx];
+    if (opt && typeof opt.scrollIntoView === 'function') {
+        try { opt.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch(e) {}
+    }
     const data = JSON.parse(opt.value);
     const toneName = data.name || opt.text.replace(/^\d+\.\s*/, '');
     currentTone[part] = { ...data, name: toneName, text: opt.text };

@@ -399,23 +399,23 @@ function loadAppState() {
             document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
         }
         
-        // Startup ALWAYS enforces default instruments and search filters (Option A):
-        // U1: Preset "Piano" -> Tone 1 "1. Stage Piano"
-        // U2: Preset "Pad" -> Tone 8 "8. ADV Piano PAD"
-        // L:  Preset "Strings" -> Tone 24 "24. Strings Piano"
+        // Startup ALWAYS enforces default instruments (Option A) with full list visible:
+        // U1: Tone 1 "1. Stage Piano"
+        // U2: Tone 8 "8. ADV Piano PAD"
+        // L:  Tone 24 "24. Strings Piano"
         const startupDefaults = {
-            U1: { filter: 'Piano', id: 1 },
-            U2: { filter: 'Pad', id: 8 },
-            L:  { filter: 'String', id: 24 }
+            U1: 1,
+            U2: 8,
+            L:  24
         };
         ['U1', 'U2', 'L'].forEach(part => {
-            const def = startupDefaults[part];
+            const toneId = startupDefaults[part];
             const ts = window.toneSearch?.[part];
-            if (ts) {
-                ts.searchEl.value = def.filter;
+            if (ts && ts.searchEl) {
+                ts.searchEl.value = '';
                 ts.searchEl.dispatchEvent(new Event('input'));
             }
-            selectToneInList(part, d => d.id === def.id, true);
+            selectToneInList(part, d => d.id === toneId, false);
         });
 
         if (saved.pcSynthEnabled !== undefined) {
