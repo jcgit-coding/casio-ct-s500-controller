@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v247
+# Casio CT-S500 Pro Controller — v248
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -117,6 +117,18 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v248 · lun 12 oct 2026 22:58 · COT
+- **feat(presets):** Restaurados los Presets de Búsqueda por defecto de inicio solicitados (Opción A):
+  - **U1:** Preset chip "Piano" activo, filtro "Piano", Tono 1 *Stage Piano*.
+  - **U2:** Preset chip "Pad" activo, filtro "Pad", Tono 8 *ADV Piano PAD*.
+  - **L:** Preset chip "Strings" activo, filtro "String", Tono 24 *Strings Piano*.
+- **fix(tones):** Desbloqueo inteligente del catálogo completo de 764 tonos en movimiento físico y navegación:
+  - **MIDI In desde Casio:** Al girar la rueda o cambiar de tono en el teclado físico, `keepFilter=false` en `selectToneInList` y `onMIDIMessage` limpia automáticamente el filtro de búsqueda de esa pista, restaurando en pantalla los 764 tonos en sus 33 categorías con auto-scroll (`scrollIntoView`) directo al tono.
+  - **Navegación de categorías `<` y `>`:** Presionar los botones de cambio de categoría en la app limpia de inmediato cualquier filtro de texto activo, permitiendo recorrer libremente las 33 categorías del Casio sin quedar atrapado en un subconjunto.
+  - **Toggle en chips:** Tocar un chip activo lo apaga y despliega los 764 tonos con 1 solo toque.
+- **fix(cache-buster):** Invalidador de caché robusto con redirección forzada vía timestamp (`window.location.replace`) que garantiza que los navegadores móviles y de escritorio descarguen `v248` de inmediato sin depender de recargas manuales.
+- **cache-bust:** `index.html` → v248.
 
 ### v247 · lun 12 oct 2026 22:40 · COT
 - **fix(tones):** Resuelto el problema por el cual la lista de tonos quedaba truncada y no permitía ver el catálogo completo de los 764 instrumentos:

@@ -636,8 +636,10 @@ function initToneSearch() {
             }
         }
 
-        // Startup: start with empty search filter so the complete list of all 764 tones is populated!
-        searchEl.value = '';
+        // Startup defaults: U1 -> Piano, U2 -> Pad, L -> String
+        if (part === 'U1') searchEl.value = 'Piano';
+        if (part === 'U2') searchEl.value = 'Pad';
+        if (part === 'L')  searchEl.value = 'String';
 
         searchEl.addEventListener('input', () => {
             const q = searchEl.value.trim().toLowerCase();
@@ -723,6 +725,10 @@ function initToneSearch() {
         // Prev / Next Buttons (Categories)
         document.querySelectorAll(`.cat-nav-btn[data-part="${part}"]`).forEach(btn => {
             btn.addEventListener('click', (e) => {
+                if (searchEl.value) {
+                    searchEl.value = '';
+                    searchEl.dispatchEvent(new Event('input'));
+                }
                 const optgroups = Array.from(listEl.querySelectorAll('optgroup'));
                 if (optgroups.length === 0) return;
 
@@ -747,7 +753,7 @@ function initToneSearch() {
         
         // Default: select default tone for each part (U1: 1, U2: 8, L: 24)
         const startupDefaultTones = { U1: 1, U2: 8, L: 24 };
-        selectToneInList(part, d => d.id === startupDefaultTones[part], false);
+        selectToneInList(part, d => d.id === startupDefaultTones[part], true);
     });
 }
 
@@ -759,9 +765,13 @@ function selectToneInList(part, match, keepFilter = false) {
     const find = () => [...listEl.options].findIndex(o => {
         try { return match(JSON.parse(o.value), o); } catch(e) { return false; }
     });
-    let idx = find();
     const ts = window.toneSearch?.[part];
-    if (idx < 0 && !keepFilter && ts && ts.searchEl.value) {
+    if (!keepFilter && ts && ts.searchEl && ts.searchEl.value) {
+        ts.searchEl.value = '';
+        ts.searchEl.dispatchEvent(new Event('input'));
+    }
+    let idx = find();
+    if (idx < 0 && ts && ts.searchEl && ts.searchEl.value) {
         ts.searchEl.value = '';
         ts.searchEl.dispatchEvent(new Event('input'));
         idx = find();
