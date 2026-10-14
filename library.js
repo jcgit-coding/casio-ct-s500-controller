@@ -159,9 +159,9 @@ const RepertorioApp = {
         const ES_QUAL = '(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?';
         const ES_BASS = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
 
-        // Regex para strip (detectar si la línea es solo acordes)
+        // Español PRIMERO: DO/RE/MI etc deben ganar sobre D/E/... inglés
         const CHORD_STRIP_RE = new RegExp(
-            `(?:${EN_ROOT}${EN_QUAL}${EN_BASS}|${ES_ROOT}${ES_QUAL}${ES_BASS})`, 'g'
+            `(?:${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g'
         );
 
         const isChordLine = (line) => {
@@ -176,7 +176,7 @@ const RepertorioApp = {
             return leftover.length === 0;
         };
 
-        // Regex para highlight (envolver cada acorde en span)
+        // Español PRIMERO también en highlight
         const CHORD_RE = new RegExp(
             `(${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g'
         );
