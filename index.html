@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
     (function(){
-        var V='v255';
+        var V='v256';
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
             var u=new URL(window.location.href);
@@ -790,7 +790,7 @@
                         <!-- SUB-PANEL: SONGS -->
                         <div id="lib-subpanel-songs" style="display:flex; flex-direction:column; gap:10px; flex:1; min-height:0;">
                             <input type="text" id="lib-song-search-filter" class="search-input" placeholder="Filter by title or artist..." style="padding: 8px 12px; font-size: 13px;">
-                            <div id="cloud-song-list-container" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:450px; display:flex; flex-direction:column; gap:6px;">
+                            <div id="cloud-song-list-container" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:0; max-height:calc(100vh - 290px); position:relative; padding-right:24px; scrollbar-width:thin; scrollbar-color:var(--accent) rgba(255,255,255,0.06);">
                                 <div style="color:var(--text-muted); font-size:12px; padding:10px;">Loading song library...</div>
                             </div>
                         </div>
@@ -801,7 +801,7 @@
                                 <input type="date" id="lib-date-picker" class="search-input" style="flex: 1;">
                                 <button class="btn" id="lib-btn-add-event" style="padding: 0 14px;"><span class="material-symbols-outlined">add</span></button>
                             </div>
-                            <div id="lib-event-list" class="song-list-scroll" style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; flex:1; min-height:450px;">
+                            <div id="lib-event-list" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:0; max-height:calc(100vh - 290px); scrollbar-width:thin; scrollbar-color:var(--accent) rgba(255,255,255,0.06);">
                                 <div class="event-list-empty" style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">
                                     No events scheduled.<br>Select a date above.
                                 </div>

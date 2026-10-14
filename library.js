@@ -340,20 +340,17 @@ const RepertoireSync = {
                         ${has ? `onclick="RepertoireSync._jumpToLetter('${l}')"` : ''}>${l}</div>`;
         }).join('');
 
-        wrap.style.position = 'relative';
-        wrap.style.paddingRight = '24px';
-        wrap.innerHTML = `<div id="_song-scroll" style="height:100%;overflow-y:scroll;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--accent) rgba(255,255,255,0.06);">${listHTML}</div>`;
-
+        wrap.innerHTML = listHTML;
         clearIndex();
         const idx = document.createElement('div');
         idx.id = '_alpha-index';
-        idx.style.cssText = 'position:absolute;right:0;top:0;bottom:0;width:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5;';
-        idx.innerHTML = indexHTML;
-        wrap.appendChild(idx);
+        idx.style.cssText = 'position:absolute;top:0;right:0;bottom:0;width:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5;pointer-events:none;';
+        idx.innerHTML = indexHTML.replace(/onclick=/g, 'style="pointer-events:auto;" onclick=');
+        wrap.insertBefore(idx, wrap.firstChild);
     },
 
     _jumpToLetter(letter) {
-        const scroll = document.getElementById('_song-scroll');
+        const scroll = document.getElementById('cloud-song-list-container');
         if (!scroll) return;
         const groups = [...scroll.querySelectorAll('[id^="artist-"]')];
         const target = groups.find(el => {
