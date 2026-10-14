@@ -262,32 +262,74 @@ const RepertoireSync = {
     },
     
     renderSongList(songs) {
-        const container = document.getElementById('cloud-song-list-container');
-        if (!container) return;
+        const wrap = document.getElementById('cloud-song-list-container');
+        if (!wrap) return;
+
+        const clearIndex = () => { const o = document.getElementById('_alpha-index'); if (o) o.remove(); };
 
         if (!songs || songs.length === 0) {
-            container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>No matching songs found.</div>";
+            wrap.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>No matching songs found.</div>";
+            wrap.style.paddingRight = '';
+            clearIndex();
             return;
         }
 
-        // Group by artist
+        // Group by artist, sorted alphabetically
         const byArtist = {};
         songs.forEach(s => {
             const artist = s.artist || "Unknown Artist";
             if (!byArtist[artist]) byArtist[artist] = [];
             byArtist[artist].push(s);
         });
+        const sortedArtists = Object.keys(byArtist).sort((a, b) => a.localeCompare(b));
 
-        container.innerHTML = Object.entries(byArtist).map(([artist, artistSongs]) => `
-            <div style='margin-bottom:14px;'>
-                <div style='font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.1em; padding:3px 0 6px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:5px;'>${artist}</div>
-                ${artistSongs.map(s => `
-                    <div class='song-item' style='padding:7px 10px; border-radius:7px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); cursor:pointer; transition:all .2s; margin-bottom:3px;' onclick='RepertoireSync.openSong("${s.id}")'>
-                        <div style='font-weight:600; font-size:13px; color:var(--text);'>${s.title}</div>
-                    </div>
-                `).join('')}
-            </div>
-        `).join('');
+        // Song list HTML with per-artist sections
+        const listHTML = sortedArtists.map(artist => {
+            const anchorId = 'artist-' + artist.replace(/[^a-z0-9]/gi, '_');
+            const letter = artist[0].toUpperCase();
+            return `<div id="${anchorId}" style="margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:8px;padding:4px 0 6px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:5px;">
+                    <span style="font-size:15px;font-weight:800;color:var(--accent);min-width:18px;">${letter}</span>
+                    <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">${artist}</span>
+                </div>
+                ${byArtist[artist].map(s => `
+                    <div style="padding:7px 10px 7px 26px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;margin-bottom:3px;transition:background .12s;"
+                         onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'"
+                         onclick="RepertoireSync.openSong('${s.id}')">
+                        <span style="font-weight:600;font-size:13px;color:var(--text);">${s.title}</span>
+                    </div>`).join('')}
+            </div>`;
+        }).join('');
+
+        // Alphabet index — highlight only letters present
+        const usedLetters = new Set(sortedArtists.map(a => a[0].toUpperCase()));
+        const indexHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(l => {
+            const has = usedLetters.has(l);
+            return `<div style="font-size:9px;font-weight:700;line-height:1.9;text-align:center;width:100%;cursor:${has ? 'pointer' : 'default'};color:${has ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};"
+                        ${has ? `onclick="RepertoireSync._jumpToLetter('${l}')"` : ''}>${l}</div>`;
+        }).join('');
+
+        wrap.style.position = 'relative';
+        wrap.style.paddingRight = '24px';
+        wrap.innerHTML = `<div id="_song-scroll" style="height:100%;overflow-y:auto;padding-right:4px;">${listHTML}</div>`;
+
+        clearIndex();
+        const idx = document.createElement('div');
+        idx.id = '_alpha-index';
+        idx.style.cssText = 'position:absolute;right:0;top:0;bottom:0;width:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5;';
+        idx.innerHTML = indexHTML;
+        wrap.appendChild(idx);
+    },
+
+    _jumpToLetter(letter) {
+        const scroll = document.getElementById('_song-scroll');
+        if (!scroll) return;
+        const groups = [...scroll.querySelectorAll('[id^="artist-"]')];
+        const target = groups.find(el => {
+            const letterSpan = el.querySelector('span');
+            return letterSpan && letterSpan.textContent.trim() >= letter;
+        });
+        if (target) target.scrollIntoView({ block: 'start', behavior: 'smooth' });
     },
     
     async openSong(id) {
