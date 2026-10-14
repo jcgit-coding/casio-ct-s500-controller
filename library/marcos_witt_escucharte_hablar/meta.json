@@ -1,13 +1,13 @@
 {
   "id": "marcos_witt_escucharte_hablar",
-  "title": "Escucharte Hablar",
+  "title": "Escucharte hablar",
   "artist": "Marcos Witt",
   "genre": "Worship",
   "original_key": "G",
   "versions": [
     {
-      "file": "chords_v1_cifraclub.txt",
-      "source": "https://www.cifraclub.com/marcos-witt/escucharte-hablar/"
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marcos_witt/escucharte_hablar"
     }
   ]
 }

@@ -1,0 +1,20 @@
+B5 = Bm
+F#5 = F#     Abajo estan los tonos
+E5 = E
+A5 = A
+
+/////B5 F#5 E5 A5/////
+
+B5        F#5          E5      A5
+Fui a la tienda a comprar un televisor
+B5           F#5           E5           A5
+Era blanco y negro habían dicho que era de color
+   B5          F#5     E5       A5
+Hablé por el teléfono para reclamar
+      B5       F#5     E5      A5
+Me dijeron que no me podían ayudar
+
+F#5                    G5
+Pues mire señor el fabricante dijo que era de color
+   F5
+Nosotros no somos responsables

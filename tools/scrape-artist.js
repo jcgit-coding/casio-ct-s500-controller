@@ -173,26 +173,33 @@ async function lcArtistPage(artistSlug) {
     const seen  = new Set();
     const songs = [];
 
-    // lacuerda usa href relativos simples: href='tu_fidelidad' o href='/marcos_witt/tu_fidelidad'
-    // Capturamos ambos formatos de la lista de canciones
-    const songListRe = /<li[^>]*onclick='[^']*location="([^"]+)"[^>]*>[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/gi;
-    let slm;
-    while ((slm = songListRe.exec(html)) !== null) {
-        const slug  = slm[1].replace(/^\/+/, '').replace(/\.html?$/, '').split('/').pop();
-        const title = decodeEntities(stripTags(slm[2])).trim();
-        if (!slug || seen.has(slug)) continue;
-        seen.add(slug);
-        songs.push({ slug, title, lcSlug });
+    // La lista completa está en <ul id=b_main class=b_main ...>
+    // Cada entrada: <li id='rNNN' lcd='...'><a href="slug">Título <em>acordes</em></a></li>
+    const mainListStart = html.indexOf('id=b_main');
+    if (mainListStart !== -1) {
+        const mainListEnd = html.indexOf('</ul>', mainListStart);
+        const block = html.slice(mainListStart, mainListEnd > -1 ? mainListEnd : mainListStart + 200000);
+        const re = /<li[^>]*><a href="([^"]+)">([\s\S]*?)<\/a>/gi;
+        let m;
+        while ((m = re.exec(block)) !== null) {
+            const slug  = m[1].trim();
+            const title = decodeEntities(stripTags(m[2])).replace(/\s+acordes\s*$/i, '').trim();
+            if (!slug || seen.has(slug)) continue;
+            seen.add(slug);
+            songs.push({ slug, title, lcSlug });
+        }
     }
 
-    // Fallback: links con href absoluto que incluyen el slug del artista
+    // Fallback: lista de populares (rList) si no encontramos b_main
     if (songs.length === 0) {
-        for (const { href, text } of extractLinks(html)) {
-            if (!text || !href.includes(`/${lcSlug}/`)) continue;
-            const slug = path.basename(href).replace(/\.html?$/, '');
-            if (!slug || slug === lcSlug || seen.has(slug)) continue;
+        const songListRe = /<li[^>]*onclick='[^']*location="([^"]+)"[^>]*>[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/gi;
+        let slm;
+        while ((slm = songListRe.exec(html)) !== null) {
+            const slug  = slm[1].replace(/^\/+/, '').replace(/\.html?$/, '').split('/').pop();
+            const title = decodeEntities(stripTags(slm[2])).trim();
+            if (!slug || slug.startsWith('/') || slug.startsWith('http') || seen.has(slug)) continue;
             seen.add(slug);
-            songs.push({ slug, title: text, lcSlug });
+            songs.push({ slug, title, lcSlug });
         }
     }
 
