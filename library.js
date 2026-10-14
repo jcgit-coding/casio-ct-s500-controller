@@ -154,10 +154,10 @@ const RepertorioApp = {
         const EN_BASS = '(?:\\/[CDEFGAB](?:#|b)?)?';
 
         // Notación española/solfège: DO RE MI FA SOL LA SI (y mayúsculas mixtas como Sol, Sim, Fa#)
-        // Incluye variantes: Sib, Fa#, Mim, Lam, Dom, etc.
         const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';
-        const ES_QUAL = '(?:#|b|m(?:aj)?(?:7)?|dim|aug|sus[24]?|add\\d?|[79]|11|13|maj7?|M|\\+)?(?:\\d+)?';
-        const ES_BASS = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:#|b)?)?';
+        // Sufijos: #/b accidental, m/M/maj/dim/aug/sus/add/+/(aug)/(add2) etc., números de extensión
+        const ES_QUAL = '(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?';
+        const ES_BASS = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
 
         // Regex para strip (detectar si la línea es solo acordes)
         const CHORD_STRIP_RE = new RegExp(
@@ -181,11 +181,21 @@ const RepertorioApp = {
             `(${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g'
         );
 
+        // Separa acordes concatenados sin espacio: "SImLA+(aug)" → "SIm LA+(aug)"
+        // Solo aplica en líneas de acordes, entre el fin de un acorde y el inicio del siguiente
+        const splitConcatChords = (line) => {
+            // Inserta espacio antes de raíz española cuando la precede fin de acorde
+            let result = line.replace(/([a-z0-9#b\)])(?=(DO|RE|MI|FA|SOL|LA|SI)(?![a-zA-Z]))/g, '$1 ');
+            // Inserta espacio antes de raíz inglesa (A-G mayúscula) cuando la precede fin de acorde
+            result = result.replace(/([a-z0-9#b\)])(?=[A-G](?:[#b]|m|$|\s|\())/g, '$1 ');
+            return result;
+        };
+
         const lines = text.split('\n');
         const htmlLines = lines.map(line => {
             let parsedLine = line;
             if (isChordLine(line)) {
-                parsedLine = line.replace(CHORD_RE, chord =>
+                parsedLine = splitConcatChords(line).replace(CHORD_RE, chord =>
                     `<span class='chord' style='color:var(--accent); font-weight:bold;'>${chord}</span>`
                 );
             }
