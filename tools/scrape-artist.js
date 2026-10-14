@@ -157,28 +157,47 @@ function saveIndex(index) {
 }
 
 // ── LACUERDA ──────────────────────────────────────────────────────────────────
-const LC_BASE = 'https://www.lacuerda.net';
+const LC_BASE = 'https://acordes.lacuerda.net';
 
 async function lcArtistPage(artistSlug) {
-    const pageUrl = `${LC_BASE}/${artistSlug}/`;
+    // lacuerda usa guion_bajo en slugs (marcos_witt, no marcos-witt)
+    const lcSlug  = artistSlug.replace(/-/g, '_');
+    const pageUrl = `${LC_BASE}/${lcSlug}/`;
     console.log(`\n[lacuerda] ${pageUrl}`);
     const html = await fetchHTML(pageUrl);
 
-    const h1   = between(html, '<h1', '</h1>') || '';
-    const name = decodeEntities(stripTags(h1)).trim() || artistSlug.replace(/-/g,' ');
+    const h1Raw = between(html, '<h1', '</h1>') || '';
+    const name  = decodeEntities(stripTags(h1Raw)).replace(/^[>\s]+/, '').trim()
+                  || artistSlug.replace(/[-_]/g,' ').replace(/\b\w/g, c => c.toUpperCase());
 
     const seen  = new Set();
     const songs = [];
-    for (const { href, text } of extractLinks(html)) {
-        if (!text || !href.includes(`/${artistSlug}/`)) continue;
-        const slug = path.basename(href).replace(/\.html?$/, '');
-        if (!slug || slug === artistSlug || seen.has(slug)) continue;
+
+    // lacuerda usa href relativos simples: href='tu_fidelidad' o href='/marcos_witt/tu_fidelidad'
+    // Capturamos ambos formatos de la lista de canciones
+    const songListRe = /<li[^>]*onclick='[^']*location="([^"]+)"[^>]*>[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/gi;
+    let slm;
+    while ((slm = songListRe.exec(html)) !== null) {
+        const slug  = slm[1].replace(/^\/+/, '').replace(/\.html?$/, '').split('/').pop();
+        const title = decodeEntities(stripTags(slm[2])).trim();
+        if (!slug || seen.has(slug)) continue;
         seen.add(slug);
-        songs.push({ slug, title: text });
+        songs.push({ slug, title, lcSlug });
+    }
+
+    // Fallback: links con href absoluto que incluyen el slug del artista
+    if (songs.length === 0) {
+        for (const { href, text } of extractLinks(html)) {
+            if (!text || !href.includes(`/${lcSlug}/`)) continue;
+            const slug = path.basename(href).replace(/\.html?$/, '');
+            if (!slug || slug === lcSlug || seen.has(slug)) continue;
+            seen.add(slug);
+            songs.push({ slug, title: text, lcSlug });
+        }
     }
 
     console.log(`  Artista: "${name}"  |  Canciones en lacuerda: ${songs.length}`);
-    return { artistName: name, songs: songs.slice(0, MAX), artistSlug };
+    return { artistName: name, songs: songs.slice(0, MAX), artistSlug, lcSlug };
 }
 
 function extractLacuerdaText(html) {
@@ -192,8 +211,9 @@ function extractLacuerdaText(html) {
     return best.length > 50 ? best : null;
 }
 
-async function lcSongVersions(artistSlug, songSlug) {
-    const baseUrl  = `${LC_BASE}/${artistSlug}/${songSlug}.html`;
+async function lcSongVersions(artistSlug, songSlug, lcSlug) {
+    const artist  = lcSlug || artistSlug.replace(/-/g, '_');
+    const baseUrl = `${LC_BASE}/${artist}/${songSlug}`;
     const versions = [];
     try {
         const html = await fetchHTML(baseUrl);
@@ -353,7 +373,7 @@ function upsertIndex(entry) {
 // ── MODO DUAL: lacuerda primero, cifraclub de respaldo ────────────────────────
 async function runDual(artistSlug) {
     // 1. Obtener listas de ambos sitios en paralelo
-    let lcInfo = { artistName: '', songs: [], artistSlug };
+    let lcInfo = { artistName: '', songs: [], artistSlug, lcSlug: artistSlug.replace(/-/g,'_') };
     let ccInfo = { artistName: '', songs: [], artistSlug };
 
     try { lcInfo = await lcArtistPage(artistSlug); } catch (e) { console.warn(`[lacuerda] Error: ${e.message}`); }
@@ -402,7 +422,7 @@ async function runDual(artistSlug) {
         process.stdout.write(`  [${i+1}/${allLc.length}] ${song.title} ... `);
         await sleep(DELAY);
 
-        const versions = await lcSongVersions(artistSlug, song.slug);
+        const versions = await lcSongVersions(artistSlug, song.slug, lcInfo.lcSlug);
         if (!versions.length) { console.log('sin contenido, saltada'); skipped++; continue; }
 
         const entry = saveSong(artistName, artistSlug, song.title, song.slug, versions, 'lacuerda');
@@ -491,7 +511,7 @@ async function runDual(artistSlug) {
         await sleep(DELAY);
 
         const versions = site === 'lacuerda'
-            ? await lcSongVersions(artistSlug, song.slug)
+            ? await lcSongVersions(artistSlug, song.slug, info.lcSlug)
             : await ccSongVersions(artistSlug, song.slug);
 
         if (!versions.length) { console.log('sin contenido, saltada'); skipped++; continue; }

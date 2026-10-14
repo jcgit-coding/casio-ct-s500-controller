@@ -1,13 +1,13 @@
 {
   "id": "marcos_witt_yo_te_busco",
-  "title": "Yo Te Busco",
+  "title": "Yo te busco",
   "artist": "Marcos Witt",
   "genre": "Worship",
-  "original_key": "D",
+  "original_key": "C",
   "versions": [
     {
-      "file": "chords_v1_cifraclub.txt",
-      "source": "https://www.cifraclub.com/marcos-witt/yo-te-busco/"
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marcos_witt/yo_te_busco"
     }
   ]
 }
