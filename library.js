@@ -45,6 +45,7 @@ const RepertorioApp = {
                 btnSongs.classList.remove('active-tab');
                 if (panelSongs) panelSongs.style.display = 'none';
                 if (panelEvents) panelEvents.style.display = 'flex';
+                EventsMgr.render();
             });
         }
     },
@@ -78,12 +79,14 @@ const RepertorioApp = {
         let parsedHTML = this.parseRawTextToChords(rawText);
 
         this.currentSong = {
+            _id: this._pendingSongId || null,
             title: title || "Song",
             artist: artist || "Artist",
             rawText: rawText,
             originalContent: parsedHTML,
             originalKey: originalKey || 'C'
         };
+        this._pendingSongId = null;
 
         if (titleEl) titleEl.innerText = this.currentSong.title;
         if (artistEl) artistEl.innerText = this.currentSong.artist;
@@ -92,6 +95,28 @@ const RepertorioApp = {
 
         const btnSave = document.getElementById('lib-btn-save-cloud');
         if (btnSave) btnSave.style.display = 'inline-block';
+
+        // Show "add to event" banner if an event is active
+        let banner = document.getElementById('_evt-add-banner');
+        if (typeof EventsMgr !== 'undefined' && EventsMgr.activeEventId) {
+            const events = EventsMgr.getAll();
+            const evt = events.find(e => e.id === EventsMgr.activeEventId);
+            if (evt) {
+                if (!banner) {
+                    banner = document.createElement('div');
+                    banner.id = '_evt-add-banner';
+                    const viewer = document.getElementById('lib-chords-view');
+                    viewer?.parentNode?.insertBefore(banner, viewer);
+                }
+                banner.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-radius:8px;background:rgba(var(--accent-rgb,0,255,204),0.1);border:1px solid var(--accent);margin-bottom:10px;gap:10px;';
+                const songId = this.currentSong?._id || '';
+                banner.innerHTML = `<span style="font-size:12px;font-weight:600;color:var(--accent);">Evento activo: ${evt.name}</span>
+                    <button style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;background:var(--accent);color:#000;border:none;cursor:pointer;"
+                            onclick="EventsMgr.addSong(RepertorioApp.currentSong?._id)">+ Agregar</button>`;
+            }
+        } else if (banner) {
+            banner.style.display = 'none';
+        }
     },
 
     importFromText() {
@@ -292,12 +317,18 @@ const RepertoireSync = {
                     <span style="font-size:15px;font-weight:800;color:var(--accent);min-width:18px;">${letter}</span>
                     <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">${artist}</span>
                 </div>
-                ${byArtist[artist].map(s => `
-                    <div style="padding:7px 10px 7px 26px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;margin-bottom:3px;transition:background .12s;"
-                         onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'"
-                         onclick="RepertoireSync.openSong('${s.id}')">
-                        <span style="font-weight:600;font-size:13px;color:var(--text);">${s.title}</span>
-                    </div>`).join('')}
+                ${byArtist[artist].map(s => {
+                    const hasActive = typeof EventsMgr !== 'undefined' && EventsMgr.activeEventId;
+                    return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
+                        <div style="flex:1;padding:7px 10px 7px 26px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .12s;"
+                             onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'"
+                             onclick="RepertoireSync.openSong('${s.id}')">
+                            <span style="font-weight:600;font-size:13px;color:var(--text);">${s.title}</span>
+                        </div>
+                        ${hasActive ? `<div style="cursor:pointer;padding:5px 8px;border-radius:7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);font-size:14px;line-height:1;color:var(--accent);"
+                             title="Agregar al evento" onclick="EventsMgr.addSong('${s.id}')">+</div>` : ''}
+                    </div>`;
+                }).join('')}
             </div>`;
         }).join('');
 
@@ -348,6 +379,7 @@ const RepertoireSync = {
                 originalKey = meta.original_key || 'C';
             }
 
+            RepertorioApp._pendingSongId = id;
             RepertorioApp.setSong(title, artist, text, originalKey);
         } catch(e) {
             alert('Error loading song from cloud');
@@ -355,10 +387,150 @@ const RepertoireSync = {
     }
 };
 window.RepertoireSync = RepertoireSync;
+
+// ================= EVENTS MANAGER =================
+const EventsMgr = {
+    activeEventId: null,
+
+    getAll() {
+        try { return JSON.parse(localStorage.getItem('casio_events') || '[]'); } catch { return []; }
+    },
+
+    save(events) {
+        localStorage.setItem('casio_events', JSON.stringify(events));
+    },
+
+    init() {
+        document.getElementById('lib-btn-add-event')?.addEventListener('click', () => this.promptCreate());
+        document.getElementById('lib-date-picker')?.addEventListener('change', () => this.render());
+        // Set today's date as default
+        const dp = document.getElementById('lib-date-picker');
+        if (dp && !dp.value) dp.value = new Date().toISOString().slice(0, 10);
+        this.render();
+    },
+
+    promptCreate() {
+        const date = document.getElementById('lib-date-picker')?.value;
+        if (!date) return alert('Selecciona una fecha primero.');
+        const name = prompt(`Nombre del evento (${date}):`);
+        if (!name || !name.trim()) return;
+        const events = this.getAll();
+        events.push({ id: 'evt_' + Date.now(), name: name.trim(), date, songs: [] });
+        this.save(events);
+        this.render();
+    },
+
+    render() {
+        const list = document.getElementById('lib-event-list');
+        if (!list) return;
+        const dateFilter = document.getElementById('lib-date-picker')?.value;
+        let events = this.getAll();
+        if (dateFilter) events = events.filter(e => e.date === dateFilter);
+        events.sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
+
+        if (!events.length) {
+            list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px;">
+                Sin eventos${dateFilter ? ' para esta fecha' : ''}.<br>
+                ${dateFilter ? 'Haz click en + para crear uno.' : 'Selecciona una fecha arriba.'}
+            </div>`;
+            return;
+        }
+
+        const allSongs = RepertoireSync.allSongs;
+        list.innerHTML = events.map(evt => {
+            const isActive = this.activeEventId === evt.id;
+            const songsHTML = isActive ? (evt.songs.length ? evt.songs.map((sid, i) => {
+                const meta = allSongs.find(s => s.id === sid);
+                const title = meta ? meta.title : sid;
+                const artist = meta ? meta.artist : '';
+                return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,0.04);margin-bottom:2px;">
+                    <span style="color:var(--text-muted);font-size:10px;min-width:16px;text-align:right;">${i+1}.</span>
+                    <div style="flex:1;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}')">
+                        <div style="font-size:12px;font-weight:600;color:var(--text);">${title}</div>
+                        <div style="font-size:10px;color:var(--text-muted);">${artist}</div>
+                    </div>
+                    <span style="cursor:pointer;padding:2px 6px;border-radius:4px;color:rgba(255,100,100,0.8);font-size:12px;font-weight:700;"
+                          onclick="EventsMgr.removeSong('${evt.id}','${sid}')" title="Quitar">✕</span>
+                </div>`;
+            }).join('') : `<div style="padding:8px;text-align:center;font-size:11px;color:var(--text-muted);">Sin canciones aún.</div>`) : '';
+
+            return `<div style="border-radius:10px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.08)'};overflow:hidden;margin-bottom:6px;">
+                <div style="display:flex;align-items:center;padding:10px 12px;cursor:pointer;background:rgba(255,255,255,0.04);gap:8px;"
+                     onclick="EventsMgr.toggleActive('${evt.id}')">
+                    <div style="flex:1;">
+                        <div style="font-weight:700;font-size:13px;color:${isActive ? 'var(--accent)' : 'var(--text)'};">${evt.name}</div>
+                        <div style="font-size:10px;color:var(--text-muted);">${evt.date} · ${evt.songs.length} canción${evt.songs.length !== 1 ? 'es' : ''}</div>
+                    </div>
+                    <span style="font-size:10px;color:var(--text-muted);">${isActive ? '▲' : '▼'}</span>
+                    <span style="cursor:pointer;padding:3px 7px;border-radius:5px;background:rgba(255,60,60,0.12);color:rgba(255,100,100,0.8);font-size:11px;font-weight:700;"
+                          onclick="event.stopPropagation();EventsMgr.deleteEvent('${evt.id}')" title="Eliminar evento">✕</span>
+                </div>
+                ${isActive ? `<div style="padding:8px;">${songsHTML}
+                    <div style="margin-top:6px;padding:6px;text-align:center;font-size:10px;color:var(--text-muted);border:1px dashed rgba(255,255,255,0.12);border-radius:6px;">
+                        Abre una canción en SONGS y toca <b style="color:var(--accent);">+</b> para agregarla aquí
+                    </div>
+                </div>` : ''}
+            </div>`;
+        }).join('');
+    },
+
+    toggleActive(id) {
+        this.activeEventId = this.activeEventId === id ? null : id;
+        this.render();
+        RepertoireSync.renderSongList(RepertoireSync.allSongs);
+        // Refresh banner in viewer
+        if (RepertorioApp.currentSong) {
+            const { title, artist, rawText, originalKey, _id } = RepertorioApp.currentSong;
+            RepertorioApp._pendingSongId = _id;
+            RepertorioApp.setSong(title, artist, rawText, originalKey);
+        }
+    },
+
+    addSong(songId) {
+        if (!songId) return;
+        if (!this.activeEventId) return alert('Selecciona un evento en la pestaña EVENTS primero.');
+        const events = this.getAll();
+        const evt = events.find(e => e.id === this.activeEventId);
+        if (!evt) return;
+        if (evt.songs.includes(songId)) { alert('Esta canción ya está en el evento.'); return; }
+        evt.songs.push(songId);
+        this.save(events);
+        this.render();
+        // Flash feedback
+        const banner = document.getElementById('_evt-add-banner');
+        if (banner) {
+            const btn = banner.querySelector('button');
+            if (btn) { const orig = btn.textContent; btn.textContent = '✓ Agregada'; setTimeout(() => btn.textContent = orig, 1200); }
+        }
+    },
+
+    removeSong(eventId, songId) {
+        const events = this.getAll();
+        const evt = events.find(e => e.id === eventId);
+        if (!evt) return;
+        evt.songs = evt.songs.filter(s => s !== songId);
+        this.save(events);
+        this.render();
+    },
+
+    deleteEvent(id) {
+        if (!confirm('¿Eliminar este evento?')) return;
+        const events = this.getAll().filter(e => e.id !== id);
+        this.save(events);
+        if (this.activeEventId === id) {
+            this.activeEventId = null;
+            RepertoireSync.renderSongList(RepertoireSync.allSongs);
+        }
+        this.render();
+    }
+};
+window.EventsMgr = EventsMgr;
+
 initCloudSync();
 
 document.addEventListener('DOMContentLoaded', () => {
     RepertorioApp.init();
+    EventsMgr.init();
 });
 
 
