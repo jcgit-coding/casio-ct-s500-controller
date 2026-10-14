@@ -148,21 +148,38 @@ const RepertorioApp = {
     },
 
     parseRawTextToChords(text) {
-        // Matches full chord tokens in standard English notation, optionally wrapped in /// markers
-        const CHORD_STRIP_RE = /\/{0,3}[CDEFGAB][#b]?(m|maj7?|dim|aug|sus[24]?|add\d?|7|9|11|13)?\d*(\/[CDEFGAB][#b]?)?\/{0,3}/g;
+        // Notación inglesa: C D E F G A B
+        const EN_ROOT = '[CDEFGAB]';
+        const EN_QUAL = '(?:#|b)?(?:m(?:aj)?|dim|aug|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?';
+        const EN_BASS = '(?:\\/[CDEFGAB](?:#|b)?)?';
 
-        // Determines if a line contains only chord symbols and structural filler
+        // Notación española/solfège: DO RE MI FA SOL LA SI (y mayúsculas mixtas como Sol, Sim, Fa#)
+        // Incluye variantes: Sib, Fa#, Mim, Lam, Dom, etc.
+        const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';
+        const ES_QUAL = '(?:#|b|m(?:aj)?(?:7)?|dim|aug|sus[24]?|add\\d?|[79]|11|13|maj7?|M|\\+)?(?:\\d+)?';
+        const ES_BASS = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:#|b)?)?';
+
+        // Regex para strip (detectar si la línea es solo acordes)
+        const CHORD_STRIP_RE = new RegExp(
+            `(?:${EN_ROOT}${EN_QUAL}${EN_BASS}|${ES_ROOT}${ES_QUAL}${ES_BASS})`, 'g'
+        );
+
         const isChordLine = (line) => {
             const trimmed = line.trim();
             if (!trimmed) return false;
-            // Strip leading section labels like "Intro:", "Verso 1:", "Ministración:", etc.
-            const noLabel = trimmed.replace(/^[A-Za-záéíóúüñÁÉÍÓÚÜÑ\s\d()]+:\s*/, '').trim();
+            // Ignorar líneas que empiezan con // (marcadores de sección)
+            if (trimmed.startsWith('//')) return false;
+            // Strip etiquetas de sección: "Intro:", "Coro:", "Verso 1:", etc.
+            const noLabel = trimmed.replace(/^[A-Za-záéíóúüñÁÉÍÓÚÜÑ\s\d().]+:\s*/, '').trim();
             if (!noLabel) return false;
-            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-|./\\x()]+/gi, '').replace(/\d+/g, '').trim();
+            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-|./\\()\[\]x]+/gi, '').replace(/\d+/g, '').trim();
             return leftover.length === 0;
         };
 
-        const CHORD_RE = /([CDEFGAB][#b]?(m|maj7?|dim|aug|sus[24]?|add\d?|7|9|11|13)?\d*(\/[CDEFGAB][#b]?)?)/g;
+        // Regex para highlight (envolver cada acorde en span)
+        const CHORD_RE = new RegExp(
+            `(${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g'
+        );
 
         const lines = text.split('\n');
         const htmlLines = lines.map(line => {
@@ -186,14 +203,49 @@ const RepertorioApp = {
             return;
         }
 
+        // Mapa solfège → semitono y viceversa
+        const ES_TO_EN = { 'DO':'C','RE':'D','MI':'E','FA':'F','SOL':'G','LA':'A','SI':'B',
+                           'Do':'C','Re':'D','Mi':'E','Fa':'F','Sol':'G','La':'A','Si':'B' };
+        const EN_TO_ES = { 'C':'Do','D':'Re','E':'Mi','F':'Fa','G':'Sol','A':'La','B':'Si' };
+
+        const transposeRoot = (root) => {
+            // Detectar si es solfège y convertir a inglés para transponer
+            let enRoot = root, isSpanish = false;
+            for (const [es, en] of Object.entries(ES_TO_EN)) {
+                if (root.toUpperCase().startsWith(es.toUpperCase()) &&
+                    (root.length === es.length || '#b'.includes(root[es.length]))) {
+                    enRoot = en;
+                    isSpanish = es.length > 1; // DO/RE/MI/FA/SOL/LA/SI son >1 char
+                    break;
+                }
+            }
+            let idx = this.notes.indexOf(enRoot + (root.includes('#') ? '#' : ''));
+            if (idx === -1) idx = this.notes.indexOf(enRoot);
+            if (idx === -1) return root;
+            let newIdx = ((idx + steps) % 12 + 12) % 12;
+            const transposed = this.notes[newIdx];
+            // Devolver en el mismo sistema (español o inglés)
+            if (isSpanish) {
+                const base = transposed.replace('#','');
+                return (EN_TO_ES[base] || base) + (transposed.includes('#') ? '#' : '');
+            }
+            return transposed;
+        };
+
         let newContent = this.currentSong.originalContent.replace(/(<span[^>]*class=['"]chord['"][^>]*>)(.*?)(<\/span>)/gi, (match, openTag, chordText, closeTag) => {
-            let transposedChord = chordText.replace(/[CDEFGAB]#?/g, note => {
-                let idx = this.notes.indexOf(note);
-                if (idx === -1) return note; 
-                let newIdx = (idx + steps) % 12;
-                if (newIdx < 0) newIdx += 12;
-                return this.notes[newIdx];
-            });
+            // Transponer la raíz del acorde preservando sufijos (m, maj7, sus2, etc.)
+            const ES_ROOT_RE = /^(DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(#|b)?/i;
+            const EN_ROOT_RE = /^([CDEFGAB])(#|b)?/;
+            let transposedChord = chordText;
+            const esM = chordText.match(ES_ROOT_RE);
+            const enM = !esM && chordText.match(EN_ROOT_RE);
+            if (esM) {
+                const root = esM[0];
+                transposedChord = transposeRoot(root) + chordText.slice(root.length);
+            } else if (enM) {
+                const root = enM[0];
+                transposedChord = transposeRoot(root) + chordText.slice(root.length);
+            }
             return openTag + transposedChord + closeTag;
         });
 
