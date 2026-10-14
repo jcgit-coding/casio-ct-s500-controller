@@ -123,38 +123,31 @@ const RepertorioApp = {
     },
 
     parseRawTextToChords(text) {
-        // Diccionario de conversión de notación latina a inglesa
-        const latinToEnglish = {
-            'DO': 'C', 'RE': 'D', 'MI': 'E', 'FA': 'F', 'SOL': 'G', 'LA': 'A', 'SI': 'B',
-            'Do': 'C', 'Re': 'D', 'Mi': 'E', 'Fa': 'F', 'Sol': 'G', 'La': 'A', 'Si': 'B',
-            'do': 'C', 're': 'D', 'mi': 'E', 'fa': 'F', 'sol': 'G', 'la': 'A', 'si': 'B'
+        // Matches full chord tokens in standard English notation, optionally wrapped in /// markers
+        const CHORD_STRIP_RE = /\/{0,3}[CDEFGAB][#b]?(m|maj7?|dim|aug|sus[24]?|add\d?|7|9|11|13)?\d*(\/[CDEFGAB][#b]?)?\/{0,3}/g;
+
+        // Determines if a line contains only chord symbols and structural filler
+        const isChordLine = (line) => {
+            const trimmed = line.trim();
+            if (!trimmed) return false;
+            // Strip leading section labels like "Intro:", "Verso 1:", "Ministración:", etc.
+            const noLabel = trimmed.replace(/^[A-Za-záéíóúüñÁÉÍÓÚÜÑ\s\d()]+:\s*/, '').trim();
+            if (!noLabel) return false;
+            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-|./\\x()]+/gi, '').replace(/\d+/g, '').trim();
+            return leftover.length === 0;
         };
 
-        let lines = text.split('\n');
-        let htmlLines = lines.map(line => {
-            // Regex completo que captura notación inglesa o latina
-            const chordRegex = /(^|\s)([CDEFGAB]|DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si|do|re|mi|fa|sol|la|si)([#b]?)(m|maj|dim|aug|sus|add)?(\d*)(\/([CDEFGAB]|DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si|do|re|mi|fa|sol|la|si)[#b]?)?(?=\s|$)/g;
-            
-            let parsedLine = line.replace(chordRegex, (match, prefix, root, acc, type, num, bass) => {
-                // Letras como "A", "Y", "LA" podrían ser palabras sueltas de la letra de la canción.
-                // Es arriesgado, pero normalmente los acordes están en líneas con muchos espacios.
-                let engRoot = latinToEnglish[root] || root.toUpperCase();
-                let engBass = "";
-                if (bass) {
-                    let rawBassNote = bass.substring(1); // remover slash
-                    let bassAcc = rawBassNote.match(/[#b]$/) ? rawBassNote.slice(-1) : "";
-                    let bassBase = rawBassNote.replace(/[#b]$/, "");
-                    let engBassBase = latinToEnglish[bassBase] || bassBase.toUpperCase();
-                    engBass = "/" + engBassBase + bassAcc;
-                }
-                
-                let chord = engRoot + (acc||"") + (type||"") + (num||"") + engBass;
-                return prefix + `<span class='chord' style='color:var(--accent); font-weight:bold;'>${chord}</span>`;
-            });
+        const CHORD_RE = /([CDEFGAB][#b]?(m|maj7?|dim|aug|sus[24]?|add\d?|7|9|11|13)?\d*(\/[CDEFGAB][#b]?)?)/g;
 
-            // Conservar espacios usando &nbsp; para que no colapse
-            parsedLine = parsedLine.replace(/ {2}/g, '&nbsp;&nbsp;');
-            return parsedLine;
+        const lines = text.split('\n');
+        const htmlLines = lines.map(line => {
+            let parsedLine = line;
+            if (isChordLine(line)) {
+                parsedLine = line.replace(CHORD_RE, chord =>
+                    `<span class='chord' style='color:var(--accent); font-weight:bold;'>${chord}</span>`
+                );
+            }
+            return parsedLine.replace(/ {2}/g, '&nbsp;&nbsp;');
         });
 
         return htmlLines.join('<br>');
@@ -271,16 +264,28 @@ const RepertoireSync = {
     renderSongList(songs) {
         const container = document.getElementById('cloud-song-list-container');
         if (!container) return;
-        
+
         if (!songs || songs.length === 0) {
             container.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>No matching songs found.</div>";
             return;
         }
 
-        container.innerHTML = songs.map(s => `
-            <div class='song-item' style='padding:10px 12px; border-radius:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); cursor:pointer; transition:all .2s;' onclick='RepertoireSync.openSong("${s.id}")'>
-                <div style='font-weight:600; font-size:14px; color:var(--text);'>${s.title}</div>
-                <div style='font-size:12px; color:var(--text-muted); margin-top:2px;'>${s.artist || "Unknown Artist"}</div>
+        // Group by artist
+        const byArtist = {};
+        songs.forEach(s => {
+            const artist = s.artist || "Unknown Artist";
+            if (!byArtist[artist]) byArtist[artist] = [];
+            byArtist[artist].push(s);
+        });
+
+        container.innerHTML = Object.entries(byArtist).map(([artist, artistSongs]) => `
+            <div style='margin-bottom:14px;'>
+                <div style='font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.1em; padding:3px 0 6px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:5px;'>${artist}</div>
+                ${artistSongs.map(s => `
+                    <div class='song-item' style='padding:7px 10px; border-radius:7px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); cursor:pointer; transition:all .2s; margin-bottom:3px;' onclick='RepertoireSync.openSong("${s.id}")'>
+                        <div style='font-weight:600; font-size:13px; color:var(--text);'>${s.title}</div>
+                    </div>
+                `).join('')}
             </div>
         `).join('');
     },
