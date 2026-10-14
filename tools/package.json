@@ -1,0 +1,13 @@
+{
+  "name": "casio-scraper",
+  "version": "1.0.0",
+  "description": "Personal library builder — scrapes chord sheets for offline use",
+  "type": "commonjs",
+  "scripts": {
+    "scrape": "node scrape-artist.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "node-fetch": "^2.7.0"
+  }
+}

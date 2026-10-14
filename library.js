@@ -363,27 +363,57 @@ const RepertoireSync = {
         if (target) target.scrollIntoView({ block: 'start', behavior: 'smooth' });
     },
     
-    async openSong(id) {
+    async openSong(id, versionFile) {
         try {
-            const res = await fetch(`library/${id}/chords.txt?v=` + Date.now());
-            const text = await res.text();
-            let title = "Song";
-            let artist = "Artist";
-            let originalKey = 'C';
-
             const metaRes = await fetch(`library/${id}/meta.json?v=` + Date.now());
-            if(metaRes.ok) {
-                const meta = await metaRes.json();
-                title = meta.title;
-                artist = meta.artist;
-                originalKey = meta.original_key || 'C';
-            }
+            let meta = { title: 'Song', artist: 'Artist', original_key: 'C', versions: [] };
+            if (metaRes.ok) meta = { ...meta, ...await metaRes.json() };
+
+            // Determine which file to load
+            const file = versionFile || (meta.versions?.length ? meta.versions[0].file : 'chords.txt');
+            const res  = await fetch(`library/${id}/${file}?v=` + Date.now());
+            if (!res.ok) throw new Error('File not found: ' + file);
+            const text = await res.text();
 
             RepertorioApp._pendingSongId = id;
-            RepertorioApp.setSong(title, artist, text, originalKey);
+            RepertorioApp._songMeta      = meta;
+            RepertorioApp.setSong(meta.title, meta.artist, text, meta.original_key);
+
+            // Show version picker if multiple versions exist
+            this._renderVersionPicker(id, meta, file);
         } catch(e) {
-            alert('Error loading song from cloud');
+            console.error(e);
+            alert('Error loading song: ' + e.message);
         }
+    },
+
+    _renderVersionPicker(id, meta, activeFile) {
+        let picker = document.getElementById('_version-picker');
+        const versions = meta.versions || [];
+
+        if (!versions.length || versions.length < 2) {
+            if (picker) picker.remove();
+            return;
+        }
+
+        if (!picker) {
+            picker = document.createElement('div');
+            picker.id = '_version-picker';
+            const viewer = document.getElementById('lib-chords-view');
+            viewer?.parentNode?.insertBefore(picker, viewer);
+        }
+
+        const site = f => f.includes('cifraclub') ? 'Cifraclub' : f.includes('lacuerda') ? 'Lacuerda' : 'Manual';
+        picker.style.cssText = 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);';
+        picker.innerHTML = `<span style="font-size:10px;color:var(--text-muted);font-weight:700;margin-right:4px;">VERSIÓN:</span>` +
+            versions.map((v, i) => {
+                const isActive = v.file === activeFile;
+                return `<button onclick="RepertoireSync.openSong('${id}','${v.file}')"
+                    style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};
+                    background:${isActive ? 'var(--accent)' : 'transparent'};color:${isActive ? '#000' : 'var(--text-muted)'};cursor:pointer;">
+                    ${site(v.file)} v${i+1}
+                </button>`;
+            }).join('');
     }
 };
 window.RepertoireSync = RepertoireSync;
@@ -439,14 +469,19 @@ const EventsMgr = {
         const allSongs = RepertoireSync.allSongs;
         list.innerHTML = events.map(evt => {
             const isActive = this.activeEventId === evt.id;
-            const songsHTML = isActive ? (evt.songs.length ? evt.songs.map((sid, i) => {
-                const meta = allSongs.find(s => s.id === sid);
+            const evtSongs = (evt.songs || []).map(s => typeof s === 'string' ? { id: s, versionFile: null, transpose: 0 } : s);
+            const songsHTML = isActive ? (evtSongs.length ? evtSongs.map((entry, i) => {
+                const sid   = entry.id;
+                const meta  = allSongs.find(s => s.id === sid);
                 const title = meta ? meta.title : sid;
                 const artist = meta ? meta.artist : '';
+                const verLabel = entry.versionFile
+                    ? ` · <span style="color:var(--accent);font-size:9px;">${entry.versionFile.replace(/chords_|\.txt/g,'')}</span>` : '';
+                const transpLabel = entry.transpose ? ` +${entry.transpose}st` : '';
                 return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,0.04);margin-bottom:2px;">
                     <span style="color:var(--text-muted);font-size:10px;min-width:16px;text-align:right;">${i+1}.</span>
-                    <div style="flex:1;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}')">
-                        <div style="font-size:12px;font-weight:600;color:var(--text);">${title}</div>
+                    <div style="flex:1;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}','${entry.versionFile||''}')">
+                        <div style="font-size:12px;font-weight:600;color:var(--text);">${title}${verLabel}${transpLabel}</div>
                         <div style="font-size:10px;color:var(--text-muted);">${artist}</div>
                     </div>
                     <span style="cursor:pointer;padding:2px 6px;border-radius:4px;color:rgba(255,100,100,0.8);font-size:12px;font-weight:700;"
@@ -486,14 +521,19 @@ const EventsMgr = {
         }
     },
 
-    addSong(songId) {
+    addSong(songId, versionFile) {
         if (!songId) return;
         if (!this.activeEventId) return alert('Selecciona un evento en la pestaña EVENTS primero.');
         const events = this.getAll();
         const evt = events.find(e => e.id === this.activeEventId);
         if (!evt) return;
-        if (evt.songs.includes(songId)) { alert('Esta canción ya está en el evento.'); return; }
-        evt.songs.push(songId);
+        if (!evt.songs) evt.songs = [];
+        // songs now stored as objects: {id, versionFile, transpose}
+        const alreadyIn = evt.songs.find(s => (s.id || s) === songId);
+        if (alreadyIn) { alert('Esta canción ya está en el evento.'); return; }
+        const meta = RepertorioApp._songMeta;
+        const file = versionFile || meta?.versions?.[0]?.file || null;
+        evt.songs.push({ id: songId, versionFile: file, transpose: 0 });
         this.save(events);
         this.render();
         // Flash feedback
@@ -508,7 +548,7 @@ const EventsMgr = {
         const events = this.getAll();
         const evt = events.find(e => e.id === eventId);
         if (!evt) return;
-        evt.songs = evt.songs.filter(s => s !== songId);
+        evt.songs = (evt.songs || []).filter(s => (s.id || s) !== songId);
         this.save(events);
         this.render();
     },
