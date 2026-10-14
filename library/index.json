@@ -98,13 +98,6 @@
     "original_key": "Gm"
   },
   {
-    "id": "marcoswitt_oh_moradora",
-    "title": "Oh Moradora de Sión",
-    "artist": "Marcos Witt",
-    "genre": "Worship",
-    "original_key": "Gm"
-  },
-  {
     "id": "psalm126_cuando_senor",
     "title": "Cuando el Señor hiciere volver",
     "artist": "Tradicional",
@@ -126,15 +119,8 @@
     "original_key": "C"
   },
   {
-    "id": "marcoswitt_poderoso_israel",
-    "title": "El poderoso de Israel",
-    "artist": "Marcos Witt",
-    "genre": "Worship",
-    "original_key": "Gm"
-  },
-  {
     "id": "marcos_witt_renuevame",
-    "title": "Renuevame",
+    "title": "Renuévame",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "D"
@@ -176,35 +162,28 @@
   },
   {
     "id": "marcos_witt_temprano_yo_te_buscare",
-    "title": "Temprano Yo Te Buscare",
+    "title": "Temprano Yo Te Buscaré",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "G"
   },
   {
     "id": "marcos_witt_de_gloria_en_gloria",
-    "title": "De Gloria En Gloria",
+    "title": "De Gloria en Gloria",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "D"
   },
   {
     "id": "marcos_witt_somos_el_pueblo_de_dios",
-    "title": "Somos El Pueblo De Dios",
+    "title": "Somos el Pueblo de Dios",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "Am"
   },
   {
-    "id": "marcos_witt_gracas",
-    "title": "Gracas",
-    "artist": "Marcos Witt",
-    "genre": "Worship",
-    "original_key": "E"
-  },
-  {
     "id": "marcos_witt_mas_el_dios_de_toda_gracia",
-    "title": "Mas El Dios De Toda Gracia",
+    "title": "Más el Dios de Toda Gracia",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "D"
@@ -232,7 +211,7 @@
   },
   {
     "id": "marcos_witt_no_hay_dios_tan_grande_como_tu",
-    "title": "No Hay Dios Tan Grande Como Tu",
+    "title": "No Hay Dios Tan Grande Como Tú",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "Em"

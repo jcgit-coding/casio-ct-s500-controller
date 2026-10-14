@@ -4,17 +4,17 @@
  * SIN dependencias externas — solo módulos built-in de Node.js
  *
  * Uso:
- *   node scrape-artist.js --artist "marcos-witt" --site cifraclub
+ *   node scrape-artist.js --artist "marcos-witt"              # dual (lacuerda primero, cifraclub de respaldo)
  *   node scrape-artist.js --artist "marcos-witt" --site lacuerda
- *   node scrape-artist.js --url "https://www.cifraclub.com.co/marcos-witt/"
+ *   node scrape-artist.js --artist "marcos-witt" --site cifraclub
  *
  * Opciones:
  *   --artist    slug del artista (ej: marcos-witt, grupo-grace)
- *   --site      cifraclub (default) | lacuerda
- *   --url       URL directa de la página del artista
+ *   --site      dual (default) | lacuerda | cifraclub
+ *   --url       URL directa de la página del artista (omite --artist)
  *   --delay     ms entre requests (default 1400)
  *   --max       máximo de canciones (default: todas)
- *   --versions  versiones por canción (default: 3)
+ *   --versions  versiones por canción en cifraclub (default: 2)
  */
 
 'use strict';
@@ -32,15 +32,15 @@ const INDEX_FILE  = path.join(LIBRARY_DIR, 'index.json');
 const args   = process.argv.slice(2);
 const get    = (flag, def) => { const i = args.indexOf(flag); return i !== -1 ? args[i+1] : def; };
 
-const SITE       = get('--site', 'cifraclub');
+const SITE       = get('--site', 'dual');
 const ARTIST     = get('--artist', '');
 const CUSTOM_URL = get('--url', '');
 const DELAY      = parseInt(get('--delay', '1400'), 10);
 const MAX        = parseInt(get('--max', '9999'), 10);
-const MAX_VER    = parseInt(get('--versions', '3'), 10);
+const MAX_VER    = parseInt(get('--versions', '2'), 10);
 
 if (!ARTIST && !CUSTOM_URL) {
-    console.error('Uso: node scrape-artist.js --artist "marcos-witt" --site cifraclub');
+    console.error('Uso: node scrape-artist.js --artist "marcos-witt"');
     process.exit(1);
 }
 
@@ -111,7 +111,6 @@ function between(str, open, close) {
     return str.slice(s + open.length, e);
 }
 
-// Extract all href+text pairs from <a> tags
 function extractLinks(html) {
     const links = [];
     const re = /<a\s[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
@@ -128,110 +127,33 @@ function slugify(str) {
         .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 }
 
+// ── Detección de portugués ────────────────────────────────────────────────────
+// Palabras comunes en portugués que raramente aparecen en español
+const PT_WORDS = [
+    'você', 'voce', 'não', 'então', 'também', 'coração', 'coracao',
+    'minha', 'meu', 'meus', 'minhas', 'teu', 'tua', 'teus', 'suas',
+    'nosso', 'nossa', 'isso', 'essa', 'esse', 'aqui', 'muito',
+    'fazer', 'viver', 'quero', 'serei', 'posso', 'tenho',
+    'quando eu', 'para mim', 'de mim', 'em mim', 'por mim',
+];
+
+function isPortuguese(text) {
+    if (!text) return false;
+    const lower = text.toLowerCase();
+    let hits = 0;
+    for (const w of PT_WORDS) {
+        if (lower.includes(w)) hits++;
+        if (hits >= 3) return true;
+    }
+    return false;
+}
+
 // ── Index helpers ─────────────────────────────────────────────────────────────
 function loadIndex() {
     try { return JSON.parse(fs.readFileSync(INDEX_FILE, 'utf8')); } catch { return []; }
 }
 function saveIndex(index) {
     fs.writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2) + '\n', 'utf8');
-}
-
-// ── CIFRACLUB ─────────────────────────────────────────────────────────────────
-const CC_BASE = 'https://www.cifraclub.com';
-
-async function ccArtistPage(artistSlug) {
-    const pageUrl = `${CC_BASE}/${artistSlug}/`;
-    console.log(`\n[cifraclub] ${pageUrl}`);
-    const html = await fetchHTML(pageUrl);
-
-    // Artist name — try JSON-LD first (most reliable), then og:title, then h1
-    let name = '';
-    const jsonLd = between(html, '"@type":"MusicGroup"', '}') || between(html, '"@type": "MusicGroup"', '}') || '';
-    const nameM  = jsonLd.match(/"name"\s*:\s*"([^"]+)"/) || html.match(/<meta[^>]+property="og:title"[^>]+content="([^"]+)"/i);
-    if (nameM) name = decodeEntities(nameM[1]).replace(/\s*[-–|].*$/, '').trim();
-    if (!name) {
-        const h1 = between(html, '<h1', '</h1>') || '';
-        name = decodeEntities(stripTags(h1)).trim();
-    }
-    name = name || artistSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-    // Song links: /{artist}/{song}/ — extract from raw href attributes (Next.js pages inline data)
-    const SKIP = new Set(['discografia','videos','fotos','bio','letras','?instrument=lyrics',
-                          '?instrument=guitarpro','?instrument=sheet','imprimir','tabs']);
-    const seen  = new Set();
-    const songs = [];
-
-    // Match all href values that follow the pattern /{artistSlug}/{song}/
-    const hrefRe = new RegExp(`href=["']\\/(${artistSlug.replace(/[-]/g,'[-]')}\\/([^"'/\\?#]+)\\/)["']`, 'gi');
-    let hm;
-    while ((hm = hrefRe.exec(html)) !== null) {
-        const songSlug = hm[2];
-        if (!songSlug || seen.has(songSlug) || SKIP.has(songSlug)) continue;
-        seen.add(songSlug);
-        // Try to find associated text (title) near this href — look for data-title or aria-label or nearby text
-        const pos   = hm.index;
-        const chunk = html.slice(pos, pos + 400);
-        const titleM = chunk.match(/(?:title|aria-label|data-title)=["']([^"']+)["']/) ||
-                       chunk.match(/>([^<]{3,80})<\/a>/) ||
-                       chunk.match(/>([^<]{3,80})<\/span>/);
-        const title = titleM
-            ? decodeEntities(titleM[1]).trim()
-            : songSlug.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
-        songs.push({ slug: songSlug, title });
-    }
-
-    console.log(`  Artista: "${name}"  |  Canciones encontradas: ${songs.length}`);
-    return { artistName: name, songs: songs.slice(0, MAX), artistSlug };
-}
-
-function extractCifraclubText(html) {
-    // Try <pre> blocks — cifraclub stores chord sheets in pre tags
-    const preRe = /<pre[^>]*>([\s\S]*?)<\/pre>/gi;
-    let best = '';
-    let m;
-    while ((m = preRe.exec(html)) !== null) {
-        const txt = decodeEntities(stripTags(m[1])).trim();
-        if (txt.length > best.length) best = txt;
-    }
-    if (best.length > 50) return best;
-
-    // Fallback: look for div.cifra_cnt
-    const block = between(html, 'class="cifra_cnt"', '</div>') ||
-                  between(html, "class='cifra_cnt'", '</div>') || '';
-    if (block) {
-        const t = decodeEntities(stripTags(block)).trim();
-        if (t.length > 50) return t;
-    }
-    return null;
-}
-
-async function ccSongVersions(artistSlug, songSlug) {
-    const baseUrl  = `${CC_BASE}/${artistSlug}/${songSlug}/`;
-    const versions = [];
-    try {
-        const html = await fetchHTML(baseUrl);
-        const text = extractCifraclubText(html);
-        if (text) versions.push({ source: baseUrl, text, version: 1 });
-
-        if (MAX_VER > 1) {
-            // Look for "outras versões" / version links on page
-            const altSeen = new Set([baseUrl]);
-            for (const { href } of extractLinks(html)) {
-                if (versions.length >= MAX_VER) break;
-                const full = href.startsWith('http') ? href : CC_BASE + href;
-                if (!altSeen.has(full) && full.includes(`/${artistSlug}/${songSlug}`)) {
-                    altSeen.add(full);
-                    await sleep(DELAY);
-                    try {
-                        const h2  = await fetchHTML(full);
-                        const t2  = extractCifraclubText(h2);
-                        if (t2) versions.push({ source: full, text: t2, version: versions.length + 1 });
-                    } catch {}
-                }
-            }
-        }
-    } catch (e) { console.warn(`  [error] ${songSlug}: ${e.message}`); }
-    return versions;
 }
 
 // ── LACUERDA ──────────────────────────────────────────────────────────────────
@@ -255,7 +177,7 @@ async function lcArtistPage(artistSlug) {
         songs.push({ slug, title: text });
     }
 
-    console.log(`  Artista: "${name}"  |  Canciones encontradas: ${songs.length}`);
+    console.log(`  Artista: "${name}"  |  Canciones en lacuerda: ${songs.length}`);
     return { artistName: name, songs: songs.slice(0, MAX), artistSlug };
 }
 
@@ -277,7 +199,99 @@ async function lcSongVersions(artistSlug, songSlug) {
         const html = await fetchHTML(baseUrl);
         const text = extractLacuerdaText(html);
         if (text) versions.push({ source: baseUrl, text, version: 1 });
-    } catch (e) { console.warn(`  [error] ${songSlug}: ${e.message}`); }
+    } catch (e) { console.warn(`  [error lc] ${songSlug}: ${e.message}`); }
+    return versions;
+}
+
+// ── CIFRACLUB ─────────────────────────────────────────────────────────────────
+const CC_BASE = 'https://www.cifraclub.com';
+
+async function ccArtistPage(artistSlug) {
+    const pageUrl = `${CC_BASE}/${artistSlug}/`;
+    console.log(`\n[cifraclub] ${pageUrl}`);
+    const html = await fetchHTML(pageUrl);
+
+    // Artist name — JSON-LD first, then og:title
+    let name = '';
+    const jsonLd = between(html, '"@type":"MusicGroup"', '}') || between(html, '"@type": "MusicGroup"', '}') || '';
+    const nameM  = jsonLd.match(/"name"\s*:\s*"([^"]+)"/) || html.match(/<meta[^>]+property="og:title"[^>]+content="([^"]+)"/i);
+    if (nameM) name = decodeEntities(nameM[1]).replace(/\s*[-–|].*$/, '').trim();
+    if (!name) {
+        const h1 = between(html, '<h1', '</h1>') || '';
+        name = decodeEntities(stripTags(h1)).trim();
+    }
+    name = name || artistSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    const SKIP = new Set(['discografia','videos','fotos','bio','letras','?instrument=lyrics',
+                          '?instrument=guitarpro','?instrument=sheet','imprimir','tabs']);
+    const seen  = new Set();
+    const songs = [];
+
+    const hrefRe = new RegExp(`href=["']\\/(${artistSlug.replace(/[-]/g,'[-]')}\\/([^"'/\\?#]+)\\/)["']`, 'gi');
+    let hm;
+    while ((hm = hrefRe.exec(html)) !== null) {
+        const songSlug = hm[2];
+        if (!songSlug || seen.has(songSlug) || SKIP.has(songSlug)) continue;
+        seen.add(songSlug);
+        const pos   = hm.index;
+        const chunk = html.slice(pos, pos + 400);
+        const titleM = chunk.match(/(?:title|aria-label|data-title)=["']([^"']+)["']/) ||
+                       chunk.match(/>([^<]{3,80})<\/a>/) ||
+                       chunk.match(/>([^<]{3,80})<\/span>/);
+        const title = titleM
+            ? decodeEntities(titleM[1]).trim()
+            : songSlug.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+        songs.push({ slug: songSlug, title });
+    }
+
+    console.log(`  Artista: "${name}"  |  Canciones en cifraclub: ${songs.length}`);
+    return { artistName: name, songs: songs.slice(0, MAX), artistSlug };
+}
+
+function extractCifraclubText(html) {
+    const preRe = /<pre[^>]*>([\s\S]*?)<\/pre>/gi;
+    let best = '';
+    let m;
+    while ((m = preRe.exec(html)) !== null) {
+        const txt = decodeEntities(stripTags(m[1])).trim();
+        if (txt.length > best.length) best = txt;
+    }
+    if (best.length > 50) return best;
+
+    const block = between(html, 'class="cifra_cnt"', '</div>') ||
+                  between(html, "class='cifra_cnt'", '</div>') || '';
+    if (block) {
+        const t = decodeEntities(stripTags(block)).trim();
+        if (t.length > 50) return t;
+    }
+    return null;
+}
+
+async function ccSongVersions(artistSlug, songSlug) {
+    const baseUrl  = `${CC_BASE}/${artistSlug}/${songSlug}/`;
+    const versions = [];
+    try {
+        const html = await fetchHTML(baseUrl);
+        const text = extractCifraclubText(html);
+        if (text) versions.push({ source: baseUrl, text, version: 1 });
+
+        if (MAX_VER > 1) {
+            const altSeen = new Set([baseUrl]);
+            for (const { href } of extractLinks(html)) {
+                if (versions.length >= MAX_VER) break;
+                const full = href.startsWith('http') ? href : CC_BASE + href;
+                if (!altSeen.has(full) && full.includes(`/${artistSlug}/${songSlug}`)) {
+                    altSeen.add(full);
+                    await sleep(DELAY);
+                    try {
+                        const h2  = await fetchHTML(full);
+                        const t2  = extractCifraclubText(h2);
+                        if (t2) versions.push({ source: full, text: t2, version: versions.length + 1 });
+                    } catch {}
+                }
+            }
+        }
+    } catch (e) { console.warn(`  [error cc] ${songSlug}: ${e.message}`); }
     return versions;
 }
 
@@ -285,7 +299,6 @@ async function lcSongVersions(artistSlug, songSlug) {
 function detectKey(text) {
     const m = (text || '').match(/[Tt]ono[:\s]+([A-G][#b]?m?)/);
     if (m) return m[1];
-    // First chord-like token on a chord line
     const lines = text.split('\n');
     for (const line of lines) {
         const chord = line.trim().match(/^([A-G][#b]?m?)\s/);
@@ -337,6 +350,104 @@ function upsertIndex(entry) {
     saveIndex(index);
 }
 
+// ── MODO DUAL: lacuerda primero, cifraclub de respaldo ────────────────────────
+async function runDual(artistSlug) {
+    // 1. Obtener listas de ambos sitios en paralelo
+    let lcInfo = { artistName: '', songs: [], artistSlug };
+    let ccInfo = { artistName: '', songs: [], artistSlug };
+
+    try { lcInfo = await lcArtistPage(artistSlug); } catch (e) { console.warn(`[lacuerda] Error: ${e.message}`); }
+    await sleep(DELAY);
+    try { ccInfo = await ccArtistPage(artistSlug); } catch (e) { console.warn(`[cifraclub] Error: ${e.message}`); }
+
+    const artistName = lcInfo.artistName || ccInfo.artistName
+        || artistSlug.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    // 2. Construir mapa normalizado de canciones
+    //    lcuerda tiene prioridad; cifraclub solo se usa si la canción no está en lacuerda
+    const normalize = t => slugify(t || '').replace(/_+/g,'');
+
+    const lcMap = new Map(); // normTitle -> { slug, title }
+    for (const s of lcInfo.songs) lcMap.set(normalize(s.title), s);
+
+    // Index de lacuerda por slug también (para buscar por slug)
+    const lcSlugMap = new Map();
+    for (const s of lcInfo.songs) lcSlugMap.set(s.slug, s);
+
+    // Canciones de cifraclub que NO están en lacuerda
+    const ccOnly = [];
+    for (const s of ccInfo.songs) {
+        const key = normalize(s.title);
+        if (!lcMap.has(key)) {
+            // También revisar por slug (slugs de ambos sitios suelen coincidir)
+            if (!lcSlugMap.has(s.slug)) {
+                ccOnly.push(s);
+            }
+        }
+    }
+
+    const allLc = lcInfo.songs;
+    console.log(`\n── Resumen ──────────────────────────────────────────`);
+    console.log(`   lacuerda:  ${allLc.length} canciones`);
+    console.log(`   cifraclub solo: ${ccOnly.length} canciones nuevas`);
+    console.log(`   Total: ${allLc.length + ccOnly.length} canciones`);
+    console.log(`─────────────────────────────────────────────────────\n`);
+
+    let saved = 0, skipped = 0, ptSkipped = 0;
+
+    // 3. Descargar de lacuerda
+    console.log(`\n[1/2] Descargando de lacuerda (${allLc.length} canciones)...`);
+    for (let i = 0; i < allLc.length; i++) {
+        const song = allLc[i];
+        process.stdout.write(`  [${i+1}/${allLc.length}] ${song.title} ... `);
+        await sleep(DELAY);
+
+        const versions = await lcSongVersions(artistSlug, song.slug);
+        if (!versions.length) { console.log('sin contenido, saltada'); skipped++; continue; }
+
+        const entry = saveSong(artistName, artistSlug, song.title, song.slug, versions, 'lacuerda');
+        upsertIndex(entry);
+        console.log(`✓ lacuerda`);
+        saved++;
+    }
+
+    // 4. Descargar de cifraclub solo las que no están en lacuerda
+    if (ccOnly.length > 0) {
+        console.log(`\n[2/2] Descargando de cifraclub (${ccOnly.length} canciones no encontradas en lacuerda)...`);
+        for (let i = 0; i < ccOnly.length; i++) {
+            const song = ccOnly[i];
+            process.stdout.write(`  [${i+1}/${ccOnly.length}] ${song.title} ... `);
+            await sleep(DELAY);
+
+            const versions = await ccSongVersions(artistSlug, song.slug);
+            if (!versions.length) { console.log('sin contenido, saltada'); skipped++; continue; }
+
+            // Filtrar versiones en portugués
+            const spanishVersions = versions.filter(v => {
+                if (isPortuguese(v.text)) return false;
+                return true;
+            });
+
+            if (!spanishVersions.length) {
+                console.log('en portugués, saltada');
+                ptSkipped++;
+                continue;
+            }
+
+            // Renumerar versiones
+            spanishVersions.forEach((v, idx) => { v.version = idx + 1; });
+
+            const entry = saveSong(artistName, artistSlug, song.title, song.slug, spanishVersions, 'cifraclub');
+            upsertIndex(entry);
+            console.log(`✓ cifraclub (${spanishVersions.length} versión${spanishVersions.length > 1 ? 'es' : ''})`);
+            saved++;
+        }
+    }
+
+    console.log(`\n✅  ${saved} guardadas · ${skipped} sin contenido · ${ptSkipped} en portugués (ignoradas)`);
+    console.log(`   Librería: ${LIBRARY_DIR}`);
+}
+
 // ── MAIN ──────────────────────────────────────────────────────────────────────
 (async () => {
     const site = CUSTOM_URL
@@ -345,10 +456,21 @@ function upsertIndex(entry) {
 
     let artistSlug = ARTIST;
     if (CUSTOM_URL) {
-        const m = CUSTOM_URL.match(/(?:cifraclub\.com\.co|lacuerda\.net)\/([^/?#]+)/);
+        const m = CUSTOM_URL.match(/(?:cifraclub\.com|lacuerda\.net)\/([^/?#]+)/);
         if (m) artistSlug = m[1];
     }
 
+    if (!artistSlug) {
+        console.error('No se pudo determinar el slug del artista.');
+        process.exit(1);
+    }
+
+    if (site === 'dual') {
+        await runDual(artistSlug);
+        return;
+    }
+
+    // Modo single-site (lacuerda o cifraclub)
     let info;
     try {
         info = site === 'lacuerda'
@@ -362,7 +484,7 @@ function upsertIndex(entry) {
     const { artistName, songs } = info;
     console.log(`\nDescargando ${songs.length} canciones...\n`);
 
-    let saved = 0, skipped = 0;
+    let saved = 0, skipped = 0, ptSkipped = 0;
     for (let i = 0; i < songs.length; i++) {
         const song = songs[i];
         process.stdout.write(`  [${i+1}/${songs.length}] ${song.title} ... `);
@@ -374,12 +496,25 @@ function upsertIndex(entry) {
 
         if (!versions.length) { console.log('sin contenido, saltada'); skipped++; continue; }
 
-        const entry = saveSong(artistName, artistSlug, song.title, song.slug, versions, site);
-        upsertIndex(entry);
-        console.log(`✓  (${versions.length} versión${versions.length > 1 ? 'es' : ''})`);
+        if (site === 'cifraclub') {
+            const spanishVersions = versions.filter(v => !isPortuguese(v.text));
+            if (!spanishVersions.length) {
+                console.log('en portugués, saltada');
+                ptSkipped++;
+                continue;
+            }
+            spanishVersions.forEach((v, idx) => { v.version = idx + 1; });
+            const entry = saveSong(artistName, artistSlug, song.title, song.slug, spanishVersions, site);
+            upsertIndex(entry);
+            console.log(`✓  (${spanishVersions.length} versión${spanishVersions.length > 1 ? 'es' : ''})`);
+        } else {
+            const entry = saveSong(artistName, artistSlug, song.title, song.slug, versions, site);
+            upsertIndex(entry);
+            console.log(`✓`);
+        }
         saved++;
     }
 
-    console.log(`\n✅  ${saved} guardadas · ${skipped} saltadas`);
+    console.log(`\n✅  ${saved} guardadas · ${skipped} sin contenido · ${ptSkipped} en portugués (ignoradas)`);
     console.log(`   Librería: ${LIBRARY_DIR}`);
 })();
