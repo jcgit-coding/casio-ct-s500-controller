@@ -68,5 +68,61 @@
     "artist": "Chris Tomlin",
     "genre": "Worship",
     "original_key": "D"
+  },
+  {
+    "id": "grupograce_sucedera",
+    "title": "Sucederá",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "D"
+  },
+  {
+    "id": "newwine_movimiento_gloria",
+    "title": "El movimiento de gloria",
+    "artist": "New Wine",
+    "genre": "Worship",
+    "original_key": "Em"
+  },
+  {
+    "id": "artag_hay_libertad",
+    "title": "Hay Libertad",
+    "artist": "Art Aguilera",
+    "genre": "Worship",
+    "original_key": "Em"
+  },
+  {
+    "id": "misioneros_remolineando",
+    "title": "Remolineando",
+    "artist": "Misioneros de Cristo",
+    "genre": "Worship",
+    "original_key": "Gm"
+  },
+  {
+    "id": "marcoswitt_oh_moradora",
+    "title": "Oh Moradora de Sión",
+    "artist": "Marcos Witt",
+    "genre": "Worship",
+    "original_key": "Gm"
+  },
+  {
+    "id": "psalm126_cuando_senor",
+    "title": "Cuando el Señor hiciere volver",
+    "artist": "Tradicional",
+    "genre": "Worship",
+    "original_key": "Am"
+  },
+  {
+    "id": "artag_me_gozare",
+    "title": "Me gozaré",
+    "artist": "Art Aguilera",
+    "genre": "Worship",
+    "original_key": "Am"
+  },
+  {
+    "id": "himno_bueno_es",
+    "title": "Bueno es",
+    "artist": "Desconocido",
+    "genre": "Worship",
+    "original_key": "C"
   }
 ]
