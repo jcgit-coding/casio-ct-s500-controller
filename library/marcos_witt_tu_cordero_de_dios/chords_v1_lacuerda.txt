@@ -1,3 +1,5 @@
+(ACORDES ORIGINALES DE LA GRABACION)
+
 REbmaj9            SIbm7
    TU QUE JUSTO ME HACES
 
@@ -18,3 +20,39 @@ OH CORDERO FIEL
 
 RSIbm7dd9)    Lab/Do   Sibm7(add4)
     TU,     CORDERO  DE  DIOS
+
+RSOLbadd9)/Lab     Solb(add2)  MIbm9    LAb7sus4
+  LLEVASTE     EN     TI       TODO  MI  DOLOR
+
+RSIbm7dd9)  Lab/Do   Sibm7(add4)
+   TU      RASGASTE AL MORIR
+
+SOLbb/Lab   Solb(add9)
+ EL VELO  QUE  AYER
+
+  SOLbSOLb4   Solb(add9)    LAb   REb    Solb(add9)
+ME SEPARO   DE   TI
+
+REbmaj9            SIbm7
+   TU QUE JUSTO ME HACES...
+
+    SIbAb7sus4   LA/DO#   Sib(add9)  MIsus2,sus4  LA6/9
+...ME SEPARO  DE  TI
+
+SRE RESOLdd9)  SOL/SI  LLA   Re(add9) La    Sol(add2)/Si
+                               TU CORDERO  DE  DIOS
+
+SOLus4/La    Sol(add9)
+ LLEVASTE   EN   TI
+
+MIm7    SOL/LA    LA7   SOL/LA   LA
+TODO MI DOLOR
+
+RESOLd9) LA    Sol(add9)/Si
+   TU RASGASTE AL MORIR 
+
+ RSOLj7/La  FA#m7     Sol(add9)
+EL   VE   -   LO   QUE   AYER
+
+   LAsus4    LA/SOL      REmaj9
+ME SEPARO  DE  TI

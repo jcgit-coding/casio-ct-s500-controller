@@ -1,3 +1,5 @@
+(NO son los acordes originales)
+
 FAmaj9  DO               FAmaj7 
    QUISIERA HABER SIDO UN ANGEL
 
@@ -18,3 +20,44 @@ DONDE HABRIAS DE       DESCANSAR
 
          DOmaj7   SOLm9    Solm7/Sib   DO
 MAS NO SOY NADA ESPECIAL
+
+         FAmaj7           SIb
+NO TENGO MUCHO QUE PODRIA DAR
+
+     DO         RE/FA#
+SOLO TENGO ESTE CORAZON 
+
+        Rem7(add4) Sol7sus2
+QUE HOY TE VENGO A ENTREGAR
+
+  SOLm   DOmaj7   Solm(add11)   DOsus4,sus2
+MAS NO SOY NADA    ESPECIAL 
+
+  SIb    FAmaj9         Sib(add9)
+NO TENGO MUCHO QUE PODRIA DAR
+
+     DO          RE/FA#
+SOLO TENGO ESTE CORAZON
+
+   REm7    SOL        DO
+QUE HOY TE VENGO A ENTREGAR
+
+FAmaj7   DO              FAmaj7
+    QUISIERA HABER SIDO UN MAGO
+
+      MIm7            REm6   SOL
+PARA PODERTE TRAER MI MEJOR REGALO
+
+   DO     LAm9   REm7    SOL     DO7
+Y PONERLO DELANTE DE TUS PIES
+
+  DOSOLm7                Do(add9)
+Y QUISIERA HABER SIDO EL DUEÑO
+
+   FAmaj7              RE/FA#
+DEL MEJOR MESON, DE TODA LA REGION
+
+DO/RE       SOL      FAmaj7
+Y DARTE MI MEJOR HABITACION
+
+MAS...

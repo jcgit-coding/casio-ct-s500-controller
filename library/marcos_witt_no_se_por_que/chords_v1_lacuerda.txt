@@ -1,3 +1,4 @@
+Primera Estrofa:
 MIm   MImmaj7 MIm7      MIm/DO#
 NO SE POR QUE, SEÑOR TU ME TOCASTE
 LAm    LAmmaj7 LAm7            RE
@@ -18,3 +19,84 @@ CONTIGO SIEMPRE
 QUIERO SEÑOR ESTAR.
 
 Coro:
+        LAm      RE
+PORQUE FUERA DE TI
+       SOL         MIm
+NADA DESEO EN LA TIERRA
+       LAm             RE
+TU PRESENCIA ES MAS HERMOSA
+               MIm  LAm  MI
+QUE CUALQUIER CO---------SA //.
+
+Tercera Estrofa:
+MIm  MImmaj7  MIm7        MIm/DO#
+ERES SEÑOR,   MI GOZO Y MI ALEGRIA
+LAm     LAmmaj7  LAm7           RE
+TU ESTAS SEÑOR, CONMIGO TODO EL DIA
+MIm
+Y EN TI YO SIEMPRE
+    LAm SI      MIm  MI (MI para pasar al coro)
+QUIERO SEÑOR ESTAR.
+Despues del Coro:
+MIm                    LAm
+ME HAS LIBRADO DE LA MUERTE
+RE                 SOL
+ME HAS DADO NUEVA VIDA
+MIm                LAm
+ME QUITASTE MI TRISTEZA
+SI                 MIm
+ME CEÑISTE DE ALEGRÍA
+
+          LAm        RE
+POR TANTO NUNCA CALLARÉ
+SOL      MIm  LAm     SI
+A TI CANTARÉ, TE ALABARÉ
+       MIm  LAm  MI
+GLORIA MI--------A
+LAm          RE
+CRISTO MI SEÑOR
+SOL      MIm  LAm     SI
+A TI CANTARÉ, TE ALABARÉ
+       MIm  LAm  MI (SI van A terminar LA cancion, MI es MIm)
+GLORIA MI--------A
+
+
+Nota:
+Lo mas complicado del tema a mi parecer son las siguientes secuencias:
+MIm - MImmaj7 - MIm7 - MIm/DO#
+LAm - LAmmaj7 - LAm7 - RE
+Que van a principio de las estrofas
+Explicaré como hacerlas en teclado (piano) y guitarra acontinuación:
+
+Teclado (la mas facil a mi parecer):
+Secuencia MIm:
+MIm    = MI  SOL SI
+MImmaj7= RE# SOL SI
+MIm7   = RE  SOL SI
+MIm/DO#= DO# SOL SI
+CONCLUSION: la tonica que es mi(en el acorde de mi menor) se va bajando
+medio tono hasta do#, se hace lo mismo con la secuencia que sigue de Lam
+Secuencia LAm:
+LAm    = LA   DO MI
+LAmmaj7= SOL# DO MI
+LAm7   = SOL  DO MI
+RE     = RE  FA# LA
+
+
+Guitarra:
+Secuencia MIm:                         Secuencia LAm:
+   MIm  MImmaj7  MIm7  MIm/DO#      LAm   LAmmaj7  LAm7  RE
+E= 0      0       0      0      E=   0      0     0    2
+B= 0      0       0      0      B=   1      1     1    3
+G= 0      0       0      0      G=   2      1     0    2
+D= 2      1       0      2      D=   2      2     2    0
+A= 2      2       2      4      A=   0      0     0    X
+E= 0      0       0      0      E=   X      X     X    X
+
+
+Espero la disfruten y les sirva...
+Es mi primera trascripcion
+No se si Marcos Witt es el autor XD
+Cualquier sugerencia y/o correccion mandenla a tanmeza@hotmail.com
+Dios Les Bendiga...
+Bye

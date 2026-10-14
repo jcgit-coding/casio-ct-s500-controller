@@ -1,20 +1,31 @@
-Intro: G7-C7-G7-C7-G7-C7-G7-C7-D
+el intro se hace con la escala de sol, usa la tecnica de taping.
+solo figuara de estilo rock.
 
-  G          Gadd2/B Cadd2   Gadd2/B       Am7     Dadd2
-Suenen dulces himnos gratos al Señor y óiganse en concierto
-       G7-G9-Bb/C-C-C9
-Universal.
- G9                 C          G      Am7     Dsus4        G--D
-Desde el alto cielo baja el Salvador para beneficio del mortal.
+G               G/B  C          G/B  Am7
+SUENEN DULCES HIMNOS GRATOS AL SEÑOR
+   C               D          G    C
+Y OIGANSE EN CONCIERTO UNIVERSAL
+G                    C            G   Am
+DESDE EL ALTO CIELO, BAJA EL SALVADOR
+Dsus4                  G  D
+PARA BENEFICIO DEL MORTAL
+
+CORO:
+
+G       Am7           C   D   G
+GLORIA, GLORIA SEA A NUESTRO DIOS
+A Bm  A/C#          D  Em7 D/F#
+GLORIA SI, CANTEMOS A UNA VOZ
+G                G/F   C/E           Cm
+Y EL CANTAR DE GLORIA QUE SE OYO EN BELEN
+G            C/D       G
+SEA NUESTRO CANTICO TAMBIEN.
+
+TODO LO DEMAS ES IGUAL SALUDOS A EL GRUPO JUVENIL
+'AMMI' QUE DIOS SEA BENDICIENDOLES
+
+YA SABEN ALGUNA DUDA ESCRIBANME, YA ME VOY
+SI NO ME VA A DAR TIEMPO DE COMER.
 
 
- G      Am7         Cadd2 D   G     A Bm7 A/C#           D Em7
-Gloria, gloria sea a nuestro Dios, gloria, si, cantemos a una
-D/F#   G          G9/F     C/E          Cm6/Eb G/D
-Voz. Y el cantar de gloria que se oyó en Belén sea nuestro
-    C/D      G  (C/D-G7-C7-G7-C7-G7-D)
-Cántico también.
-
-G7         G9     C            Am7   Dadd2                 Gadd2
-Salte de alegría lleno el corazón la abatida y pobre humanidad
-G7                C            G/B   Am7 Cadd2/D
+usa solo quintas.

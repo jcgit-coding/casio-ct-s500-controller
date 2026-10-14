@@ -1,24 +1,16 @@
-ALABAD A JEHOVÁ
-Marcos Witt (Recordando Una Misma Senda) 1995
-
-Intro: || G / C / | Bm7 / Em / | C / D / | G / D7 / ||
-
-
-       G  C       Bm7  Em
-V) Alabad   a Jehová
-            G/D            Em7       D7
-   Naciones todas, Pueblos todos, alabadle
-          Am7         D7
-   Porque ha engrandecido
-           Am7    D7        G      D7
-   Sobre nosotros su misericordia
-
-
-             G  C       Bm7  Em7
-V2) Y la verdad  de Jehová
-            F7/G         G      C
-    Es para siempre, aleluya, amén
-           Cm7/Eb        G/D   Em7
-    Y la verdad   de Jehová
-             Am7        D7      G
-    Es para siempre, aleluya, amén.
+G     C       Bm   Em7
+ALABAD A JEHOVA
+           G             Em7      D7
+NACIONES TODAS, PUEBLOS TODOS ALABADLE
+      Am          D7
+POQUE HA ENGRANDECIDO
+        Am7    D7        G     D7
+SOBRE NOSOTROS SU MISERICORDIA
+      G    C        Bm     Em7
+Y LA VERDAD DE JEHOVA
+          G         G7    C
+ES PARA SIEMPRE ALELUYA AMEN
+        Cm7         G    Em
+Y LA VERDAD DE JEHOVA
+          Am        D7    G
+ES PARA SIEMPRE ALELUYA AMEN

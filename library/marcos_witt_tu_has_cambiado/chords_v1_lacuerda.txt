@@ -1,4 +1,5 @@
-SOL     MIm        LA-7
+CORO:
+  SOL     MIm        LA-7
 TU HAS CAMBIADO MI LAMENTO 
   SI-7    DO      RE
 Y MI TRISTEZA EN DANZA
@@ -18,3 +19,38 @@ EL NOS DIO CONSOLACION
            FA           MIm
 SIENTO SU DULCE, DULCE AMOR
            SOL
+QUE ME ILUMINA
+        FA             MIm
+VEO EL RESPLANDOR DEL SOL
+        RE              DO   RE   SOL
+QUE BRILLANDO ESTA CON SU ALEGRIA
+
+
+CORO:
+
+TU HAS.......//
+
+
+ESTROFA:
+
+DONDE SOLO.....
+
+
+CORO:
+
+TU HAS......//
+
+
+ESTROFA 2:
+  
+ FA     SOL      FA      SOL
+TU IRA SERA MOMENTANEA SEÑOR
+                 LA
+MAS TU GRACIA Y FAVOR
+   SOL       DO     RE  SOL
+DURARA PARA TODA LA VIDA
+
+
+CORO:
+
+TU HAS.....//

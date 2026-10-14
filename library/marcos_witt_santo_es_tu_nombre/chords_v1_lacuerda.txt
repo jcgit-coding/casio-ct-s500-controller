@@ -1,20 +1,17 @@
-Intro: Abm7   F#/Bb   Bm  E   Am   D  Eadd2
+DO          RE           SOL    SOL7
+Tú habitas la alabanza de tu pueblo
 
+DO  RE         SOL  SOL7
+Coronado con poder
 
-ESTROFA 1 - TONO E
+    DO        RE  SIm          MIm
+Angeles alrededor cantan con nosotros
 
-E/Ab            A                   B/A                  Eadd2
-        Tú habitas en la alabanza de tu pueblo
-E/Ab    A     B/A                E
-          co--ronado con poder
-E/Ab    A               B/A        Abm7           C#m
-        ángeles alrededor, cantan con nosotros
-             F#(7/9)                         B
-        alabanza y gloria a ti Señor
-CORO
- E/Ab   A                E/Ab
-          Santo es tu nombre oh Dios,
-       C#m           Bsus4
-        Santo eres Tú
-E/Ab   A               E/Ab      C#m7
-          la creación declara tu gloria,
+   DO      LAm      RE 
+Alabanza y gloria a tí, Señor.
+
+DO          SOL        MIm    DO         RE
+Santo es tu Nombre, oh Dios, Santo eres tú,
+
+DO            SOL      MIm      DO    RE  SOL
+La creación declara tu gloria, Santo eres tú.

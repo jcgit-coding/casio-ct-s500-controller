@@ -1,3 +1,4 @@
+INTRO
 A - D - A - D
 
 VERSO x2
@@ -17,3 +18,23 @@ Que tu presencia llene todo este lugar
 Que tu presencia llene todo este altar
      F#m      D     A
 Lléname, lléname de ti
+
+INTRO
+VERSO
+CORO x2
+
+INSTRUMENTAL x2
+F#m - E - Bm
+
+PUENTE x3
+     F#m   E          Bm
+Lléname,  luz de mi vida
+     F#m   E               Bm
+Lléname,  fuente de agua viva
+     F#m     E        Bm
+Lléname,  Jesús mi deseo
+     F#m     E          Bm    D
+Lléname,  Jesús mi anhelo
+
+CORO x2
+INTRO

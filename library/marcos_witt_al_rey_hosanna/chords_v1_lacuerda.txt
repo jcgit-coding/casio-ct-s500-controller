@@ -1,3 +1,5 @@
+INTRO TONO B
+
 G#m F# E D#
 
   G#m    F#         E     D#
@@ -18,3 +20,21 @@ Ha ungido mi cabeza
                     G#m     F#         E  C#m       D#
 Me cubrió de su belleza, de su redención yo cantaré
 ------------------------------------------------------------------
+
+        C#m            G#m
+Yo me asombro me maravillo
+      F#                 G#m   G#
+Y derramo mi canto en honor a Él
+        C#m            G#m
+No hay nadie mas glorioso
+      A#             D#
+Tan hermoso como mi rey
+------------------------------------------------------------------
+
+INSTRUMENTAL [notas]
+D# C# D# F# D# C# D# C# D#
+D# C# D# F# D# C# G# F# G#
+D# C# D# F# D# C# D# C# D#
+D# C# D# F# D# C# G# F# B G#
+REMATE: G#m
+FINAL (notas): D# [D#-E-F-F#] - G# F# B G#

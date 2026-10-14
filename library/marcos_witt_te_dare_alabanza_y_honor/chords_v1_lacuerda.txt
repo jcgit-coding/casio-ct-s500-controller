@@ -1,30 +1,43 @@
-::INTRO::
+F#
+Tu sangre me derimio 
 
-     F#m         C#7         C#7         F#m
-E||--2--2-2--2-|-----------|-----------|-2--2-2--2----|
-A||------------|-4--4-4--4-|-4--4-4--4-|--------------|  (2 veces)
-D||------------|-----------|-----------|------------4-|
-G||------------|-----------|-----------|--------------|
+               A
+para darme la luz u la paz
+
+D              F#m
+tu vida se derramo
+
+                    E
+por mi maldad se entrego
+
+F#m
+tu amor incondicional
+
+                 A 
+me abrazo con dolor y pasion
+
+D            F#m
+mi vida te ofrecere
+
+                E
+mi canto levantare
 
 
-::ESTROFA 1::
+F#m          A       D      E
+Alabanza y honor, poder y gloria
 
-     F#m                     A
-E||--2--2-2--2-|-2--2-2--2-|-5--5-5--5-|-5--5-5--5-|
-A||------------|-----------|-----------|-----------|
-D||------------|-----------|-----------|-----------|
-G||------------|-----------|-----------|-----------|
+F#m           A         D       E 
+al Cordero de Dios al León de Judá
 
-     D           F#m         E           E
-E||------------|-2--2-2--2-|-0--0-0--0-|-0--0-0--0---|
-A||--5--5-5--5-|-----------|-----------|-------------|
-D||------------|-----------|-----------|-----------2-|
-G||------------|-----------|-----------|-------------|
+   F#m             E
+Al unico digno de honrra
+
+F#m                  E
+Jesucristo mi Rey y Señor
 
 
-TECLADO PARA PASAR A LA ESTROFA 2:
+  D                    F#m
+Anciano de dia, te quiero exaltar
 
-      E||--------|---------7_7--5-0-2-|
-      A||-----12_|_12-11-7------------|
-      D||--------|--------------------|
-      G||--------|---------
+   D                   Esus4
+Postrado, te quiero adorar

@@ -1,20 +1,84 @@
-TONO: A
+INTRO: A - G - A7 - D/F# - Esus4 - E
 
-INTRO
-A - A/G - D/F# - A/E - E —] A
 
-VERSO 1
-     A           E/F#   A/F#
-Mas el Dios de toda gracia
-          A/D           Esus E
-Que nos llamó a su gloria eterna
-          A/F# E/C# A/F#
-Os perfeccione y afirme
-   A/D          Esus  E     Pase A/C#
-Fortalezca y establezca
+ESTROFA 1:
 
-CORO 1
-  D    D  A/C#    D/B     A   A/F#
-A Él    sea       LA       gloria
- A/D             A/C# A/F#
-A Él sea el       imperio
+        A            F#m
+Mas el Dios de toda gracia,
+         D/F#             Esus4   E
+que nos llamó a su gloria eter---na,
+        F#m7     C#m   F#m
+os perfeccione y afir---me,
+      D          Esus4  E - A
+fortalezca y establez--ca.
+
+CORO 1:
+
+   D          A  F#m7
+¡A él sea la glo--ria!
+   D            A  F#m7
+¡A él sea el impe---rio
+         D      Bm7        Esus4   E
+por los siglos       de los si----glos!
+ A/C# - G - A7 -  D/F# - Esus4 - E
+¡Amén!
+
+ESTROFA 2:
+
+   A                 C#m7
+Quiero levantar mis manos,
+F#sus4  F#7         Bm7
+quiero  levantar mi voz,
+F#sus4   F#7     F#    Bm7 - D      E/G#        A
+Ofre----ciendo a ti mi vida     en santidad y amor.
+ D     F#m            Bm7
+Padre, solo a ti te ofrezco
+   C#m7       F#sus4 - F#7
+mi vida y mi corazón,
+Bm7                   E    Bm7      E/G# - A
+y me postro en tu presencia en adoración.
+
+CORO 2:
+
+        C#m7 - Em7 F#7    Bm7 - Dm
+Hijo de Dios,      recibe hoy
+         A   F#m7    Bm7  A/C#  D - B/D#     E - A
+toda la gloooria, la hon---ra   y         honor.
+        C#m - Em7  F#7    Bm7 - Dm
+Hijo de Dios,      recibe hoy
+          A  F#m7    Bm7  A/C#  D   A/C#
+toda la gloooria, la hon---ra   y  honor.
+
+
+INTERLUDIO: B - Bm7 - A/C#
+            Cm7 - F7 - Bb
+
+CORO 3:
+
+Bb           Dm7 - Fm7   Bb7   Ebmaj7 - Eb - Cm
+    Hijo de Dios,        recibe hoy
+         Bb  Gm7     Cm7  Bb/D  Eb - C7     Ab - Eb - F - Bb
+toda la gloooria, la hon---ra   y        honor.
+         Dm7 - Fm7  Bb7    Eb - Cm
+Hijo de Dios,       recibe hoy
+         Bb  Gm7     Cm7  Bb/D  F7   Gm7 - F/A - C/E - Cm - Ebm
+toda la gloooria, la hon---ra   y  honor.
+
+FINAL:
+
+         Bb   Gm7    Cm7  Bb/D  F/A   Bb
+toda la gloooria, la hon---ra    y  honor.
+   Eb         Bb
+¡A él sea la gloria!
+  Ebmaj7       Gm7
+¡A él sea el imperio
+        Ebmaj7       Cm7   F/A
+por los siglos de los si---glos!
+  Ebmaj7      Dm7 - Gm7
+¡A él sea la gloria
+  Ebmaj7       Bb   Gm7
+¡A él sea el impe---rio
+        Ebmaj7 - Cm7        F
+por los siglos      de los siglos!
+  Bb - Bb7   Eb/G   Fsus4 F  Bb
+¡Amén!      ¡Amén! ¡Amén! y Amén

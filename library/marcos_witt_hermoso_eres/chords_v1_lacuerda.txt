@@ -1,20 +1,27 @@
-Intro: D - E - A - D - E - F#m
-A - D - C# - Bm - D - E - A
+A          Dmaj7            E
+ En mi corazon hay una cancion
 
-   A           D              E
-// En mi corazón hay una canción
-A      D             E
-Que demuestra mi pasión
-F#m      E          D   A/C#
-Para mi Rey y mi Señor
-Bm       A           E
-Para Aquél que me amó //
+A       Dmaj7        E
+ que demuestra mi pasion
 
-   A        C#m  D     E
-// Hermoso eres, mi Señor
-A       C#m      D      E
-Hermoso eres Tú, Amado mío
-Bm                        E
-Tú eres la fuente de mi vida
-Bm      A/C# D    E     A
-Y el anhelo de mi corazón //
+F#m                 D
+ para mi Rey y mi Señor,
+
+Bb                  E
+ para aquel que me amo
+
+
+A           C#m7    D     E
+ ///Hermoso eres,   mi señor
+
+A         C#m7   D      E
+ hermoso eres tú, amado mio
+
+Bm7                      E
+ tú eres la fuente de mi vida
+
+Bm7  -  A/C#     D         E
+ y el anhelo    de mi corazon//
+
+Bm7      A/C#   D    E    A
+ y el anhelo   de mi corazon

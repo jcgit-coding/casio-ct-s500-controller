@@ -1,3 +1,8 @@
+(ACORDES ORIGINALES DE LA GRABACION)
+
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
+
+(INTRO)
 (DOm(add9)  SOL   LA#dim7   MIm7   LAm7   RE7  SOL  MIm7   LAm7   RE6)
 
  SOL  SOLmaj9    SOL   MI7      LAm9   RE6   LAm9  RE6
@@ -17,3 +22,45 @@ Quédate Señor ya se hace tarde
 
 MI/SORE7SOLLAm7         RE    Re7(b9)        Sol    MIm7   LAm7   RE
   Te    ofrezco el corazón            para posar
+
+ SOL  RE#m     MIm/RE      SOL      DO     Dom7/Fa
+Hazlo  tu       mora   -   da permanente
+
+    SOL   MIm7     LAm7    RE         SOL    MIm7  LAm7
+Acéptalo,       acéptalo        MI Salvador
+
+    SOL SOLmaj9           SOL      MI7         LAm9   RE6  LAm9
+Las som    -   bras de la no   -   che se aproximan
+
+RE6 RE7    LAm7         RE6   Re7(b9)      SOL     LAm7   RE7
+      Y en ellas el tentador           acechará
+
+SOL   RE#m  MIm/RE     SOL      DO     LAm7     RE
+No me dejes  solo      en el camino
+
+   SIm7   MIm7      LAm7   RE             SOL    (Dom7/Fa)
+Ayúdame,         ayúdame          hasta llegar
+
+    SOL    MIm7      LAm7    RE           SOL     DOm6
+Acéptalo,         acéptalo         MI salvador
+
+    SOL    MIm7      LAm7    RE           SOL
+Acéptalo,         acéptalo         MI salvador
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
+
+DOmDom(aRE7)  LA#dim7  SOLmaj9  LAm9  RE6  Re7(b9)  MIm/RE
+E      X          X        X      0    X      X        0
+A      3          X        0      0    0      0        2
+D      0          2        4      2    0      4        2
+G      0          3        4      0    2      5        0
+B      4          2        3      0    0      4        3
+E      3          3        5      0    2      5        0
+
+   DO/RE  SOLmaj7  MIsus4  MI/SOL#  Dom7/Fa  DOm6
+E    0       3        0        4       1       X
+A    3       2        2        2       1       0
+D    0       0        2        2       1       5
+G    0       0        2        1       3       5
+B    1       0        0        0       1       4
+E    0       2        0        0       3       5

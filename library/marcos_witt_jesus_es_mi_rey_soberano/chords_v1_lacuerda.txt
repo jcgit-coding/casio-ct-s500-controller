@@ -1,4 +1,8 @@
-DOFA      REm    DO/MI       Fa(add9)
+(ACORDES ORIGINALES DE LA GRABACION)
+
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
+
+  DOFA      REm    DO/MI       Fa(add9)
 Jesús es mi Rey Soberano
 
   DO/SOL     LAm     SOL
@@ -18,3 +22,70 @@ Me vino a sacar de la escoria
 
 REm7    FA#dim7        DO/SOL
 Y yo soy feliz,
+
+           LAm  REm9    SoL13(b9)  FAmaj7
+Y yo soy feliz     por               él
+
+  DOFA       REm7   DO/MI      Fa(add9)
+Jesús es mi amigo anhelado
+
+    DO/SOL        LAm        SOL
+Y en sombras o en luz siempre va
+
+  REm7     LAm7        SIbmaj7
+Paciente y humilde a mi lado
+
+SoL13  SOL+aug7    DOmaj9
+Ayuda y socorro   me da
+
+REm7  SFA   DOmaj7   REm7     DO/MI      Fa(add9)
+      Por     eso constante lo sigo
+
+     SOLm7      DO   DO/MI   FAmaj7
+Porque el es mi Rey    y mi   amigo
+
+REm     RE9        DO/SOL
+Y yo soy feliz,
+
+           RE9  REm7    SoL13    FAmaj7
+Y yo soy feliz   por               él
+
+(SoL13    SOL+aug7    SOL7)
+
+  LAm7    SOL/SI     DO/MI
+Dejando su trono de Gloria
+
+FAFA#79)  SOLm9   Fa#7(b9)       FAmaj9
+   El  me  vino  a  sacar de la escoria
+
+Re9/Fa#      LAb
+   Y yo soy feliz
+
+MIm7         LA9   REm9       SoL13(b9)  FAmaj7    DOmaj7
+  Y yo soy feliz         por               él
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
+
+  FADO/MI  Fa(add9)  DO/SOL  FAmaj7  SoL13  SOL+aug7
+E    0        X        3       0       0       0
+A    3        0        3       3       2       2
+D    2        3        2       3       2       1
+G    0        2        0       2       0       0
+B    1        1        1       1       0       0
+E    3        3        0       0       1       1
+
+   DOmaj7  FA#dim7  REm9  SoL13(b9)  SIbmaj7  DOmaj9
+E     0       X       0       0          1       0
+A     3       0       0       2          1       3
+D     2       1       3       2          3       2
+G     0       2       2       1          2       4
+B     0       1       1       0          3       3
+E     0       2       0       1          1       0
+
+   FA#7  SOLm9  Fa#7(b9)  FAmaj9  Re9/Fa#  LA9
+E   2     3        X        0       0      0
+A   0     5        X        0       0      0
+D   0     3        2        2       2      2
+G   2     3        3        2       2      2
+B   1     3        2        1       1      0
+E   0     5        3        3       2      3

@@ -1,18 +1,69 @@
-E|-------------------------8-10----------------------------------------|
-B|----------------6h8h10-8------10-13----------------------------------|
-G|--9-7-9h10--9-7---------------------12-14----------------------------|
-D|------------------------------------------15-17-------15-14-12-------|
-A|------------------------------------------------17-19----------12-15-|
-E|---------------------------------------------------------------------|
+Los tonos son iguales a la canción pero
+Son algo raros pero se oyen bien padre
+Abajo están como se deben de tocar
 
-E|---------------------------------|
-B|-----------------13-15--17-15-14-|
-G|-----------12-14-----------------|
-D|-----12-14-----------------------|
-A|--15-----------------------------|
-E|---------------------------------|
+En la parte del coro donde los tonos tienen
+un (*) es porque también toca una guitarra eléctrica
+y son tonos quintos, para eso también están abajo
+como se tocan
 
-Es mi primera transcripción,
-espero que les sirva.
 
-Dios los bendiga!!!
+//Dadd2 Dm9 Cadd2//
+
+Dadd2
+        Dm9     Cadd2  Dadd2
+A veces en mi soledad
+         Dm9       Cadd2  Dadd2
+Viviendo solo por vivir
+              Dm9         Cadd2  Dadd2
+Cuando pienso que no puedo más
+       Dm9      Cadd2
+Sé que tu estas aquí
+   Bb/Dm9            Cadd2       G
+Hay algo de ti, que está en mí
+                Asus4-A
+Soy atraído por ti
+
+Coro:
+      Dadd2*-Dm9* Cadd2       (en lugar de Dm9 es Bb5)
+Es la fuerza      de tu amor
+          Dadd2*-Dm9*  Cadd2
+Es como un rayo     que parte el corazón
+       Dadd2*-Dm9*  Cadd2
+Son tus manos   que sanan mi dolor
+     G*           Bb/Dm9   Cadd2        Dadd2
+Atraído soy por la fuerza    de tu amor
+
+Dm9-A7sus4 Dadd2
+
+        Dm9         Cadd2  Dadd2
+Puedo estar lejos de ti
+        Dm9      Cadd2  Dadd2
+Y no escuchar tu voz
+        Dm9       Cadd2  Dadd2
+La brújula no guía más
+         Dm9       Cadd2
+Perdido estoy sin dirección
+        Bb/Dm9           Cadd2      G
+Pero hay algo de ti que está en mí
+                Asus4-Cadd2-Asus4
+Soy atraído por ti
+
+
+Tonos raros:
+  Dadd2 Dm9 Cadd2 Bb/Dm9 Asus4 A7sus4
+E) -0-  -0-  -0-    -0-    -0-    -0-
+B) -3-  -3-  -3-    -3-    -3-    -3-
+G) -2-  -2-  -0-    -2-    -2-    -0-
+D) -0-  -3-  -2-    -3-    -2-    -2-
+A) -0-  -0-  -3-    -1-    -0-    -0-
+E) -x-  -x-  -0-    -x-    -x-    -x-
+
+Tonos quintos:
+   D5    Bb5   G5
+E) -x-   -x-   -x-
+B) -x-   -x-   -x-
+G) -7-   -3-   -x-
+D) -7-   -3-   -5-
+A) -5-   -1-   -5-
+E) -x-   -x-   -3-

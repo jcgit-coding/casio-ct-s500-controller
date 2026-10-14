@@ -1,20 +1,154 @@
-G - F/G - C - Cm - Bm - Em - A - D - C - D
+(ACORDES ORIGINALES DE LA GRABACION)
 
+   SOL       MIm
+Alabaré, alabaré,
 
-     G         Em
-//Alabare, alabare,
+LAm7   RE         SOL    DO/RE
+Ala - baré a mi Señor
 
-Am7    D          G      C/D
-Ala - bare a mi Seeor //
+SOL(add9)    MIm
+Alabaré, alabaré
 
+LAm7    RE       SOL    DO/RE
+Ala - baré a mi Señor
 
-      G             Em
-Juan vi0 el numero De los redimidos
+Sol(add9)
+  Juan vió el número
 
-     G               D
+MIm
+De los redimidos
+
+SOL(add9)             RE
 Y todos alababan al Señor
 
-Am7    D     Am7        D
+LAm7   RE    LAm7       RE
 Unos oraban, otros cantaban
 
-       Am    D          G     C/D
+    SOLAm7     RE     Sol(add9)   DO/RE
+Pero todos alababan al Señor
+
+  SOL     DO         SIm7        MIm7
+Alabad           A Jehová
+
+        SOL/RE          MIm7      RE7
+Naciones todas, pueblos todos alabadle
+
+      LAm7        RE7
+Porque ha engrandecido
+
+        LAm7   RE7        SOL    RE7
+Sobre nosotros su misericordia
+
+      SOL     DO        SIm7       MIm7
+Y la verdad         en Jehová
+
+       Fa7/Sol   SOL7     DO
+Es para siempre aleluya, amén
+
+    Dom7/Mib   SOL/RE        MIm7
+Y la verdad de Jehová 
+
+         LAm7     RE7    SOL
+Es para siempre aleluya amén
+
+     Ladim7/Mib  SOL/RE     MIm7
+( Y la verdad de Jehová 
+
+    FA  LAm7     RE  Fa(add9)/Sol     DO/RE    RE/MI     MI
+es para siempre aleluya amén )
+
+         LA
+Yo tengo gozo en mi alma
+
+FA#m7
+Gozo en mi alma
+
+LA         FA#m7         MI
+Gozo en mi alma, y en mi ser
+
+        LA          LA/SOL
+Es como ríos de agua viva
+
+RE/FA#      Rem/Fa
+Ríos de agua viva
+
+LA/MI         MI        LA  
+Ríos de agua viva en mi ser
+
+  LA/MI                 FA/SOL     SOL
+( Ríos de agua viva en mi ser )
+
+       FA      SOL/FA     MIm7      LAm7
+Donde está el espíritu de Dios
+
+SDO Sol(add9)      Do(add9) 
+Hay libertad, hay libertad
+
+Sib/MI7 FA    Ladim7/Fa#   DO/SOL    Mi7(b9)/Sol#   LAm7
+Donde  está el espíritu de  Dios
+
+SDO(add9)          Do(add9)
+  Ahí siempre hay libertad
+
+    SOL       DO
+Libertad, libertad,
+
+  FA#7L       SibMaj7/Sol      Fa#7(b9)
+Libertad,      liberta        -        D
+
+FAMI7a(add9) Ladim7/Fa#  DO/SOL    Mi7(b9)/Sol#   LAm7
+Donde está el espíritu de Dios
+
+SDO(add9)        Do(add9)
+Ahí siempre hay libertad
+
+    FA                  REm7
+Yo tengo un amigo que me ama
+
+   DO      FA
+Me ama, me ama
+
+DO  FA                  REm7
+Yo tengo un amigo que me ama
+
+  FADO      Fa(add9)
+Su nombre es Jesús
+
+  FA   SIb       Fa(add9)
+Que me ama, que me ama,
+
+       DO                  FA
+Que me ama, si, con tierno amor
+
+  FA   SIb      Fa(add9)        REm7
+Que me ama, que me a      -      ma,
+
+  FADO      Fa(add9)     DO/RE
+Su nombre es Jesús
+
+    SOL                  MIm7
+Yo tengo un amigo que me ama
+
+ LAm7  RE      SOL
+Me a - ma, me ama
+
+RE  SOL                 MIm7
+Yo tengo un amigo que me ama 
+
+    LAm7  RE9  SOL     FA/SOL
+Su nombre es Jesús
+
+      DO        RE/DO     SIm7       MIm7
+Que me a    -    ma, que me a    -    ma
+
+     LAm7    RE             SOL      FA/SOL
+Que me ama, si, con tierno amor
+
+DO Do(add9)      RE/DO      SIm7         MIm7
+Que me a     -     ma, que me a     -     ma
+
+  REsus4  RE   SOL       
+Su nombre es Jesús
+
+RE7     SOL
+    Alabaré....

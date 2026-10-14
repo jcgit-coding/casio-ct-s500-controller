@@ -1,3 +1,6 @@
+Orden: Intro, V1V2 2x,  Coro,
+V1V2, Coro, Bridge, Coro 2x, End
+
 Intro: Bbsus2, Gm7 2x.
 
 Verso 1:
@@ -18,3 +21,20 @@ Tú me diste vida
             Ebsus2
 Cuando resucitaste
      Cm7/Eb              F
+Tu victoria también fue mía.
+
+Coro:
+Eb  F/Eb   Dm Bb
+ Puedo entrar
+      Eb   F/Eb Dm Bb
+(A Tu) Santo lugar
+Eb         F/Eb      Dm       F# - G
+Todos mis pecados clavaste en la Cruz
+      G#       F
+Por siempre y siempre.
+
+Bridge: G, G# 2x, G 2x, F, Eb, Db, B
+       Eb/G, G# 2x  G 2x F, Eb, Db, C-D-Eb
+
+End:   Bb, G, Eb, Cm7, F
+       Bb, G, Eb, Cm7, F, Bb

@@ -1,4 +1,8 @@
-C           Am
+NOTA: El acorde que esta con un asterisco (*) se puede omitir
+y seguir tocando el acorde a continuación de éste. (Dm/C)
+  *Al Final están los acordes desconocidos.
+
+          C           Am
 //Te alabaré con todo lo que soy
       F                       Cm G/B
 el camino de tu amor yo seguiré
@@ -18,3 +22,56 @@ por ti seré   en este mundo lo mejor
        Edim      Em               A
 perdoname    las veces que he fallado a tu corazón
         Dm  Dm/C*             G
+yo ya morí  el día en que, Jesús, te conocí
+           C - G/B
+volví a vivir
+
+        C           Am
+te adoraré con todo mi temor,
+      F                      C
+tu palabra llevaré a donde este
+G/B   - C             Am
+te adoraré sin dar explicación
+      F                        E/D
+solo se que tu, Jesús, eres mi vida
+      E              Am
+mi escudo eres mi espada
+   G           F-Fm        G
+en ti me dan ganas   de vivir.
+
+
+Acordes desconocidos:
+
+Edim
+---|-----|-----|-----||||||||||||
+---|-----|-----|--O--||          ||
+---|-----|--O--|-----|||||||||||||||
+---|-----|-----|-----|||||||||||||||
+---|-----|-----|-----||          ||
+---|-----|-----|-----||||||||||||
+
+E/D
+---|-----|-----|-----||||||||||||
+---|-----|-----|-----||          ||
+---|-----|-----|-----|||||||||||||||
+---|-----|-----|--O--|||||||||||||||
+---|-----|-----|-----||          ||
+---|-----|-----|-----||||||||||||
+
+G/B
+---|-----|-----|-----||||||||||||
+---|-----|--O--|-----||          ||
+---|-----|-----|-----|||||||||||||||
+---|-----|-----|-----|||||||||||||||
+---|--O--|-----|-----||          ||
+---|--O--|-----|-----||||||||||||
+
+Dm/C
+---|-----|-----|-----||||||||||||
+---|--O--|-----|-----||          ||
+---|-----|-----|-----|||||||||||||||
+---|-----|--O--|-----|||||||||||||||
+---|--O--|-----|-----||          ||
+---|-----|-----|--O--||||||||||||
+
+Para Honra y Gloria Del Dios Todopoderoso.

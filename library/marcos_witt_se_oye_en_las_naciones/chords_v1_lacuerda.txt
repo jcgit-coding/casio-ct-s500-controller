@@ -1,21 +1,33 @@
-Afinación: G D A E
+INTRO:   Gm7   (C#-D-C-A#-D-F-B-G)
 
-  Intro
-G |---------------------------------------------------3---------------
-D |-----5----3-------5----3-------5----3-----5----3-------------------
-A |-------3h5----------3h5----------3h5--------3h5--5-----------------
-E |-3------------3------------3------------3--------------------------
+Gm7
+SE OYE EN LAS NACIONES HAY UN CANTO NUEVO
 
-G |---------------------------------------------------------3--|
-D |-----5----3-------5----3-------5----3-----------------------|
-A |-------3h5----------3h5----------3h5---------5-4-3---3-5----|
-E |-3------------3------------3------------3----------5--------|
+QUE SE ESTA CANTANDO HOY
+Gm7
+SE ESCUCHA EN LOS LABIOS DE GRANDES MULTITUDES
 
-  Versos
-G |-------------------------------------------------------------------
-D |-----5----3-------5----3-------5----3-------5-------------5----3---
-A |-------3h5----------3h5----------3h5-----------3------------3h5----
-E |-3------------3------------3------------3--------------3-----------
+ES UN CANTO DE GRATITUD
+C7
+HACIA EL QUE NOS BRINDA DE SU AMOR ETERNO
 
-G |--------------------------------------------5----3-------5----3----
-D |-----5----3-------5----3-------5----3---------3h5--------
+Y NOS HA TRAIDO PERDON
+Gm7
+UNETE A LOS MILES QUE LO ESTAN CANTANDO
+
+CANTAN DE SU GRAN SALVACION
+
+            Gm                  F
+CANTAMOS CRISTO ES EL SEÑOR DE LAS NACIONES
+ C7/E                  Eb
+CRISTO ES EL SEÑOR DEL UNIVERSO
+  Gm                 F
+CADA LENGUA TRIBU Y CADA PUEBLO
+c7/E                 Eb                   Dadd2   D7
+EN SUS RODILLAS DECLARARAN QUE ES SEÑOR
+
+
+  Gm
+//CRISTO, CRISTO, JESUCRISTO, JESUCRISTO
+   C7             Dsus4      D7
+CRISTO  CRISTO ES SEÑOR//

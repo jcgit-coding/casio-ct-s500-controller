@@ -1,4 +1,8 @@
-FA          FA/LA
+(ACORDES ORIGINALES DE LA GRABACION)
+
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION
+
+      FA          FA/LA
 EN EL FONDO DE MI ALMA
 
         SIb    FA/LA        LA+(aug)7(b9)
@@ -18,3 +22,93 @@ LOS AMADOS DE DIOS
 
   Sib/Re      DO/MI     SIb/FA      FA     DO
     COM   -   PREN   -   DER
+
+FA  FA/LA    SIb       FA/LA     MIm7     LA+(aug)7(b9)
+PAZ, PAZ     CUAN DULCE PAZ
+
+   REm            SOL9   SOLm7   MIb+(aug)/REb  Solm7/Do
+ES AQUELLA QUE EL PADRE ME DA
+
+DO    DOm9       FA         FA/LA
+YO LE RUEGO QUE INUNDE
+
+    SIbsus2        SIdim
+POR SIEMPRE TODO MI SER
+
+       FA        DO
+EN SUS ONDAS DE AMOR
+
+  REm   Do7/Mi  SIb/FA      REb     MIb
+  CE  -  LES  -  TIAL
+
+LAb DO7ab/Do  REb      Lab/Do  SOLm7(b-5)  Do7(b9)
+PAZ,    PAZ   CUAN DULCE PAZ
+
+     FAm          SIb9
+ES AQUELLA QUE EL PADRE
+
+SIbmibm(add4)   SOLb+(aug)/FAb       SIbm
+   ME DA               -               A
+
+      MIbm       FA
+YO LE RUEGO QUE INUNDE
+
+     REb           REdim
+POR SIEMPRE TODO MI SER
+
+       LAb      MIb
+EN SUS ONDAS DE AMOR
+
+ FAm7    MIb7    REb    LAb   MIb   LAb
+  CE  -  LES  -  TIAL
+
+      MIbm       LAb9
+YO LE RUEGO QUE INUNDE
+
+REbReb(add9)    SIdim7
+POR SIEMPRE MI   SER
+
+       LAb       MIb   FAm  Mib/Sol   REb    LAb
+EN SUS ONDAS DE AMOR   CE  -  LES  -  TIAL
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
+
+   FA/LA  LA+(aug)7(b9)  SOL6/9  SOLm/FA  DO/MI  Sib/Re
+E    X          0           0       3       0       X
+A    0          0           0       5       3       X
+D    3          5           2       3       2       0
+G    2          6           2       3       0       3
+B    1          6           3       6       1       3
+E    1          6           3       3       3       1
+
+FSIbFa(add9)/La  Sib(add9)  MIb9  SIb/FA  SOL9  MIb+(aug)/REb
+E       X           1        X      X      X         X
+A       0           1        6      1      0         6
+D       3           3        5      3      3         5
+G       0           3        6      3      4         4
+B       1           1        6      3      3         0
+E       3           1        6      X      5         3
+
+   Solm7/Do  DOm9  SIbsus2  SIdim  Do7/Mi  Lab/Do  Solm7(b-5)
+E      3       X      X       X       X       4        X
+A      3       3      X       2       X       6        X
+D      3       0      X       3       2       6        3
+G      3       0      3       4       3       X        3
+B      3       4      1       3       1       4        2
+E      3       6      1       X       3       4        3
+
+DO7SIbm(b9)  SIb9  Sibm(add4)  SOLb+(aug)/FAb  REdim  LAb9
+E     X       X       X              X          X      X
+A     X       1       1              X          X      X
+D     2       0       1              2          0      4
+G     3       1       1              3          1      5
+B     2       1       2              3          3      4
+E     3       1       1              2          1      6
+
+REbReb(add9)  SIdim7  Mib/Sol
+E      X         X       X
+A      X         X       X
+D      1         0       X
+G      1         1       3
+B      2         0       4
+E      1         1       3

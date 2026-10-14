@@ -1,19 +1,56 @@
-F: 133211     Em7b5: XX2333  G79:XX5465
-G79:X.10.9.10.10.10   C79: 032333
-C: 032010  BbMaj7: 113231  F/A: X0321X
-G7sus4 : 353533  C7sus4: 335363
-Fsus4: 133311 A7:002020 A7sus4: 002030
+Acordes utilizados:
+F: 133211   Edism: 012020 o 002323  Dm: X00231
+
+Dm7/C: 030211  Bb: 113331  Am: 002210
+
+G79: 323200   C: 032010  C7: 032310  C/G:332010
+
+Bbsus2: 113311  G7: 353433  C7sus4: 335363
+C79: 032333
 Dm7: 557565 ....RECUERDA LA "X" ES CUERDA QUE
 NO DEBE SONAR Y QUE "0" ES CUERDA AL AIRE
+
+haz 6 lineas en horizontal que simbolizaran
+las 6 cuerdas de la guitarra
+y el primer numero lo pones en la linea de mas
+abajo y el resto en cada linea siguiente
+y ahi tendras el acorde en tabulado
+eso es lo que significan las cifras de arriba
+de esta pagina.
+
 NO TE OLVIDES DE VISITAR LA PAGINA: WWW.RTVAMISTAD.NET
 
-puedes sustituir el acorde de (Em7b5) por un simple (A7)
 
-C7  F    A7    Dm
-Alegre  muy alegre
-Bb           Am           G           C
+C79 F   Edimm Dm   Dm7/C
+Alegre muy alegre
+Bb           Am           G79        C     C79
 Alegre es el pueblo cuyo Dios es el Señor
-C7  F     A7     Dm
-Alegre    muy  alegre
-Bb            Am          C      C7    F
-Alegre es el pueblo cuyo Dios es el  Señor
+F      Edimm  Dm    Dm7/C
+Alegre muy alegre
+Bb            Am          C/G        F
+Alegre es el pueblo cuyo Dios es el Señor
+
+
+
+F         C         Bbsus2  F
+Es es el Dios de mi Salvacion
+        C           Bb      F
+El es Señor de toda la Creacion
+    Bb         F         Edimm        Dm7
+Es Grande en Justicia y Eterno en su Verdad
+     G7           C7sus4   C7
+Me alegrare en su Fidelidad.
+
+
+
+(ESTRIBILLO)
+
+
+F         C           Bbsus2  F
+Su Redencion me trajo Libertad
+        C              Bb   F
+En su Perdon encuentro Sanidad
+    Bb        F          Edimm      Dm7
+Es digno de Alabanza ,le dare mi Adoracion
+     G7           C7sus4  C7
+Me alegrare en su Salvacion.

@@ -1,18 +1,114 @@
-INTRO: G    D/G    G    C2/G //
+Intro: // G - C - G - C //
 
-VERSO1
-G                     D/G                 G                C2/G
-Te exaltamos sobre un trono de alabanza,  Te exaltamos, oh Señor
-G                  D/G              G               C2/G        Em  D
-Nuestras alabanzas subirán, Delante de tu trono, oh Señor //
+   G
+// Te exaltamos
+         C
+Sobre un trono de alabanza
+G
+Te exaltamos
+   C
+Oh Señor
+G
+Nuestras alabanzas
+C
+Subirán
+        G
+Delante de Tu trono
+     C
+Oh Señor //
 
+ D      G
+Olor fragante
+  D  C G
+A Ti Señor
+  D        G
+Honor y alabanza
+    D      C  G
+Por siempre daré
+C
+Al que está sentado
+Am
+Sobre el trono
+      D
+De mi Dios
 
-CORO
- D      G       D    G       D       G         D        G
-Olor fragante a ti Señor, Honor y alabanza por siempre daré
-C                   Am                   D
-Al que está sentado sobre el trono de mi Dios
+G
+Te exaltamos
+         C
+Sobre un trono de alabanza
+G
+Te exaltamos
+   C
+Oh Señor
+G
+Nuestras alabanzas
+C
+Subirán
+        G
+Delante de Tu trono
+     C
+Oh Señor
 
-VERSO1
+ D      G
+Olor fragante
+  D  C G
+A Ti Señor
+  D        G
+Honor y alabanza
+    D      C  G
+Por siempre daré
+Am
+Al que está sentado
+F
+Sobre el trono
+      D      E
+De mi Dios
 
-CORO
+   G#
+// Majestuosamente
+C#
+Reinas sin igual
+   G#            C#
+Tú eres poderoso Dios
+G#
+Te proclamaré
+   C#
+Te exaltaré
+           G#
+Tú eres el Rey
+             C#   D#
+Sobre mi corazón //
+
+G#
+Te exaltamos
+         C#
+Sobre un trono de alabanza
+G#
+Te exaltamos
+   F#   Fm
+Oh Señor
+G#
+Nuestras alabanzas
+C#
+Subirán
+        G#
+Delante de Tu trono
+     C#
+Oh Señor
+
+G#
+Te exaltamos
+         C#
+Sobre un trono de alabanza
+G#
+Te exaltamos
+   F#  F Fm
+Oh Señor
+G#
+Nuestras alabanzas
+C#
+Subirán
+        G#
+Delante de Tu trono
+     E  F# G#
+Oh Señor

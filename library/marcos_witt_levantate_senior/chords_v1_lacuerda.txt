@@ -1,24 +1,114 @@
-Afinación: G D A E
+(Los acordes se tocan exactamente
+sobre la letra en que se encuentran.
+Los números 1[ y 2[ sirven para cambiar
+el final de una parte que se repite.)
 
-  (0:40)   (1:10)  (2:19)
-G |-------|-------|---------------------------------------------------
-D |-------|-------|--------11------15s17-15-13------------------------
-A |-3-----|--3----|3/15-15----15---------------13-13s15--13h15-13h15-
-E |-------|-------|---------------------------------------------------
+Intro: Bb/C - Ab/C - Bb/C - Cm - Bb/C - Cm - Ab/C - Bb/C - 
 
-                   (3:10)    (3:38)   (4:03)
-G |---------------|---------|--------|-12-12-11-11-9-9--------10-10--
-D |---------------|---------|--------|-----------------12-12---------
-A |---13h15\---3--|----3----|----3---|-------------------------------
-E |---------------|---------|--------|-------------------------------
+  Cm           Bb/C      Cm - Ab/C - Bb/C
+  Levántate, levántate Señor.
+  Cm           Eb   Gm7   Cm - Bb/C
+1[Levántate, levántate Señor. (bis)
+  Cm           Eb   Gm7   Cm 
+2[Levántate, levántate Señor.
 
-G |8-8-7-7--------------------------------|
-D |--------10-10-----------------------3--|
-A |---------------10-10-8-8-7-7-----------|
-E |-----------------------------10-10-----|
+ESTROFA:
+  Cm           Bb        Cm - Ab - Bb
+  Levántate, levántate Señor.
+  Cm           Eb   Bb   Cm(corte)
+1[Levántate, levántate Señor. (bis)
+  Cm           Eb   Bb   Cm - Bb - Cm7/G
+2[Levántate, levántate Señor.
 
-Aquí empieza la canción Levántate
+Pre-CORO:
+  Fm7                  Bb     Cm
+  Huyan delante de Ti, tus enemigos,
+  Bb  Cm7/G   Fm7
+  se  dis  -  persen delante de Ti
+  Gsus4                 G(3 cortes)  Bb/C (Cm - Ab/C - Bb/C)x2
+1[todos aquellos que aborrecen tu presen - cia.      
 
-  (4:44) Intro
-G |-------------------------------------------------------------------
-D |---------------------------------
+(ESTROFA, Pre-CORO)
+
+  Gsus4                 G(3 cortes)  Bb/C  Cm - Cm(corte)
+2[todos aquellos que aborrecen tu presen - cia.
+
+CORO:
+        Fm
+  Tu presencia reinará
+  Bb           Cm
+  sobre todo imperio,
+  Bb  Cm7/G   Fm
+  tu  pre  -  sencia reinará,
+    Gsus4         G(3 cortes)    Bb/C  (Cm - Ab/C - Bb/C)x2
+  gobernará sobre todo     principa  -  do.
+
+(se vuelve a la ESTROFA y sigue desde allí)
+
+    Cm        Bb   Cm         Ab - Bb
+  espíritu de te - mor, ¡huye!
+    Cm     Eb  Bb/D  Cm         Ab - Bb
+  espíritu de  mal - dad, ¡huye!
+    Cm        Bb Cm         Ab - Bb
+  espíritu de rencor, ¡huye!
+    Cm        Ab  Gsus4
+  espíritu de división, ¡huye!.
+    Cm             Bb   Cm         Ab - Bb
+  espíritu de enferme - dad, ¡huye!
+    Cm        Eb   Bb/D   Cm          Ab - Bb
+  espíritu de re - be  -  lión, ¡huye!
+    Cm       Bb   Cm         Ab - Bb
+  espíritu inmo - ral, ¡huye!
+    Cm          Ab  Gsus4       G(3 cortes)
+  espíritu de oscuridad, ¡huye!.
+
+(CORO)
+
+    Cm           Bb Cm          Ab - Bb
+  espíritu de perversión, ¡huye!
+    Cm        Eb   Bb/D Cm          Ab - Bb
+  espíritu de am - bi - ción, ¡huye!
+    Cm             Bb   Cm         Ab - Bb
+  espíritu de profana - dor, ¡huye!
+    Cm        Ab  Gsus4
+  espíritu de vanidad, ¡huye!.
+    Cm             Bb   Cm          Ab - Bb
+  espíritu de murmura - ción, ¡huye!
+    Cm        Eb  Bb/D  Cm           Ab - Bb
+  espíritu de constri - cción, ¡huye!
+    Cm          Bb   Cm         Ab - Bb
+  espíritu hechice - ría, ¡huye!
+    Cm        Ab    Gsus4      G(3 cortes)
+  espíritu de mortandad, ¡huye!.
+
+CORO:
+        Fm
+  Tu presencia reinará
+  Bb           Cm
+  sobre todo imperio,
+  Bb  Cm7/G   Fm
+  tu  pre  -  sencia reinará,
+    Gsus4         G(3 cortes)    Bb/C   Cm
+1[gobernará sobre todo     principa  -  do. [bis]
+
+Outro:
+    Gsus4         G(3 cortes)    Bb/C  (Cm - Ab/C - Bb/C)x2
+2[gobernará sobre todo     principa  -  do.
+    Cm      Bb   Cm(corte)
+  Levántate Se - ñor.
+
+
+  ACORDES:
+      EADGBe
+Bb/C  X3333X 
+Ab/C  X3111X
+Cm    355433
+Eb    XX1343
+Gm7   353333
+Ab    466544
+Bb    X13331
+Fm7   131111
+Gsus4 355533
+Fm    133111
+Cm7/G 335343
+Bb/D  XX0331

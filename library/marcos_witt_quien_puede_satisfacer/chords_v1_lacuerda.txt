@@ -1,20 +1,26 @@
-Intro: C-Gm7-C7-F-Fm
-       C-Gm7-C7-F-Dm7
+Intro: C
 
-
-Dm7     Cmaj7          Gm9
+         C         Bb   Gm7
 Quièn puede satisfacer
- C7   F(add2) Fm
-Mi ser como   tu
-  Am9          Em7
+        F
+Mi ser como tu
+  Am         Em
 Quièn puede amarme
-           Bbmaj9     Bb/Eb Dm7
+           F        G
 darme consuelo com Tù
-  Dm7     Am9            Gm7   C7  F  Bb9
-Quièn pudiera ser màs ver - dadero y fiel
-  Bb9    Am9           Em7
+         C             Bb   Gm7   F
+Quièn pudiera ser màs ver - da - dero y fiel
+          Am        Em
 Quièn puede satisfacer
-         Fmaj7        C2/E    G7sus
-Quièn puede satisfacer   como   Tù
+          Am        Em      G
+Quièn puede satisfacer como Tù
 
-Coro:
+coro:
+C                  Am
+    Hay una fuente     y el es el Rey
+F             C     F          G
+    Es victorioso y el es el Señor
+C                  Am
+    El es mi roca,     mi salvaciòn
+F             C         F     G     C
+    Bendito Cristo, El reina con poder

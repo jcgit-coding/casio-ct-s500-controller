@@ -1,21 +1,47 @@
-Afinación: G D A E B
+(Acordes Originales de la Grabación)
+P.D. Tengo partituras para piano de esta cancion.
 
-  Intro
-G |------------------------------------------10-9--7------------------
-D |--------------------------------------------------7---------------
-A |----------------------------5-5----5--5--------------5----55\-----
-E |-6-6----6--6---5-5----5--5------------------------------5----------
-B |-------------------------------------------------------------------
+       Bbmaj7
+ME HAS LLAMADO A CONOCERTE
 
-G |-------------------------------------------------------|
-D |-------------------------------------------------------|
-A |-------------------------------------------------------|
-E |6-6----6--6---5-5----5--5----3-3---3-3-3----5-5---5\---|
-B |-------------------------------------------------------|
+         Am7                 Am7/D
+ME HAS LLAMADO A AMARTE MAS, JESUS
 
-  Versos
-G |-------------------------------------------------------------------
-D |-------------------------------------------------------------------
-A |------------------------------5-5----5--5---5-5----5--5-5\--------
-E |-6-6----6--6----5-5----5--5----------------5-----------------6-6---
-B |-------------
+       Bbmaj7
+ME HAS LLAMADO A OBEDECERTE
+
+     Am7               Am7/D
+Y A VIVIR EN SANTIDAD, JESUS
+
+   Bbmaj7
+NO QUIERES SACRIFICIOS
+
+    Am7               Am7/D     G
+HOLOCAUSTOS NADA SON, JESUS
+
+       SIbmaj7
+LO QUE QUIERES ES MI VIDA
+
+    Am7                      G      A+aug7(b9)
+Y TAMBIEN MI CORAZON, TE LO DOY, TE LO DOY
+
+        Dm      Csus2,sus4
+HOY MI VIDA YO TE OFREZCO
+
+        G                    C    G/B    C
+COMO OFRENDA ANTE TUS PIES
+
+     Dm     Csus2,sus4
+MI CORAZON TE ENTREGO
+
+ G              C   G/B   C
+TOMALO MI REY
+
+      Dm      Csus2,sus4
+SIN EXCUSAS NI RESERVAS
+
+     G                   C   G/B   C
+TODO LO QUE SOY TE DOY
+
+     Dm         Csus4  Am7   Bbmaj7
+VEN AHORA, VEN Y REINA EN MI CORAZON

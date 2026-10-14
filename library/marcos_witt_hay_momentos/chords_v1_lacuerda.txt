@@ -1,20 +1,38 @@
-Gadd2
+G
 Hay momentos que
-        G9/F       E
+        F         E
 no deberían terminar,
-Am7           E/G#
+Am7           Am/G
 Hay segundos que
-             Am7/G       D
+             C/D        D
 tendrían que ser eternidad
-    B7    Em          B/D#
+    B7    Em
 cuando tu Espíritu Señor
-    Dm7         F/G
+    Dm7         G
 se toca con el mío
-C     G/B  Am7         D7sus4     D
+C         Am         D7
 Y mi corazón estalla en adoración.
 
 CORO:
     G
 Te amo mi Señor
-     G)/F             E
+     F             E
 Se acaban las palabras
+   Am            Cm7          C/D   D
+Sólo me queda mi alma para cantarte
+     G
+Te adoro mi Señor
+        F          E
+no hay nada alrededor
+Am7               E
+Sólo estamos tú y yo
+C      G     D     G
+Sólo estamos tú y yo
+
+Am/G:
+EADGBe
+302210
+
+C/D:
+EADGBe
+000010

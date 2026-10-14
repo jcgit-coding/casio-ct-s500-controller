@@ -1,19 +1,15 @@
-Intro : Bb /D  EbM7 Gm F (Figura 1)
-        Bb /D  EbM7 Gm F/A
-        Bb /D  EbM7 Gm F Gm
+A    F#m        D    E     D    E       A
+Enséñame tu camino Señor y andaré en tu luz.
+
+F#m                               D              E  
+Dame un corazón entregado a ti para honrarte, oh Dios
 
 
-Bb2   Bb2/G        Cm7     F   F/D    Cm7  F  Eb /F    (Figura 1)
- Enséñame     tu camino Señor       y andaré   en  tu luz.
-
-Gm      Gmmaj7  Gm7         Gm/E  Cm7  Dm7  EbM7 C/E     F    F/D
-Dame un corazón entregado a  ti  para  hon--rar--te,  oh Dios
-
-  EbM7  F/Eb   Dm7       Gm7
+  F#m     E    C#m      F#m
 //Purifícame, límpiame Señor;
 
-  Cm7     Bb /D          Bb /Eb       F       F/D
-y líbrame  de   lo que impida  el fluir//...
+       D        F#m            E
+y líbrame de lo que impida el fluir//...
 
-Eb /F    (Figura 1)
- De  tu amor.
+A
+De tu amor.

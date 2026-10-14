@@ -1,20 +1,45 @@
------------------------------------------
+Intro:
+//Dm - Bb,F,Gm - Gm,F,Bb
 
-/ / INTRO (Primer parte división sugerida por la cuerda)
-Dm7 - - Bbmaj7/9 /F Gm7 | - - Gm7 /A Bbmaj7/9 |
+           A - Bb - F -E
+Bb,F,Gm - Am//
 
-INTRO (Segunda parte/ división sugerida por la cuerda)
-- - Bbmaj7/9 /F Gm7 | - - /A /Bb /F C/A |                / /
+VERSO:
+Dm                 Gm
+Todas las naciones hablan de tu nombre,
+Bb                 Gm              Am
+Todo ser creado confiesen que eres Dios.
+Dm                     Gm
+Todas las criaturas se rinden a su nombre,
+Bb                    Gm              Am
+Todo el firmamento confiesen que eres Dios.
 
-VERSO 1
- Dm7              Bbmaj7/9  /F Gm7                Gm7 /A Bbmaj7/9
-Todas las naciones             hablen de tu nombre
-              Bbmaj7/9 /F  Gm7        /A    /Bb /F C/A
-Todo ser creado        confiese que eres Dios
- Dm7             Bbmaj7/9 /F Gm7             Gm7 /A Bbmaj7/9
-Todas las criaturas       se rinden a tu nombre
-                 Bbmaj7/9 /F  Gm7         /A /Bb /F C/A
-Todo el firmamento         confiese que eres Dios.
+PreCoro:
+Bb             Gm
+Confesamos que tú eres Santo
+Dm             Am
+Confesamos que tú eres digno
+Bb             Gm
+Confesamos que tú eres Santo
+Dm               Am
+Inigualable eres tú.
 
-PRECORO
-Bbmaj7/9                  Gm7
+
+CORO:
+ Dm                    Bb
+//Tu nombre es Cristo, Dios poderoso
+Gm                  Bb      Am      Dm
+Tu nombre es digno, Rey asombroso//
+
+
+PUENTE:
+D          Gm       Am       C
+//Cantaré, gritaré, gloria, gloria
+D        Gm       Am       C
+Cantaré, gritaré, gloria, gloria//
+
+
+SOLO:
+//D - Dm,C,Bm - Bb,F,Gm -
+
+Gm,F,Bb - Bb,Am - Bb,Bb,Am//

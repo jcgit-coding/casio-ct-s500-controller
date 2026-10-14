@@ -1,20 +1,32 @@
-A/G: 30222X  Dmaj7: 000222  A9: 002200
-E6: 020120   Gmaj7: 3x443x  A: 002220
-D6: X00202   A6: 002022
-recuerda que "0" es cuerda al aire y que "X" es
-cuerda muda ,que no debe sonar.
-visita www.rtvamistad.net
-**********************************************************************
-
-Dmaj7  F#7   Bm7    Am7 D7
+Dmaj7  F#9   Bm7    Am7 D7
 Ayer, hoy y siempre
-  Gmaj7   B7  Em7
+  Gmaj7  B/D#  Em7
 Lo tengo  decidido
-     A           A/G  F#m7    B7
+     A9         A7/G  F#m7    B4 B
 Siempre serás mi fiel amigo
-    Em     A9       Dmaj7  A7
+    Em7     A9       Dmaj7  A4 A/C#
 Siempre caminaré contigo
 
-Dmaj7 F#7    Bm7   Am7 D7
+Dmaj7 F#9    Bm7   Am7 D7
 Ayer hoy y siempre
-   Gmaj7   B7  Em7
+   Gmaj7 B/D#  Em7
+Te tengo  reservado
+    A9     A7/G  F#m7    B4 B
+Mi corazón y mi cariño
+    Em7     A9       Dmaj7
+A Tí Jesús mi gran amigo
+
+A  G      D/F#
+Tú, Señor amado
+A  G      D/F#
+Mi amor divino
+       Bm               F#m
+No hay otro dueño en mi vida
+       E                 A
+No hay otro por quien viviría
+
+         D
+...sólo Tu
+
+Obs: Acordes non son originales,
+pero ya se puede hacer una idea

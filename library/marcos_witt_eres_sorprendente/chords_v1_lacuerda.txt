@@ -1,3 +1,8 @@
+Bpm: 107
+Tono: Bb (Sube a C)
+
+
+Intro:
 Bb - Cm7 - Eb - F - Bb - F
 
 
@@ -18,3 +23,72 @@ Nunca me dejó, me favoreció
     Eb
 Lo que pensabas Tú
  F                       Bb      F
+Siempre superó lo que pensaba yo
+
+
+Pre-coro 1:
+  Gm
+Jesús, eres sorprendente
+     Cm7
+Lo mejor ha sido conocerte
+       Eb                 F
+Cuando pienso en tus maravillas
+      Gm
+Caigo de rodillas
+
+
+Coro:
+    Bb      Cm7
+Eres inexplicable
+           Eb  F     Bb    F
+Tu amor es i - nterminable
+     Bb    Cm7
+Eres insuperable
+          Eb F      Bb    F
+Amarte es i  -  nevitable
+
+
+Pre-coro 2:
+  Gm
+Jesús, eres sorprendente
+     Cm7
+Lo mejor ha sido conocerte
+       Eb                 F
+Cuando pienso en tus maravillas
+      Dm7       G
+Caigo de rodillas
+
+
+(Sube 1 tono)
+
+
+Coro↑:
+     C      Dm7
+Eres inexplicable
+           F   G      C    G
+Tu amor es i - nterminable
+     C     Dm7
+Eres insuperable,
+          F  G       C     G
+Amarte es i  -  nevitable
+
+
+Outro:
+
+ C
+Nunca imaginé
+            Dm7
+Todo lo que Tú pensabas, Dios
+         F          G
+Cada día eres la razón
+             C             G
+De vivir Tu sorprendente amor
+
+ C
+Nunca imaginé
+            Dm7
+Todo lo que Tú pensabas, Dios
+         F          G
+Cada día eres la razón
+             C
+De vivir Tu sorprendente amor

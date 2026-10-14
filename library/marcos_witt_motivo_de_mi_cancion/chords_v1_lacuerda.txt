@@ -1,19 +1,47 @@
-SOL                   DO             RE      LAm  SI
-     B B B    A   B   B*C *C  B  *D *D  *D *C B A
-    JESUCRISTO ES EL MO TI VO DE MI CANCION
-    SOL              DO               RE  SI
-    B B   B B   A B  *C *C G# *D  *D *D
-    OTRA RAZON YO NO TENGO PORQUE CANTAR
-    MIm           SIm  SI7               MI   DO
-   -B  B B B B G# A    A A  A  A G# A B  A  G#
-    LA MELODIA ES EL , TODA MI VIDA ESTA EN EL
-    LAm                  RE            SOL  RE  DO SOL RE
-    *C*C *C *C   *C  E F F   D  B  B  G#
-    JESUCRISTO ES EL MOTIVO DE MI CANCION
-    SOL                 DO      RE                 SOL   SI
-   -B -B  -B-B  C   D D  E E     F F   F  F G#  A A  B D
-    MUCHAS RAZONES PARA VIVIR , MUCHAS RAZONES PARA MORIR
-    DO              LAm      DO       SOL                  DO
-     E *C   B*C B  *C B  A  G# E F D -B  -B  -B -B  C  D   D   E  E
-    MUCHAS RAZONES PARA DAR AMOR ,    NO SIEMPRE SE SABEN LOS PORQUE
-    RE                  SOL    DO           LAm          RE
+Chords: 
+
+      strings 
+      (654321) 
+       ------ 
+G     = 320003 
+C     = 032010 
+D     = 000232 
+Am    = 002210 
+Bm    = 224432 
+Em    = 022000 
+B7    = 021202 
+D7    = 000212 
+
+
+G              C          D/A  D 
+Jesucristo es el motivo de mi cancion 
+G             C         D     D7   
+Otra razon yo no tengo porque cantar 
+Am         Bm    B7            Em 
+La melodia es El, toda mi vida esta en El 
+Am              D7          G 
+Jesucristo es el motivo de mi cancion 
+
+
+G              C 
+Muchas razones para vivir 
+D              G 
+Muchas razones para morir 
+C         Am       D 
+Muchas razones para dar amor 
+G                   C 
+No siempre cesa de los porques 
+D                 G 
+La vida pasa con rapidez 
+C       Am        D  D7 
+Cada momento yo aprobechare 
+Bm                  Em 
+Para darle mis canciones 
+Am                   D 
+Ofrecer mis oraciones 
+Bm                  Em 
+Entrtegar mi vida entera 
+Am           D D7 
+Al que todo me da 
+
+Ojalá les guste y les sea de bendicion!!!

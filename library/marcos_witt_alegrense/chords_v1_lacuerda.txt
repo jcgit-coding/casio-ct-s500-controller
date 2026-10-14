@@ -1,4 +1,8 @@
-SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
+(ACORDES ORIGINALES DE LA GRABACION)
+
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION
+
+    SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
 ALEGRENSE                       ALEGRENSE
 
 FA  SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
@@ -18,3 +22,46 @@ ALEGRENSE                       ALEGRENSE
 
 REsRE7          RE7            Re7(#9)
 LOS QUE CONFIAN EN EL SEÑOR
+
+    SOLm7   REm7   SOLm7
+ALEGRENSE
+
+SIb         Sib(add9)     DOm7
+CON VOCES DE JUBILO
+
+          SOLm7        Solm7/Fa
+EXALTEN SU NOMBRE
+
+              MIbmaj9       DOm7
+PORQUE EL NOS DEFIENDE
+
+RE7sus4/La       Re7(#9)
+ALEGRENSE
+
+    SOLm7
+ALEGRENSE....
+
+
+              (GUITARRA & BASS)
+
+//Sol(Omit3) Re(Omit3) Mib(add9) Fa(Omit3)
+  Sol(Omit3) Re(Omit3) Mib(Omit3) Fa(Omit3)//
+
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
+
+  RSIbIbmaj9  Resus4/La  Re7(#9)  Sib(add9)  Solm7/Fa
+E     X         X         X         1          3
+A     X         0         0         1          5
+D     1         0         3         3          3
+G     3         0         2         3          3
+B     3         3         1         1          6
+E     1         3         2         1          3
+
+SRMFMIbol(Omit3)  Re(Omit3)  Mib(add9)  Fa(Omit3)  Mib(Omit3)
+E      3          X          X          1          X
+A      5          5          X          3          6
+D      5          7          3          3          8
+G      X          7          3          X          8
+B      X          X          4          X          X
+E      X          X          3          X          X

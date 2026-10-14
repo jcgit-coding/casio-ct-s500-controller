@@ -1,20 +1,68 @@
-Intro: G-C-GSUS2-CSUS2
+Intro: C-C-C-G
 
- G            D/F#
+ G            D
 Tengo tanto que decirte
 Em              D
 Tanto que expresar
- C                  Am7
+ C                  Am
 Tengo tantas ganas de cantarte
         Dsus2         D
 Que no puedo esperar más
 
 
-   G                  D/F#
+   G                  D
 Tú eres aquel que me ha traído
-   Em7        DSUS2
+   Em        D
 Total felicidad
-   C               Am7
+   C               Am
 Tu eres aquel que con tocarme
     Dsus2       D
 Me da completa paz
+
+
+Coro:
+      G/C       D/C
+Eres todo para mi
+        Bm         Em
+Por ti yo puedo vivir
+Am            Bm
+Contigo toda cambia
+        C    Am        D
+Por ti hay aliento en mi
+
+      G/C       D/C
+Eres todo para mí
+        Bm         Em
+Por ti yo puedo vivir
+   Am          Bm
+Señor eres mi vida
+    C  D
+Te doy   mi adoración
+
+////C-C-G-G////
+
+-Primera parte otra vez-
+
+-Coro 2x-
+Después cambia nota:
+
+      Bb/Eb     F/Eb
+Eres todo para mi
+        Dm         Gm
+Por ti yo puedo vivir
+Cm            Dm
+Contigo toda cambia
+        Eb   Cm        F
+Por ti hay aliento en mi
+
+      Bb/Eb     F/Eb
+Eres todo para mí
+        Dm         Gm
+Por ti yo puedo vivir
+   Cm          Dm
+Señor eres mi vida
+    Eb F
+Te doy   mi adoración
+
+Final:
+Eb-Eb-Eb-Eb-Bb-Bb-Eb-Eb-Bb-Bb

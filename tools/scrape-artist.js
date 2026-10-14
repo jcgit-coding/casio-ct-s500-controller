@@ -219,13 +219,37 @@ function extractLacuerdaText(html) {
 }
 
 async function lcSongVersions(artistSlug, songSlug, lcSlug) {
-    const artist  = lcSlug || artistSlug.replace(/-/g, '_');
-    const baseUrl = `${LC_BASE}/${artist}/${songSlug}`;
+    const artist   = lcSlug || artistSlug.replace(/-/g, '_');
+    // lacuerda: la versión completa está en .shtml; la URL sin extensión tiene preview recortado
+    const shtmlUrl = `${LC_BASE}/${artist}/${songSlug}.shtml`;
+    const baseUrl  = `${LC_BASE}/${artist}/${songSlug}`;
     const versions = [];
     try {
-        const html = await fetchHTML(baseUrl);
-        const text = extractLacuerdaText(html);
-        if (text) versions.push({ source: baseUrl, text, version: 1 });
+        // Intentar .shtml primero (contenido más completo)
+        let html, usedUrl;
+        try {
+            html = await fetchHTML(shtmlUrl);
+            usedUrl = shtmlUrl;
+        } catch {
+            html = await fetchHTML(baseUrl);
+            usedUrl = baseUrl;
+        }
+        // Recoger TODOS los <pre> del rtBody (puede haber varias versiones inline)
+        const rtBodies = [...html.matchAll(/<div[^>]*class='rtBody'[^>]*>([\s\S]*?)<\/div>/gi)];
+        if (rtBodies.length > 0) {
+            rtBodies.forEach((m, i) => {
+                const preM = m[1].match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
+                if (preM) {
+                    const txt = decodeEntities(stripTags(preM[1])).trim();
+                    if (txt.length > 50) versions.push({ source: usedUrl, text: txt, version: i + 1 });
+                }
+            });
+        }
+        // Fallback: pre más largo de la página
+        if (versions.length === 0) {
+            const text = extractLacuerdaText(html);
+            if (text) versions.push({ source: usedUrl, text, version: 1 });
+        }
     } catch (e) { console.warn(`  [error lc] ${songSlug}: ${e.message}`); }
     return versions;
 }

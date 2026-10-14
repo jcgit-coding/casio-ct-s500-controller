@@ -1,3 +1,7 @@
+Y todo ojo le verá
+Juan Salinas, Coalo Zamorano, Gamaliel Morán
+Preparad el camino
+
 Introducción: Dm9 - G6 - Dm9 - G6 - Dm9 - G6 - Dm9 - G6
 
 Coro:
@@ -17,3 +21,35 @@ Fm7(add4)           Ebmaj7        Abmaj7    F(add9)/G  -  Aaug
 Y el Espíritu y la Iglesia dicen: ¡Ven Señor Jesús!
 
 --- Coro ---
+
+Dm9                   G9       Dm9             G9
+Bienaventurado el que quiera beber del agua de vida.
+Fm7(add4)          Ebmaj7         Abmaj7    F(add9)/G  -  Aaug
+Y el Espíritu y la Iglesia dicen: ¡Ven Señor Jesús!
+
+--- Coro ---
+
+Puente (No voz principal): Dm - Dm6 - Dm7 - Dm(maj7) - Dm - Dm6 - Dm7 - Dm(maj7)  
+
+Dm              Dm6              Dm7        Dm(maj7)
+Sobre las nubes volverá con gran gloria y majestad
+      Dm        Dm6            Dm7    Dm(maj7) -  Gm7-5/A
+Sobre las nubes volverá y todo ojo le verá
+
+
+
+          Dm9      G6        Fmaj7       Em7
+// Y todo ojo le verá cuando vuelva en poder, 
+          Abmaj9      Bb(add2)   Gm9            C 
+sobre las nubes volverá con gran gloria y majestad //
+
+--- Coro ---
+
+Finalización: 
+
+Dm9 - Dm6/9 - Dm9 - Db9
+Dm9 - Dm6/9 - Dm9 - Db6/9
+Dm9 - G6/9 - (Db6/9/G) - Dm9 - G6/9 - (Gaug) - Abmaj9 - Bb(add2) - Gm7 - C  -  Aaug/C#
+Dm9 - G6/9 - (Db6/9/G) - Dm9 - G6/9 - (Gaug) - Abmaj9 - Bb(add2) - Gm7 - C  ---Arpeggio--- D(omit3)
+
+Arpeggio: C - D - F - D - // - G - A - G - F - D - F - D - C - F - D

@@ -1,20 +1,54 @@
-SOL
-MARAVILLOSO DIOS 
+INTRO: A7 - D
 
-FA#m7Fa#m7(add4)    SI    MIm7
-TU   PERMANECES   SIEMPRE FIEL
+VERSO 1
 
-   LAm7                       REsus4      RE
+  G               F#m        Bm          Em7
+MARAVILLOSO DIOS TU PERMANECES SIEMPRE FIEL
+
+ Am7         C               Dsus4       D
 TU GLORIA Y TU PODER LLENAN MI VIDA DE TU SER
 
-Sol(add9)
-SOSTENME CON TU AMOR
+  G                      F#m7       Bm        Em7
+SOSTENME CON TU AMOR CON LA VICTORIA EN TU PERDON
 
-FA#m7 Fa#m7(add4)    SI    MIm7
-CON LA VICTORIA EN   TU   PERDON 
 
- LAm7SOL    DO/DO/RE RE    Sol(add9)   Do/Re
-DESDE MI CORAZON   TE CANTO HOY            [COMIENZA]
+ Am7        D            G      C/D
+DESDE MI CORAZÓN   TE CANTO HOY
 
-  LAmSOL     DO/RE  RE     Sol(add9)   SIm7   MI
-(DESDE MI CORAZON  TE CANTO HOY)
+VERSO 2
+
+  G               F#m        Bm          Em7
+MARAVILLOSO DIOS TU PERMANECES SIEMPRE FIEL
+
+ Am7         C               Dsus4       D
+TU GLORIA Y TU PODER LLENAN MI VIDA DE TU SER
+
+  G                      F#m7       Bm        Em7
+SOSTENME CON TU AMOR CON LA VICTORIA EN TU PERDON
+
+
+ Am7        D            G       Bm - E - A
+DESDE MI CORAZÓN   TE CANTO HOY
+
+SUBE 1 TONO
+
+  A                 G#m      C#7      F#m7
+MARAVILLOSO DIOS TU PERMANECES SIEMPRE FIEL
+
+   Bm7                        Esus4       E
+TU GLORIA Y TU PODER LLENAN MI VIDA DE TU SER
+
+  A                   G#m      C#7         F#m7
+SOSTENME CON TU AMOR CON LA VICTORIA EN TU PERDÓN
+
+
+FINAL
+
+Bm7        D/E    E       F#m7
+DESDE MI CORAZON  TE CANTO HOY
+
+Bm7        D/E    E       F#m7
+DESDE MI CORAZON  TE CANTO HOY
+
+   D       E            A
+DESDE MI CORAZON  TE CANTO HOY

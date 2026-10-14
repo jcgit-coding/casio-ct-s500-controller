@@ -1,19 +1,22 @@
-G                     C      G
-tu eres escudo alrededor de mi
+INTRO G Em C D
 
-G                     C       G
+ESTROFA
+
+G                    Em
 Tu eres escudo alrededor de mi
-          C      D                      G     D
+G                    Em
+Tu eres escudo alrededor de mi
+          C      D                      G
 Eres mi gloria y  el que levanta mi cabeza
 
 CORO
 
-C                   G          Em
+C                   Bm
 No temeré a diez millares de pueblos
-            Am   D      G
+            Am          D
 que hagan sitio contra mi
 
-C                   G           Em
+C                   Bm
 No temeré a diez millares de pueblos
             Am          D
 que hagan sitio contra mi

@@ -16,3 +16,68 @@ Coro
 // A-le - lu - u - ya,   A-le - lu - u - ya,  A-le - lu - u - ya
   G            A2   A     D
 Jesús me haces tan  fe - liz //
+
+
+La canción sube primero medio tono (Eb) y luego otro medio tono (E).
+Los acordes en Eb son muy complicados. Los de E son más sencillos.
+SI subes A E, los acordes serían:
+D --> E, G --> A, Gmaj7 --> Amaj7, A --> B, Em7(add4) --> F#m7(add4)
+A2 --> B2, D7 --> E7, Bm --> C#m. Aquí algunos acordes:
+
+       E     B      G      D      A     E --> (Cuerdas Guitarra)
+F#m7   0     0    II(1)  IV(4)   IV(3)  0 (I,II..= traste;1,2..= dedo)
+C#m    0     0     I(1)  II(2)   IV(4)  x (x = no se toca)
+Amaj7  0   II(3)   I(1)  II(2)    0     x
+
+Las notas de la izquierda del siguiente gráfico que van desde
+mi a Mi en orden vertical son las cuerdas de la guitarra.
+(1era, 2da,...,6ta). Números romanos (I,II..): es el
+correspondiente traste de la guitarra. Los acordes están
+formados de acuerdo a la posición de tus dedos de la mano
+izquierda sobre las cuerdas en los respectivos trastes.
+Los números están sobre cada cuerda en cada traste en el
+gráfico del acorde. Tu mano izquierda se divide en:
+dedo 1(índice),2(medio), 3(anular)y 4(meñique).
+El número 0 muestra que esa cuerda se toca al aire.
+La x representa que esa cuerda no se toca.
+
+ACORDES NO COMUNES
+    Acorde de D/F#
+MI   ____1_____
+la ││0_│___│___│
+RE ││0_│___│___│
+sol││__│_2_│___│
+SI ││__│___│_4_│
+mi ││0_│___│___│
+     I  II  III
+
+
+Acorde de Em7(add4)
+MI   0________
+la ││__│_1_│__│
+RE ││0_│___│__│
+sol││__│_2_│__│
+SI ││0_│___│__│
+mi ││0_│___│__│
+     I  II  III
+
+   Acorde de Gmaj7
+MI  _________3_
+la ││__│_2_│___│
+RE ││0_│___│___│
+sol││0_│___│___│
+SI ││0_│___│___│
+mi ││__│_1_│___│
+      I  II III
+
+    Acorde de A2
+MI   x_________
+la ││0__│___│__│
+RE ││___│_2_│__│
+sol││___│_3_│__│
+SI ││0__│___│__│
+mi ││0__│___│__│
+     I  II  III
+
+Un saludo desde Quito en Ecuador!!. Un abrazo a las chicas del coro:
+Paolita, Carla y Yesennia. Cualquier comentario me escriben. Chao.

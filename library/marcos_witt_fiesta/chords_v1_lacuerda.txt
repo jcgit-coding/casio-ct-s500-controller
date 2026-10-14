@@ -1,3 +1,7 @@
+(ACORDES ORIGINALES DE LA GRABACION)
+
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
+
 LAsus4      LA         MI/LA      LA
 ¡Fies   -   ta! Hay que cele  -  brar
 
@@ -18,3 +22,39 @@ Hay mucha gente que no sabe gozar de la vida que Jesús nos dio
 
 SIm7              MI                   SIm7               MI
 Es una vida donde hay que expresar todo lo que Cristo regaló
+
+FA#sus4                  FA#         FA#sus4      FA#
+  Uno de los frutos del espíritu es el gozo del Señor
+
+MIsus4            MI                 MIsus4
+  Y ese gozo te podrá sostener, darte fuerza en la debilidad
+
+SIm7                MI              SIm7            MI
+Hay algunos que te irán a decir que reír no es espiritual
+
+ SIm7             MI                SIm7               MI
+Tienen años sin poder sonreír, no lo ven como algo anormal
+
+FA#sus4                  FA#          FA#sus4              FA#
+Cuando compruebas lo que hizo Jesús al morir por ti en la cruz
+
+MIsus4                    MI             MIsus4
+  La victoria obtuvo al resucitar en su victoria nos podemos gozar
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI.
+
+   LAsus4  MI/LA  LAsus4/FA#  Fa#m7/Si  RE/MI  LA/MI MIsus4
+E     0      0         2          0       0      0      0
+A     0      0         0          2       0      4      2
+D     2      2         2          2       2      2      2
+G     2      1         2          2       2      2      2
+B     3      0         3          2       3      5      0
+E     0      0         0          2       2      0      0
+
+   SOL/LA  RE/LA  FA#sus4
+E     3      X       2
+A     0      0       4
+D     0      0       4
+G     0      2       4
+B     0      3       2
+E     3      5       2

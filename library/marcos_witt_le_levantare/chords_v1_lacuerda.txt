@@ -1,3 +1,5 @@
+LE LEVANTARÉ
+
 C#m, A, B
 
 C#m
@@ -17,3 +19,28 @@ CORO:
 
            E            F#
 EN LA SABIDURÍA DEL HOMBRE
+
+G#      A
+NUNCA CONFIARÉ
+
+     E      F#            C#m
+ESPERARÉ EN ÉL, QUE ME DIO
+
+          B          A
+VIDA POR LA ETERNIDAD
+
+     C#m      B           A
+EN ÉL, QUE ME DIO SU SEGURIDAD
+
+(Se repite primera estrofa y coro)
+
+C#m
+//CON MIS MANOS
+B
+CON MI VOZ
+
+A
+CON MI CORAZON//
+
+          B
+LE LEVANTARÉ...

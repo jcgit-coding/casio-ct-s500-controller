@@ -18,3 +18,33 @@ F#
 HOSANNA A CRISTO NUESTRO REY
 F#
 REGOCIJO Y JUBILO ANTE EL
+
+  B   F#  B   F#  B   F#     E      C#   (C#-D#-F-F#-G#-F#-F-D#-C#)
+//HOSANNA GLORIA, HONORES A NUESTRO REY//
+
+F#(E)
+HOSANNA A CRISTO NUESTRO REY
+B(D)
+EL LEON DE LA TRIBU DE JUDA
+F#(E)
+HOSANNA A CRISTO NUESTRO REY
+B
+EL ES DIOS A VENCIDO Y VENCERA
+
+  B   F#  B   F#  B   F#     E      C#
+//HOSANNA GLORIA, HONORES A NUESTRO REY//
+
+Solo: E B F# E B D#
+
+  C#   G# C#   G# C#   G#      F#    D#
+///HOSANNA GLORIA, HONORES A NUESTRO REY///
+
+Final:
+
+      F#    D#      (D#-F-G-G#-A#-G#-G-F-D#)
+//A NUESTRO REY//
+   C# G#
+Hosanna
+
+
+( ) Estos acordes son para cuando repiten los coros.

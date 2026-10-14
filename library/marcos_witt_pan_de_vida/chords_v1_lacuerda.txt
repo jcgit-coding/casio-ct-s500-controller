@@ -1,20 +1,44 @@
-Intro: //Am9 Am9 Am9 Adim/A//
+INTRO:A-A-C-E-D D-C-B-A
+          A-C-E-Gb-E-D
+          A-A-C-E-D D-C-B-A
+          A-C-E-D
 
-  Am9                D7
-pan de vida, es cristo
-     Am9             D7
-la luz del mundo,  es jesus
-Cmaj7               D4
-cordero de dios inmolado en la cruz
-Bm7             E4
-mi salvador y rey
-    Am9                D7
-el gran maestro,  es cristo
-    Am9             D7
-el buen pastor,  es jesus
-Cmaj7               D4
-el hijo de dios y el gran yo soy
-Bm7                  E4  E7
-el agua que sacia mi sed.
-               Am9   D7                    Am9   D7
- //solo cristo tiene,  palabras de vida eterna//
+          (I Y II SON PUNTEADOS)
+
+     A               D
+    Pan de vida es Cristo
+        A           D
+    la luz de mundo es Jesús
+        C                 D
+    cordero de Dios, inmolado en la cruz
+     B             E
+    mi Salvador y Rey.
+
+         A               D
+    El gran maestro es Cristo
+         A         D
+    el buen Pastor es Jesús
+        C                  D
+    el hijo de Dios y el gran YO SOY
+       B                  E
+    el agua que sacia mi sed.
+
+           (CORO)
+
+                  A-A-C-E-D
+     Solo Cristo tiene
+               D-C-B-A         A-C-E-Gb-E-D
+     palabras de vida eterna
+                   A-A-C-E-D
+     solo Cristo tiene
+               D-C-B-A         A-C-E-Gb-E-D
+     palabras de vida eterna
+
+             (PUNTEADO)
+             A                   F
+     para el aflijido, para el quebrantado
+           C                         D           E
+     para todo aquel que quiera ser libre del pecado.
+
+
+    FINAL: A-A-C-E-D D-C-G-A

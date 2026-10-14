@@ -17,3 +17,113 @@ ESTROFA 1:
 
 
 CORO:
+
+  G        Csus2/F  C/E   Am9   Dm7   G6
+  Me has dado       tan  -  tas  co - sas,
+
+  Dm9   G13    Cmaj9
+  mi precioso Jesús,
+
+              Em11            Eb9(b5)          Dm7, G9
+  me has dado fe, me has dado paz, me has dado amor,
+
+              Dm9      G13         Cmaj7(6/9), Gsus4
+  me has dado gozo eternal en plenitud.
+
+  G        Csus2/F  C/E   Am9   Dm7   G6
+  Me has dado       tan  -  tas  co - sas,
+
+  Dm9   G13    Cmaj9
+  mi precioso Jesús,
+
+  Fm9      Bb(add9) C/E  Am9
+  que yo sería un ingrato
+
+  Dm7    G6/9   Cm, Cm7/Bb, Abmaj7, G7sus4, G7
+  si negara tu amor.
+
+
+ESTROFA 2:
+
+  Cm9          Fm9        Cm7
+  Cuando estoy Señor ante tu altar
+
+  G            G+(aug)  Cm, Abmaj7, G
+  me conmueve el     corazón
+
+  C/E        Fm7    Cm
+  al verte clavado en esa Cruz
+
+  G7             Gaug7(+5)  C/E  Dm7
+   por mis culpas y mi      error.
+
+
+CORO:
+
+  G      Gsus2  Csus2/F  C/E   Am7/Eb  Dm7   G6
+  Me has da  -  do       tan  -  tas    co - sas,
+
+  Dm9   G13    Cmaj9
+  mi precioso Jesús,
+
+              Em11            Eb9(b5)          Dm7, G9
+  me has dado fe, me has dado paz, me has dado amor,
+
+        Am7   Dm9      G13         Cmaj7(6/9), Gsus4
+  me has dado gozo eternal en plenitud.
+
+  G      Gsus2  Csus2/F  C/E   Am7/Eb  Dm7   G6
+  Me has da  -  do       tan  -  tas    co - sas,
+
+  Dm9   G13    Cmaj9
+  mi precioso Jesús,
+
+  Fm9      Bb(add9)  C/E  Am9
+  que yo sería un  ingrato
+
+  Dm7    G6/9     C(Riff)
+  si negara tu   amor.
+
+
+(SUBE 1 H)
+
+
+Riff:
+
+  Gsus4, Ab, Absus2, C#sus2/F#, C#/F, Bbm7/E, Ebm7, Ab6, Bbm7, Ebm9, Ab13, C#maj9,
+  Fm11, E7(b5), Ebm7, Ab9, Bbm7, Ebm9, Ab13, C#sus2/F#, C#maj6/9/F, Absus4
+
+
+Outro:
+
+  Ab     Absus2  C#sus2/F#  C#/F  Bbm7/Eb  Ebm7  Ab6  Bbm7
+  Me has da  -   do         tan  -  tas     co - sas,
+
+  Ebm9  Ab13   C#maj9
+  mi precioso Jesús,
+
+  F#m9     B(add9)  C#/F  Bbm9
+  que yo sería un ingrato
+
+  Ebm7   Ab6/9  Adim7  Bbm7, Bbm7/Ab, Eb/G, Fm7(+5)
+  si negara       tu  amor
+
+  Ebm7   Ab6/9sus4  Ab13(b9)  C#m, C#m7/B, Amaj7, D9(b5), C#
+  si negara         tu       amor.
+
+
+     ACORDES PARA GUITARRA (EADGBe)
+Cm7/Bb 635343  Abmaj7 4X5543  G7sus4 353533  G7 353433  Gaug7(+5) 353443
+Cm9 X31333  Fm9 131113  Cm7 X35353  G+(aug) 3X1003  Fm7 131111
+Gsus4 320013  Csus2/F 130033  Dm7 XX0211  G6 320000  Dm9 X53555
+G13 323230  Cmaj9 X32430  Em11 024233  Eb9(b5) X65665  G9 3X0201
+Cmaj7(6/9) X30455  Bb(add9) X13011  G6/9 3X0200  Gsus2 3X0233  Am7/Eb XX1213
+Am7 X02010  Absus2 4X1344  C#sus2/F# 241144  C#/F 143121  Bbm7/E XX2324
+Ebm7 XX1322  Ab6 431111  Bbm7 X13121  Ebm9 X64666  Ab13 434341
+C#maj9 X43541  Fm11 135344  E7(b5) XX2334  Ab9 4X1312  C#maj6/9/F 141566
+Absus4 431124  F#m9 242224  B(add9) X24122  Ab6/9 4X1311  Adim7 5X4545
+Bbm7/Ab 413121  Eb/G 3X1343  Fm7(+5) 133141  Ab6/9sus4 4X1321  Ab13(b9) 464211
+C#m7/B 746454  Amaj7 5X6654  D9(b5) X54554
+
+
+Elaborado por: Centro Familiar Cristiano Choele Choel (R.N.)

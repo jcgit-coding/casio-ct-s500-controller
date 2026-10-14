@@ -1,23 +1,39 @@
-Artista: Marcos Witt
-Álbum: Venció
-Canción: Al Que Es Digno
-Instrumento: Bajo Eléctrico
-
-Afinación: G D A E B
-
-Intro:                                   (0:24)Slap Bass
-G |--------------------------------------|J7h9-------------------------|
-D |--------------------------------------|-----Px-P7h9--P5h7-P5--------|
-A |3----2-2----0----2-2---3-----2-2s53-3|----------------------P5h7-P5|
-E |--------------------------------------|-----------------------------|
-B |--------------------------------------|-----------------------------|
-
-                                     (0:33)
-G |---------------------------------X----------------------------------
-D |--P7-P5----------------P5h7-----X------------J5-------------J4-----
-A |---------------------------------X----------------------------------
-E |-------------P2P0--P5-------P5--XP3---P3-P3----P3--P3---P2----P2--
-B |---------------------------------X----------------------------------
+D                     G
+Al que es Digno, de recibir la gloria.
+          F#m                     A
+Al que es Digno, de recibir el honor.
+           D                     G
+Al que es Digno, de recibir la gloria.
+          F#m                     A
+Al que es Digno, de recibir el honor.
 
 
-G |------------------------------------------------
+-- CORO --
+      G              A         F#m    Bm
+Levantemos nuestras manos y adoremos,
+     G       A       F#m        Am    D7
+a Jesús, Cordero de Glooooooooriaaaaaaaa.
+       G          A         F#m   B7
+Y exaltemos su incomparable majestad
+        Em  D/F#     G       Em  D/F#     G
+Al que viiiveee por siempre, al Gran  Yo Soy,
+A    D
+A Jesús.
+
+
+-- CORO PARA TERMINAR --
+      G              A         F#m    Bm
+Levantemos nuestras manos y adoremos,
+     G       A       F#m        Am    D7
+a Jesús, Cordero de Glooooooooriaaaaaaaa.
+       G          A         F#m   B7
+Y exaltemos su incomparable majestad
+            Em  D/F#     G       Em  D/F#     G
+////Al que viiiveee por siempre, al Gran  Yo Soy,////
+A    C    G      D
+A Jesús     A Jesus!
+
+
+Acordes por Edgar Rdgz.
+IGLESIA MONTE HOREB
+CAMALU B.C. MEX

@@ -18,3 +18,121 @@ Am7/c              E/B
       LE FALTABA UNA
 C#m7       F#m7  B9          Eadd9-A
 LE FALTABA UNA,  Y TRISTE LLORO
+
+
+Eadd9-G#m7        F#m7add4
+      LAS NOVENTAYNUEVE
+Aadd9/b-B7        Emaj9
+      DEJO EN EL APRISCO
+G#m7      Gm7   F#m7add4
+    Y POR LA MONTAÑA
+Bsus4-B7           C#m7
+      A BUSCARLA FUE
+B9               Aadd9/e-E
+   LA ENCOTRO GIMIEN-----DO
+D/E       E/G#    Aadd9
+   TEMBLANDO DE FRIO
+Am7/c             E/B  C#m7           F#m7
+     UNGIÓ SUS HERIDAS LA CARGÓ SUS HOMBROS
+B7sus4-B7-     E
+Y AL REDIL VOLVIO.
+
+
+PASO: C#m7   B9
+
+
+B                Emaj7
+  ESTA MISMA HISTORIA
+G#m7-C#m7         F#m7add4-B7
+     VUELVE A REPETIR------SE
+         F#m7add4
+HAY AUN OVEJAS
+Aadd9/b-B7              Emaj9
+        QUE ERRABUNDAS VAN
+F#m7add4-Aadd/B-B7   Aadd9/e-E
+         CON EL ALMA RO------TA
+D/F#-Eadd9/g#        Aadd9
+     VAN POR LOS COLLADOS
+Am7/c               E/B
+     TEMBLANDO DE FRIO
+C#m7               F#m7
+    VAGANDO EN EL MUNDO
+B9               Eadd9-Aadd9
+SIN DIOS Y SIN  LUZ
+E-G#m7      F#m7add4
+  PERO TODAVIA
+A/B-B7         Emaj9
+    EXINTEN PASTORES
+G#m7        Gm7   F#m7
+    QUE POR LA MONTAÑA
+Aadd9/b-B7           C#m7-B/d#
+        A BUSCARLAS VAN
+B9              A/E-E
+   Y CUANDO LAS HALLAN
+D/E            E/G#-Aadd9
+   LAS TRAEN A EL CAMINO
+Am7/c             E/B
+     AL CAMINO BUENO
+   C#m7        F#m7add4
+LA VERDAD Y LA VIDA
+B9sus4        B7   Cmaj7
+QUE ES CRISTO EL SEÑOR.
+
+
+PASO: D/C  Bm7  Em7  Am-Em/G  F#m7  A/B
+
+
+B             F#m7add4
+  LAS NOVENTAYNUEVE
+A/B-B7          Emaj9
+   DEJO EN EL APRISCO
+G#m7        Gm7-F#m7
+    Y POR LA MONTAÑA
+A/B-B           C#m7-B/d#
+    A BUSCARLA FUE
+B9               Aadd9/e-E
+  LA ENCOTRO GIMIEN-----DO
+D/E    E/G#      Aadd9
+   TEMBLANDO DE FRIO
+Am7/c             E/B
+     UNGIÓ SUS HERIDAS
+ C#m7             F#m7
+Y LA CARGÓ SUS HOMBROS
+A/B      B      E
+Y AL REDIL VOLVIO.
+
+
+
+FINAL: C#m7  F#m7  A/B-B  Eadd9.
+
+
+ACORDES:
+
+A/b: x22220
+Aadd9/b: x22200
+Aadd9/e: 0x2200
+Aadd9:002200
+Am7/c: 002213
+B/d#: x24442
+B7: 021202
+B7sus4: x22202
+B9: x21333
+B9sus4: 02222x
+Bm7: x2x232
+Bsus4: xxx452
+C#m7: x46464 ó 002424
+C#m7add4: xx2442
+Cmaj7: x32000
+D/c: x30232
+D/e: 0xx232
+D/f#: 2x0232
+E/b: x22100
+E/g#: 422100
+Eadd9: 022102
+Em/g: 322000
+Em7: 002433
+Emaj9: 002442
+F#m7: xx2222
+F#m7add4: 2x2200
+G#m7: xx4444
+Gm7: xx3333

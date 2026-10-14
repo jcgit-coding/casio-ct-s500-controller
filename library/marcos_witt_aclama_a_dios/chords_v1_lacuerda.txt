@@ -1,4 +1,5 @@
-G       C         D        G
+CORO:
+  G       C         D        G
 Aclama a Dios, con voz de júbilo,
    G      C         D      G
 Aclama a Dios, con voz de gozo,
@@ -17,3 +18,40 @@ Aclámale en la tarde cantando una melodía,
 Aclámale en la noche con voz de alegría,
            Am      C      D
 Pueblos todos aclamen a Dios¡ (vuelve al coro)
+
+Verso II
+
+   G           D           C              G
+Aclama su grandeza, es el Dios de las naciones,
+  G            D           C                 G
+Aclama sus proezas, el llevo nuestras aflicciones,
+   G          D           C         Em
+Aclama su realeza, todas las generaciones,
+            Am     C      D------Eb  (sube medio tono)
+¡Pueblos todos aclamen a Dios!
+
+
+
+  Ab      Db        Eb       Ab
+Aclama a Dios, con voz de júbilo,
+   Ab      Db       Eb     Ab
+Aclama a Dios, con voz de gozo,
+   Ab      Db       Eb     Fm
+Aclama a Dios, con voz alegre,
+           Bbm      Db      Ebsus4    Db   Ab
+¡Pueblos todos con gozo aclama----ad  a  Dios¡
+
+
+PUENTE
+
+   Ab        Eb      Db        Fm Eb
+Aclama con gozo aclámale con alegría,
+   Ab       Eb          Bbm          Db Eb
+Aclama a Cristo, nos a dado un nuevo día,
+   Ab       Eb        Db         Fm Eb
+Aclama con gozo, aclámale con alegría,
+    Bbm     Db  Eb
+Aclama  A  Cristoooo!!!!
+
+SALUDOS A LA IGLESIA PENTECOSTES ALFA Y OMEGA
+DE Cd.AZTECA DEPARTE DEL HERMANO PEPITO.

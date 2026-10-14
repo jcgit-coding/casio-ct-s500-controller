@@ -1,28 +1,26 @@
-:Intro de Piano:
-:Piano e Insttumentos:
+Intro:/D G D A/
 
-G] :---------------:
-D] :---------------:
-A] :---2-5-7-------:
-E] :--------3-5----:
+        D
+Con tu sangre
+          Dsus4                D   Dsus4 D
+nos has redimido para nuestro Dios
+          A              Asus4 A      D   Dsus4 D A
+de todo linaje, pueblo, lengua  y nación.
+               D          Dsus4                  
+Nos has hecho reyes y sacerdotes 
+               D   Dsus4 D
+para nuestro Dios
+        A              Asus4  A G
+y reinaremos sobre la tierra;
+              A        D
+gloria al Cordero de Dios.
 
-:Estrofa:
-:Entrada del Bajo en Estrofa:
 
-                Nos has hecho Reyes....
-G] :---------------:---------------:---------------:---------------:
-D] :---------------:---------------:---------------:---------------:
-A] :------------12-:----5--5-5-----:-----5--5-5----:----5--5-5-----:
-E] :---------------:---------------:---------------:---------------:
-
-                 Y Reinaremos...
-G] :---------------:---------------:---------------:--------------:------------:
-D] :---------------:---------------:---------------:--------------:------------:
-A] :----5--5-5-----:---------------:---------------:--------------:-5---------5:
-E] :--------------7:-----5--5-5----:--5--5-5------2:-3---3-5------:------------:
-
-:Coro:
-
-      E  -  xal   -  tad ...
-G] :---------------:---------------:-----------------:--------------:
-D] :---------------:----
+D G  A  Asus4 A A7       G        D     Dsus4  
+Exaltad           al Cordero de gloria,
+D G  A  Asus4 A A7         G       D     Dsus4 
+adorad             al que vive y reina,
+D G  A  Asus4 A A7           G
+adorad             al Dios Altísimo,
+        D         A  A7       D  G D A
+Padre eterno, Corde--ero de Dios.

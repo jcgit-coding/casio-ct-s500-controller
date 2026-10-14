@@ -1,34 +1,51 @@
-Narracion: La Celebracion
-:Intro:
+INTRO:    (Gm-F-C-D#-D) x 4
 
-G]:------------:----------:------------:----------:
-D]:------------:----------:------------:----------:
-A]:------------:3-3----1-0:------------:3-3----1-0:
-E]:3-3---1-1---:----------:3-3---1-1---:----------:
 
-G]:------------:----------:------------:----------:
-D]:------------:----------:------------:----------:
-A]:------------:3-3----1-0:------------:3-3----1-1:
-E]:3-3---1-1---:----------:3-3---1-1---:----------:
+ Gm                    C          D#   D
+OH  OH  OH  OH  OH  OH  OH
+  Gm                   C
+OH  OH  OH  OH  OH  OH  OH  CELEBRARE
+  Gm                   C           D#   D
+OH  OH  OH  OH  OH  OH  OH
+   Gm                  C         
+ OH  OH  OH  OH  OH  OH  OH  ME ALEGRARE
 
-:Coro:
+ESTRIBILLO
 
-Oh, oh, oh, oh...
+Gm       A#                  C
+TENGO  PERDON, TENGO SALVACION
+                    Gm
+REDENCION, JUSTIFICACION.
+  Gm    A#                  C  
+FUE POR JESUS QUE MURIO EN LA CRUZ
+                        D    
+ME COMPRO, EL ME TRAJO LUZ
+  
+Las demás estrofas son iguales
 
-G]:------------:----------:------------:----------:
-D]:------------:----------:------------:----------:
-A]:------------:3-3----1-0:------------:3-3----1-1:
-E]:3-3---1-1---:----------:3-3---1-1---:----------:
+TENGO SU AMOR, SU ACEPTACION
+TENGO SU CALOR, TENGO SU FAVOR
+NO TEMERE LO QUE PUEDA HABER
+PORQUE SU PODER HE PODIDO VER
 
-Oh, oh, oh, oh...
+PUEDO CANTAR, PUEDO CELEBRAR
+ALABAR, PUEDO YO GRITAR
+SU LIBERTAD ME HA DADO PAZ
+ME LIBRO DE LA MALDICION
 
-G]:------------:----------:------------:----------:
-D]:------------:----------:------------:----------:
-A]:------------:3-3----1-0:------------:3-3----1-1:
-E]:3-3---1-1---:----------:3-3---1-1---:----------:
+PUEDO ANDAR, PUEDO CAMINAR
+EN SU VERDAD YO ME SOSTENDRE
+NO PARARE, ME ALEGRARE
+LE DARE TODO EL CORAZON
 
-:Estrofa:
+PUENTE
 
-Tengo perdon, tengo salvacion...
+  C                     Gm
+EL ME DIO UN MANTO DE ALEGRIA
+ C                      D                      
+Y CAMBIO MI TRISTEZA EN DIA
 
-G]:--
+Espero que esta cancionsea de bendicion
+para sus vidas cualquier consulta 
+me lo envian a mi mail
+BENDICIONES!!!!!!!

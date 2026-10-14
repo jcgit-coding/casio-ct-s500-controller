@@ -1,20 +1,65 @@
-G                   Em
-He decidió Seguir a Cristo
-          C          G
-He decidió Seguir a Cristo
-                   Em
-He decidió Seguir a Cristo
-           D      C G
-No vuelvo atrás, no vuelvo atrás
+Intro: Bbmaj9, Dbmaj7, F#maj7, Fsus4 (bis)
 
 
-G                   Em
-Algunos vuelve yo sigo a Cristo
-          C          G
-Algunos vuelve yo sigo a Cristo
-                Em
-Algunos vuelve yo sigo a Cristo
-           D      C G
-No vuelvo atrás, no vuelvo atrás
+ESTROFA 1:
 
-G                   Em
+         Bbmaj9  F13sus4    Bbmaj9, Fm13
+  He decidido      seguir a Cristo
+
+     Bb13   Ebmaj7  Cm7        Dm11   Db9(b5)/G, Cm9
+  He deci - dido      seguir a Cris - to
+
+     F13    Bbmaj9  F13sus4    Bbmaj9   Dm7, Gm7(add4)
+  He deci - dido      seguir a Cris  -  to
+
+     Ebmaj9    Bb/F     F13sus4   Bb, Fsus4
+  No vuelvo a atrás, no vuelvo a atrás.
+
+
+ESTROFA 2:
+
+            Bbmaj9  F13sus4   Bbmaj9, Fm13
+  La vida antigua     ya he dejado
+
+     Bb13   Ebmaj7  Cm7       Dm11   Db9(b5)/G, Cm9
+  La vida antigua     ya he deja  -  do
+
+     F13    Bbmaj9  F13sus4   Bbmaj9   Dm7, Gm7(add4)
+  La vida antigua     ya he deja   -   do
+
+     Ebmaj9    Bb/F     F13sus4   Bb, Fsus4
+  No vuelvo a atrás, no vuelvo a atrás.
+
+
+ESTROFA 3:
+
+            Bbmaj9  F13sus4         Bbmaj9, Fm13
+  El Rey de gloria    me ha transformado
+
+     Bb13   Ebmaj7  Cm7             Dm11   Db9(b5)/G, Cm9
+  El Rey de gloria    me ha transforma  -  do
+
+     F13    Bbmaj9  F13sus4         Bbmaj9   Dm7, Gm7(add4)
+  El Rey de gloria    me ha transforma   -   do
+
+     Ebmaj9    Bb/F     F13sus4   Bb, Fsus4
+  No vuelvo a atrás, no vuelvo a atrás.
+
+
+(ESTROFA 1)
+
+
+Outro:
+
+     Ebmaj9    Bb/F     F13sus4  [Bbmaj9, Dbmaj7, F#maj7, Fsus4]x3 Bb
+  No vuelvo a atrás, no vuelvo a atrás.
+
+
+     ACORDES PARA GUITARRA (EADGBe)
+Bbmaj9 X10211  Dbmaj7 X43111  F#maj7 2X3321  Fsus4 133311  F13sus4 131333
+Fm13 131133  Bb13 X10113  Ebmaj7 XX1333  Cm7 X35343  Dm11 X53553
+Db9(b5)/G 343443  Cm9 X31333   F13 131233  Dm7 XX0211  Gm7(add4) 3X3311
+Ebmaj9 XX1031  Bb/F 1X3331
+
+
+Elaborado por: Centro Familiar Cristiano Choele Choel (R.N.)

@@ -1,26 +1,36 @@
-intermedio:
-despues del Puente,cuando termina de decir:
-todopoderoso gran Rey,empieza esto:
-                                  aleluya         aleluya           aleluya a nuestro Dios
-e--------------------------------------------------------------------------------------
-B5-7-8-10-12-14--1517/19-/1510-14-15-15-----15-19-19
-G-------------------------------------------14---------------------------------------
-       aleluya               aleluya                     aleluya
-e------------17/19-19v-17-15-14---------------------------------
-B15--------------------------15-----15-17/1917/19/18/19-
-G---------------------------------14---------------------------------
-   a nuestro Dios                       coro
-e----------------------------
-B17-15-15--10-10-10
-G---------------------------
+D        G         Em      C               D
+//Aleluya, Aleluya,  Ale - luya a nuestro Dios//
+ 
+D              D    D6             D7  
+Todos sus siervos,   Los que le temen
+G                D/F#       Em             G
+Los pequeños y grandes,  Alabad a nuestro Dios
+D              D   D6             D7
+El es Dios Santo,  Justos sus juicios
+G              D/F#      Em             G
+Es Fiel y Verdadero,  Alabad a nuestro Dios
 
-cuando repite el coro hace esto:
-e3-3-2-0
-B-----------2
-G------------
+Coro...
 
-/:deslizar la cuerda
-v:vibrar la cuerda
+D           D   D6          D7
+Demosle gloria,  Demosle honra
+G              D/F#      Em         G
+La hora ha llegado,  Al Cordero exaltad
+D             D     D6          D7
+Su trono es firme,  Siempre eterno
+G            D/F#         Em               G    
+Cetro de justicia,  Es el cetro del gran Rey
 
-espero que les guste,suena muy bien.
-saludes a los mu
+ Coro...
+PUENTE
+
+Em                G                  D
+Gran multitud estruendo de muchas aguas
+   Em                 G                  D
+Levanten su voz den voces de jubilo al Rey
+      Em            G                       D
+Del norte al sur declaren por siempre su gloria
+         G           Em               A
+El es nuestro Dios todopoderoso gran Rey
+
+Coro...

@@ -1,20 +1,37 @@
-Intro: Dmaj7 - A/C#(x2) Bm7 - D/E - E - 
+Esta es mi interpretación personal.
 
-ESTROFA:
-  A              E/G#  
-           OH Jesús,       
-E----------------4---------
-A-0------------------------
-D---2--------------2-------
-G--------------------------
-B-----0-0_2----------0-0_2-
-e--------------------------
+ Algunos Acordes.
+  E/G#    F#m7   Dmaj7    A/C#  Bm7(add4) A(add2)/C#
+ EADGBe  EADGBe  EADGBe  EADGBe  EADGBe     EADGBe
+ 4X245X  242222  X54222  X4X255  X22232     X42200
 
-     F#m7                      E   D
- mis pasos me han llevado  tan le--jos de Ti.
-E----2-------------------------0------------/
-A------------------------------|------------/
-D-------2----------------------|----0-------/
-G------------4--------2----2---|--1-|-------/
-B------------------------------|-0--|-------/
-e-----------------------0------0----2-------/
+  Amaj7
+ EADGBe
+ X02120
+
+A         E/G#     F#m7 
+ Oh Jesús,     mis pasos me han llevado
+     E  D      A
+ tan le-jos de Ti.
+         E/G#      F#m7
+ Mi alma      se secado en el desierto 
+    E      D
+ dentro de mi.
+   Dmaj7   A/C#         Dmaj7
+ Escuchame mi Jesús, el amor de mi vida,
+    A/C#                 Bm7(add4)  A(add2)/C#  E 
+ LA luz de MI existir no puedo -  vivir   -     sin
+ A
+ Ti.
+
+            Amaj7          Bm7(add4)
+ Primer Amor,     te adorare por siempre
+    D              F         A
+ yo quiero estar pegado a Ti.
+         Amaj7            Bm7(add4)
+ Llevame hoy al Santo lugar Jesús,
+ D     Dm            A
+ donde    te conocí.
+
+
+ Espero les guste.   See Yaa!!!

@@ -1,20 +1,120 @@
-D   Bm7add4     Em7    Asus4    A7    G/D  D         A/C#
-Tu fidelidad es grande, tu fidelidad incomparable es
-Bm7     Bm7 /A   Em7       Gmaj7 /A  G6 /A  G/A       D     Gadd2/A  A7
-Nadie como tú, bendito Dios; gran - de es tu fidelidad
+(ACORDES ORIGINALES DE LA GRABACION)
 
-D   Bm7add4       Em7   Em9  G6 /A   A        G/D  D        A/C#
-Tu fidelidad es    grande,    tu fidelidad incomparable es
-Bm7      Bm7 /A   Emadd9   Em7  Em9 /A  G6 /A  D/A  A7     D
-Nadie como tú,   bendito  Dios; grande  es   tu fidelidad
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
 
-A#  G# /A#  A#7
+RSIm7im7(add4)    MIm7
+TU FIDELIDAD ES GRANDE
 
-D#       Cm7     Fm7    A#      A# /D  G# /C  A#   G# /D#  D#        A# /D
-Tu fidelidad es grande, tu fidelidad              incomparable es
-Cm7    Cm7 /A#   Fm11          G#maj7 /A#  G# /A#     D#       B7
-Nadie como tú, bendito Dios;     grande es tu  fidelidad
+LAsus4    LA7    SOL         RE    LA/DO#
+   TU FIDELIDAD INCOMPARABLE ES
 
-E      C#m7  E/F  F#m7    B            A/E  E          B /D#
-Tu fidelidad es grande,  tu fidelidad incomparable es
-C#m7      E/B      F#m9     Amaj7 /B  A/B E/B   B9  E      C7
+SIm7    Sim7/La  MIm7
+NADIE COMO TU   BENDITO DIOS                    EMPEZAR
+
+ SOLmaj7    Sol(add9)   SOL/LA        RE    (SOL(add9)  LA)
+  GRANDE        ES        TU     FIDELIDAD
+
+(Se repite en Re)
+
+SIb  LAb  SIb7
+
+MIb    DOm7     FAm7
+TU FIDELIDAD ES GRANDE
+
+SIb   Sib/Re  LAb SIb     Lab/Reb     MIb       Sib/Re
+TU FIDELIDAD       IN   -   COM   -   PARABLE ES
+
+DOm7    Dom7/Sib     FAm11
+NADIE COMO TU      BENDITO DIOS
+
+LabMaj7/Sib   LAb     MIb        SI7
+  GRANDE   ES TU FIDELIDAD
+
+MI    DO#m7     MI/FA     FA#m7
+TU FIDELIDAD ES GRAN   -    DE
+
+SI             LA/MI  MI      Si/Re#
+TU FIDELIDAD INCOMPARABLE ES
+
+DO#m7      MI   FA#m9
+NADIE COMO TU BENDITO DIOS
+
+LaMaj7/Si   LA MI  SI9 MI     DO7
+  GRANDE ES TU FIDELIDAD
+
+FA      REm7     SOLm7
+TU FIDELIDAD ES GRANDE
+
+DO(add9)  DOsus4        DO   SIb  FA        DO
+   TU      FIDE   -   LIDAD INCOMPARABLE ES
+
+REm7            FA    SOLm7
+NADIE COMO TU BENDITO DIOS
+
+DO13  DO9  Sib/Do     FA   DO/RE  RE  DO/RE
+GRANDE ES    TU FIDELIDAD
+
+SOL     MIm7    LAm7
+TU FIDELIDAD ES GRANDE
+
+DoMaj7/Re  RE7  DO/SOL     SOL     RE     SOL      RE/FA#
+   TU FIDELIDAD INCOM   -   PA  -  RA  -  BLE   ES
+
+MIm7         SOL/LA     LAm7  SOL/LA   LAm7
+NADIE COMO TU BENDI   -   TO   DIOS
+
+DOmaj7  Do6/Re  DO/RE    RE7         SOL   (DO  RE)
+GRANDE    ES      TU  FIDELI    -    DAD
+
+(Se repite en Sol)
+
+MIm
+
+LAm7      RE7    SOL      MIm7
+GRANDE ES TU FIDELIDAD
+
+LAm7SOL   RE7   SOLsus4   Sol(add9)
+GRANDE ES TU FIDELIDAD
+
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
+
+SIm7imSOLdd4)  LAsus4  LA/DO#  Sim7/La  SOLmaj7  Sol(add9)
+E      0          0       0       0        3         3
+A      2          0       4       0        2         0
+D      2          2       2       4        0         0
+G      2          2       2       2        0         2
+B      3          3       0       3        0         0
+E      2          0       0       2        2         3
+
+   Sol/La  Sib/Re  Lab/Re  Dom7/Sib  Fam11  LabMaj7/Sib
+E     3       X       X        3       1         X
+A     0       X       6        3       1         X
+D     0       0       0        5       1         6
+G     0       3       5        3       1         3
+B     0       3       4        4       1         4
+E     3       1       4        6       1         3
+
+   MI/FDO  LA/MI  FA#m9  LaMaj7/Si  SI9  Do(add9)  DOsus4
+E    1      0      2        0       0       0        0
+A    2      0      4        2       2       3        3
+D    2      2      0        2       1       2        3
+G    1      2      0        1       2       0        0
+B    0      2      0        2       2       3        1
+E    0      5      4        0       2       3        1
+
+   DO13  DO9  Sib/Do  DO/RE  DoMaj7/Re  DO/SOL  RE/FA#  SOL/LA
+E    X    0     1       0        0         3       2       3
+A    3    3     3       0        3         3       0       0
+D    3    2     X       0        0         2       0       0
+G    3    3     3       0        0         0       2       0
+B    3    3     3       1        0         1       3       0
+E    6    3     1       0        0         0       2       3
+
+   DOmaj7  Do6/Re  SOLsus4
+E     0       0       3
+A     3       3       3
+D     2       0       0
+G     0       2       0
+B     0       1       1
+E     0       3       3

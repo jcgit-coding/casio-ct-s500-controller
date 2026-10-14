@@ -1,20 +1,29 @@
-F# - C# -  D#m - B - F# - C#m - E - B
-
-ESTRIBILLO
-F#m                        E
-¿A donde iré sin ti Señor?
-------------------------*---------------
---9-9-9--10-12--10--9--7--5-----5-2-3-
----------------------------------------
----------------------------------------
----------------------------------------
----------------------------------------
-
-    Dmaj7                                        E
+Am                        G6
+¿A donde ire sin ti Señor?
+    Fmaj7                            G
 Si solo Tu Jesús tienes palabras de vida
-------------------------9---------------
---9-9--12-9-12----12-10---10-12-9--------------
------------------------------------11-9-11--
----------------------------------------
----------------------------------------
----------------------------------------
+        Am
+Si  subiera al monte mas alto
+      G6      
+O bajara hasta el fondo del mar
+Fmaj7                                  E
+¿Quien me dara quien me mostrara tal amor?
+ 
+CORO
+      A             E            F#m           D               A
+Danzare, cantare derramare mi corazon delante de ti
+        Em           G       D
+Es el rio de tu amor
+ 
+         A           E            F#m           D                   A
+Danzare, cantare derramare mi corazon delante de ti
+        Em           G       D
+Es el rio de tu amor
+ 
+PUENTE
+            F#m        F#m(maj7)     F#m7                  B9
+Tantos años yo  perdi sin el        amor que no pude ver
+          Bm7                            Bm7/A
+Hasta que encontre  la presencia de Dios
+                E
+Aqui en el rio

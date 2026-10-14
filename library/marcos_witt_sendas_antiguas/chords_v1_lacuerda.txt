@@ -1,3 +1,7 @@
+(ACORDES ORIGINALES DE LA GRABACION)
+
+P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
+
 MIb(add9)                    SOLm7
 Mirando las sendas por donde andar
 
@@ -18,3 +22,121 @@ Tu misericordia nunca se apartó
 
 SIb FAol/Sib  DOm7    SOLm7   Fa(add9)/La
                     Fidelidad   y paz
+
+  LAb      FAm7       Dom7/Mib   Lab(add9)     SIb
+Siempre consolando y levantán  -  donos
+
+MLAb   Mib/Sol          Lab(add9)     SIb
+     Es ahí donde quiero andar
+
+  LAbb        Mib/Sol        Lab(add9)     SIb
+Siguiendo tus pasos hasta el final
+
+   DOm7                 SOLm7
+Teniéndote siempre a mi lado
+
+Sol7LAb         DOm7       FA/LA    Lab(add9)
+Camino con seguridad
+
+FAmMIbol  Fam7(add4)    LAb    Mib(add9)
+Es ahí      donde     quiero    andar
+
+MIb(add9)                    SOLm7
+Volviendo atrás lo que puedo mirar
+
+LAb        Lab(add9)   Mib/Sol               FAm7       LAb      SIb
+Son sendas antiguas,              lugares en donde descansar
+
+MIb                        SOLm7
+   He aprendido a confiar en ti
+
+DLAb          Lab(add9)
+    Tu eres el camino,
+
+Mib/Sol           REbmaj7       Sol7/Si
+     La verdad y la vida,        Jesús
+
+DOmLAb SOLm7     Lab(add9)    Mib/Sol
+     Caminos de esperanza   y  luz
+
+  LAbFAm7   Dom7/Mib    Lab(add9)
+Cada paso tu palabra  nos guió
+
+SIb   SOL/SI   DOm7  SOLm7       FA/LA
+                   Victoria y Libertad
+
+  LAb  FAm7         Dom7/Mib    Lab(add9)  SIb
+Tu nos diste en cada tiempo de aflicción
+
+FASSIb    FA/LA      Sib(add9)  Sib(add9)/DO   Do
+  Es ahi donde quiero andar
+
+FASIb           FA/LA         Sib(add9)    DO
+  Siguiendo tus pasos hasta el final
+
+ REm7                   LAm7
+Teniendote siempre a mi lado
+
+LA/DO#         REm7       SOL/SI
+Camino con seguridad
+
+SIb FAFA/LA  SOLm7   Sib/Do  Fa(add9)    DO/RE    RE
+    Es ahi   donde   quiero   andar
+
+SSDDO  Sol(add9)/Si          Do(add9)     Do(add9)/RE    Re
+       Es ahí  donde  quiero andar
+
+  SDDOL      Sol(add9)/Si    Do(add9)     Do(add9)/RE    Re
+Siguiendo tus pasos hasta el final
+
+   MIm7                 SIm7
+Teniéndote siempre a mi lado
+
+  SI7           MIm7     LA/DO#
+Camino con seguridad
+
+DO  DSOLOL/SI    LAm7    Do(add9)/Re   Sol(add9)
+   Es ahí      donde      quiero       andar
+
+
+ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
+
+MLAbMib(add9)  Lab(add9)  Mib/Sol  Lab/Sib  REbmaj7
+E      X          X         X        X        4
+A      X          X         X        X        4
+D      3          6         5        6        6
+G      3          5         3        5        5
+B      4          4         4        4        6
+E      3          6         3        4        4
+
+   Sol7/Si  Dom7/Mib  Sol/Sib  Fa(add9)/La  Fa/La
+E     3         X        3           X        X
+A     0         X        1           0        0
+D     0         5        0           3        3
+G     0         0        0           0        0
+B     0         4        0           1        1
+E     1         3        3           3        1
+
+FSSIbam7(add4)  Sib(add9)  Sib(add9)/Do  LA/DO#
+E      X           1            1          0
+A      1           1            3          4
+D      1           3            3          2
+G      1           3            3          2
+B      1           1            1          0
+E      1           1            1          0
+
+FASDOb/Do  Fa(add9)  DO/RE  Sol(add9)/Si  Do(add9)
+E     1        X       0          X           0
+A     3        0       3          2           3
+D     3        3       0          0           2
+G     3        2       0          2           0
+B     3        1       1          0           3
+E     1        3       0          3           0
+
+DO Do(add9)/Re  SOL/SI
+E        0         3
+A        3         2
+D        0         0
+G        0         0
+B        3         3
+E        0         3

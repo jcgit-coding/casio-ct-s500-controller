@@ -1,20 +1,27 @@
-INTRO: 4/4   (F-A-C)x2 (F-Dm-A#-C-Am-Dm-A#-C)x2 F
-F      A#-C     Am    Dm
+INTRO: 4/4   F Dm | Gm C
+
+F       Bb-C        Dm
 Puedo vivir, puedo gozar
-   A#    Gm        C     F-Dm
+       Bb               F     Bb   F
 Puedo decir tengo libertad
-F      A#-C     Am    Dm
+(Misma secuencia)
 Puedo reir, puedo llorar
-   A#    Gm        C     (F-Dm-A#-C)X2
 Puedo decir tengo libertad
-F      A#-C     Am    Dm
 Puedo cantar, Puedo correr,
-   A#    Gm        C     F-Dm
 Puedo danzar Tengo libertad
-F      A#-C     Am    Dm
 Puedo amar, Puedo alabar,
-   A#    Gm        C     (F-Dm-A#-C)X2
 Puedo soñar Tengo libertad
 
 
-   F         Dm             Gm          A#-C-F        Dm-A#
+F         Dm
+Tengo Libertad
+         Gm
+Tengo Libertad
+      Bb - C - F
+Tengo Libertad
+
+4/4  F Dm | Gm C
+    //Libertad//
+
+ Bb  C      Dm  Gm    C     F
+Tengo Libertad, Tengo libertad

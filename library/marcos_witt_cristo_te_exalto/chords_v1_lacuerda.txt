@@ -1,4 +1,6 @@
-SOL         DO
+ESTROFA:
+
+  SOL         DO
 CRISTO TE EXALTO
    RE      DO   SOL
 CRISTO TE ADORO
@@ -18,3 +20,12 @@ ME CUBRE Y ME DA PAZ
    MI              LA-7
 MI SER SIEMPRE PROCLAMARA
          DO       RE
+QUE SOLO TU ERES DIGNO 
+     SI-7      MIm
+SOLO TU ERES DIGNO
+     DO       RE         SOL
+SOLO TU ERES DIGNO DE ADORAR
+
+
+
+ESTROFA:

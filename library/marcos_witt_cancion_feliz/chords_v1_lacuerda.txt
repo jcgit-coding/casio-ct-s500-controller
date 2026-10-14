@@ -1,4 +1,6 @@
-E          B/Eb             C#m                  A
+Intro.-E |E/D#|E/D| A | E |E/D#|E/D| A |
+
+        E          B/Eb             C#m                  A
     //  Cantaria   sin   parar por   lo   que hiciste en mi
 
        E       B/Eb            C#m           A
@@ -18,3 +20,10 @@ B/Eb  C#m                           A
       A                         E
       Estamos cantando, somos felices
       A                            E
+      Estamos danzando pues somos libres
+
+         F#m7                     G#m7
+      Si   te   pudieramos mirar, contemplar tu sonreir
+
+        Amaj7                                           E
+     Y   a   tus angeles danzar, por que el gozo esta aqui

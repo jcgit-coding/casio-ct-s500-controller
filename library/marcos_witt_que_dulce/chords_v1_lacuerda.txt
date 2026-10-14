@@ -1,36 +1,24 @@
-Dadd2         F#m7       Gsus2     Asus4-A/C#
-Qué dulce es estar en tu presencia
-Dsus2           F#m7       Gsus2     Asus4-A
-contemplando la hermosura de tu tu Majestad,
-F#m7     F#add2        Bm7-Asus2-Esus2/G#
-y reconociendo que tu eres Señor,
-Em7          Em/D        Asus4
-Todopoderoso y el gran Yo Soy.
-Dsus2         F#m7       Gsus2     Asus4-A/C#
-Qué dulce es estar en tu presencia
-Dsus2           F#m7       Gsus2     Asus4-A
-contemplando la belleza de tu Santidad,
-F#m7     F#        Bm7-Asus2-E/G#
-y reconociendo que tu eres Señor,
-Em7           Em/D         Asus4   (Dsus2/F#)
-Todopoderoso y el gran Yo Soy.
+D           F#m7
+//Que dulce es estar en tu 
+  G     A
+presencia
+  D             F#m7
+contemplando la hermosura 
+     G       A
+de tu majestad
+F#m7   F#        Bm7
+y reconociendo que tu
+ A   E/G#
+eres señor
+  Em         Em/D
+todopoderoso y el gran
+   A
+!yo soy!//
 
-Coro:
-Gsus2 Asus2/G F#m7 (Bm7-F#m7)
-Sa............nto
-Gsus2 Asus2/G F#m7 (Bm7-F#m7)
-Sa............nto
-   Em7        Dsus2/F#
-mi corazón se une
-Gsus2     Asus4    Dsus2
-a la melodía angelical.
-
-Puente:(C-Dsus2/F#)
-
-Gsus2 Asus2/G F#m7 (Bm7-F#m7)
-Sa............nto
-Gsus2 Asus2/G F#m7 (Bm7-F#m7)
-Sa............nto
-   Em7        D/F#
-mi corazón se une
-Gsus2     Asus4    Dsus2
+=CORO=
+ G A/G F#m D7  G A/G F#m D
+ // S a n to,  S a n t o
+  G       G/F#    Em
+mi corazon se une ala
+  A     D
+ melodia angelical//

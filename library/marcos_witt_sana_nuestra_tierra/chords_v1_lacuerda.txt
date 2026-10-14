@@ -1,18 +1,66 @@
-E-----------------------------------------------------------
-B-------12h15(15)bends full15--12-------------------------------
-G---------------------------------1412111211----------------
-D-12s14--------------------------------------12v------------
-A-----------------------------------------------------------
-E------------------------------------------------------------
+INTRO (2x)
+G | Em7 | C | Am7 - D - |
 
-E------------------------------------------------------------
-B-----------------------------------------------------12-----
-G--------11h12h14v-14h16141212--11h1211------------12------
-D-12s14---------------------------------1412v--14------------
-A------------------------------------------------------------
-E------------------------------------------------------------
 
-E---------14h1514-------------15h17s19v19-17h15s17--------
-B--15117----------15s17-15h17-------------------------------
-G------------------------------------------------------------
-D-----------------------------------------------------
+VERSO
+G         Em7      C
+  Vengo a ti, Guíame
+      D         G
+Santificame en ti
+            Em7           C
+Yo quiero andar en tu verdad
+G     Em7        C
+  Tómame, abrázame
+        D               Am7        D
+Mi corazón hoy vuelvo a ti, solo a ti.
+
+
+CORO
+   G                 Em7
+Quiero a humillarme, buscar tu rostro
+ C                   Am7      D
+Hoy me arrepiento delante de ti
+ G                    Em7
+Vengo a invocarte, inclina tu oído
+   C              Am7      D
+Escucha y perdona mi rebelión.
+
+
+TAG  (2x)
+Am       Em      D
+   Sana nuestra tierra. / /
+
+
+PUENTE
+Eb          F          G
+   Escucha hoy mi oración
+Eb         F           Dsus4 D
+   A ti levanto mi clamor.
+
+
+SOLO
+C - D - | Em - D/F# G | (3x)
+C  | D |
+
+
+CORO
+   G                 Em7
+Quiero a humillarme, buscar tu rostro
+ C                   Am7      D
+Hoy me arrepiento delante de ti
+ G                    Em7
+Vengo a invocarte, inclina tu oído
+   C              Am7      D
+Escucha y perdona mi rebelión.
+
+
+SALIDA (7x)
+Am       Em      D
+   Sana nuestra tierra.
+
+FINAL
+         G  Em7 C Am7 D
+Con tu amor.
+
+FIN
+G

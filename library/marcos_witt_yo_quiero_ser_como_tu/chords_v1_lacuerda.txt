@@ -1,31 +1,72 @@
+Si la sacan con estos acordes les va a salir como la original.
+y recuerden que lo mejor es para Dios.
+
+W=tono
+H=semi-tono
+
 (piano solo)
-  D  A/F#             G  G/A  A -
+  D  D/F#             G - G/A - A -
   Yo quiero ser como Tú.
-  D  A/F#             G  G/A  A7/G -
+  D  D/F#             G - G/A - A7/G -
   Yo quiero ser como Tú.
-     F#                    D/B Bm  D/A -
-  Yo quiero ser un baso de tu  a-mor.
-  Em   A/F#  G          G/A  A   D  A/B  B7 -
+     F#            Bbdim    Bm  D/A -
+  Yo quiero ser un baso de tu amor.
+  Em   D/F#  G          G/A  A   D - A/B - B7 -
   Yo - o     quiero ser co - mo Tú.
 
+(SUBE 1 W)
 (todos los instrumentos suave)
-  E  B/Ab             A  A/B  B -
+  E  Abm7             A - A/B - B -
   Yo quiero ser como Tú.
-  E  B/Ab             A  A/B  B/A -
+  E  Abm7             A - A/B - B/A -
   Yo quiero ser como Tú.
-     Ab            Ab/C    E/C# C#m E/B -
-  Yo quiero ser un baso de tu   a---mor.
-  F#m7 B/Ab  A          A/B  B7  E  Bb/C - C7
+     Ab            Ab/C     C#m7  C#m/B -
+  Yo quiero ser un baso de tu   amor.
+  F#m7 E/Ab  A          A/B  B7  E - Bb/C - 
   Yo - o     quiero ser co - mo Tú.
 
 (SUBE 1 H)
 (todos los instrumentos fuerte)
-  F  Am7              Bb  Bb/C -
+  F  Am7              Bb - Bb/C -
   Yo quiero ser como Tú.
-  F  Am7              Bb  Bb/C  C/Bb -
-  Yo quiero ser como Tú.
-     A          A/C#       F/D  Dm  F/C
-  Yo quiero ser un baso de tu   a---mor.
-   Gm7  F/A  Bb         Bb/C  F  Bb/C -
-1[Yo  o    quiero ser como Tú. (bis)
-   Gm7  F/A  Bb
+  F  Am7              Bb - Bb/C - C/Bb -
+  Yo quiero ser como Tú.  
+     Em7           A7       Dm  Dm/C -
+  Yo quiero ser un baso de tu amor.
+   Gm7  F/A  Bb         Bb/C  F - Bb/C -
+1[Yo - o    quiero ser como Tú. [bis]
+   Gm7  F/A  Bb         Bb/C  Gm7 - F/A - Dm7 -
+2[Yo - o    quiero ser como Tú.
+
+Outro:
+  Gm7  F/A  Bb         Bb/C  Gm7 - F/A - Dm7 -
+  Yo - o    quiero ser como Tú.
+  Bb   F/A  Gm         Bb/C  F - Gm7 - F/A - Bb -
+  Yo - o    quiero ser como Tú.
+     A             A/C#     Dm  Dm/C -
+  Yo quiero ser un baso de tu amor.
+  Gm7  F/A  Bb          C   F - Bb/C - F
+  Yo - o    quiero ser como Tú.
+
+  ACORDES:
+      EADGBe
+  G/A X05433
+ A7/G 3X2020
+Bbdim X12020
+  D/A X04232
+  A/B X22220
+   B7 X21202
+ Abm7 464444
+  B/A X04442
+ Ab/C X31114
+C#m/B 746454
+ E/Ab 4X2450
+ Bb/C X3333X
+ C/Bb X12010
+ Dm/C X3X231
+  Gm7 353333
+  F/A X03211
+
+:::Escuchen la canción para tocarla con los tiempos determinados
+espero que la disfruten:::
+...Chauuuuuuuuuu........__________

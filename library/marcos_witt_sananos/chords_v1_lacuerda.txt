@@ -1,3 +1,4 @@
+ESTRIBILLO 1
 E             A         E             A             E
 Somos tu pueblo,  Y hoy venimos humillados ante Ti
                A          C#m    B    A     
@@ -18,3 +19,15 @@ Es el clamor de este pueblo, Humillado ante Ti
 Es la oracion de tus hijos, Postrados ante Ti
         A            E
 Sananos, sananos
+ 
+ESTRIBILLO 2
+E               A      E         A                            E
+Somos tus hijos, Reconocemos, nuestro orgullo nuestro error
+                 A     C#m   B              A
+Somos tus hijos, Te pedimos hoy perdon
+ 
+PUENTE
+       B                  C#m        A              E
+Invocamos hoy Tu nombre, Y buscamos tu favor
+           B           C#m                  A   E/G#  Dmaj7     B
+Que tu luz nos alumbre, Para honrarte  a     Ti       Señor

@@ -120,7 +120,7 @@
   },
   {
     "id": "marcos_witt_renuevame",
-    "title": "Renuévame",
+    "title": "Renuevame",
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "D"
@@ -130,7 +130,7 @@
     "title": "Gracias",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_poderoso_dios",
@@ -151,14 +151,14 @@
     "title": "Quiero Levantar mis Manos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_tu_fidelidad",
     "title": "Tu fidelidad",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_temprano_yo_te_buscare",
@@ -193,7 +193,7 @@
     "title": "Yo te busco",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_escucharte_hablar",
@@ -214,14 +214,14 @@
     "title": "No hay Dios tan grande como tu",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "E"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_somos_el_pueblo",
     "title": "Somos el Pueblo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "B"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_25_aniversario",
@@ -256,14 +256,14 @@
     "title": "A Dios el Padre",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_a_quien_ire",
     "title": "A quien iré",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "A"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_a_quien_tengo_yo_sino_a_ti",
@@ -277,7 +277,7 @@
     "title": "A Ti",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_a_ti_atribuimos",
@@ -305,7 +305,7 @@
     "title": "A una voz",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "Bm"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_abre_hoy_los_cielos",
@@ -340,28 +340,28 @@
     "title": "Agradecimiento",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "B"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_ahora_es_el_tiempo",
     "title": "Ahora es el tiempo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Bb"
   },
   {
     "id": "marcos_witt_al_estar_aqui",
     "title": "Al Estar Aqui",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F#"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_al_que_es_digno",
     "title": "Al que es digno",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_al_que_esta_sentado_en_el_trono",
@@ -410,7 +410,7 @@
     "title": "Alabanza y honor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_alabare",
@@ -431,7 +431,7 @@
     "title": "Alabemos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_alegre_muy_alegre",
@@ -445,21 +445,21 @@
     "title": "Alegrense",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_aleluya",
     "title": "Aleluya",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "E"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_aleluya_a_nuestro_dios",
     "title": "Aleluya a nuestro Dios",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_aleluya_handel",
@@ -655,14 +655,14 @@
     "title": "Celebraré Me Alegraré",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Gm"
   },
   {
     "id": "marcos_witt_cerca_de_ti",
     "title": "Cerca de tí",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "A"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_como_el_ciervo",
@@ -697,7 +697,7 @@
     "title": "Con tu sangre",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "E"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_consume_con_tu_fuego",
@@ -760,7 +760,7 @@
     "title": "Cuan grande es El",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "E"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_cuan_hermoso",
@@ -781,7 +781,7 @@
     "title": "Dame más sabiduría",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "Dm"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_damos_honor_a_ti",
@@ -795,21 +795,21 @@
     "title": "Danzare, Cantare",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F#"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_declaramos_tu_majestad",
     "title": "Declaramos tu majestad",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_derrama_de_tu_fuego",
     "title": "Derrama de tu fuego",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Cm"
   },
   {
     "id": "marcos_witt_dia_a_dia",
@@ -851,14 +851,14 @@
     "title": "Dios de mi salvación",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_dios_de_pactos",
     "title": "Dios de pactos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_dios_desciende_aqui",
@@ -900,7 +900,7 @@
     "title": "Divino Compañero del Camino",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_donde_esta_el_espiritu_de_dios",
@@ -914,7 +914,7 @@
     "title": "Doxologia",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_echad_la_hoz",
@@ -928,7 +928,7 @@
     "title": "El Amor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_el_centro_de_mi_adoracion",
@@ -942,7 +942,7 @@
     "title": "El Deseado de las Naciones",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_el_es_mi_rey",
@@ -991,7 +991,7 @@
     "title": "El volverá",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_en_la_tierra_habra",
@@ -1005,14 +1005,14 @@
     "title": "En los montes, en los valles",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Dm"
   },
   {
     "id": "marcos_witt_en_navidad",
     "title": "En navidad",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "Bm"
   },
   {
     "id": "marcos_witt_en_ti",
@@ -1040,7 +1040,7 @@
     "title": "Enciende Una Luz",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_eres_mi_pastor",
@@ -1075,7 +1075,7 @@
     "title": "Es aquí, es ahora",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_es_jesus",
@@ -1089,14 +1089,14 @@
     "title": "Es Navidad",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "Bb"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_es_por_ti",
     "title": "Es por tí",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_es_por_tu_amor",
@@ -1152,14 +1152,14 @@
     "title": "Exáltate",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_fiesta",
     "title": "Fiesta",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_fiesta_hay_en_el_corazon",
@@ -1243,7 +1243,7 @@
     "title": "Hay Momentos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_hay_poder",
@@ -1264,14 +1264,14 @@
     "title": "He decidido seguir a Cristo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_heme_aqui",
     "title": "Heme aquí",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_hemos_venido_a_buscarte",
@@ -1362,7 +1362,7 @@
     "title": "Jesús eres mi buen pastor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_jesus_es_el_senior",
@@ -1376,7 +1376,7 @@
     "title": "Jesús es mi Rey Soberano",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_jesus_nacio",
@@ -1397,7 +1397,7 @@
     "title": "La Anunciación",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_la_bendicion",
@@ -1418,7 +1418,7 @@
     "title": "La fuerza de tu amor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_la_puerta_de_la_fe",
@@ -1432,7 +1432,7 @@
     "title": "Las naciones proclamen",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_lavame",
@@ -1467,14 +1467,14 @@
     "title": "Levántate señor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "Cm"
   },
   {
     "id": "marcos_witt_levantate_y_salvame",
     "title": "Levantate y Salvame",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_llename",
@@ -1488,14 +1488,14 @@
     "title": "Llename Señor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_loores_dad_a_cristo_el_rey",
     "title": "Loores dad a Cristo el Rey",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_luz_de_mi_vida",
@@ -1523,7 +1523,7 @@
     "title": "Maravilloso Dios",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_mas_de_ti_cristo_mas_de_ti",
@@ -1544,7 +1544,7 @@
     "title": "Más Que Palabras",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_mayor_es_el",
@@ -1572,7 +1572,7 @@
     "title": "Me has llamado a conocerte",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "Dm"
   },
   {
     "id": "marcos_witt_mesias",
@@ -1614,7 +1614,7 @@
     "title": "Mi deseo de navidad",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F#"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_mi_dios_es_grande_y_fuerte",
@@ -1670,7 +1670,7 @@
     "title": "Motivo de mi cancion",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "B"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_muevete",
@@ -1698,21 +1698,21 @@
     "title": "Nadie pudo amarme como Cristo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_necesitas_conocerle",
     "title": "Necesitas Conocerle",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_no_cambiaria",
     "title": "No cambiaría",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "Cm"
   },
   {
     "id": "marcos_witt_no_hay_nadie_como_tu",
@@ -1733,7 +1733,7 @@
     "title": "No se por qué",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_no_te_afanes",
@@ -1754,7 +1754,7 @@
     "title": "Nuestro padre eres tú",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_nuestro_salvador",
@@ -1810,28 +1810,28 @@
     "title": "Padre Nuestro",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_palabras_de_vida_eterna",
     "title": "Palabras de vida eterna",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_pan_de_vida",
     "title": "Pan de vida",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_paz_cuan_dulce_paz",
     "title": "Paz, Cuan Dulce Paz",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_penia_de_horeb",
@@ -1866,7 +1866,7 @@
     "title": "Poema de salvación",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_pon_aceite_en_mi_vida",
@@ -1880,7 +1880,7 @@
     "title": "Popurri de Coros",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_popurri_ranchero",
@@ -1915,14 +1915,14 @@
     "title": "Porque para siempre",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "F#m"
   },
   {
     "id": "marcos_witt_porque_tu_eres_bueno",
     "title": "Porque tu eres bueno",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_preparad_el_camino",
@@ -1943,14 +1943,14 @@
     "title": "Purificame",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "Bb"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_que_dulce",
     "title": "Que dulce",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_que_lindo_es_mi_cristo",
@@ -1978,7 +1978,7 @@
     "title": "Quién como Tú?",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "C#m"
   },
   {
     "id": "marcos_witt_quien_es_como_tu",
@@ -2027,7 +2027,7 @@
     "title": "Quiero escuchar tu dulce voz",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_quiero_expresar_mi_gratitud",
@@ -2041,7 +2041,7 @@
     "title": "Quiero llenar tu trono de alabanzas",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_quiero_mas_de_ti",
@@ -2069,7 +2069,7 @@
     "title": "Resucito",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_rey_de_gloria",
@@ -2083,7 +2083,7 @@
     "title": "Roca eterna",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "Db"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_rodeado",
@@ -2111,7 +2111,7 @@
     "title": "Sana nuestra tierra",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_sananos",
@@ -2125,7 +2125,7 @@
     "title": "Santo es tu Nombre",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C#m"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_santo_espiritu",
@@ -2174,14 +2174,14 @@
     "title": "Se oye en las naciones",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "Gm"
   },
   {
     "id": "marcos_witt_sendas_antiguas",
     "title": "Sendas antiguas",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_sendas_dios_hara",
@@ -2195,7 +2195,7 @@
     "title": "Señor hazme un radical",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_sera_llena_la_tierra",
@@ -2223,7 +2223,7 @@
     "title": "Si puedes creer",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_siempre_seremos_amigos",
@@ -2258,14 +2258,14 @@
     "title": "Sobrenatural",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Em"
   },
   {
     "id": "marcos_witt_sobrenatural_dios",
     "title": "Sobrenatural Dios",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "Em"
   },
   {
     "id": "marcos_witt_solamente_en_cristo",
@@ -2286,7 +2286,7 @@
     "title": "Sólo por tu sangre",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Eb"
   },
   {
     "id": "marcos_witt_solo_tu_eres_santo",
@@ -2314,7 +2314,7 @@
     "title": "Somos Pueblo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F#"
+    "original_key": "Em"
   },
   {
     "id": "marcos_witt_suenen_dulces_himnos",
@@ -2342,21 +2342,21 @@
     "title": "Te Amo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_te_anhelo",
     "title": "Te Anhelo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_te_dare_alabanza_y_honor",
     "title": "Te daré alabanza y honor",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F#m"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_te_dare_lo_mejor_del_trigo",
@@ -2370,7 +2370,7 @@
     "title": "Te Exaltamos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_te_exhaltamos",
@@ -2405,14 +2405,14 @@
     "title": "Te vengo a decir",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "D"
   },
   {
     "id": "marcos_witt_tengo_la_gloria",
     "title": "Tengo la Gloria",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "Cm"
   },
   {
     "id": "marcos_witt_tengo_la_palabra",
@@ -2447,7 +2447,7 @@
     "title": "Tentación",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "Bm"
+    "original_key": "E"
   },
   {
     "id": "marcos_witt_tiempo",
@@ -2468,7 +2468,7 @@
     "title": "Toda la Tierra",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "A#"
   },
   {
     "id": "marcos_witt_todo_a_cristo",
@@ -2496,7 +2496,7 @@
     "title": "Tómame en tus brazos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "D"
+    "original_key": "Em"
   },
   {
     "id": "marcos_witt_torre_fuerte",
@@ -2524,7 +2524,7 @@
     "title": "Tu eres el gozo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "A"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_tu_eres_el_rey",
@@ -2573,7 +2573,7 @@
     "title": "Tú Harás",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "F"
   },
   {
     "id": "marcos_witt_tu_has_cambiado",
@@ -2622,7 +2622,7 @@
     "title": "Tu nombre es Cristo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_tu_nombre_levantare",
@@ -2636,7 +2636,7 @@
     "title": "Tu nombre oh Dios",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_tu_palabra",
@@ -2699,7 +2699,7 @@
     "title": "Usa mi vida",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "E"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_ven_a_mi",
@@ -2741,14 +2741,14 @@
     "title": "Venció",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_witt_venid_fieles_todos",
     "title": "Venid fieles todos",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "A"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_vision_pastoral",
@@ -2776,7 +2776,7 @@
     "title": "Vivifícame",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Gm"
   },
   {
     "id": "marcos_witt_vivo_para_amarte",
@@ -2804,21 +2804,21 @@
     "title": "Y todo ojo le verá",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Dm"
   },
   {
     "id": "marcos_witt_yeshua",
     "title": "Yeshua",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "F"
+    "original_key": "Am"
   },
   {
     "id": "marcos_witt_yo_creo",
     "title": "Yo Creo",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "G"
   },
   {
     "id": "marcos_witt_yo_me_alegre",
@@ -2860,7 +2860,7 @@
     "title": "Yo tengo un amigo que me ama",
     "artist": "Marcos Witt",
     "genre": "Worship",
-    "original_key": "G"
+    "original_key": "C"
   },
   {
     "id": "marcos_witt_en_quien_puedo_confiar",

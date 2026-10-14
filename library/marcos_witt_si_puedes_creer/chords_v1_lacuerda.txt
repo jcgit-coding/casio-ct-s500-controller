@@ -1,31 +1,81 @@
-Cualquier duda me escriben al correo diego_jc7@hotmail.com
+Aqui les traigo la estructura natural de la cancion que es:
+" Intro, Estrofa, Coro, Estrofa, Coro, Coro, Final "
+En esta cancion enumere los coros para que puedan entender
+ya que hay coros donde hay cortes y otros donde varian las notas.
+
+Esto es para(Piano, guitarra, etc)
+
+Intro: D  G/D  A/D  Em   D   C  G/B   Asus A
+
+            D    D7           G/D  C/E   D/F#   G       C-G
+Si puedes creer,   las mon--ta---ñas    se    moverán
+                Em    D      A/C#                G        A
+Los enfermos se sa---naaaa---ran, tu vida Dios cambiara
+            D   D7        G/D    C/E   D/F#   G        C-G
+Si puedes creer,  los    cie----los    se    abrirán
+             Em    D    A/C#               G      A
+Su gloria descen-deeee--rá su fuego te abrazara
 
 
-Intro
+::CORO::
 
-G------------------------------------------
-D-----------------------------------5S-7---
-A-----5---3--------2---2S-10---------------
-E--0---------------------------5-----------
+            D  (G-D)       G/D   C/E    D/F#  G    C-G
+Si puedes creer       su   glo---ria     ve--ras
+              A        D/F#     Em  D/F#  G
+Su amor sentirás  su poder tocaras
+     A       D  (G-D)     G/D   C/E   D/F#     G   C-G
+Si puedes creer       de   mo---nios   hui----rán
+            A      D/F#        Em    D/F#    A
+Cadenas caerán  tendrás libertad
+             Bm   A
+Si puedes creer,
+            Em  D/F#   G     A         C   G/B  Asus A
+SI puedes Creer,          SI puedes Creer
 
 
-
-Estrofa
-
-G-----------------------------------------------------------------------
-D-------------------4------------------4----------------------5-5-7-----
-A--5---5-5-----5-7---------3------5-7-------7--5----4-------5-5-5-------
-E---------------------3------3--------------------------3----------3-5--
+/Estrofa/ (igual a la de arriba)
 
 
-Coro
+::Coro 2:: ( En este coro vemos el corte para ir a la
+            repeticion del mismo)
 
-G-----------------------------------------------------------
-D------------------4------------------5-7----4--------------
-A---5---5-5----5-7------------------------------------2--4--
-E--------------------3----3-3----5---------------0--2-------
 
-G-------------------------------------------------------------
-D------------------4------------------9-7---4----5----7-------
-A---5---5-5----5-7-------------------7-7----------------------
-E---------
+            D  (G-D)       G/D   C/E    D/F#  G    C-G
+Si puedes creer       su   glo---ria     ve--ras
+              A        D/F#     Em  D/F#  G
+Su amor sentirás  su poder tocaras
+     A       D  (G-D)     G/D   C/E   D/F#     G
+Si puedes creer       de   mo---nios   hui----rán..
+G D/F# Em  D    A/C# Bm  A    D/F#       Em       D/F#      G  A
+     Cadenas caerán  ..      tendrás libertad Libertad Libertaad...
+
+
+::CORO 3 FINAL:: (Aqui varian las ultimas notas para
+                 teminar la cancion)
+
+            D  (G-D)       G/D   C/E    D/F#  G    C-G
+Si puedes creer       su   glo---ria     ve--ras
+              A        D/F#     Em  D/F#  G
+Su amor sentirás  su poder tocaras
+     A       D  (G-D)     G/D   C/E   D/F#     G   C-G
+Si puedes creer       de   mo---nios   hui----rán
+            A      D/F#        Em    D/F#    A
+Cadenas caerán  tendrás libertad
+             Bm   Em      D/F#     G    Em        A         C  A  D
+SI puedes creer,     SI puedes creer,        SI puedes creer
+
+///D C///
+
+Estos Dos ultimos acordes van uando Marcos Que hablando
+"Si tan solo puedes tener fe como del tamaño..."
+
+Bueno Muchachos este es mi primer a porte a esta pagina
+que ha sido de bendición para muuchos, cualquier duda
+(eduard9128@hotmail.com)
+le bendigo en el Nombre de Jesus..Portence Bien :D
+
+Bendiciones Para el grupo de Confraternidad Cristiana Cartagena
+Helder Rodriguez, Jhon Segura"Prix", Brayan Sossa,
+Alex del Valle, Jhon Morales, Jesus Cuadro, Naisir Fuentes,
+Jeison Guzman, July Guzman mi lider,
+:D Dios los Bendiga..!!!

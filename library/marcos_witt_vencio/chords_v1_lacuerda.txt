@@ -1,32 +1,35 @@
-ESTA LO SAQUE DEL DE VENCIO SI LES GUSTA VOTEN LA CALIDAD
-PARA QUE NO LO QUITEN
+Una versión un poco mas sencilla mis hermanos, Dios les bendiga.
 
-T=GOLPE C/PULGAR   P=LATIGAZO (jalar) DE CUERDA
-S=DESLIZAR A LA SIG NOTA
+INTRO DE BAJO
+la linea del bajo va acompañada con:
 
-G--------------------------------
-D------2---4-4--2--------------
-A--4----------------4--2--------
-E---------------------------------
-   SE REPITE DURANTE EL CORO
+               // C#m7 - F# //
 
-EN LA ESTROFA:
-G---------------------------------------------------
-D---------------------4P---4P--------------7P---7P----7P-7P
-A-4T---4T-4T-------------------------------------------
-E--------------6TS-2T----2T-----2T-3T-4T-5T--5T----4T
 
-EN EL PAP PAP PARARARAP PAP.... 1 PARTE
-TOCARLO RAPIDO
+Coro:
+      C#m7 F#                C#m7  F#
+   Venció             Cristo venció
+      C#m7 F#                C#m7  F#
+   Venció             Al diablo en la cruz
+      C#m7 F#                C#m7  F#
+   Venció             Cristo venció
+      C#m7 F#                C#m7  F#
+   Venció             A toda potestad
 
-G--------------------------------------------
-D-----------------2---2------2S-4---------
-A--4-4---4-2-4----4------4------------------
-E----------------------------------------------
 
-EN EL PAP PAP PARARARAP PAP.... 2 PARTE
-TOCARLO RAPIDO
+        C#m7        F#7
+Él es Jesús Hijo de Dios
+        A            G#7
+Y en El nada se puede perder
+        C#m7         F#7
+Él dijo que Él es la Luz
+        A                  G#7
+Es el Camino, la Vida y la Verdad
 
-G--------------------2-----2--------------------
-D-----4-4---4-2-4-----4-------4S-2----------------
-A----------------------------------------4-4-
+
+(Parte del Rap)Puente:  // C#m7  D#  E  F# //
+
+
+Final:
+                 G#m7 G#m7 G#7  C#m7
+Cristo… ¡Venció!
