@@ -311,7 +311,7 @@ const RepertoireSync = {
 
         wrap.style.position = 'relative';
         wrap.style.paddingRight = '24px';
-        wrap.innerHTML = `<div id="_song-scroll" style="height:100%;overflow-y:auto;padding-right:4px;">${listHTML}</div>`;
+        wrap.innerHTML = `<div id="_song-scroll" style="height:100%;overflow-y:scroll;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--accent) rgba(255,255,255,0.06);">${listHTML}</div>`;
 
         clearIndex();
         const idx = document.createElement('div');
