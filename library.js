@@ -8,7 +8,7 @@ const RepertorioApp = {
     currentSong: null,
     
     notes:      ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
-    noteLabels: ["DO", "DO# / REb", "RE", "RE# / MIb", "MI", "FA", "FA# / SOLb", "SOL", "SOL# / LAb", "LA", "LA# / SIb", "SI"],
+    noteLabels: ["C", "C# / Db", "D", "D# / Eb", "E", "F", "F# / Gb", "G", "G# / Ab", "A", "A# / Bb", "B"],
 
     init() {
         this.bindEvents();
