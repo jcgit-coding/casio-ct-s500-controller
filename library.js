@@ -478,10 +478,11 @@ const RepertoireSync = {
         picker.innerHTML = `<span style="font-size:10px;color:var(--text-muted);font-weight:700;margin-right:4px;">VERSIÓN:</span>` +
             versions.map((v, i) => {
                 const isActive = v.file === activeFile;
+                const ratingStr = (v.lcd != null && v.lcd > 0) ? ` · ${v.lcd}★` : '';
                 return `<button onclick="RepertoireSync.openSong('${id}','${v.file}')"
                     style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};
                     background:${isActive ? 'var(--accent)' : 'transparent'};color:${isActive ? '#000' : 'var(--text-muted)'};cursor:pointer;">
-                    ${site(v.file)} v${i+1}
+                    ${site(v.file)} v${i+1}${ratingStr}
                 </button>`;
             }).join('');
     }

@@ -265,8 +265,13 @@ function saveSong(artistName, artistSlug, title, baseSlug, versionFiles) {
     for (const vf of versionFiles) {
         const fname = vf.file;
         fs.writeFileSync(path.join(songDir, fname), vf.text, 'utf8');
-        if (!existing.find(e => e.file === fname)) {
-            existing.push({ file: fname, source: vf.source });
+        const existing_entry = existing.find(e => e.file === fname);
+        if (!existing_entry) {
+            const entry = { file: fname, source: vf.source };
+            if (vf.lcd != null) entry.lcd = vf.lcd;
+            existing.push(entry);
+        } else if (vf.lcd != null && existing_entry.lcd == null) {
+            existing_entry.lcd = vf.lcd;
         }
     }
 
@@ -322,17 +327,18 @@ function upsertIndex(entry) {
         let vNum = 1;
 
         // Slugs a procesar: los del grupo + extras descubiertos dentro de cada página
-        const slugQueue = group.versions.map(v => v.slug);
-        const seenSlugs = new Set(slugQueue);
+        // slugQueue entries: {slug, lcd}
+        const slugQueue = group.versions.map(v => ({ slug: v.slug, lcd: v.lcd }));
+        const seenSlugs = new Set(slugQueue.map(v => v.slug));
 
         for (let qi = 0; qi < slugQueue.length; qi++) {
-            const slug = slugQueue[qi];
+            const { slug, lcd } = slugQueue[qi];
             await sleep(DELAY);
             try {
                 const { usedUrl, texts, skippedType, extraSlugs } = await lcFetchVersion(lcSlug, slug);
                 // Agregar versiones alternativas descubiertas en la página
                 for (const es of (extraSlugs || [])) {
-                    if (!seenSlugs.has(es)) { seenSlugs.add(es); slugQueue.push(es); }
+                    if (!seenSlugs.has(es)) { seenSlugs.add(es); slugQueue.push({ slug: es, lcd: 0 }); }
                 }
                 if (skippedType) {
                     process.stdout.write(`[tipo ${skippedType} ignorado] `);
@@ -342,7 +348,8 @@ function upsertIndex(entry) {
                     versionFiles.push({
                         file: `chords_v${vNum}_lacuerda.txt`,
                         text: txt,
-                        source: usedUrl
+                        source: usedUrl,
+                        lcd
                     });
                     vNum++;
                 }
