@@ -1,0 +1,24 @@
+{
+  "id": "jesus_adrian_romero_princesas_magicas",
+  "title": "Princesas Mágicas",
+  "artist": "Jesús Adrián Romero",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/jesus_adrian_romero/princesas_magicas",
+      "lcd": 0
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/jesus_adrian_romero/princesas_magicas",
+      "lcd": 0
+    },
+    {
+      "file": "chords_v3_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/jesus_adrian_romero/princesas_magicas",
+      "lcd": 0
+    }
+  ]
+}

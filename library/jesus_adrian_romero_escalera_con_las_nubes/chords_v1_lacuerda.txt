@@ -1,0 +1,45 @@
+Las transcripciones anteriores sólo tienen un error y consiste
+en lo siguiente:
+Tanto en la introducción como en la estrofa existe una progresión
+desecendente, donde el bajo desciende de B a A. A es la tercera menor
+de F#m, que es la quinta de B. De esta manera, el segundo acorde de
+la canción es F#m/A
+
+ACORDES DEL INICIO:  B  F#m/A  G#m  E
+
+ B                       F#m/A
+Haz una escalera con las nubes
+                          G#m
+Abre una ventana allá en el cielo
+        E                    F#
+para subir cada mañana y saludarte
+
+ B                        F#m/A
+Haz un arco iris con tu lumbre,
+                        G#m
+Canta una canción usando el viento
+           E                     F#
+Para escuchar tu corazón y enamorarme otra vez...
+
+D#                          E
+Porque si te siento junto a mí
+D#                            E
+Es más fácil caminar si estoy aquí
+          F#
+cerca de ti...
+
+Coro:
+B                      G#m
+Hazme danzar como el árbol
+            D#            E
+cuando se asoma por mi ventana,
+B                       G#m
+Hazme brillar como el agua
+            D#                 E
+cuando los rayos del sol la abrazan,
+G#m                B
+Hazme reír como un niño
+               D#                 E
+cuando en sus sueños en ti descansa,
+  Em            B
+quiero estar en ti...

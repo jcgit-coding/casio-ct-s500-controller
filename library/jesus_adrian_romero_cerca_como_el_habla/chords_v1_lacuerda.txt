@@ -1,0 +1,61 @@
+E(no.3)           B(add4)/D#         C#m7   A(add2)
+  Desde aquí hasta allá donde raya el alba
+                  E(no.3)          B(add4)
+  Te puedo encontrar cerca como el habla estás
+E(no.3)            B(add4)/D#        C#m7   A(add2)
+  Desde aquí hasta allá todo tú lo llenas
+                  E(no.3)          B(add4)
+  Desde donde estoy hasta las estrellas.
+C#m7                               A(add2)
+  Si te siento lejos no es porque no estas
+                     E(no.3)               B(add4)
+  No es porque te has ido siempre ahí estarás
+C#m7                               A(add2)
+  Si te siento lejos es que me escondí
+              F#m7(add4)         B(add4)   A(add2)/C#  B(add4)
+  Me cubrí los ojos me aleje de ti
+
+  coro
+    E(no.3)       B(add4)      C#m7
+  Siempre tu estarás es tu promesa
+           A(add2)     E(no.3)                    B(add4)  A(add2)
+  No te irás nunca me dejas siempre fiel allí estarás
+   E(no.3)     B(add4)     C#m7
+  No te olvidarás de tu palabra
+       A(add2)      E(no.3)         G#7            C#m7*
+  Estarás por la mañana y  por la noche al descansar
+      Bsus  Asus2    E(no.3) B(add4)/D# C#m7 A(add2)
+  Tu mano me protegerá.
+
+
+(Se sigue la misma secuencia de acordes de la 1era estrofa)
+  En la oscuridad puedo siempre hallarte
+  Puedo en ti confiar puedo siempre hablarte
+  En mi soledad siempre estás conmigo
+  Eres el calor cuando tengo frio.
+  Si te siento lejos no es porque no estas
+  No es porque te has ido siempre ahí estarás
+  Si te siento lejos es que me escondí
+  Me cubrí los ojos me aleje de ti.
+
+Acordes:
+E(no.3) | B(add4)/D# |C#m7 |A(add2) |B(add4) |F#m7(add4)
+
+E-0     |E-0         |E-0  |E-0     |E-0     |E-0
+B-0     |B-0         |B-0  |B-0     |B-0     |B-0
+G-9     |G-8         |G-9  |G-6     |G-8     |G-9
+D-9     |D-9         |D-9  |D-7     |D-9     |D-7
+A-7     |A-6         |A-X  |A-0     |A-9     |A-9
+E-0     |E-X         |E-9  |E-X     |E-7     |E-X
+
+A(add2)/C# |G#7 |C#m7* |Bsus |A(add2)*
+
+E-0        |E-4 |E-0   |E-0  |E-0
+B-0        |B-4 |B-0   |B-0  |B-0
+G-6        |G-5 |G-6   |G-6  |G-2
+D-7        |D-4 |D-6   |D-6  |D-2
+A-4        |A-6 |A-4   |A-2  |A-0
+E-X        |E-4 |E-X   |E-X  |E-X
+Nota:
+El tono original es Eb, Tocado en mi por cuentiones prácticas.
+Afinación de la guitarra ½ debajo: 1-Eb, 2-Bb, 3-Gb, 4-Db, 5-Ab, 6-Eb
