@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
     (function(){
-        var V='v267';
+        var V='v268';
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
             var u=new URL(window.location.href);
@@ -84,7 +84,17 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v255 &middot; Tue Oct 14 &middot; COT</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version"></span>
+                <script>
+                (function(){
+                    var d=new Date(document.lastModified);
+                    var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                    var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    var pad=function(n){return n<10?'0'+n:n;};
+                    var label=days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+                    document.getElementById('appVersionBadge').textContent=V+' · '+label;
+                })();
+                </script>
             </div>
         </div>
 
