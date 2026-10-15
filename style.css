@@ -193,7 +193,6 @@ body {
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    user-select: none;
     margin: 0;
     padding: 0;
 }
