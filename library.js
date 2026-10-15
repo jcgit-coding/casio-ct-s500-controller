@@ -150,13 +150,13 @@ const RepertorioApp = {
     parseRawTextToChords(text) {
         // Notación inglesa: C D E F G A B
         const EN_ROOT = '[CDEFGAB]';
-        const EN_QUAL = '(?:#|b)?(?:m(?:aj)?|dim|aug|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?';
+        const EN_QUAL = '(?:#|b)?(?:m(?:aj)?|dim|aug|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?(?:/\\d+)?';
         const EN_BASS = '(?:\\/[CDEFGAB](?:#|b)?)?';
 
         // Notación española/solfège: DO RE MI FA SOL LA SI (y mayúsculas mixtas como Sol, Sim, Fa#)
         const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';
-        // Sufijos: #/b accidental, m/M/maj/dim/aug/sus/add/+/(aug)/(add2) etc., números de extensión
-        const ES_QUAL = '(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?';
+        // Sufijos: #/b accidental, calificador, extensión, sus[24] compuesto (para 7sus4, 9sus4), fracción (6/9)
+        const ES_QUAL = '(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?(?:/\\d+)?';
         const ES_BASS = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
 
         // Español PRIMERO: DO/RE/MI etc deben ganar sobre D/E/... inglés
