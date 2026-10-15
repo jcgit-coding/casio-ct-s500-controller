@@ -181,6 +181,14 @@ function groupSongs(songs) {
     return groups;
 }
 
+// Tipos de versión en lacuerda (campo otipo en el HTML de la canción):
+//   R = Guitarra / Letra y Acordes  ← solo este nos interesa
+//   B = Bajo (tab de bajo)
+//   P = Piano / Teclados
+//   U = Ukulele
+// Si no hay otipo (página antigua), asumimos que es guitarra.
+const LC_CHORD_TIPOS = new Set(['R', '']);
+
 async function lcFetchVersion(lcSlug, songSlug) {
     const shtmlUrl = `${LC_BASE}/${lcSlug}/${songSlug}.shtml`;
     const baseUrl  = `${LC_BASE}/${lcSlug}/${songSlug}`;
@@ -191,9 +199,16 @@ async function lcFetchVersion(lcSlug, songSlug) {
         html = await fetchHTML(baseUrl);  usedUrl = baseUrl;
     }
 
+    // Filtrar por tipo: solo Letra y Acordes (guitarra, otipo='R')
+    const otipoM = html.match(/otipo='([^']*)'/);
+    const otipo  = otipoM ? otipoM[1].toUpperCase() : '';
+    if (otipoM && !LC_CHORD_TIPOS.has(otipo)) {
+        return { usedUrl, texts: [], skippedType: otipo };
+    }
+
     const texts = [];
 
-    // Intentar extraer rtBody divs (pueden contener múltiples tabs/versiones en la página)
+    // Extraer rtBody divs
     const rtBodies = [...html.matchAll(/<div[^>]*class=['"]?rtBody['"]?[^>]*>([\s\S]*?)<\/div>/gi)];
     for (const m of rtBodies) {
         const preM = m[1].match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
@@ -298,7 +313,11 @@ function upsertIndex(entry) {
         for (const ver of group.versions) {
             await sleep(DELAY);
             try {
-                const { usedUrl, texts } = await lcFetchVersion(lcSlug, ver.slug);
+                const { usedUrl, texts, skippedType } = await lcFetchVersion(lcSlug, ver.slug);
+                if (skippedType) {
+                    process.stdout.write(`[tipo ${skippedType} ignorado] `);
+                    continue;
+                }
                 for (const txt of texts) {
                     versionFiles.push({
                         file: `chords_v${vNum}_lacuerda.txt`,
