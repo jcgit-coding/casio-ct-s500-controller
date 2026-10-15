@@ -164,15 +164,22 @@ const RepertorioApp = {
             `(?:${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g'
         );
 
+        // Etiquetas de sección conocidas (para styling y detección)
+        const SECTION_LABEL_RE = /^((?:Coro|Estrofa|Verso|Puente|Intro|Outro|Bridge|Chorus|Verse|Pre-?[Cc]oro|Pre-?[Cc]horus|Vamp|Tag|Interludio|Instrumental|Solo|Final|Llave)(?:\s+\d+)?)\s*(?:\([^)]*\))?\s*:?\s*$/i;
+
         const isChordLine = (line) => {
             const trimmed = line.trim();
             if (!trimmed) return false;
-            // Ignorar líneas que empiezan con // (marcadores de sección)
             if (trimmed.startsWith('//')) return false;
-            // Strip etiquetas de sección: "Intro:", "Coro:", "Verso 1:", etc.
-            const noLabel = trimmed.replace(/^[A-Za-záéíóúüñÁÉÍÓÚÜÑ\s\d().]+:\s*/, '').trim();
+            // Etiquetas de sección puras → nunca son línea de acordes
+            if (SECTION_LABEL_RE.test(trimmed)) return false;
+            // Strip etiqueta de sección al inicio, incluyendo repeticiones como (x3)
+            const noLabel = trimmed
+                .replace(/^[A-Za-záéíóúüñÁÉÍÓÚÜÑ\s\d().]+:\s*/, '')
+                .replace(/\(x\s*\d+\)/gi, '')  // "(x3)", "(x 2)"
+                .trim();
             if (!noLabel) return false;
-            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-|./\\()\[\]x]+/gi, '').replace(/\d+/g, '').trim();
+            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-|./\\()\[\]]+/gi, '').replace(/\d+/g, '').trim();
             return leftover.length === 0;
         };
 
@@ -182,7 +189,6 @@ const RepertorioApp = {
         );
 
         // Separa acordes concatenados sin espacio: "FAFA" → "FA FA", "SIbFASOLm7" → "SIb FA SOLm7"
-        // Encuentra matches consecutivos sin gap y les inserta espacio entre ellos
         const CHORD_FIND_RE = new RegExp(
             `${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS}`, 'g'
         );
@@ -204,6 +210,12 @@ const RepertorioApp = {
 
         const lines = text.split('\n');
         const htmlLines = lines.map(line => {
+            const trimmed = line.trim();
+            // Etiqueta de sección → resaltar con estilo propio
+            if (trimmed && SECTION_LABEL_RE.test(trimmed)) {
+                const label = trimmed.replace(/:$/, '');
+                return `<span style="display:inline-block;margin-top:10px;margin-bottom:2px;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);opacity:0.75;">${label}</span>`;
+            }
             let parsedLine = line;
             if (isChordLine(line)) {
                 parsedLine = splitConcatChords(line).replace(CHORD_RE, chord =>
