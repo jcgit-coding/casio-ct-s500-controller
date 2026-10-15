@@ -181,13 +181,24 @@ const RepertorioApp = {
             `(${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g'
         );
 
-        // Separa acordes concatenados sin espacio: "SImLA+(aug)" → "SIm LA+(aug)"
-        // Solo aplica en líneas de acordes, entre el fin de un acorde y el inicio del siguiente
+        // Separa acordes concatenados sin espacio: "FAFA" → "FA FA", "SIbFASOLm7" → "SIb FA SOLm7"
+        // Encuentra matches consecutivos sin gap y les inserta espacio entre ellos
+        const CHORD_FIND_RE = new RegExp(
+            `${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS}`, 'g'
+        );
         const splitConcatChords = (line) => {
-            // Inserta espacio antes de raíz española cuando la precede fin de acorde
-            let result = line.replace(/([a-z0-9#b\)])(?=(DO|RE|MI|FA|SOL|LA|SI)(?![a-zA-Z]))/g, '$1 ');
-            // Inserta espacio antes de raíz inglesa (A-G mayúscula) cuando la precede fin de acorde
-            result = result.replace(/([a-z0-9#b\)])(?=[A-G](?:[#b]|m|$|\s|\())/g, '$1 ');
+            let result = '';
+            let lastEnd = 0;
+            let prevEnd = -1;
+            let m;
+            CHORD_FIND_RE.lastIndex = 0;
+            while ((m = CHORD_FIND_RE.exec(line)) !== null) {
+                const gap = line.slice(lastEnd, m.index);
+                result += gap + (m.index === prevEnd ? ' ' : '') + m[0];
+                lastEnd = m.index + m[0].length;
+                prevEnd = lastEnd;
+            }
+            result += line.slice(lastEnd);
             return result;
         };
 
