@@ -150,14 +150,17 @@ const RepertorioApp = {
     parseRawTextToChords(text) {
         // Notación inglesa: C D E F G A B
         const EN_ROOT = '[CDEFGAB]';
-        const EN_QUAL = '(?:#|b)?(?:m(?:aj)?|dim|aug|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?(?:/\\d+)?';
-        const EN_BASS = '(?:\\/[CDEFGAB](?:#|b)?)?';
+        // Sufijo inglés: accidental, calificador, extensión base, paréntesis numérico (9), (9/13), (add2), (maj7), etc.
+        const EN_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
+        const EN_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${EN_PAREN}(?:\\/\\d+)?`;
+        const EN_BASS  = '(?:\\/[CDEFGAB](?:#|b)?)?';
 
         // Notación española/solfège: DO RE MI FA SOL LA SI (y mayúsculas mixtas como Sol, Sim, Fa#)
         const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';
-        // Sufijos: #/b accidental, calificador, extensión, sus[24] compuesto (para 7sus4, 9sus4), fracción (6/9)
-        const ES_QUAL = '(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?(?:/\\d+)?';
-        const ES_BASS = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
+        // Sufijo español: igual de completo, con paréntesis numérico adicional
+        const ES_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
+        const ES_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${ES_PAREN}(?:\\/\\d+)?`;
+        const ES_BASS  = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
 
         // Español PRIMERO: DO/RE/MI etc deben ganar sobre D/E/... inglés
         const CHORD_STRIP_RE = new RegExp(
@@ -353,6 +356,8 @@ const RepertoireSync = {
         }
     },
 
+    _activeArtist: null,
+
     initSearchFilter() {
         const input = document.getElementById('lib-song-search-filter');
         if (!input || input._bound) return;
@@ -360,90 +365,189 @@ const RepertoireSync = {
         input.addEventListener('input', () => {
             const q = input.value.trim().toLowerCase();
             if (!q) {
-                this.renderSongList(this.allSongs);
+                // Sin búsqueda: volver a la pantalla de artistas (o del artista activo)
+                if (this._activeArtist) {
+                    const songs = this.allSongs.filter(s => s.artist === this._activeArtist);
+                    this._renderArtistSongs(this._activeArtist, songs);
+                } else {
+                    this.renderSongList(this.allSongs);
+                }
             } else {
-                const filtered = this.allSongs.filter(s => 
-                    (s.title && s.title.toLowerCase().includes(q)) || 
+                // Búsqueda activa: mostrar resultados planos agrupados por artista
+                const filtered = this.allSongs.filter(s =>
+                    (s.title && s.title.toLowerCase().includes(q)) ||
                     (s.artist && s.artist.toLowerCase().includes(q))
                 );
-                this.renderSongList(filtered);
+                this._renderSearchResults(filtered, q);
             }
         });
     },
-    
+
+    // Pantalla 1: lista de artistas
     renderSongList(songs) {
         const wrap = document.getElementById('cloud-song-list-container');
         if (!wrap) return;
-
-        const clearIndex = () => { const o = document.getElementById('_alpha-index'); if (o) o.remove(); };
+        this._activeArtist = null;
+        this._clearAlphaIndex();
 
         if (!songs || songs.length === 0) {
-            wrap.innerHTML = "<div style='color:var(--text-muted); font-size:12px; padding:8px;'>No matching songs found.</div>";
+            wrap.innerHTML = "<div style='color:var(--text-muted);font-size:12px;padding:10px;'>Sin canciones en la biblioteca.</div>";
             wrap.style.paddingRight = '';
-            clearIndex();
             return;
         }
 
-        // Group by artist, sorted alphabetically
         const byArtist = {};
         songs.forEach(s => {
-            const artist = s.artist || "Unknown Artist";
-            if (!byArtist[artist]) byArtist[artist] = [];
-            byArtist[artist].push(s);
+            const a = s.artist || 'Sin artista';
+            if (!byArtist[a]) byArtist[a] = [];
+            byArtist[a].push(s);
         });
-        const sortedArtists = Object.keys(byArtist).sort((a, b) => a.localeCompare(b));
+        const sorted = Object.keys(byArtist).sort((a, b) => a.localeCompare(b, 'es'));
 
-        // Song list HTML with per-artist sections
-        const listHTML = sortedArtists.map(artist => {
-            const anchorId = 'artist-' + artist.replace(/[^a-z0-9]/gi, '_');
-            const letter = artist[0].toUpperCase();
-            return `<div id="${anchorId}" style="margin-bottom:16px;">
-                <div style="display:flex;align-items:center;gap:8px;padding:4px 0 6px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:5px;">
-                    <span style="font-size:15px;font-weight:800;color:var(--accent);min-width:18px;">${letter}</span>
-                    <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">${artist}</span>
+        wrap.style.paddingRight = '28px';
+        wrap.innerHTML = sorted.map(artist => {
+            const count = byArtist[artist].length;
+            const initial = artist[0].toUpperCase();
+            const aid = 'art-' + artist.replace(/[^a-z0-9]/gi, '_');
+            return `<div id="${aid}" style="margin-bottom:4px;">
+                <div onclick="RepertoireSync._openArtist('${artist.replace(/'/g,"\\'")}',event)"
+                     style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;
+                            background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+                            cursor:pointer;transition:background .12s;user-select:none;"
+                     onmouseover="this.style.background='rgba(255,255,255,0.09)'"
+                     onmouseout="this.style.background='rgba(255,255,255,0.04)'">
+                    <span style="width:28px;height:28px;border-radius:50%;background:rgba(var(--accent-rgb,0,255,204),0.15);
+                                 display:flex;align-items:center;justify-content:center;flex-shrink:0;
+                                 font-size:12px;font-weight:800;color:var(--accent);">${initial}</span>
+                    <span style="flex:1;font-size:13px;font-weight:700;color:var(--text);">${artist}</span>
+                    <span style="font-size:11px;font-weight:600;color:var(--text-muted);background:rgba(255,255,255,0.06);
+                                 padding:2px 7px;border-radius:10px;">${count}</span>
+                    <span style="font-size:14px;color:var(--text-muted);opacity:0.5;">›</span>
                 </div>
-                ${byArtist[artist].map(s => {
-                    const hasActive = typeof EventsMgr !== 'undefined' && EventsMgr.activeEventId;
-                    return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
-                        <div style="flex:1;padding:7px 10px 7px 26px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .12s;"
-                             onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'"
-                             onclick="RepertoireSync.openSong('${s.id}')">
-                            <span style="font-weight:600;font-size:13px;color:var(--text);">${s.title}</span>
-                        </div>
-                        ${hasActive ? `<div style="cursor:pointer;padding:5px 8px;border-radius:7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);font-size:14px;line-height:1;color:var(--accent);"
-                             title="Agregar al evento" onclick="EventsMgr.addSong('${s.id}')">+</div>` : ''}
-                    </div>`;
-                }).join('')}
             </div>`;
         }).join('');
 
-        // Alphabet index — highlight only letters present
-        const usedLetters = new Set(sortedArtists.map(a => a[0].toUpperCase()));
-        const indexHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(l => {
-            const has = usedLetters.has(l);
-            return `<div style="font-size:9px;font-weight:700;line-height:1.9;text-align:center;width:100%;cursor:${has ? 'pointer' : 'default'};color:${has ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};"
-                        ${has ? `onclick="RepertoireSync._jumpToLetter('${l}')"` : ''}>${l}</div>`;
-        }).join('');
+        // Índice alfabético
+        const used = new Set(sorted.map(a => a[0].toUpperCase()));
+        this._renderAlphaIndex(used, letter => {
+            const target = [...wrap.querySelectorAll('[id^="art-"]')]
+                .find(el => el.querySelector('span:nth-child(2)')?.textContent.trim()[0]?.toUpperCase() >= letter);
+            if (target) target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        });
+    },
 
-        wrap.innerHTML = listHTML;
-        clearIndex();
+    // Pantalla 2: canciones de un artista
+    _openArtist(artist) {
+        this._activeArtist = artist;
+        const songs = this.allSongs.filter(s => s.artist === artist);
+        this._renderArtistSongs(artist, songs);
+    },
+
+    _renderArtistSongs(artist, songs) {
+        const wrap = document.getElementById('cloud-song-list-container');
+        if (!wrap) return;
+        this._clearAlphaIndex();
+        wrap.style.paddingRight = '';
+
+        const hasActive = typeof EventsMgr !== 'undefined' && EventsMgr.activeEventId;
+
+        wrap.innerHTML = `
+            <div style="display:flex;align-items:center;gap:8px;padding:0 0 10px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;position:sticky;top:0;background:var(--panel-bg,#1a1a2e);z-index:2;">
+                <button onclick="RepertoireSync._backToArtists()"
+                        style="display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;color:var(--accent);font-size:12px;font-weight:700;letter-spacing:0.04em;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='none'">
+                    ‹ ARTISTAS
+                </button>
+                <span style="font-size:13px;font-weight:800;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${artist}</span>
+                <span style="font-size:10px;color:var(--text-muted);">${songs.length} canciones</span>
+            </div>
+            ${songs.length === 0
+                ? "<div style='color:var(--text-muted);font-size:12px;padding:10px;'>Sin canciones.</div>"
+                : songs.map(s => `
+                    <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
+                        <div style="flex:1;padding:8px 12px;border-radius:7px;background:rgba(255,255,255,0.03);
+                                    border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .12s;"
+                             onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                             onmouseout="this.style.background='rgba(255,255,255,0.03)'"
+                             onclick="RepertoireSync.openSong('${s.id}')">
+                            <span style="font-weight:600;font-size:13px;color:var(--text);">${s.title}</span>
+                        </div>
+                        ${hasActive ? `<div style="cursor:pointer;padding:6px 9px;border-radius:7px;background:rgba(255,255,255,0.05);
+                                           border:1px solid rgba(255,255,255,0.1);font-size:13px;line-height:1;color:var(--accent);"
+                                      title="Agregar al evento" onclick="EventsMgr.addSong('${s.id}')">+</div>` : ''}
+                    </div>`).join('')}`;
+    },
+
+    _backToArtists() {
+        const input = document.getElementById('lib-song-search-filter');
+        if (input) input.value = '';
+        this.renderSongList(this.allSongs);
+    },
+
+    // Búsqueda activa: resultados planos agrupados
+    _renderSearchResults(songs, q) {
+        const wrap = document.getElementById('cloud-song-list-container');
+        if (!wrap) return;
+        this._clearAlphaIndex();
+        wrap.style.paddingRight = '';
+
+        if (!songs.length) {
+            wrap.innerHTML = "<div style='color:var(--text-muted);font-size:12px;padding:10px;'>Sin resultados.</div>";
+            return;
+        }
+
+        const hl = txt => {
+            const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+            return (txt||'').replace(re, `<mark style="background:rgba(var(--accent-rgb,0,255,204),0.25);color:var(--text);border-radius:2px;">$1</mark>`);
+        };
+
+        const byArtist = {};
+        songs.forEach(s => {
+            const a = s.artist || 'Sin artista';
+            if (!byArtist[a]) byArtist[a] = [];
+            byArtist[a].push(s);
+        });
+        const sorted = Object.keys(byArtist).sort((a,b) => a.localeCompare(b,'es'));
+
+        wrap.innerHTML = sorted.map(artist => `
+            <div style="margin-bottom:12px;">
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;
+                            color:var(--accent);opacity:0.7;padding:2px 0 5px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;">
+                    ${hl(artist)}
+                </div>
+                ${byArtist[artist].map(s => `
+                    <div style="padding:7px 10px 7px 14px;border-radius:7px;background:rgba(255,255,255,0.03);
+                                border:1px solid rgba(255,255,255,0.06);cursor:pointer;margin-bottom:3px;transition:background .12s;"
+                         onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                         onmouseout="this.style.background='rgba(255,255,255,0.03)'"
+                         onclick="RepertoireSync.openSong('${s.id}')">
+                        <span style="font-weight:600;font-size:13px;color:var(--text);">${hl(s.title)}</span>
+                    </div>`).join('')}
+            </div>`).join('');
+    },
+
+    _clearAlphaIndex() {
+        document.getElementById('_alpha-index')?.remove();
+    },
+
+    _renderAlphaIndex(usedLetters, onClickFn) {
+        const wrap = document.getElementById('cloud-song-list-container');
+        if (!wrap) return;
+        this._clearAlphaIndex();
         const idx = document.createElement('div');
         idx.id = '_alpha-index';
-        idx.style.cssText = 'position:absolute;top:0;right:0;bottom:0;width:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5;pointer-events:none;';
-        idx.innerHTML = indexHTML.replace(/onclick=/g, 'style="pointer-events:auto;" onclick=');
+        idx.style.cssText = 'position:absolute;top:0;right:0;bottom:0;width:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5;';
+        idx.innerHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(l => {
+            const has = usedLetters.has(l);
+            return `<div style="font-size:9px;font-weight:700;line-height:1.9;text-align:center;width:100%;cursor:${has?'pointer':'default'};color:${has?'var(--accent)':'rgba(255,255,255,0.15)'};"
+                        ${has ? `onclick="RepertoireSync._alphaJump('${l}')"` : ''}>${l}</div>`;
+        }).join('');
         wrap.insertBefore(idx, wrap.firstChild);
+        this._alphaJumpFn = onClickFn;
     },
 
-    _jumpToLetter(letter) {
-        const scroll = document.getElementById('cloud-song-list-container');
-        if (!scroll) return;
-        const groups = [...scroll.querySelectorAll('[id^="artist-"]')];
-        const target = groups.find(el => {
-            const letterSpan = el.querySelector('span');
-            return letterSpan && letterSpan.textContent.trim() >= letter;
-        });
-        if (target) target.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    },
+    _alphaJumpFn: null,
+    _alphaJump(letter) { if (this._alphaJumpFn) this._alphaJumpFn(letter); },
     
     async openSong(id, versionFile) {
         try {
