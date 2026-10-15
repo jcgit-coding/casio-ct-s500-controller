@@ -81,19 +81,26 @@ const RepertorioApp = {
     _applyTransposeShift(updateSelect) {
         this.applyTranspose(this._semitoneShift);
         const sel = document.getElementById('lib-transpose-select');
+        const lbl = document.getElementById('lib-transpose-label');
         if (sel && updateSelect !== false) sel.value = this._semitoneShift;
+        if (lbl) {
+            const noteIdx = (this.notes.indexOf(this.normalizeNoteRoot(this.currentSong?.originalKey || 'C')) + this._semitoneShift) % 12;
+            lbl.textContent = this.noteLabels[noteIdx] || this.notes[noteIdx] || 'C';
+        }
     },
 
     populateTransposeDropdown(originalKey) {
         this._semitoneShift = 0;
         const sel = document.getElementById('lib-transpose-select');
-        if (!sel) return;
+        const lbl = document.getElementById('lib-transpose-label');
         const root = originalKey ? this.normalizeNoteRoot(originalKey) : 'C';
         const fromIdx = this.notes.indexOf(root);
+        if (lbl) lbl.textContent = this.noteLabels[fromIdx] || root;
+        if (!sel) return;
         sel.innerHTML = this.noteLabels.map((label, i) => {
             const steps = (i - fromIdx + 12) % 12;
-            const sign = steps === 0 ? '' : (steps <= 6 ? `+${steps}` : `-${12 - steps}`);
-            return `<option value="${steps}">${label}${sign ? ' ' + sign : ''}</option>`;
+            const orig = steps === 0 ? ' ★' : '';
+            return `<option value="${steps}">${label}${orig}</option>`;
         }).join('');
         sel.value = 0;
     },
