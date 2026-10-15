@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_seguire_tus_pasos",
+  "title": "Seguiré tus pasos",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/seguire_tus_pasos.shtml",
+      "lcd": 0
+    }
+  ]
+}

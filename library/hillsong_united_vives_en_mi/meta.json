@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_vives_en_mi",
+  "title": "Vives en mí",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/vives_en_mi.shtml",
+      "lcd": 0
+    }
+  ]
+}

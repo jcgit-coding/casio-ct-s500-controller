@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_gracia_abunda",
+  "title": "Gracia Abunda",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/gracia_abunda.shtml",
+      "lcd": 0
+    }
+  ]
+}

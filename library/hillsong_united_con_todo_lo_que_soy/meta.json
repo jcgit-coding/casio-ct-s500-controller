@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_con_todo_lo_que_soy",
+  "title": "Con todo lo que soy",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/con_todo_lo_que_soy.shtml",
+      "lcd": 0
+    }
+  ]
+}

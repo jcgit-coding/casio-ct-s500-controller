@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_avivamiento",
+  "title": "Avivamiento",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "Db",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/avivamiento.shtml",
+      "lcd": 0
+    }
+  ]
+}

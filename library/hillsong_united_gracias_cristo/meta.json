@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_gracias_cristo",
+  "title": "Gracias Cristo",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/gracias_cristo.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_history_maker",
+  "title": "History Maker",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/history_maker.shtml",
+      "lcd": 0
+    }
+  ]
+}

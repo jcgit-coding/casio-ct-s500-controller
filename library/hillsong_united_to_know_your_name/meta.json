@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_to_know_your_name",
+  "title": "To know your name",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/to_know_your_name.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_solo_cristo",
+  "title": "Sólo Cristo",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/solo_cristo.shtml",
+      "lcd": 0
+    }
+  ]
+}

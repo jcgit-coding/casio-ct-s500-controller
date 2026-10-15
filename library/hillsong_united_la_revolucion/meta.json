@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_la_revolucion",
+  "title": "La Revolución",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/la_revolucion.shtml",
+      "lcd": 0
+    }
+  ]
+}

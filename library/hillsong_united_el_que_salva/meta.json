@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_el_que_salva",
+  "title": "El que salva",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/el_que_salva.shtml",
+      "lcd": 0
+    }
+  ]
+}

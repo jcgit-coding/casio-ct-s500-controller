@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_cubreme",
+  "title": "Cúbreme",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/cubreme.shtml",
+      "lcd": 0
+    }
+  ]
+}

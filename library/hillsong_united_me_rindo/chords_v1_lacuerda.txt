@@ -1,0 +1,102 @@
+BPM: 52
+Tonalidad: F / Dm
+
+MELODIA:
+         A.F.A.F A.F.A.F A.F.A.F E.D.C
+         A.F.A.F A.F.A.F A.F.A.F E.D.C
+         G.F.G.F G.F.G.F G.F.G.F E.D.C
+         Bb.F.Bb.F Bb.F.Bb.F Bb.F.Bb.F E.D.C
+
+INTRO: (*MELODIA)
+       (Dm7 F C Bb) x2
+VERSO-1:
+Dm7                F
+Ante ti postrado estoy aquí
+             C               Bb
+Te rindo mi ser, Te rindo mi ser
+ Dm7                F
+Con tu amor atráeme señor
+               C                Bb
+Vengo a tus pies, Vengo a tus pies
+         Dm7 F C Bb  (*MELODIA)
+Yo me rindo.
+
+VERSO-2:
+Dm7                  F
+Lléname, de gracia inúndame
+          C            Bb
+Sacia mi ser, Sacia mi ser
+   Dm7              F
+Mi corazón levanta un clamor
+           C              Bb
+Háblame señor, Háblame señor
+
+PRECORO: (*MELODIA)
+          Dm7            F
+//A ti me rindo, a ti me rindo
+          Gm7                Bb
+Te quiero conocer, mas de ti conocer//
+
+INSTRU:
+        Bb F C C Gm Dm C C
+CORO:
+          Bb     F
+//Con tu aliento Dios
+         C
+Sopla en mi interior
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí
+       Bb      F         C
+Con tu gran poder, Muévete en mi ser
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí//
+
+INSTRU:
+        Bb F C C Gm Dm C C
+
+CORO:
+        Bb     F
+Con tu aliento Dios
+         C
+Sopla en mi interior
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí
+       Bb      F         C
+Con tu gran poder, Muévete en mi ser
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí
+
+PRECORO: (*MELODIA)
+          Dm7            F
+//A ti me rindo, a ti me rindo
+          Gm7                Bb
+Te quiero conocer, mas de ti conocer//
+
+INSTRUMENTAL: *CRECIENDO MINISTRACION
+              (Dm F Gm Bb) x4
+
+PRECORO: (*MELODIA)
+            Dm7            F
+////A ti me rindo, a ti me rindo
+          Gm7                Bb
+Te quiero conocer, mas de ti conocer////
+
+CORO:
+          Bb     F
+//Con tu aliento Dios
+         C
+Sopla en mi interior
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí
+       Bb      F         C
+Con tu gran poder, Muévete en mi ser
+         Gm          Dm7    C
+Cumple señor tu voluntad en mí//
+
+           Gm          Dm7    C
+//Cumple señor tu voluntad en mí..//
+
+
+FIN

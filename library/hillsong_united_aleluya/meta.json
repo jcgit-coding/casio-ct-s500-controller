@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_aleluya",
+  "title": "Aleluya",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/aleluya.shtml",
+      "lcd": 0
+    }
+  ]
+}

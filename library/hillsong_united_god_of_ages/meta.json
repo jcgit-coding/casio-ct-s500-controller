@@ -1,0 +1,14 @@
+{
+  "id": "hillsong_united_god_of_ages",
+  "title": "God of ages",
+  "artist": "Hillsong United",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/hillsong_united/god_of_ages.shtml",
+      "lcd": 0
+    }
+  ]
+}

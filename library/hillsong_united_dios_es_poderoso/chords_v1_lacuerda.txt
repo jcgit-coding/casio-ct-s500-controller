@@ -1,0 +1,91 @@
+Para esta cancion les recomiendo usar en
+la guitarra electrica una distorsion pesada
+pero q no sea de Metal y un delay en 50 milisegundos [50ms]
+para los q tienen pedalera
+zoom G1, G1X, G1N ó G1XN aqui les dejos los efectos
+
+Marshall Rocanrolero [rock n' Roller Marshall]
+
+Patch Level: 62
+Comp/EFX: (C) - Compressor Prm: 9 [(C9)]
+Drive: Nd - MS Drive Prm [Gain]: 23
+EQ: Lo: 1  Mid: -2  Hi: 0
+ZNR/Amp: S - Stack+ZNR Prm: 4   [S4]
+Modulation: (C)- Chorus Prm 1: 1  [C1] Prm 2 [rate]: 24
+Delay: Off
+Reverb: H - Hall Prm 1: 3 [H3] Prm 2 [Decay]: 19
+
+En la Intro y el solo usan un delay [d prm 1: 3 Prm 2 [time]: 50]
+
+Intro: se repite 4 o 6 veces
+
+E-------------------11-12-12-11---------------------------------
+B--14po12-14-14po12-------------14po12-14-14po12----------12----
+G------------------------------------------------11-13-13-------
+D---------------------------------------------------------------
+A---------------------------------------------------------------
+E---------------------------------------------------------------
+
+Acordes [pueden reemplazarlos por Quintas si usan la distorsion]
+
+Verso: 1
+      B
+Poderoso
+        F#
+Nunca fallará
+ G#m             E
+Omnipotente Dios
+            B
+Más de lo que busqué
+           F#
+Más de lo que pedí
+ G#m           E        F#
+Grande es nuestro Dios
+
+Coro:
+          B                   F#
+Él triunfó a la muerte venció
+         G#m         E
+Vivo está es poderoso
+      B/D#         F#
+En Jesús soy vencedor
+          G#m      F#      E
+Nuestro Dios es poderoso
+
+Verso: 2
+Dios me guía
+Él conmigo está
+Un camino hará
+Más de lo que soñé
+Más de lo que esperé
+Grande es nuestro Dios
+
+Instrumental [guitarra acustica]:
+B/D#-F#-G#m-F#-E
+
+Solo:
+
+E-------------------------------------------------------------------
+B-------------------------------------------------------------------
+G-11-11-11-11-11-9-9-8----------------------11-11-11-11-8-8-------9-
+D-----------------------11-11-11-11s8-8s9-9-----------------11-11---
+A-------------------------------------------------------------------
+E-------------------------------------------------------------------
+
+Puente:
+        B/D#
+Dios me cuida
+       F#
+Él conmigo está
+             G#m
+Él nunca me deja
+ F#              E
+  Él nunca me deja
+        B/D#
+Dios me ama
+      F#
+Con eterno amor
+             G#m
+Él nunca me falla
+ F#              E
+ Él nunca me falla
