@@ -29,12 +29,14 @@ const INDEX_FILE  = path.join(LIBRARY_DIR, 'index.json');
 const args  = process.argv.slice(2);
 const get   = (flag, def) => { const i = args.indexOf(flag); return i !== -1 ? args[i+1] : def; };
 
-const ARTIST = get('--artist', '');
-const DELAY  = parseInt(get('--delay', '1400'), 10);
-const MAX    = parseInt(get('--max', '9999'), 10);
+const ARTIST       = get('--artist', '');
+const DISPLAY_NAME = get('--display-name', '');  // sobrescribe el nombre del artista en la biblioteca
+const ARTIST_ID    = get('--artist-id', '');      // sobrescribe el ID/slug de artista en la biblioteca
+const DELAY        = parseInt(get('--delay', '1400'), 10);
+const MAX          = parseInt(get('--max', '9999'), 10);
 
 if (!ARTIST) {
-    console.error('Uso: node scrape-artist.js --artist "marcos-witt"');
+    console.error('Uso: node scrape-artist.js --artist "marcos-witt" [--display-name "Marcos Brunet"] [--artist-id "marcos_brunet"]');
     process.exit(1);
 }
 
@@ -181,15 +183,26 @@ function groupSongs(songs) {
     return groups;
 }
 
-// Tipos de versión en lacuerda (campo otipo en el HTML de la canción):
-//   R = Guitarra / Letra y Acordes  ← solo este nos interesa
-//   B = Bajo (tab de bajo)
-//   P = Piano / Teclados
-//   U = Ukulele
-// Si no hay otipo (página antigua), asumimos que es guitarra.
-const LC_CHORD_TIPOS = new Set(['R', '']);
+// Tipos de versión en lacuerda:
+//   R = Guitarra / Letra y Acordes  ← preferido
+//   T = Tablatura                   ← fallback: se toma pero se filtran líneas de tab
+//   B = Bajo  P = Piano  U = Ukulele  K = otros → descartados
+const LC_CHORD_TIPOS   = new Set(['R', '']);   // tipos directamente usables
+const LC_TAB_FALLBACK  = new Set(['T']);        // aceptados solo si no hay versión R
 
-async function lcFetchVersion(lcSlug, songSlug) {
+// Elimina líneas de notación de tablatura (e|--0-2-3--|, B|, fret numbers, etc.)
+function stripTabLines(text) {
+    return text.split('\n').filter(line => {
+        const t = line.trim();
+        // Líneas de tab: empieza con cuerda (e/B/G/D/A/E) seguida de | o --
+        if (/^[eEBGDAd]\s*[\|]/.test(t)) return false;
+        // Líneas solo de dashes, pipes y números (secuencias de tab)
+        if (/^[\-\|0-9p h b r ~\/\\]+$/.test(t) && t.length > 6) return false;
+        return true;
+    }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+async function lcFetchVersion(lcSlug, songSlug, allowTabFallback = false) {
     const shtmlUrl = `${LC_BASE}/${lcSlug}/${songSlug}.shtml`;
     const baseUrl  = `${LC_BASE}/${lcSlug}/${songSlug}`;
     let html, usedUrl;
@@ -199,21 +212,33 @@ async function lcFetchVersion(lcSlug, songSlug) {
         html = await fetchHTML(baseUrl);  usedUrl = baseUrl;
     }
 
-    // Filtrar por tipo: solo Letra y Acordes (guitarra, otipo='R')
     const otipoM = html.match(/otipo='([^']*)'/);
     const otipo  = otipoM ? otipoM[1].toUpperCase() : '';
-    if (otipoM && !LC_CHORD_TIPOS.has(otipo)) {
+    const isTab  = LC_TAB_FALLBACK.has(otipo);
+
+    // Descartar tipos que no son guitarra ni tab (bajo, piano, ukulele)
+    if (otipoM && !LC_CHORD_TIPOS.has(otipo) && !isTab) {
         return { usedUrl, texts: [], skippedType: otipo };
+    }
+    // Tab solo aceptado si el llamador lo permite (segunda pasada de fallback)
+    if (isTab && !allowTabFallback) {
+        return { usedUrl, texts: [], skippedType: otipo, isTabOnly: true };
     }
 
     const texts = [];
+
+    const extractText = raw => {
+        let t = decodeEntities(stripTags(raw)).trim();
+        if (isTab) t = stripTabLines(t);
+        return t;
+    };
 
     // Extraer rtBody divs
     const rtBodies = [...html.matchAll(/<div[^>]*class=['"]?rtBody['"]?[^>]*>([\s\S]*?)<\/div>/gi)];
     for (const m of rtBodies) {
         const preM = m[1].match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
         if (preM) {
-            const txt = decodeEntities(stripTags(preM[1])).trim();
+            const txt = extractText(preM[1]);
             if (txt.length > 50) texts.push(txt);
         }
     }
@@ -224,7 +249,7 @@ async function lcFetchVersion(lcSlug, songSlug) {
         let best = '';
         let pm;
         while ((pm = preRe.exec(html)) !== null) {
-            const t = decodeEntities(stripTags(pm[1])).trim();
+            const t = extractText(pm[1]);
             if (t.length > best.length) best = t;
         }
         if (best.length > 50) texts.push(best);
@@ -306,11 +331,17 @@ function upsertIndex(entry) {
         process.exit(1);
     }
 
-    const { artistName, songs, artistSlug, lcSlug } = info;
+    let { artistName, songs, artistSlug, lcSlug } = info;
+
+    // Sobrescribir nombre/ID del artista si se especificó (ej: toma_tu_lugar → Marcos Brunet)
+    if (DISPLAY_NAME) artistName = DISPLAY_NAME;
+    if (ARTIST_ID)    artistSlug = ARTIST_ID;
+
     const groups = groupSongs(songs);
     const groupList = [...groups.entries()].slice(0, MAX);
 
     console.log(`\n── Resumen ──────────────────────────────────────────`);
+    console.log(`   Artista en biblioteca: "${artistName}" (id: ${slugify(artistSlug)})`);
     console.log(`   Canciones únicas: ${groupList.length}`);
     const totalVersionEntries = groupList.reduce((s, [, g]) => s + g.versions.length, 0);
     console.log(`   Entradas totales (versiones): ${totalVersionEntries}`);
@@ -326,35 +357,49 @@ function upsertIndex(entry) {
         const versionFiles = [];
         let vNum = 1;
 
-        // Slugs a procesar: los del grupo + extras descubiertos dentro de cada página
-        // slugQueue entries: {slug, lcd}
         const slugQueue = group.versions.map(v => ({ slug: v.slug, lcd: v.lcd }));
         const seenSlugs = new Set(slugQueue.map(v => v.slug));
+        const tabOnlySlugs = []; // slugs que solo tenían tablatura, para segunda pasada
 
         for (let qi = 0; qi < slugQueue.length; qi++) {
             const { slug, lcd } = slugQueue[qi];
             await sleep(DELAY);
             try {
-                const { usedUrl, texts, skippedType, extraSlugs } = await lcFetchVersion(lcSlug, slug);
-                // Agregar versiones alternativas descubiertas en la página
+                const { usedUrl, texts, skippedType, isTabOnly, extraSlugs } = await lcFetchVersion(lcSlug, slug);
                 for (const es of (extraSlugs || [])) {
                     if (!seenSlugs.has(es)) { seenSlugs.add(es); slugQueue.push({ slug: es, lcd: 0 }); }
+                }
+                if (isTabOnly) {
+                    tabOnlySlugs.push({ slug, lcd, usedUrl });
+                    continue;
                 }
                 if (skippedType) {
                     process.stdout.write(`[tipo ${skippedType} ignorado] `);
                     continue;
                 }
                 for (const txt of texts) {
-                    versionFiles.push({
-                        file: `chords_v${vNum}_lacuerda.txt`,
-                        text: txt,
-                        source: usedUrl,
-                        lcd
-                    });
+                    versionFiles.push({ file: `chords_v${vNum}_lacuerda.txt`, text: txt, source: usedUrl, lcd });
                     vNum++;
                 }
             } catch (e) {
                 process.stdout.write(`[error v${vNum}: ${e.message}] `);
+            }
+        }
+
+        // Segunda pasada: tablatura como fallback si no hubo ninguna versión R
+        if (versionFiles.length === 0 && tabOnlySlugs.length > 0) {
+            process.stdout.write(`[tab fallback] `);
+            for (const { slug, lcd } of tabOnlySlugs) {
+                await sleep(DELAY);
+                try {
+                    const { usedUrl, texts } = await lcFetchVersion(lcSlug, slug, true);
+                    for (const txt of texts) {
+                        versionFiles.push({ file: `chords_v${vNum}_lacuerda.txt`, text: txt, source: usedUrl, lcd });
+                        vNum++;
+                    }
+                } catch (e) {
+                    process.stdout.write(`[error tab: ${e.message}] `);
+                }
             }
         }
 
