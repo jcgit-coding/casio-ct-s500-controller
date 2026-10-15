@@ -1,0 +1,14 @@
+{
+  "id": "bethel_music_se_entronado",
+  "title": "Sé Entronado",
+  "artist": "Bethel Music",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/bethel_music/se_entronado.shtml",
+      "lcd": 0
+    }
+  ]
+}

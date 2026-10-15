@@ -1,0 +1,14 @@
+{
+  "id": "bethel_music_muevete_ya",
+  "title": "Muévete Ya",
+  "artist": "Bethel Music",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/bethel_music/muevete_ya.shtml",
+      "lcd": 0
+    }
+  ]
+}

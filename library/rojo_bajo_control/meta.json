@@ -1,0 +1,14 @@
+{
+  "id": "rojo_bajo_control",
+  "title": "Bajo Control",
+  "artist": "Rojo",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/rojo/bajo_control.shtml",
+      "lcd": 0
+    }
+  ]
+}

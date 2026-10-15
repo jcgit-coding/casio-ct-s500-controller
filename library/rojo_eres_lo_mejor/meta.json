@@ -1,0 +1,14 @@
+{
+  "id": "rojo_eres_lo_mejor",
+  "title": "Eres lo mejor",
+  "artist": "Rojo",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/rojo/eres_lo_mejor.shtml",
+      "lcd": 0
+    }
+  ]
+}

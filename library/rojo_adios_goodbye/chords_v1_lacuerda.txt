@@ -1,0 +1,67 @@
+Escala: Básica
+E|----------|
+B|----------|
+G|----------|
+D|----------|
+A|----------|
+E|----------|
+
+Verso1:
+           A         F#       G    
+La otra vez me encontré a una chava que dijo
+     F#m                     F                 E
+que juntos podríamos pasarla y llevarla muy bien.
+       A                      F#
+Le pregunté: 'What is your name?'
+       G                      F#m        F          E
+dijo: 'Tengo un nombre sencillo, me llamo distracción'.
+F#m                 G                  F#m
+Cuando me di cuenta, ya habían sido años.
+                    G
+Me paré y le dije así: 
+
+
+Coro:
+   A         Bm             C#    
+Adiós, Goodbye, ya he perdido mucho
+        D         A       Bm          C#         D   
+tiempo así. Goodbye, Adiós contigo no tengo futuro.
+
+
+Verso2:
+         A           F#         G                F#m
+Se indignó, se ofendió dijo: 'No puedes hacerme esto,
+        F          E
+no podemos terminar'.
+        A          F#          G               F#m
+Me decidí y la corrí, 'Ya no tengo tiempo para esto,
+       F            E
+se acabo tu diversión'.
+F#m                 G                F#m                    G
+Ya me tienes harto, ya estoy cansado, ya no te quiero escuchar'.
+
+Coro.
+
+Pre Coro:
+F#m                 G                  F#m                  G
+'Ya no quiero verte, quítate del frente, ya no seguiré tu voz'.
+
+Coro.
+
+Mariachi:
+A                Bm        C#m       D (se repite)
+Adiós, Adiós, Adiós.....
+
+Coro.
+
+Tonos:
+A   = 577655
+Bm  = 224432
+C#  = 446654
+C#m = 446644
+D   = 557755
+E   = 022100
+F   = 133211
+F#  = 244322
+F#m = 244222
+G   = 355433

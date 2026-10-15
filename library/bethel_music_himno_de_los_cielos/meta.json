@@ -1,0 +1,14 @@
+{
+  "id": "bethel_music_himno_de_los_cielos",
+  "title": "Himno de los cielos",
+  "artist": "Bethel Music",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/bethel_music/himno_de_los_cielos.shtml",
+      "lcd": 0
+    }
+  ]
+}
