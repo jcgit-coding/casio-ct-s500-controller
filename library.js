@@ -308,29 +308,25 @@ const RepertorioApp = {
     }
 };
 
-// ================= CLOUD SYNC & AI =================
+// ================= CLOUD SYNC =================
 function initCloudSync() {
     const btnSaveKeys = document.getElementById('btnSaveApiKeys');
     if(btnSaveKeys) {
-        // Cargar llaves
-        document.getElementById('api-key-gemini').value = localStorage.getItem('gemini_api_key') || '';
         document.getElementById('api-key-github').value = localStorage.getItem('github_pat') || '';
-        
+
         btnSaveKeys.addEventListener('click', () => {
-            localStorage.setItem('gemini_api_key', document.getElementById('api-key-gemini').value.trim());
             localStorage.setItem('github_pat', document.getElementById('api-key-github').value.trim());
-            btnSaveKeys.innerText = 'Saved!';
+            btnSaveKeys.innerText = 'Guardado!';
             btnSaveKeys.style.background = '#00ffcc';
             btnSaveKeys.style.color = '#000';
             setTimeout(() => {
-                btnSaveKeys.innerText = 'Save Keys';
+                btnSaveKeys.innerText = 'Guardar';
                 btnSaveKeys.style.background = '';
                 btnSaveKeys.style.color = '';
             }, 2000);
         });
     }
-    
-    // Cargar repertorio de GitHub al inicio
+
     if(typeof RepertoireSync !== 'undefined') {
         RepertoireSync.loadIndex();
     }
@@ -768,71 +764,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// ================= AI GENERATOR & CLOUD SAVE =================
-const btnAi = document.getElementById('lib-btn-ai');
-if (btnAi) {
-    btnAi.addEventListener('click', async () => {
-        const queryInput = document.getElementById('lib-ai-query');
-        const query = queryInput ? queryInput.value.trim() : '';
-        if (!query) return alert("Please enter a song name or paste a YouTube link.");
-        
-        const apiKey = localStorage.getItem('gemini_api_key');
-        if (!apiKey) {
-            alert("Please go to PRESETS and configure your free Gemini API Key.");
-            document.querySelector('[data-target="view-settings"]')?.click();
-            return;
-        }
-        
-        btnAi.innerText = "Searching...";
-        btnAi.disabled = true;
-        
-        try {
-            const prompt = `Analyze the following search query or YouTube link: "${query}".
-Determine the exact song title and artist.
-Then write the complete lyrics with their musical chords positioned directly above each verse (standard chords: C, D, Em, F#m, G/B).
-Return strictly valid JSON with this exact schema, without extra explanations or markdown blocks:
-{
-  "title": "Song Title",
-  "artist": "Artist Name",
-  "chords": "Full lyrics with chords above..."
-}`;
-            
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
-                })
-            });
-            
-            if (!response.ok) throw new Error("API response error");
-            const data = await response.json();
-            let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            
-            aiText = aiText.replace(/\`\`\`json/gi, '').replace(/\`\`\`/g, '').trim();
-            let parsed;
-            try {
-                parsed = JSON.parse(aiText);
-            } catch(err) {
-                parsed = {
-                    title: query,
-                    artist: "Unknown Artist",
-                    chords: aiText
-                };
-            }
-            
-            RepertorioApp.setSong(parsed.title, parsed.artist, parsed.chords);
-            if (queryInput) queryInput.value = '';
-            
-        } catch(e) {
-            console.error(e);
-            alert("Error searching or processing song. Please check your network or API Key.");
-        } finally {
-            btnAi.innerText = "Search Song";
-            btnAi.disabled = false;
-        }
-    });
-}
 
 const btnSaveCloud = document.getElementById('lib-btn-save-cloud');
 if (btnSaveCloud) {

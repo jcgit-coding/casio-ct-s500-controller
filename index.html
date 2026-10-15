@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
     (function(){
-        var V='v269';
+        var V='v270';
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
             var u=new URL(window.location.href);
@@ -457,24 +457,17 @@
 
             <!-- Cloud Integration row -->
             <div class="panel">
-                <div class="panel-title">Cloud Integration & AI</div>
+                <div class="panel-title">Cloud Sync</div>
                 <div style="display:flex; flex-direction:column; gap:16px;">
                     <p style="font-size:14px; color:var(--text-muted); line-height:1.5;">
-                        To enable automatic song generation and cloud synchronization across devices, you must provide the following API keys. These keys are saved <b>locally</b> on this device and are never sent to our servers.
+                        Token de GitHub para sincronización de la biblioteca. Se guarda <b>localmente</b> en este dispositivo.
                     </p>
-                    
-                    <div style="display:flex; align-items:center; gap:16px;">
-                        <div style="flex:1;">
-                            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px; color:var(--accent);">Gemini API Key (AI Song Generation)</label>
-                            <input type="password" id="api-key-gemini" class="search-input" placeholder="AIzaSy..." style="width:100%;" />
-                        </div>
-                        <div style="flex:1;">
-                            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px; color:var(--accent);">GitHub PAT (Cloud Sync)</label>
-                            <input type="password" id="api-key-github" class="search-input" placeholder="github_pat_..." style="width:100%;" />
-                        </div>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px; color:var(--accent);">GitHub PAT (Cloud Sync)</label>
+                        <input type="password" id="api-key-github" class="search-input" placeholder="github_pat_..." style="width:100%;" />
                     </div>
                     <div style="display:flex; justify-content:flex-end;">
-                        <button id="btnSaveApiKeys" class="btn btn-primary" style="padding:10px 24px;">Save Keys</button>
+                        <button id="btnSaveApiKeys" class="btn btn-primary" style="padding:10px 24px;">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -777,13 +770,6 @@
         <!-- =========== VIEW: LIBRARY =========== -->
         <div class="app-view" id="view-library">
             
-            <!-- Toolbar: Clean Search -->
-            <div class="panel panel-toolbar" style="align-items: center; gap: 12px;">
-                <input type="text" id="lib-ai-query" class="search-input" placeholder="Paste YouTube link or type song name..." style="flex:1;">
-                <button class="btn btn-primary" id="lib-btn-ai" style="padding: 10px 24px; font-weight: 600; white-space: nowrap;">
-                    Search Song
-                </button>
-            </div>
 
             <div class="app-layout-split">
                 
@@ -1015,7 +1001,7 @@
     <script src="presets.js?v255"></script>
     <script src="app.js?v255"></script>
     <script src="harmony.js?v255"></script>
-    <script src="library.js?v269"></script>
+    <script src="library.js?v270"></script>
     <script src="trainer.js?v255"></script>
 </body>
 </html>
