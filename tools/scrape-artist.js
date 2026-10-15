@@ -230,7 +230,18 @@ async function lcFetchVersion(lcSlug, songSlug) {
         if (best.length > 50) texts.push(best);
     }
 
-    return { usedUrl, texts };
+    // Extraer slugs de otras versiones listadas en esta página (selector de versiones)
+    // Lacuerda muestra links como /marcos_witt/en_los_montes2 dentro de la página de la canción
+    const extraSlugs = [];
+    const baseForSong = songSlug.replace(/\d+$/, '');
+    const altRe = new RegExp(`href="/${lcSlug}/(${baseForSong}\\d+)(?:\\.shtml)?"`, 'gi');
+    let am;
+    while ((am = altRe.exec(html)) !== null) {
+        const s = am[1];
+        if (s !== songSlug) extraSlugs.push(s);
+    }
+
+    return { usedUrl, texts, extraSlugs };
 }
 
 // ── SAVE ──────────────────────────────────────────────────────────────────────
@@ -310,10 +321,19 @@ function upsertIndex(entry) {
         const versionFiles = [];
         let vNum = 1;
 
-        for (const ver of group.versions) {
+        // Slugs a procesar: los del grupo + extras descubiertos dentro de cada página
+        const slugQueue = group.versions.map(v => v.slug);
+        const seenSlugs = new Set(slugQueue);
+
+        for (let qi = 0; qi < slugQueue.length; qi++) {
+            const slug = slugQueue[qi];
             await sleep(DELAY);
             try {
-                const { usedUrl, texts, skippedType } = await lcFetchVersion(lcSlug, ver.slug);
+                const { usedUrl, texts, skippedType, extraSlugs } = await lcFetchVersion(lcSlug, slug);
+                // Agregar versiones alternativas descubiertas en la página
+                for (const es of (extraSlugs || [])) {
+                    if (!seenSlugs.has(es)) { seenSlugs.add(es); slugQueue.push(es); }
+                }
                 if (skippedType) {
                     process.stdout.write(`[tipo ${skippedType} ignorado] `);
                     continue;
