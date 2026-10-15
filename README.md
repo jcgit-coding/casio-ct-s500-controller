@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v248
+# Casio CT-S500 Pro Controller — v267
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -16,7 +16,7 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 - `midi.js`: Conexión y routing MIDI (Web MIDI API).
 - `presets.js`: Persistencia local y sincronización GitHub de presets de usuario.
 - `harmony.js`: Motor de armonía y acordes.
-- `library.js`: Panel de biblioteca de timbres con transposición por tonalidad.
+- `library.js`: Panel de biblioteca de canciones con acordes. Incluye parser de acordes (cifrado inglés A–G y solfège español DO–SI), transpositon por tonalidad, y gestor de eventos en vivo (setlists).
 - `trainer.js`: Piano Trainer (importar .mid manualmente — sin archivos .mid incluidos).
 - `raw_tones.js` y `raw_rhythms.js`: Bases de datos crudas del manual oficial de Casio. Contienen listas de texto sin formato que `app.js` "parsea" al arrancar para construir los catálogos lógicos.
 
@@ -112,11 +112,119 @@ Sin este paso, los navegadores (especialmente móviles) sirven la versión anter
 
 ---
 
-## 8. Development Rules
+## 8. Biblioteca de Canciones (Library Panel)
+
+### Estructura de archivos
+```
+library/
+  index.json                          # Índice maestro: [{id, title, artist, genre, original_key}]
+  {artist}_{song}/
+    meta.json                         # Metadata + lista de versiones
+    chords_v1_lacuerda.txt            # Versión 1 (la de más votos en lacuerda)
+    chords_v2_lacuerda.txt            # Versión 2
+    chords_vN_lacuerda.txt            # ...
+```
+
+### Parser de acordes (`parseRawTextToChords` en `library.js`)
+Convierte texto crudo de acordes a HTML con resaltado. Soporta:
+- **Solfège español:** DO RE MI FA SOL LA SI (y variantes mixtas: Do, Re, Fa#, Sol/La, etc.)
+- **Cifrado inglés:** C D E F G A B (con accidentales #/b)
+- **Calificadores compuestos:** m, maj7, dim, aug, sus2/sus4, add9, 7sus4, 9sus4, 6/9, (add9), etc.
+- **Notas de bajo:** RE/SOL, C/E, Sol/La, etc.
+- Detección de líneas de acordes: stripping del token de acorde → si el remanente es vacío (ignorando separadores y dígitos) → línea de acorde.
+- **Orden de alternación:** Español PRIMERO en el regex para evitar que `DO` sea consumido como `D` (inglés) + `O` remanente.
+- **splitConcatChords:** Detecta acordes yuxtapuestos sin espacio (ej. `FAFA`, `SImDO`, `DOSOL9sus4`) usando matches consecutivos sin gap y les inserta espacio.
+
+### Transposición
+`applyTranspose(steps)` transpone todos los acordes visibles en pantalla. Detecta el sistema de notación de cada acorde (inglés o español) y devuelve el resultado en el mismo sistema.
+
+### Selector de transposición
+Dropdown con 12 tonalidades en cifrado inglés: C, C#/Db, D, … B.
+
+### Scroll y navegación A–Z
+- Contenedor con `max-height: calc(100vh - 290px)` para evitar lista infinita.
+- Índice alfabético lateral (`position: absolute; right: 0`) que al clic hace scroll suave a la letra del artista dentro del contenedor correcto.
+
+### Gestor de eventos / setlists
+Eventos guardados en `localStorage` como `casio_events`. Cada evento contiene `{id, title, songs:[{id, versionFile, transpose}]}`. Permite agregar canciones al evento activo con la versión y transposición actual.
+
+---
+
+## 9. Herramientas de construcción de librería (`tools/`)
+
+### `scrape-artist.js` — Solo lacuerda.net
+Scraper Node.js (sin dependencias npm) para poblar `library/` automáticamente.
+
+```bash
+node tools/scrape-artist.js --artist "marcos-witt"
+node tools/scrape-artist.js --artist "grupo-grace" --delay 2000
+node tools/scrape-artist.js --artist "marcos-witt" --max 50
+```
+
+**Cómo funciona:**
+1. Descarga la página del artista de `acordes.lacuerda.net/{slug}/`
+2. Lee todos los `<li lcd='N'>` del bloque `b_main` (lista completa, no solo el top-10)
+3. **Agrupa por canción base:** `tu_fidelidad`, `tu_fidelidad2`, `tu_fidelidad3` → un solo directorio `marcos_witt_tu_fidelidad/`
+4. Ordena versiones por `lcd` (votos de calificación) descendente — la mejor primero
+5. Descarga cada URL en `.shtml` (contenido completo) y guarda `chords_v1_lacuerda.txt`, `chords_v2_lacuerda.txt`, etc.
+6. Actualiza `library/index.json` con upsert (no destruye entradas existentes de otros artistas)
+
+**Notas:**
+- Uso personal únicamente (términos de lacuerda.net)
+- Si necesitas canciones de otra fuente, provee el link o foto directamente — no se scrapeará cifraclub ni otro sitio automáticamente
+
+### `validate-library.js` — Auditoría de calidad
+```bash
+node tools/validate-library.js
+node tools/validate-library.js --artist "marcos-witt" --verbose
+```
+Analiza todos los archivos de acordes y reporta:
+- ✅ OK — detectado y renderizable correctamente
+- ℹ️ Info — líneas en MAYÚSCULAS no reconocidas como acordes (falsos positivos típicos del solfège)
+- ⚠️ Warning — acordes concatenados, 0 líneas de acordes detectadas
+- ❌ Error — contenido en portugués, archivo muy corto, sin archivo de acordes
+
+Genera `tools/validation-report.json`.
+
+---
+
+## 10. Development Rules
 
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v267 · mar 14 oct 2026 · COT
+- **fix(parser):** Soporte para calificadores compuestos: `7sus4`, `9sus4`, `13sus4`, `6/9`. Añadido `(?:sus[24])?` y `(?:/\d+)?` al final de `ES_QUAL` y `EN_QUAL`. Soluciona líneas como `RE7sus4 SOL9sus4` que fallaban detección.
+- **fix(validate):** Mismo fix aplicado en `tools/validate-library.js`.
+
+### v266 · mar 14 oct 2026 · COT
+- **revert(library):** Restaurado dropdown de transposición con cifrado inglés (C, C#/Db, D, …).
+
+### v264 · mar 14 oct 2026 · COT
+- **fix(parser):** `splitConcatChords` reescrito con detección de adyacencia. Problema: look-ahead prefería `F` (inglés) sobre `FA` (español) cuando el acorde terminaba en mayúscula. Solución: `exec()` + insertar espacio solo cuando dos matches consecutivos no tienen gap. Casos resueltos: `FAFA→FA FA`, `DFA(b9)→D FA(b9)`, `SImDO→SIm DO`, `DOSOL9sus4→DO SOL9sus4`.
+
+### v263 · mar 14 oct 2026 · COT
+- **fix(parser):** Español PRIMERO en alternación de `CHORD_STRIP_RE` y `CHORD_RE`. Bug: `DO`/`RE`/`SOL` consumidos como `D`/`R`/`S` (inglés) dejando `O`/`E`/`OL` remanente. Fix: `ES_ROOT…` antes que `EN_ROOT…` en la alternación.
+- **refactor(scraper):** `tools/scrape-artist.js` reescrito — solo lacuerda.net, todas las versiones por canción, agrupación por slug base (`tu_fidelidad` + `tu_fidelidad2` → un directorio), orden por votos `lcd`. Eliminado todo código de cifraclub.
+
+### v262 · mar 14 oct 2026 · COT
+- **fix(parser):** Acordes concatenados con calificadores aug/add (`SImLA+(aug)→SIm LA+(aug)`). Añadido `\\+(?:\\(aug\\))?` y `(?:\\((?:add|aug)\\d*\\))` a `ES_QUAL`.
+
+### v261 · mar 14 oct 2026 · COT
+- **feat(parser):** Soporte completo para solfège español en `parseRawTextToChords`: `ES_ROOT`, `ES_QUAL`, `ES_BASS`. `applyTranspose` con tablas `ES_TO_EN`/`EN_TO_ES` para transponer y devolver en el mismo sistema de notación.
+
+### v260 · mar 14 oct 2026 · COT
+- **fix(scraper):** URL de lacuerda corregida a `.shtml` para contenido completo (sin extensión devuelve preview truncado ~358 chars).
+
+### v259 · mar 14 oct 2026 · COT
+- **feat(library):** Catálogo completo de Marcos Witt — 393 canciones de lacuerda.net. Total biblioteca: ~415 canciones.
+
+### v258 · mar 14 oct 2026 · COT
+- **fix(scraper):** Dominio `acordes.lacuerda.net`, slugs con guion bajo (`marcos_witt`), lista completa de `<ul id=b_main>` (no el top-10 `rList`).
+
+### v249–v257 · oct 2026 · COT
+- Iteraciones del scraper dual (lacuerda + cifraclub), corrección de URLs, detección de portugués, gestión de índice. Superados por v258+.
 
 ### v248 · lun 12 oct 2026 22:58 · COT
 - **feat(presets):** Restaurados los Presets de Búsqueda por defecto de inicio solicitados (Opción A):
