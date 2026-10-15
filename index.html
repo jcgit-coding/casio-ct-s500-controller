@@ -7,8 +7,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
+    var V='v273';
     (function(){
-        var V='v272';
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
             var u=new URL(window.location.href);
@@ -871,7 +871,7 @@
                                 <div style="display:flex; align-items:center; gap:6px;">
                                     <div class="daw-stepper">
                                         <button id="lib-transpose-down">−</button>
-                                        <input type="text" id="lib-transpose-label" readonly value="C (0)" style="border:none; padding:4px; width:54px; text-align:center; font-weight:bold; color:var(--accent); min-height:auto; background:transparent; cursor:default;">
+                                        <select id="lib-transpose-select" style="border:none; padding:4px 2px; width:68px; text-align:center; font-weight:bold; color:var(--accent); min-height:auto; background:transparent; cursor:pointer; font-size:13px;"></select>
                                         <button id="lib-transpose-up">+</button>
                                     </div>
                                     <button id="lib-transpose-reset" class="daw-stepper" style="padding:4px 10px; font-size:14px; cursor:pointer; border-radius:6px;" title="Volver al tono original">↺</button>
@@ -1013,7 +1013,7 @@
     <script src="presets.js?v255"></script>
     <script src="app.js?v255"></script>
     <script src="harmony.js?v255"></script>
-    <script src="library.js?v272"></script>
+    <script src="library.js?v273"></script>
     <script src="trainer.js?v255"></script>
 </body>
 </html>

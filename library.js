@@ -57,6 +57,12 @@ const RepertorioApp = {
         document.getElementById('lib-transpose-down')?.addEventListener('click', () => this._shiftTranspose(-1));
         document.getElementById('lib-transpose-up')?.addEventListener('click', () => this._shiftTranspose(+1));
         document.getElementById('lib-transpose-reset')?.addEventListener('click', () => this._resetTranspose());
+        document.getElementById('lib-transpose-select')?.addEventListener('change', (e) => {
+            if (!this.currentSong) return;
+            const toIdx = parseInt(e.target.value, 10);
+            this._semitoneShift = toIdx;
+            this._applyTransposeShift(false);
+        });
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
     },
 
@@ -72,20 +78,24 @@ const RepertorioApp = {
         this._applyTransposeShift();
     },
 
-    _applyTransposeShift() {
+    _applyTransposeShift(updateSelect) {
         this.applyTranspose(this._semitoneShift);
-        const root = this.notes[this._semitoneShift] || this.currentSong.originalKey;
-        const label = document.getElementById('lib-transpose-label');
-        const shift = this._semitoneShift;
-        const shiftStr = shift === 0 ? '0' : (shift <= 6 ? `+${shift}` : `-${12 - shift}`);
-        if (label) label.textContent = `${root} (${shiftStr})`;
+        const sel = document.getElementById('lib-transpose-select');
+        if (sel && updateSelect !== false) sel.value = this._semitoneShift;
     },
 
     populateTransposeDropdown(originalKey) {
         this._semitoneShift = 0;
+        const sel = document.getElementById('lib-transpose-select');
+        if (!sel) return;
         const root = originalKey ? this.normalizeNoteRoot(originalKey) : 'C';
-        const label = document.getElementById('lib-transpose-label');
-        if (label) label.textContent = `${root} (0)`;
+        const fromIdx = this.notes.indexOf(root);
+        sel.innerHTML = this.noteLabels.map((label, i) => {
+            const steps = (i - fromIdx + 12) % 12;
+            const sign = steps === 0 ? '' : (steps <= 6 ? `+${steps}` : `-${12 - steps}`);
+            return `<option value="${steps}">${label}${sign ? ' ' + sign : ''}</option>`;
+        }).join('');
+        sel.value = 0;
     },
 
     setSong(title, artist, rawText, originalKey) {
