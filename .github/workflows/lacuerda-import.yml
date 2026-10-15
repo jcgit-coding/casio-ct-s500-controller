@@ -1,0 +1,48 @@
+name: Importar artista de lacuerda.net
+
+on:
+  workflow_dispatch:
+    inputs:
+      artist:
+        description: 'Slug del artista en lacuerda.net (ej: marco_barrientos)'
+        required: true
+        type: string
+      display_name:
+        description: 'Nombre para mostrar en la biblioteca (opcional)'
+        required: false
+        default: ''
+        type: string
+      artist_id:
+        description: 'ID/prefijo de carpeta en library/ (opcional)'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Importar acordes
+        run: |
+          ARGS="--artist ${{ inputs.artist }}"
+          if [ -n "${{ inputs.display_name }}" ]; then
+            ARGS="$ARGS --display-name \"${{ inputs.display_name }}\""
+          fi
+          if [ -n "${{ inputs.artist_id }}" ]; then
+            ARGS="$ARGS --artist-id \"${{ inputs.artist_id }}\""
+          fi
+          node tools/lacuerda-import.js $ARGS
+
+      - name: Commit y push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add library/
+          git diff --cached --quiet && echo "Sin cambios" || git commit -m "feat(library): importar ${{ inputs.artist }} vía lacuerda - $(date +'%Y-%m-%d')"
+          git push

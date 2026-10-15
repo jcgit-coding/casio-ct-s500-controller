@@ -907,3 +907,141 @@ if (btnSaveCloud) {
         }
     });
 }
+
+// ─── LacuerdaImport ────────────────────────────────────────────────────────
+const LacuerdaImport = (() => {
+    const LOCAL_URL = 'http://localhost:7373';
+    const REPO = 'jcgit-coding/casio-ct-s500-controller';
+    const WORKFLOW = 'lacuerda-import.yml';
+
+    function openPanel() {
+        const panel = document.getElementById('lacuerda-import-panel');
+        if (panel) panel.style.display = 'flex';
+        const log = document.getElementById('lacuerda-import-log');
+        if (log) log.textContent = '';
+        const status = document.getElementById('lacuerda-import-status');
+        if (status) { status.textContent = ''; status.className = ''; }
+    }
+
+    function closePanel() {
+        const panel = document.getElementById('lacuerda-import-panel');
+        if (panel) panel.style.display = 'none';
+    }
+
+    function log(text, cls) {
+        const el = document.getElementById('lacuerda-import-log');
+        if (!el) return;
+        const line = document.createElement('div');
+        line.textContent = text;
+        if (cls) line.className = cls;
+        el.appendChild(line);
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function setStatus(text, cls) {
+        const el = document.getElementById('lacuerda-import-status');
+        if (!el) return;
+        el.textContent = text;
+        el.className = cls || '';
+    }
+
+    async function run() {
+        const artist = (document.getElementById('lacuerda-input-artist') || {}).value || '';
+        const displayName = (document.getElementById('lacuerda-input-displayname') || {}).value || '';
+        const artistId = (document.getElementById('lacuerda-input-artistid') || {}).value || '';
+
+        if (!artist.trim()) { alert('Ingresa el slug del artista'); return; }
+
+        const btn = document.getElementById('lacuerda-btn-import');
+        if (btn) btn.disabled = true;
+
+        const logEl = document.getElementById('lacuerda-import-log');
+        if (logEl) logEl.textContent = '';
+        setStatus('Conectando…', '');
+
+        // Detectar servidor local
+        let localOk = false;
+        try {
+            const r = await fetch(LOCAL_URL + '/status', { signal: AbortSignal.timeout(1500) });
+            if (r.ok) localOk = true;
+        } catch (_) {}
+
+        if (localOk) {
+            await runLocal(artist.trim(), displayName.trim(), artistId.trim());
+        } else {
+            await runRemote(artist.trim(), displayName.trim(), artistId.trim());
+        }
+
+        if (btn) btn.disabled = false;
+    }
+
+    async function runLocal(artist, displayName, artistId) {
+        setStatus('Usando servidor local…', '');
+        try {
+            const body = { artist };
+            if (displayName) body.displayName = displayName;
+            if (artistId) body.artistId = artistId;
+            const r = await fetch(LOCAL_URL + '/import', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (!r.ok) { const t = await r.text(); throw new Error(t); }
+
+            setStatus('Importando…', '');
+            const es = new EventSource(LOCAL_URL + '/progress');
+            es.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                if (data.done) {
+                    es.close();
+                    setStatus('✅ Terminado — recarga la Library', 'li-ok');
+                    log('─── Importación completa ───', 'li-ok');
+                } else if (data.type === 'error') {
+                    log('⚠ ' + data.text, 'li-err');
+                } else if (data.text) {
+                    log(data.text);
+                }
+            };
+            es.onerror = () => {
+                es.close();
+                setStatus('⚠ Conexión SSE interrumpida', 'li-err');
+            };
+        } catch (err) {
+            setStatus('Error: ' + err.message, 'li-err');
+        }
+    }
+
+    async function runRemote(artist, displayName, artistId) {
+        const pat = localStorage.getItem('github_pat');
+        if (!pat) {
+            setStatus('⚠ Falta token de GitHub. Guárdalo en Configuración.', 'li-err');
+            return;
+        }
+        setStatus('Enviando a GitHub Actions…', '');
+        const inputs = { artist };
+        if (displayName) inputs.display_name = displayName;
+        if (artistId) inputs.artist_id = artistId;
+        try {
+            const r = await fetch(
+                `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
+                {
+                    method: 'POST',
+                    headers: { 'Authorization': 'token ' + pat, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ref: 'main', inputs })
+                }
+            );
+            if (r.status === 204) {
+                setStatus('✅ Lanzado en GitHub — espera ~2 min y recarga la Library', 'li-ok');
+                log('Importación corriendo en GitHub Actions.');
+                log('Cuando termine, recarga la Library para ver las canciones.');
+            } else {
+                const t = await r.text();
+                throw new Error(r.status + ': ' + t);
+            }
+        } catch (err) {
+            setStatus('Error: ' + err.message, 'li-err');
+        }
+    }
+
+    return { openPanel, closePanel, run };
+})();
