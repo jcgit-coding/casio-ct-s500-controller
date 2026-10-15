@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
     (function(){
-        var V='v271';
+        var V='v272';
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
             var u=new URL(window.location.href);
@@ -87,12 +87,19 @@
                 <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version"></span>
                 <script>
                 (function(){
-                    var d=new Date(document.lastModified);
-                    var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-                    var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                    var pad=function(n){return n<10?'0'+n:n;};
-                    var label=days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-                    document.getElementById('appVersionBadge').textContent=V+' · '+label;
+                    var el=document.getElementById('appVersionBadge');
+                    el.textContent=V;
+                    fetch('https://api.github.com/repos/jcgit-coding/casio-ct-s500-controller/commits/main')
+                        .then(function(r){return r.json();})
+                        .then(function(data){
+                            var iso=data&&data.commit&&data.commit.committer&&data.commit.committer.date;
+                            if(!iso)return;
+                            var d=new Date(iso);
+                            var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                            var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                            var pad=function(n){return n<10?'0'+n:n;};
+                            el.textContent=V+' · '+days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+                        }).catch(function(){});
                 })();
                 </script>
             </div>
@@ -859,13 +866,15 @@
 
                         <div style="display: flex; gap: 12px; align-items: center;">
                             <!-- Transpose Control -->
-                            <div style="display: flex; flex-direction: column; gap: 4px; background: var(--input-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <span class="daw-control-label">TRANSPOSE</span>
                                 <div style="display:flex; align-items:center; gap:6px;">
-                                    <button id="lib-transpose-down" class="btn" style="padding:4px 10px; font-size:18px; font-weight:bold; min-width:34px;">−</button>
-                                    <span id="lib-transpose-label" style="min-width:54px; text-align:center; font-weight:bold; color:var(--accent); font-size:14px;">C (0)</span>
-                                    <button id="lib-transpose-up" class="btn" style="padding:4px 10px; font-size:18px; font-weight:bold; min-width:34px;">+</button>
-                                    <button id="lib-transpose-reset" class="btn" style="padding:4px 8px; font-size:11px; min-width:34px;" title="Volver al tono original">↺</button>
+                                    <div class="daw-stepper">
+                                        <button id="lib-transpose-down">−</button>
+                                        <input type="text" id="lib-transpose-label" readonly value="C (0)" style="border:none; padding:4px; width:54px; text-align:center; font-weight:bold; color:var(--accent); min-height:auto; background:transparent; cursor:default;">
+                                        <button id="lib-transpose-up">+</button>
+                                    </div>
+                                    <button id="lib-transpose-reset" class="daw-stepper" style="padding:4px 10px; font-size:14px; cursor:pointer; border-radius:6px;" title="Volver al tono original">↺</button>
                                 </div>
                             </div>
 
@@ -1004,7 +1013,7 @@
     <script src="presets.js?v255"></script>
     <script src="app.js?v255"></script>
     <script src="harmony.js?v255"></script>
-    <script src="library.js?v271"></script>
+    <script src="library.js?v272"></script>
     <script src="trainer.js?v255"></script>
 </body>
 </html>
