@@ -20327,4 +20327,165 @@
     "genre": "Worship",
     "original_key": "C"
   },
- 
+  {
+    "id": "grupo_grace_el_manto",
+    "title": "El Manto",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_en_la_espera",
+    "title": "En la espera",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_espiritu_de_dios",
+    "title": "Espíritu de Dios",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_espiritu_santo_fluye",
+    "title": "Espíritu Santo fluye",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_gloria_postrera",
+    "title": "Gloria Postrera",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_haz_llover",
+    "title": "Haz Llover",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_la_nube",
+    "title": "La Nube",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_la_promesa",
+    "title": "La Promesa",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_los_brazos_de_papa",
+    "title": "Los brazos de papá",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_maria",
+    "title": "María",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_me_salvaste",
+    "title": "Me Salvaste",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_menos_de_mi_mas_de_ti",
+    "title": "Menos de mí, más de ti",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_no_parare",
+    "title": "No Pararé",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_no_puedo_adorar_sin_ti",
+    "title": "No puedo adorar sin ti",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "Ab"
+  },
+  {
+    "id": "grupo_grace_si_no_me_bendices_no_te_vas",
+    "title": "Si no me bendices no te vas",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_sucedera",
+    "title": "Sucederá",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_suena_el_arpa",
+    "title": "Suena el arpa",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_ven_llenanos",
+    "title": "Ven Llénanos",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_voy_a_entregarlo_todo",
+    "title": "Voy a entregarlo todo",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_yo_hare_un_altar",
+    "title": "Yo haré un altar",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_yo_soy_el_que_soy",
+    "title": "Yo soy el que soy",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_yo_soy_el_que_soy_yud_hei_vav_hei",
+    "title": "Yo soy el que soy (yud hei vav hei)",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "grupo_grace_yud_hei_vav_hei_yo_soy_el_que_soy",
+    "title": "Yud hei vav hei yo soy el que soy",
+    "artist": "Grupo Grace",
+    "genre": "Worship",
+    "original_key": "C"
+  }
+]

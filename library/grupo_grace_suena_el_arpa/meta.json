@@ -1,0 +1,14 @@
+{
+  "id": "grupo_grace_suena_el_arpa",
+  "title": "Suena el arpa",
+  "artist": "Grupo Grace",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/grupo_grace/suena_el_arpa.shtml",
+      "lcd": 0
+    }
+  ]
+}

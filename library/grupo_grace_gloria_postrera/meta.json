@@ -1,0 +1,14 @@
+{
+  "id": "grupo_grace_gloria_postrera",
+  "title": "Gloria Postrera",
+  "artist": "Grupo Grace",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/grupo_grace/gloria_postrera.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+.INTRO: D#m​  F#  C#  G#
+
+[V1]
+.            D#m     F#
+ HAY HUESOS SECOS TOMANDO VIDA
+.        C#          G#
+ VEO LA NUBE DE TU GLORIA
+.            D#m        F#
+ SIENTO TUS PASOS QUE SE APROXIMAN
+.             C#               G#
+ HACIA MI ENCUENTRO AQUÍ TE ESPERO
+
+[C]
+.            A#m       F#
+ // REY DE GLORIA PODEROSO
+.         C#
+ TRAE EL CIELO AQUÍ
+.     G#
+ EL CIELO AQUÍ //
+
+[P]
+.A#m               F#
+ HOY YO VEO LA NUBE
+.                     C#
+ HOY YO SIENTO LA NUBE
+.                      Fm
+ HOY ME ENVUELVE LA NUBE
+.                    A#m
+ LA NUBE DE TU GLORIA
+
+
+* Formato listo para OpenSong
