@@ -1,0 +1,14 @@
+{
+  "id": "ebenezer_banderas",
+  "title": "Banderas",
+  "artist": "Ebenezer",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ebenezer/banderas.shtml",
+      "lcd": 0
+    }
+  ]
+}

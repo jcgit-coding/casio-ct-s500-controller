@@ -1,0 +1,14 @@
+{
+  "id": "ebenezer_esta_aqui",
+  "title": "Está Aquí",
+  "artist": "Ebenezer",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ebenezer/esta_aqui.shtml",
+      "lcd": 0
+    }
+  ]
+}

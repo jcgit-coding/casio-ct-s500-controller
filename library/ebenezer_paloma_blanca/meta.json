@@ -1,0 +1,14 @@
+{
+  "id": "ebenezer_paloma_blanca",
+  "title": "Paloma Blanca",
+  "artist": "Ebenezer",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ebenezer/paloma_blanca.shtml",
+      "lcd": 0
+    }
+  ]
+}

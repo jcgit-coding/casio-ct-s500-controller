@@ -1,0 +1,14 @@
+{
+  "id": "ebenezer_el_centro_de_todo",
+  "title": "El centro de todo",
+  "artist": "Ebenezer",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ebenezer/el_centro_de_todo.shtml",
+      "lcd": 0
+    }
+  ]
+}

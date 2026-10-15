@@ -1,0 +1,14 @@
+{
+  "id": "ebenezer_altar_de_adoracion",
+  "title": "Altar de adoración",
+  "artist": "Ebenezer",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ebenezer/altar_de_adoracion.shtml",
+      "lcd": 0
+    }
+  ]
+}

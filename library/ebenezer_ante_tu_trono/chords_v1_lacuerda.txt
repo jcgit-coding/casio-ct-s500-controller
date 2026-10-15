@@ -1,0 +1,42 @@
+Intro: //(MI, FA, RE, MI, SI, DO, SOL,)// SI, DO, SI, DO, SI DO SI, SOL, LA
+Bajos     C,     C/E,     F,       G,     Am7,            G,              F
+
+Estrofa:
+C     G/B            Am7    Bb/D - C/E
+Señor estoy ante tu trono,
+F          G        C     Bb/D - C/E
+Anhelando tú presencia,
+   F       G/F Em7   Am7
+Deseando agradarte
+Dm7            G           C
+Esperando tu gloria contemplar,
+C     G/B            Am7    Bb/D  C/E
+Señor estoy ante tu trono,
+F        G          C   Bb/D  C/E
+Anhelando poder verte
+   F       G/F Em7   Am7
+Deseando adorarte,
+  Dm7        G             C
+Esperando conocer tu voluntad
+
+
+Coro:
+Bb/D  C/E       F    G/F         Em7   Am7
+    Y que tu gloria, llene ahora este lugar,
+Dm7-G  Em7-Am7 Dm      G   Am7    D/F#,
+Santo, Santo,  Santo eres Señor.
+Dm7    G     C
+Santo eres Señor.
+
+Reintro
+Estrofa
+Coro 2x
+
+Puente: AbM7, Eb2/G, AbM7, Cm9, AbM7, Eb2/G, Fm7, Bb, C, Bb/D C/E
+
+         F    G/F     Em7 Am7    Dm7    G    C
+//Y que tu   Gloria,  tu Gloria, llene este lugar.//
+Coro, soft Groove
+Coro, Full Groove
+
+Final, Ministración: AbM7 Eb2/G, AbM7, Eb2/G, F#m7, E/G#, Am9, E/G#, A2
