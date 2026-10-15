@@ -479,11 +479,18 @@ const RepertoireSync = {
             versions.map((v, i) => {
                 const isActive = v.file === activeFile;
                 const ratingStr = (v.lcd != null && v.lcd > 0) ? ` · ${v.lcd}★` : '';
-                return `<button onclick="RepertoireSync.openSong('${id}','${v.file}')"
-                    style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};
-                    background:${isActive ? 'var(--accent)' : 'transparent'};color:${isActive ? '#000' : 'var(--text-muted)'};cursor:pointer;">
-                    ${site(v.file)} v${i+1}${ratingStr}
-                </button>`;
+                const linkHtml = v.source
+                    ? ` <a href="${v.source}" target="_blank" rel="noopener"
+                           title="Ver en lacuerda.net"
+                           style="font-size:9px;color:var(--text-muted);opacity:0.6;text-decoration:none;vertical-align:middle;"
+                           onclick="event.stopPropagation()">↗</a>`
+                    : '';
+                return `<span style="display:inline-flex;align-items:center;gap:2px;">
+                    <button onclick="RepertoireSync.openSong('${id}','${v.file}')"
+                        style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};
+                        background:${isActive ? 'var(--accent)' : 'transparent'};color:${isActive ? '#000' : 'var(--text-muted)'};cursor:pointer;">
+                        ${site(v.file)} v${i+1}${ratingStr}
+                    </button>${linkHtml}</span>`;
             }).join('');
     }
 };
