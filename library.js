@@ -50,27 +50,42 @@ const RepertorioApp = {
         }
     },
 
+    _semitoneShift: 0,
+
     bindEvents() {
         document.getElementById('lib-btn-import')?.addEventListener('click', () => this.importFromText());
-        document.getElementById('lib-transpose-select').addEventListener('change', (e) => {
-            if (!this.currentSong) return;
-            const targetNote = e.target.value;
-            const fromIdx = this.notes.indexOf(this.normalizeNoteRoot(this.currentSong.originalKey));
-            const toIdx   = this.notes.indexOf(targetNote);
-            if (fromIdx === -1 || toIdx === -1) return;
-            const steps = (toIdx - fromIdx + 12) % 12;
-            this.applyTranspose(steps);
-        });
+        document.getElementById('lib-transpose-down')?.addEventListener('click', () => this._shiftTranspose(-1));
+        document.getElementById('lib-transpose-up')?.addEventListener('click', () => this._shiftTranspose(+1));
+        document.getElementById('lib-transpose-reset')?.addEventListener('click', () => this._resetTranspose());
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
     },
 
+    _shiftTranspose(delta) {
+        if (!this.currentSong) return;
+        this._semitoneShift = ((this._semitoneShift + delta) % 12 + 12) % 12;
+        this._applyTransposeShift();
+    },
+
+    _resetTranspose() {
+        if (!this.currentSong) return;
+        this._semitoneShift = 0;
+        this._applyTransposeShift();
+    },
+
+    _applyTransposeShift() {
+        this.applyTranspose(this._semitoneShift);
+        const root = this.notes[this._semitoneShift] || this.currentSong.originalKey;
+        const label = document.getElementById('lib-transpose-label');
+        const shift = this._semitoneShift;
+        const shiftStr = shift === 0 ? '0' : (shift <= 6 ? `+${shift}` : `-${12 - shift}`);
+        if (label) label.textContent = `${root} (${shiftStr})`;
+    },
+
     populateTransposeDropdown(originalKey) {
-        const select = document.getElementById('lib-transpose-select');
+        this._semitoneShift = 0;
         const root = originalKey ? this.normalizeNoteRoot(originalKey) : 'C';
-        select.innerHTML = this.noteLabels.map((label, i) =>
-            `<option value="${this.notes[i]}">${label}</option>`
-        ).join('');
-        select.value = root;
+        const label = document.getElementById('lib-transpose-label');
+        if (label) label.textContent = `${root} (0)`;
     },
 
     setSong(title, artist, rawText, originalKey) {
@@ -143,7 +158,7 @@ const RepertorioApp = {
 
         titleEl.innerText = this.currentSong.title;
         artistEl.innerText = this.currentSong.artist;
-        document.getElementById('lib-transpose-select').value = "0";
+        this._semitoneShift = 0;
         this.renderChords(this.currentSong.originalContent);
     },
 

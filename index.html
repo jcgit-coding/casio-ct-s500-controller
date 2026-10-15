@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <script>
     (function(){
-        var V='v270';
+        var V='v271';
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
             var u=new URL(window.location.href);
@@ -861,9 +861,12 @@
                             <!-- Transpose Control -->
                             <div style="display: flex; flex-direction: column; gap: 4px; background: var(--input-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);">
                                 <span class="daw-control-label">TRANSPOSE</span>
-                                <select id="lib-transpose-select" class="search-input" style="color: var(--accent); padding: 4px 8px; min-height: auto; width: 140px; font-weight: bold; cursor: pointer;">
-                                    <option value="0">Original Key</option>
-                                </select>
+                                <div style="display:flex; align-items:center; gap:6px;">
+                                    <button id="lib-transpose-down" class="btn" style="padding:4px 10px; font-size:18px; font-weight:bold; min-width:34px;">−</button>
+                                    <span id="lib-transpose-label" style="min-width:54px; text-align:center; font-weight:bold; color:var(--accent); font-size:14px;">C (0)</span>
+                                    <button id="lib-transpose-up" class="btn" style="padding:4px 10px; font-size:18px; font-weight:bold; min-width:34px;">+</button>
+                                    <button id="lib-transpose-reset" class="btn" style="padding:4px 8px; font-size:11px; min-width:34px;" title="Volver al tono original">↺</button>
+                                </div>
                             </div>
 
                             <!-- Action Buttons -->
@@ -1001,7 +1004,7 @@
     <script src="presets.js?v255"></script>
     <script src="app.js?v255"></script>
     <script src="harmony.js?v255"></script>
-    <script src="library.js?v270"></script>
+    <script src="library.js?v271"></script>
     <script src="trainer.js?v255"></script>
 </body>
 </html>
