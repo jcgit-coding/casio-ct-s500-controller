@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_mi_dios_es_grande",
+  "title": "Mi Dios es grande",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/mi_dios_es_grande.shtml",
+      "lcd": 0
+    }
+  ]
+}

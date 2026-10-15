@@ -1,0 +1,14 @@
+{
+  "id": "marcos_brunet_la_cancion_del_cordero",
+  "title": "La canción del cordero",
+  "artist": "Marcos Brunet",
+  "genre": "Worship",
+  "original_key": "A",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marcos_brunet/la_cancion_del_cordero.shtml",
+      "lcd": 0
+    }
+  ]
+}

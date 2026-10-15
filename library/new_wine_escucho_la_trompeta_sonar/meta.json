@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_escucho_la_trompeta_sonar",
+  "title": "Escucho la trompeta sonar",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/escucho_la_trompeta_sonar.shtml",
+      "lcd": 0
+    }
+  ]
+}

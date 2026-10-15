@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_mi_dios_es_bueno",
+  "title": "Mi Dios es bueno",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/mi_dios_es_bueno.shtml",
+      "lcd": 0
+    }
+  ]
+}

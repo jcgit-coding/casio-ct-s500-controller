@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_en_alta_voz",
+  "title": "En alta voz",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/en_alta_voz.shtml",
+      "lcd": 0
+    }
+  ]
+}

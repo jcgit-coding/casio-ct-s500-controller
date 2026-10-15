@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_himno_de_avivamiento",
+  "title": "Himno de avivamiento",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/himno_de_avivamiento.shtml",
+      "lcd": 0
+    }
+  ]
+}

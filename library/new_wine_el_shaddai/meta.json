@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_el_shaddai",
+  "title": "El Shaddai",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/el_shaddai.shtml",
+      "lcd": 0
+    }
+  ]
+}

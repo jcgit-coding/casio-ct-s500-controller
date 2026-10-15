@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_el_cielo_aqui",
+  "title": "El cielo aquí",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/el_cielo_aqui.shtml",
+      "lcd": 0
+    }
+  ]
+}

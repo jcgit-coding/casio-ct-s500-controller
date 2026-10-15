@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_confia",
+  "title": "Confía",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/confia.shtml",
+      "lcd": 0
+    }
+  ]
+}

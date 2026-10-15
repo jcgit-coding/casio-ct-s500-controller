@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_jesus_ven",
+  "title": "Jesús Ven",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/jesus_ven.shtml",
+      "lcd": 0
+    }
+  ]
+}

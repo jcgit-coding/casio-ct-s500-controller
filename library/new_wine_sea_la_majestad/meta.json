@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_sea_la_majestad",
+  "title": "Sea la majestad",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/sea_la_majestad.shtml",
+      "lcd": 0
+    }
+  ]
+}

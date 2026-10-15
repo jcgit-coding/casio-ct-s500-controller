@@ -1,0 +1,19 @@
+{
+  "id": "new_wine_salmo",
+  "title": "Salmo 108",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/salmo_133.shtml",
+      "lcd": 0
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/salmo_99.shtml",
+      "lcd": 0
+    }
+  ]
+}

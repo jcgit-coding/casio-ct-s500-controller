@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_es_un_megaciclo",
+  "title": "Es un megaciclo",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/es_un_megaciclo.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_escondeme",
+  "title": "Escóndeme",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/escondeme.shtml",
+      "lcd": 0
+    }
+  ]
+}

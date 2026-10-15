@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_aceite_fresco",
+  "title": "Aceite Fresco",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/aceite_fresco.shtml",
+      "lcd": 0
+    }
+  ]
+}

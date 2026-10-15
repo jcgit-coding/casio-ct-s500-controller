@@ -1,0 +1,63 @@
+Aviso: Las letras que un punto adelante especifican
+       que son notas (no acordes)y hay que tocarlas
+       Ejemplo:
+                C. [--- (con punto)Nota
+                C  [--- (sin punto) acorde
+
+
+INTRO:
+
+Dm - Gm - A - Dm
+
+
+VERSO 1:
+
+   Dm
+Alístate, que pronto viene el Rey
+   Dm
+Alístate, que pronto viene el Rey
+   Gm
+En majestad, ya pronto viene el Rey
+   Gm
+En majestad, ya pronto viene el Rey
+         A            A            A
+Él viene ya, Él viene ya, Él viene ya
+     A. G. F. E.   Dm   A/C#   C   A#
+El Rey pronto vendrá
+
+
+VERSO 2:
+
+     Dm
+Me encontrará danzando a mi Rey
+     Dm
+Me encontrará cantando a mi Rey
+     Gm
+Me encontrará alabando a mi Rey
+     Gm
+Me encontrará adorando a mi Rey
+           A              A              A
+Me encontrará, me encontrará, me encontrará
+   A. G. F. E.   Dm   A/C#   C   A#
+Velando por mi rey
+
+
+CORO:
+
+      Dm   A/C#   C   G/B
+//Hay gozo en los cielos
+      Dm   A/C#   C   G/B
+  Hay fiesta en la tierra
+      Dm   A/C#   C   G/B
+  Su novia ya está lista
+      Gm            A
+  El Rey pronto vendrá//
+
+      Dm          Gm   A
+//Hay gozo en los cielos
+      Dm           Gm   A
+  Hay fiesta en la tierra
+      Dm          Gm   A
+  Su novia ya está lista
+      A#           A
+  El Rey pronto regresa//

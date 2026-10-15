@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_amor_sobrenatural",
+  "title": "Amor Sobrenatural",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/new_wine/amor_sobrenatural.shtml",
+      "lcd": 0
+    }
+  ]
+}
