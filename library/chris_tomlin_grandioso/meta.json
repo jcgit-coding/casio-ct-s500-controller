@@ -1,0 +1,14 @@
+{
+  "id": "chris_tomlin_grandioso",
+  "title": "Grandioso",
+  "artist": "Chris Tomlin",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/chris_tomlin/grandioso.shtml",
+      "lcd": 0
+    }
+  ]
+}

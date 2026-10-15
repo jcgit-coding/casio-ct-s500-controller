@@ -2875,5 +2875,796 @@
     "artist": "Marcos Witt",
     "genre": "Worship",
     "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_abba",
+    "title": "Abba",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_al_mirarte_a_ti",
+    "title": "Al mirarte a ti",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_cara_a_cara_te_deseo",
+    "title": "Cara a cara / te deseo",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_cerca_estas",
+    "title": "Cerca Estás",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_el_ninio_del_tambor",
+    "title": "El niño del tambor",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_el_secreto",
+    "title": "El Secreto",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_en_la_sombra",
+    "title": "En la sombra",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_esperanza_de_vida",
+    "title": "Esperanza de vida",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_espiritu_de_dios",
+    "title": "Espíritu de Dios",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_esplendor",
+    "title": "Esplendor",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_fiel",
+    "title": "Fiel",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_gracias",
+    "title": "Gracias",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_hay_un_hombre",
+    "title": "Hay un hombre",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_la_carrera",
+    "title": "La Carrera",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_llevame_a_la_cruz",
+    "title": "Llévame a la cruz",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "A"
+  },
+  {
+    "id": "majo_y_dan_mas_de_ti_menos_de_mi",
+    "title": "Más de ti, menos de mí",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_nadie_igual",
+    "title": "Nadie Igual",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "E"
+  },
+  {
+    "id": "majo_y_dan_no_me_movere",
+    "title": "No me Moveré",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_no_yo_sino_cristo",
+    "title": "No yo, sino Cristo",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_ofrenda",
+    "title": "Ofrenda",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_oh_que_amor",
+    "title": "Oh, qué amor",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_presente",
+    "title": "Presente",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_probar_y_verte_deseo_eterno",
+    "title": "Probar y verte / deseo eterno",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_que_pase_el_mundo",
+    "title": "Que pase el mundo",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_quiero_levantar_mis_manos",
+    "title": "Quiero levantar mis manos",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_santa_la_noche",
+    "title": "Santa la noche",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_sobre_todo_nombre",
+    "title": "Sobre todo nombre",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_te_amo_senior",
+    "title": "Te amo Señor",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_te_deseo",
+    "title": "Te Deseo",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_todo_nuevo",
+    "title": "Todo Nuevo",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_todos_los_sedientos",
+    "title": "Todos los sedientos",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_tu_proveeras",
+    "title": "Tú Proveerás",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_una_y_otra_vez",
+    "title": "Una y otra vez",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_vida_encontre",
+    "title": "Vida Encontré",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "majo_y_dan_volveras",
+    "title": "Volverás",
+    "artist": "Majo y Dan",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_alzo_mis_manos",
+    "title": "Alzo mis manos",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_buen_buen_padre",
+    "title": "Buen buen padre",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_cuan_grande_amor",
+    "title": "Cuan grande amor",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_cuan_grande_es_dios",
+    "title": "Cuan grande es Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_danos_manos_limpias",
+    "title": "Danos manos limpias",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_danzo_para_dios",
+    "title": "Danzo para Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_despiertanos",
+    "title": "Despiértanos",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_dios_de_esta_ciudad",
+    "title": "Dios de esta ciudad",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_dios_de_poder",
+    "title": "Dios de poder",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_en_la_cruz",
+    "title": "En la cruz",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_eternamente_dios",
+    "title": "Eternamente Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_eterno_dios",
+    "title": "Eterno Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_fiel_eres_tu_senior",
+    "title": "Fiel eres tu Señor",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_glorioso_dia",
+    "title": "Glorioso Día",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_gods_great_dance_floor",
+    "title": "God's great dance floor",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_gracia_admirable",
+    "title": "Gracia Admirable",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_grandioso",
+    "title": "Grandioso",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_holy_forever",
+    "title": "Holy Forever",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_la_gran_pista_de_dios",
+    "title": "La gran pista de Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_me_levantare",
+    "title": "Me Levantaré",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_me_rindo_al_senior",
+    "title": "Me rindo al Señor",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_mi_dios",
+    "title": "Mi Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_nuestro_dios",
+    "title": "Nuestro Dios",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_pronto_vendra",
+    "title": "Pronto Vendrá",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_santo_es_el_senior",
+    "title": "Santo es el Señor",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_santo_por_siempre",
+    "title": "Santo por siempre",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_senior_te_necesito",
+    "title": "Señor te necesito",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_suficiente",
+    "title": "Suficiente",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "chris_tomlin_yo_te_seguire",
+    "title": "Yo te seguiré",
+    "artist": "Chris Tomlin",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_a_ti_sea_la_gloria",
+    "title": "A tí sea la gloria",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_abre_mis_ojos_oh_cristo",
+    "title": "Abre mis ojos oh Cristo",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_al_estar_ante_ti",
+    "title": "Al estar ante ti",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_al_unico_y_sabio_dios",
+    "title": "Al unico y sabio Dios",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_alaben_su_nombre",
+    "title": "Alaben su nombre",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_amarte_siempre",
+    "title": "Amarte Siempre",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_ante_el_senior",
+    "title": "Ante el Señor",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_cristo_te_amo",
+    "title": "Cristo te amo",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_de_tal_manera",
+    "title": "De tal manera",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_dejando_tu_trono",
+    "title": "Dejando tu trono",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_deseado_de_mi_alma",
+    "title": "Deseado de mi alma",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_dispuesto_estoy",
+    "title": "Dispuesto estoy",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_el_es_el_unico_dios",
+    "title": "El es el único Dios",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_el_gozo_del_senior",
+    "title": "El Gozo del Señor",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_el_padre_que_siempre_sonie",
+    "title": "El padre que siempre soñé",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_enamorame",
+    "title": "Enamórame",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_es_hora_de_volver",
+    "title": "Es hora de volver",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_estar_contigo",
+    "title": "Estar Contigo",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_exaltad",
+    "title": "Exaltad",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_gloria_en_las_alturas",
+    "title": "Gloria en las alturas",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_guardame_en_tu_presencia",
+    "title": "Guárdame en tu presencia",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_hasta_el_desierto",
+    "title": "Hasta el desierto",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_hoy_te_rindo_mi_ser",
+    "title": "Hoy te rindo mi ser",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_inmerecedor",
+    "title": "Inmerecedor",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_jesus_mi_fiel_amigo",
+    "title": "Jesús mi fiel amigo",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_la_flor_mas_hermosa",
+    "title": "La flor más hermosa",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_la_ninia_de_tus_ojos",
+    "title": "La niña de tus ojos",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_la_roca",
+    "title": "La Roca",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_listo_para_nuestro_encuentro",
+    "title": "Listo para nuestro encuentro",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_lo_unico_que_quiero",
+    "title": "Lo único que quiero",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_mira_que_soy_tu_siervo",
+    "title": "Mira que soy tu siervo",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_no_hace_falta",
+    "title": "No hace falta",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_no_temere",
+    "title": "No temeré",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_nueva_historia",
+    "title": "Nueva Historia",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_palabras_de_verdad",
+    "title": "Palabras de verdad",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_quiero_agradecerte",
+    "title": "Quiero agradecerte",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_quiero_decirle_al_mundo",
+    "title": "Quiero decirle al mundo",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_quiero_estar_presente",
+    "title": "Quiero estar presente",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_se_oye_una_nueva_cancion",
+    "title": "Se oye una nueva canción",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_serviremos_al_senior",
+    "title": "Serviremos al Señor",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_te_llamas_amor",
+    "title": "Te llamas amor",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_te_pertenezco",
+    "title": "Te pertenezco",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_tomame_de_tu_mano",
+    "title": "Tómame de tu mano",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_tomame_en_tus_brazos",
+    "title": "Tómame en tus brazos",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_unanimes",
+    "title": "Unánimes",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_ven_a_mi_casa",
+    "title": "Ven a mi casa",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_veo_llover",
+    "title": "Veo Llover",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_vivire",
+    "title": "Viviré",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "abel_zavala_yo_quiero_mas_de_ti",
+    "title": "Yo quiero más de ti",
+    "artist": "Abel Zavala",
+    "genre": "Worship",
+    "original_key": "C"
   }
 ]

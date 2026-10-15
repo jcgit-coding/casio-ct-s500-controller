@@ -1,0 +1,14 @@
+{
+  "id": "chris_tomlin_pronto_vendra",
+  "title": "Pronto Vendrá",
+  "artist": "Chris Tomlin",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/chris_tomlin/pronto_vendra.shtml",
+      "lcd": 0
+    }
+  ]
+}
