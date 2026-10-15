@@ -1,0 +1,14 @@
+{
+  "id": "danilo_montero_fortaleza",
+  "title": "Fortaleza",
+  "artist": "Danilo Montero",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/danilo_montero/fortaleza.shtml",
+      "lcd": 0
+    }
+  ]
+}

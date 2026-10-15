@@ -1,0 +1,67 @@
+Tempo 118
+
+=Intro= // G - C //                        G                  C2
+                                    ||---|---|-O-|      ||---|---|-O-|
+                                    ||---|---|-O-|      ||---|---|-O-|
+                                   O||---|---|---|     O||---|---|---|
+                                   O||---|---|---|      ||---|-O-|---|
+=Verso=                             ||---|-O-|---|      ||---|---|-O-|
+                                    ||---|---|-O-|     X||---|---|---|
+  G            Em
+Aquel que nos amo
+         C2         D*
+Testigo fiel exaltare
+       G               Em
+Al que es principio y fin
+            C2       D*                            D*
+Al gran yo soy adorare                   ||---|---|---|---|-O-|
+                                         ||---|---|-O-|---|---|
+                                         ||---|-O-|---|---|---|
+                                        O||---|---|---|---|---|
+=Coro=                                  X||---|---|---|---|---|
+                                        X||---|---|---|---|---|
+G                D
+ A Jesús mí señor
+        Am7                    C2
+Resplandor de la gloria de Dios
+G                   D
+ A Jesús mí gran rey
+              C       D                   D/F#                B7
+Alabanza y honra daré               ||---|-O-|---|      ||---|-O-|---|
+                                    ||---|---|-O-|     O||---|---|---|
+                                    ||---|-O-|---|      ||---|-O-|---|
+                                   O||---|---|---|      ||-O-|---|---|
+=Puente=                           O||---|---|---|      ||---|-O-|---|
+                                    ||---|-O-|---|     X||---|---|---|
+Em  D/F# G     C2  D  B7
+Siempre  te amare
+Em  D/F# G       C2  C/D  B7
+Siempre  te adorare
+Em  D/F# G       C2  D  B7
+Siempre  te cantare
+Em  D/F# G        C2                      C/D                 C/E
+Siempre  te exaltare               O||---|---|---|     O||---|---|---|
+                                    ||-O-|---|---|      ||-O-|---|---|
+                                   O||---|---|---|     O||---|---|---|
+                                   O||---|---|---|      ||---|-O-|---|
+=Instrumental=                     X||---|---|---|      ||---|---|-O-|
+                                   X||---|---|---|     O||---|---|---|
+Em  D/F# - G    C2
+Em  D/F# - G    C2  D
+C/E - D/F#      C - D
+
+                                                       ___________________
+=Outro=                                               | _________________ |
+                                                      ||  = Estructura = ||
+G                D                                    ||                 ||
+ A Jesús mí señor                                     || Intro           ||
+        Am7                    C2                     || Verso        x2 ||
+Resplandor de la gloria de Dios                       || Coro         x1 ||
+G                   D                                 || Verso        x1 ||
+ A Jesús mí gran rey                                  || Coro         x2 ||
+              C       D                               || Puente       x1 ||
+Alabanza y honra daré                                 || Instrumental x1 ||
+              C       D                               || Coro         x1 ||
+Alabanza y honra daré                                 || Outro        x1 ||
+              C       D     G                         ||_________________||
+Alabanza y honra...      daré                         |___________________|

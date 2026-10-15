@@ -1,0 +1,14 @@
+{
+  "id": "danilo_montero_gracia",
+  "title": "Gracia",
+  "artist": "Danilo Montero",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/danilo_montero/gracia.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+Intro con arpegio:
+
+       E=0 A=2 D=4 G=1 se devuelve a D=4 A=2
+       E=X A=0 D=4 G=1 B=0 se devuelve a G=1 D=4
+       E=X A=4 D=4 G=2 B=0 se devuelve a G=2 D=4
+       E=X A=2 D=4 G=1 B=0 G=1 B=0
+
+
+
+   Eadd9               Eadd9,-2  Eadd9              Eadd9,-2
+Refresca nuestras vidas Señor,   derrama bálsamo de amor
+Eadd9     Dadd9  C#add9     Cadd9  Eadd9                          Eadd9
+sana corazones, mentes y emociones,     refresca nuestras vidas Señor
+
+
+     Badd9/E         Aadd9              Badd9/E          Aadd9     Badd9
+Refrescanos, con tu bálsamo de amor, refrescanos, con tu gracia y favor
+     Aadd9            Cadd9            Eadd9
+refrescanos, refresca nuestras vidas Señor...
+
+
+
+Solito de guitarra: Eadd9,-2 ; Eadd9 ; Eadd9,-2
+
+
+
+ Eadd9                  Aadd9  Eadd9                  Aadd9
+Refresca nuestras vidas Señor,     derrama bálsamo de amor,
+ Eadd9      Dadd9-C#add9       Cadd9  Badd9                       Eadd9
+cubre a tu novia, con velo de gloria,       refresca nuestras vidas Señor
+
+
+      Badd9/E        Aadd9                Badd9/E         Aadd9    Badd9
+//Refrescanos con tu bálsamo de amor, refrescanos, con tu gracia y favor
+      Aadd9            Cadd9          Eadd9
+refrescanos, refresca nuestras vidas Señor //.
+
+
+Puente de piano y violines: C#add9,Aadd9,C#add9,Dadd9 'se cuenta 2 compases y:'  Aadd9
+
+           Aadd9        Badd9/G#   G     D/F# Eadd9
+Coro: // Refréscanos, refréscanos, refréscanos
+         Aadd9       Badd9/G#  Cadd9   Dadd9  Eadd9
+      Refréscanos, refréscanos,  refréscanos //.
+
+Final: Eadd9,-2   Eadd9    Aadd9   Cadd9   Eadd9
+
+
+
+Que la paz y el gozo del Señor esté siempre en sus corazones,
+Gracias a todos desde mi tierra. Por si acaso aca les escribo los
+acordes uno por uno en su respectiva tabulación. Erick.
+
+Acordes tabulados:
+
+Eadd9:       E=0 A=2 D=4 G=1 B=0 E=0
+Eadd9,-2:    E=X A=0 D=4 G=1 B=0 E=0
+Dadd9:       E=X A=5 D=7 G=7 B=0 E=0
+C#add9:      E=X A=4 D=6 G=6 B=0 E=0
+Cadd9:       E=X A=3 D=5 G=5 B=0 E=0
+Badd9:       E=X A=2 D=4 G=4 B=0 E=0
+Badd9/E:     E=0 A=2 D=4 G=4 B=0 E=0
+Aadd9:       E=X A=0 D=2 G=2 B=0 E=0
+Badd9/G#:    E=4 A=2 D=4 G=4 B=0 E=0
+G:           E=1 A=5 D=5 G=4 B=0 E=0
+D/F#:        E=2 A=0 D=0 G=2 B=3 E=0

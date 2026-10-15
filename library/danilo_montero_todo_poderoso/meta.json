@@ -1,0 +1,14 @@
+{
+  "id": "danilo_montero_todo_poderoso",
+  "title": "Todo Poderoso",
+  "artist": "Danilo Montero",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/danilo_montero/todo_poderoso.shtml",
+      "lcd": 0
+    }
+  ]
+}
