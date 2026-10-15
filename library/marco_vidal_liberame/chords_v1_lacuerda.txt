@@ -1,0 +1,123 @@
+(Nota: grabación original en Cm, usar transporte en 1er.traste)
+
+Intro: Bmm A/B(x 3)
+
+A)
+         Bm         A/B
+Más allá de la frontera
+
+            G7/13
+que cualquiera puede hallar, 
+
+       F# (5+)      F#     B sus7-B7
+En el fondo más oscuro del mar, 
+
+       E m        E m/D
+Donde nadie ha llegado
+
+    G 7/13                    F#7
+Jesús ha enterrado mi maldad.
+
+
+Y sin embargo cuántas veces
+Yo tropiezo al caminar
+Por errores del ayer que me atormentan, 
+Acude a mí
+Y hazme libre del temor
+Una vez más.
+
+B)
+   Bm            A/B
+Libérame de estas cadenas
+               Em
+Que me están atando
+          F#7    G7
+Y hazme volar más alto 
+              F #7
+Que la tempestad, 
+
+Y deja que un rayo de luz
+
+Ilumine mi alma, 
+
+Estoy cansado ya 
+
+de tanta oscuridad.
+
+C)
+     Em/A
+Oh, deja que tu soplo 
+        F7 
+Caiga suave sobre mí
+          Gsus                G
+Como lluvia que desciende 
+           Asus7  A7
+En la mañana. 
+
+    Dm7/9-
+Libérame
+           E 7(9-)        
+Y que el viento lleve lejos
+       C7          Am7
+El recuerdo de mi ayer
+                  D7       D7/E    D7/F#
+Que has borrado  con tu    sangre
+   Gsus7  G7
+Por siempre. 
+
+Libérame
+
+Y enséñame a olvidar
+
+Tal como tú lo has hecho ya
+
+Con tu paz y tu perdón en mí, 
+   Am      F#7
+Libérame.
+
+(solo: armonía parte A)
+ E m   E m/D
+Acude a mí
+          G7/13
+Y hazme libre del temor
+         F#7
+Una vez más.
+
+
+Libérame de estas cadenas...
+(repite todas las estrofas hasta el final)
+
+FINAL:
+   Am           F7          G6    A
+Libérame, libérame, libérame.
+
+TABLA DE ACORDES
+
+Bm:         x24432x
+A/B:        x2222x
+G 7/13:     3x345x
+F#(5+) :    2x233x
+F#:         2x232x
+Bsus7:      x2425x
+B7:         x2424x
+Em:         xx2000
+Em/D:       xx0000
+F#7:        242352
+G7:         353463
+Em/A:       x00000
+F7+:        xx3210
+Gsus:       3x353x
+G:          3x343x
+Asus7:      x0203x
+A7:         x0202x
+D7/9-:      xx0210
+E7(9-):     0xx100
+alterna  con 0xx101 
+C7+:        x32000
+Am7:        x20100
+D7:         xx0212
+D7 9/E:     xx2210
+D7 9/F#:    xx4210
+Am:         x02210
+G6:         3xx000
+A:          x22200

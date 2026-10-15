@@ -1,0 +1,14 @@
+{
+  "id": "marco_vidal_bagatella",
+  "title": "Bagatella",
+  "artist": "Marcos Vidal",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marco_vidal/bagatella.shtml",
+      "lcd": 0
+    }
+  ]
+}

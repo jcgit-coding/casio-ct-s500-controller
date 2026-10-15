@@ -12423,5 +12423,796 @@
     "artist": "Marco Barrientos",
     "genre": "Worship",
     "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_a_ti_la_gloria",
+    "title": "A ti la gloria",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_aclamad_al_senior",
+    "title": "Aclamad al señor",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_adoradle",
+    "title": "Adoradle",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_agnus_dei",
+    "title": "Agnus Dei",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_al_rey",
+    "title": "Al rey",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_aleluya",
+    "title": "Aleluya",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_anclado_en_la_colina",
+    "title": "Anclado en la colina",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_anclados_en_la_colina",
+    "title": "Anclados en la colina",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_anio_nuevo",
+    "title": "Año Nuevo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_aqui_estamos",
+    "title": "Aqui estamos",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_aqui_estoy",
+    "title": "Aquí estoy",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_asi_es_el",
+    "title": "Así es el",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_aslan",
+    "title": "Aslán",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_bagatella",
+    "title": "Bagatella",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_buscadme_y_vivireis",
+    "title": "Buscadme y viviréis",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_caifas",
+    "title": "Caifás",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_cara_a_cara",
+    "title": "Cara a cara",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_conocerte",
+    "title": "Conocerte",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_consejo",
+    "title": "Consejo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_contracorriente",
+    "title": "Contracorriente",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_creer",
+    "title": "Creer",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_cristianos",
+    "title": "Cristianos",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_cuando_el_vuelva",
+    "title": "Cuando el vuelva",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_cuanto_te_amo",
+    "title": "Cuanto te amo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_descansare_en_ti",
+    "title": "Descansaré en ti",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_deudor",
+    "title": "Deudor",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_dime_la_verdad",
+    "title": "Dime la verdad",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_dime_que_mas",
+    "title": "Dime que más",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_discipulos",
+    "title": "Discipulos",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_dulce_refugio",
+    "title": "Dulce Refugio",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_burro",
+    "title": "El Burro",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_cantar_de_nuva",
+    "title": "El Cantar de Nuva",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_ciervo",
+    "title": "El Ciervo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_ladron",
+    "title": "El Ladrón",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_milagro",
+    "title": "El milagro",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_ninio_de_belen",
+    "title": "El niño de Belén",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_ninio_de_belen_ii",
+    "title": "El niño de Belén II",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_pajarillo",
+    "title": "El Pajarillo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_pavo_real",
+    "title": "El pavo real",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_payaso",
+    "title": "El Payaso",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_ruisenior",
+    "title": "El Ruiseñor",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_el_verbo_se_hizo_carne",
+    "title": "El verbo se hizo carne",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_en_la_cruz",
+    "title": "En la cruz",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_eres_dios",
+    "title": "Eres Dios",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_eres_escudo",
+    "title": "Eres escudo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_eres_tu",
+    "title": "Eres Tu",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_es_por_fe",
+    "title": "Es por fé",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_gregarios_de_lujo",
+    "title": "Gregarios de lujo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_hay_luz",
+    "title": "Hay Luz",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_hay_momentos",
+    "title": "Hay Momentos",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_he_despertado_en_el_redil",
+    "title": "He despertado  en el redil",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_homenaje",
+    "title": "Homenaje",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_israel",
+    "title": "Israel",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_jesus",
+    "title": "Jesús",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_la_cruz",
+    "title": "La Cruz",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_la_oveja_perdida",
+    "title": "La oveja perdida",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_la_tortuga",
+    "title": "La tortuga",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_liberame",
+    "title": "Libérame",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_llamados_a_amarle",
+    "title": "Llamados a amarle",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_llename_de_ti",
+    "title": "Lléname de tí",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_lo_eres_todo",
+    "title": "Lo eres todo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_lo_veo",
+    "title": "Lo Veo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_lupo",
+    "title": "Lupo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_madre",
+    "title": "Madre",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_magerit",
+    "title": "Magerit",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_mediano",
+    "title": "Mediano",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_mi_esperanza",
+    "title": "Mi esperanza",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_mi_luz_y_mi_salvacion",
+    "title": "Mi luz y mi salvación",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_mi_regalo",
+    "title": "Mi Regalo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_mientras_haya_luz",
+    "title": "Mientras haya luz",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_mientras_viva",
+    "title": "Mientras Viva",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nada_especial",
+    "title": "Nada Especial",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nada_mas",
+    "title": "Nada Más",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nada_me_apartara",
+    "title": "Nada me apartará",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nadie_como_tu",
+    "title": "Nadie como tú",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nana",
+    "title": "Nana",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nieve_en_verano",
+    "title": "Nieve en verano",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_nieve_y_agua",
+    "title": "Nieve Y Agua",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_no_estamos_solos",
+    "title": "No estamos solos",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_no_hay_compromiso",
+    "title": "No hay compromiso",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_no_te_quepa_duda",
+    "title": "No te quepa duda",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_obra_de_arte",
+    "title": "Obra de arte",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_oh_que_amor",
+    "title": "Oh Que Amor",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_oh_senior",
+    "title": "Oh señor",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_parabola",
+    "title": "Parábola",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_pescador",
+    "title": "Pescador",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_por_la_vida",
+    "title": "Por la vida",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_quien_como_tu",
+    "title": "Quién como tú",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_quien_ira",
+    "title": "Quien Irá",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_salmo",
+    "title": "Salmo 84",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_salva_a_nuestra_espania",
+    "title": "Salva a nuestra España",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_santo_espiritu",
+    "title": "Santo Espíritu",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_si_aun_te_quiero",
+    "title": "Si aún te quiero",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_solo_tu",
+    "title": "Solo Tú",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_solo_una_vez",
+    "title": "Sólo una vez",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_suyo_nada_mas",
+    "title": "Suyo nada más",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_toca_a_tu_pueblo",
+    "title": "Toca a tu pueblo",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_todopoderoso_dios",
+    "title": "Todopoderoso Dios",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_tu_costado_sigue_abierto",
+    "title": "Tu costado sigue abierto",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_tu_eres_dios",
+    "title": "Tu Eres Dios",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_tu_fidelidad",
+    "title": "Tu Fidelidad",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_tu_misericordia",
+    "title": "Tu Misericordia",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_tu_nombre",
+    "title": "Tu Nombre",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_una_misma_vision",
+    "title": "Una misma visión",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_unia_y_carne",
+    "title": "Uña y Carne",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_unguento",
+    "title": "Unguento",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_yo_te_alabare",
+    "title": "Yo te alabaré",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "marco_vidal_quien_soy_yo",
+    "title": "¿quien soy yo?",
+    "artist": "Marcos Vidal",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "christine_dclario_a_ti_correre",
+    "title": "A ti correré",
+    "artist": "Christine d'Clario",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "christine_dclario_abrenos_los_cielos",
+    "title": "Abrenos los cielos",
+    "artist": "Christine d'Clario",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "christine_dclario_admirable",
+    "title": "Admirable",
+    "artist": "Christine d'Clario",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "christine_dclario_agua_viva",
+    "title": "Agua Viva",
+    "artist": "Christine d'Clario",
+    "genre": "Worship",
+    "original_key": "C"
+  },
+  {
+    "id": "christine_dclario_aleluya_el_viene_ya",
+    "title": "Aleluya El viene ya",
+    "artist": "Christine d'Clario",
+    "genre": "Worship",
+    "original_key": "C"
   }
 ]
