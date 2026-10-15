@@ -1,0 +1,56 @@
+Intro
+Ebm11 / Ebm11 / Abm7 / Abm7
+Ebm11 / Ebm11 / Abm7 / Abm7
+Bmaj7 / Bbm7 / Ebm11 / Ebm11
+Fm7 - F#m7 /Abm7 - Bbm11 / Bbm11 - B13 / C#13
+
+Verso
+    Ebm11                 Abm7
+Que todos los pueblos te alaben
+    Ebm11                     Abm7
+Que toda tu creación hoy te corone Rey
+  Gb           Db        Abm7
+Y digan que Tú eres poderoso
+
+Coro
+       Abm7         Gb/Bb
+Tú eres Rey, Tú eres Rey
+         B           Db
+Tú eres Rey, Tú eres Rey
+       Abm7         Gb/Bb
+Tú eres Rey, Tú eres Rey
+        B            Db
+Tú eres Rey, Tú eres Rey
+
+Tag
+B   Db   Ebm11
+Tú eres Rey
+B   Db   Ebm11
+Tú eres Rey
+B   Db   Ebm11
+Tú eres Rey
+B   Db   Ebm11
+Tú eres Rey
+
+Solo
+Abm7 / Abm7 / Gb/Bb / Gb/Bb /
+B9 / B9 / Db / Db /
+Abm7 / Abm7 / Gb/Bb / Gb/Bb /
+B9 / B9 / Db / Db /
+
+Acordes raros:
+   Abm7        Ebm11     Bmaj7      Bbm7      Fm7       F#m7
+e----------  ----6----  ----2---  ----1---  --------  --------
+B----4-----  ----7----  ----4---  ----2---  ----1---  ----2---
+G----4-----  ----6----  ----3---  ----1---  ----1---  ----2---
+D----4-----  ----6----  ----4---  ----3---  ----1---  ----2---
+A----x-----  ----6----  ----2---  ----1---  ----x---  ----x---
+E----4-----  ---------  ----x---  ----x---  ----1---  ----2---
+
+   Bbm11       B13       C#13       Gb/Bb      Db        B9
+e-----1---  ----12---  ----14---  ----2---  ----1---  ----2---
+B-----2---  ----10---  ----12---  ----2---  ----2---  ----2---
+G-----1---  ----10---  ----12---  ----3---  ----1---  ----2---
+D-----1---  ----9----  ----11---  ----4---  ----3---  ----1---
+A-----1---  ----10---  ----12---  ----4---  ----4---  ----2---
+E-----x---  ----x----  ----x----  ----2---  ----x---  ----x---

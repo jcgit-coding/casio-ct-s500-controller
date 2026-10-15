@@ -1,0 +1,57 @@
+Intro:
+
+x1
+e-------------------------------------------------------------
+B-------------------------------------------------------------
+G-------------------------------------------------------------
+D----------------5------------0------------5---7p5------------
+A----------5h7-----------5h7----------5h7-----------7—5—7-----
+E---5—8-------------5—8----------5—8--------------------------
+
+e-------------------------------------------------------------
+B-------------------------------------------------------------
+G-------------------------------------------------------------
+D----------------5------------0-------------5—7h5---5--7------
+A----------5h7-----------5h7-----------5h7--------7-----------
+E---5---8----------5---8---------5---8------------------------
+
+Verso:
+Am   G/A      F/A       G/A
+ALABAREMOS AL SANTO DE ISRAEL,
+ Am  G/A        F/A     G/A
+EXALTAREMOS AL LEON DE JUDA,
+   Am  G/A      F/A         Am
+PUBLICAREMOS A NUESTRO SALVADOR,
+ F             G       F          G
+MAJESTUOSO, Y PODEROSO ERES TU, SEÑOR.
+      F                  G
+DE MI ALMA BROTA UNA CANCION,
+    E D   C  B Am      G/A  Am  F           G
+SANTO Y PODEROSO ERES TU, SEÑOR.
+Am      G/A  Am   F               G
+SANTO Y PODEROSO, OH CORDERO DE DIOS.
+Am      G/A  Am   F             G
+SANTO Y PODEROSO, FUERTE Y VALIENTE.
+Am      G/A   Am
+SANTO Y PODEROSO
+      F         Esus   E
+TU NOMBRE LEVANTARE.
+
+
+Final:
+
+A   A    G E G A <------- Notas solas   
+SANTO Y PODEROSO
+
+
+Estructura:
+
+intro x1
+versox1
+corox1
+
+introx1
+versox1
+corox2
+
+finalx1
