@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/hermoso_eres.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/hermoso_eres.shtml",
+      "lcd": 0
     }
   ]
 }

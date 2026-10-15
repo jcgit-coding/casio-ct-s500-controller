@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/cuan_bello_es_el_senior.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/cuan_bello_es_el_senior.shtml",
+      "lcd": 0
     }
   ]
 }

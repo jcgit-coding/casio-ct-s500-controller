@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/te_vengo_a_decir.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/te_vengo_a_decir.shtml",
+      "lcd": 0
     }
   ]
 }

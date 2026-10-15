@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/a_ti_el_alfa_y_la_omega.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/a_ti_el_alfa_y_la_omega.shtml",
+      "lcd": 0
     }
   ]
 }

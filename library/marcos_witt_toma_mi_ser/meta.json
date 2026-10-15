@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/toma_mi_ser.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/toma_mi_ser.shtml",
+      "lcd": 0
     }
   ]
 }

@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/palabras_de_vida_eterna.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/palabras_de_vida_eterna.shtml",
+      "lcd": 0
     }
   ]
 }

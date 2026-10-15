@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/algo_sucede.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/algo_sucede.shtml",
+      "lcd": 0
     }
   ]
 }

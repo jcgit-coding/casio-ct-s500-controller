@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/porque_para_siempre.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/porque_para_siempre.shtml",
+      "lcd": 0
     }
   ]
 }

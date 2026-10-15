@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/he_decidido_seguir_a_cristo.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/he_decidido_seguir_a_cristo.shtml",
+      "lcd": 0
     }
   ]
 }

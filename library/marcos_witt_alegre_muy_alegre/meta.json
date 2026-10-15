@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/alegre_muy_alegre.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/alegre_muy_alegre.shtml",
+      "lcd": 0
     }
   ]
 }

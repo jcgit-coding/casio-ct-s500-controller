@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/aclama_a_dios.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/aclama_a_dios.shtml",
+      "lcd": 0
     }
   ]
 }

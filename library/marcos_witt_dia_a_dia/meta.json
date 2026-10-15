@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/dia_a_dia.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/dia_a_dia.shtml",
+      "lcd": 0
     }
   ]
 }

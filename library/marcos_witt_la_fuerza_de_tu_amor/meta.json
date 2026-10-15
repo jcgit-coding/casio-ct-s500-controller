@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/la_fuerza_de_tu_amor.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/la_fuerza_de_tu_amor.shtml",
+      "lcd": 0
     }
   ]
 }

@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/mil_gracias.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/mil_gracias.shtml",
+      "lcd": 0
     }
   ]
 }

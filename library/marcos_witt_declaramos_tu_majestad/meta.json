@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/declaramos_tu_majestad.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/declaramos_tu_majestad.shtml",
+      "lcd": 0
     }
   ]
 }

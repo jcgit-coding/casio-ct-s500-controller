@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/te_necesito_mas_que_ayer.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/te_necesito_mas_que_ayer.shtml",
+      "lcd": 0
     }
   ]
 }

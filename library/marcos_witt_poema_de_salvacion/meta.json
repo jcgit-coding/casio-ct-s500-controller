@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/poema_de_salvacion.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/poema_de_salvacion.shtml",
+      "lcd": 0
     }
   ]
 }

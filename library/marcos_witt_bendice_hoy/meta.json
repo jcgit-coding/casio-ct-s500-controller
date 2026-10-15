@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/bendice_hoy.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/bendice_hoy.shtml",
+      "lcd": 0
     }
   ]
 }

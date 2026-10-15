@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/no_te_afanes.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/no_te_afanes.shtml",
+      "lcd": 0
     }
   ]
 }

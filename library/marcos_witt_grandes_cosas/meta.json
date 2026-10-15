@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/grandes_cosas.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/grandes_cosas.shtml",
+      "lcd": 0
     }
   ]
 }

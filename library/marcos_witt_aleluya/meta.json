@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/aleluya.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/aleluya.shtml",
+      "lcd": 0
     }
   ]
 }

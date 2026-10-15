@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/aleluya_a_nuestro_dios.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/aleluya_a_nuestro_dios.shtml",
+      "lcd": 0
     }
   ]
 }

@@ -7,7 +7,8 @@
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
-      "source": "https://acordes.lacuerda.net/marcos_witt/tu_nombre_es_cristo.shtml"
+      "source": "https://acordes.lacuerda.net/marcos_witt/tu_nombre_es_cristo.shtml",
+      "lcd": 0
     }
   ]
 }
