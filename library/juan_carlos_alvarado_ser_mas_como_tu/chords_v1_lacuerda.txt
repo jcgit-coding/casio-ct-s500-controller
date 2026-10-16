@@ -1,0 +1,85 @@
+[intro]
+Dm7  Gadd9  F  C
+
+[verso]
+  C         Dm7    G           Am/E     B7
+  Yo quiero ser de ti un instrumento
+            Em                  A
+  quiero servirte con fidelidad
+         A  A7  Dm7                  G
+  Quiero  am  dorarte con integridad
+                 C  Dm7  Gsus4  G
+  y ser más como tú
+
+[verso]
+  C         Dm7    G           Am/E     B7
+  Yo quiero ser de ti un instrumento
+            Em                  A
+  quiero servirte con fidelidad
+         A  A7  Dm7                  G
+  Quiero  am  dorarte con integridad
+                 C
+  y ser más como tú
+C  Dm  C  F  C7  C  Dm  C7
+
+[coro]
+  F    G/F        Em       Em/G   Am
+  Dame más de ti, dame más de     ti
+     Dm7                F  G
+  Lo único que quiero, Se-ñor
+                  C   C7
+  es ser más como tu
+
+[coro]
+  F    G/F        Em       Em/G   Am
+  Dame más de ti, dame más de     ti
+     Dm7               F   G
+  Lo único que quiero, Se-ñor
+                  C   Dm7  Gsus4  G
+  es ser más como tú
+
+[verso]
+  C         Dm7    G           Am     B7
+  Yo quiero ser de ti un instrumento
+            Em                  A
+  quiero servirte con fidelidad
+         A  A7  Dm7                  G
+  Quiero  am  dorarte con integridad
+                 C
+  y ser más como tú
+C  Dm  C  F  C7  C  Dm  C7
+
+[coro]
+  F    G/F        Em       Em/G   Am
+  Dame más de ti, dame más de     ti
+     Dm7               F   G
+  Lo único que quiero, Se-ñor
+                  C   C7
+  es ser más como tu
+
+[coro]
+  F    G/F        Em       Em/G   Am
+  Dame más de ti, dame más de     ti
+     Dm7               F   G
+  Lo único que quiero, Se-ñor
+             G#°  Am  Dm7
+  es ser más como tú
+
+[final]
+      G      G#°  Am  Dm7
+  es ser más como tú
+      G      G#°  Am  Dm7
+  es ser más como tú
+                  C
+  es ser más como tú
+
+
+[[ ACORDES ]]
+
+  G/F Gsus4 G#° A 
+E  3   3    4   1
+B  0   1    3   2
+G  0   0    4   2
+D  0   0    X   X
+A  X   x    X   0
+E  1   3    4   X

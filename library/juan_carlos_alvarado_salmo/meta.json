@@ -1,0 +1,19 @@
+{
+  "id": "juan_carlos_alvarado_salmo",
+  "title": "Salmo 3",
+  "artist": "Juan Carlos Alvarado",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/juan_carlos_alvarado/salmo_3.shtml",
+      "lcd": 0
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/juan_carlos_alvarado/salmo_5.shtml",
+      "lcd": 0
+    }
+  ]
+}

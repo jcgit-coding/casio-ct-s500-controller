@@ -1,0 +1,54 @@
+6/8   LA menor   63 bpm(aprox)
+
+
+[intro]
+
+A (sólo la nota LA)
+
+(E)  Am  (Em)  Am  F  G  Am
+
+(Em)  Am  (Em)  Am  F  G  A (5ta)
+
+
+“Glorifiquemos al Señor
+porque su misericordia es para siempre
+¡Aleluya!”
+
+(A)  Dm5ta    Dm  Am/D
+
+(B)  Em5ta    Em  Bm/E
+
+F  C  Dm  G  Am
+
+G  Am  (A G)  F  G  Am
+
+G  Am  G  Am  (A G) F  G  Am  F  G
+
+
+[verso] X4
+     Am        G   Am
+  Glorificad a Jehová
+         FAdd9 G      Am
+  porque su   misericordia
+
+[verso] x4
+     F    G         Am
+  Es para siempre, amén
+                 es para siempre, amén
+F  G
+
+[verso] X4
+     Am        G   Am
+  Glorificad a Jehová
+         FAdd9 G      Am
+  porque su   misericordia
+
+[verso] x4
+     F    G         Am
+  Es para siempre, amén
+                 es para siempre, amén
+
+[final]
+     Fsus2  Gsus2        A   A11#  A
+  Es para  siempre, amén
+                 es para siempre, amén
