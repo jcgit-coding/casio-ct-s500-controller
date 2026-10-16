@@ -1,0 +1,14 @@
+{
+  "id": "twice_capitan",
+  "title": "Capitán",
+  "artist": "Twice",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/twice/capitan.shtml",
+      "lcd": 0
+    }
+  ]
+}

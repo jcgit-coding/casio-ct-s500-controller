@@ -1,0 +1,14 @@
+{
+  "id": "twice_santa_la_noche",
+  "title": "Santa la noche",
+  "artist": "Twice",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/twice/santa_la_noche.shtml",
+      "lcd": 0
+    }
+  ]
+}

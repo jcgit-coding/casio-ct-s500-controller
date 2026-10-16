@@ -1,0 +1,14 @@
+{
+  "id": "barak_alfa_y_omega",
+  "title": "Alfa y Omega",
+  "artist": "Barak",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/barak/alfa_y_omega.shtml",
+      "lcd": 0
+    }
+  ]
+}

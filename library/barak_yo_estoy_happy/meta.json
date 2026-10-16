@@ -1,0 +1,14 @@
+{
+  "id": "barak_yo_estoy_happy",
+  "title": "Yo estoy happy",
+  "artist": "Barak",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/barak/yo_estoy_happy.shtml",
+      "lcd": 0
+    }
+  ]
+}

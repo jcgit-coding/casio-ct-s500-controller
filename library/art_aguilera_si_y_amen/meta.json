@@ -1,0 +1,14 @@
+{
+  "id": "art_aguilera_si_y_amen",
+  "title": "Si y Amén",
+  "artist": "Art Aguilera",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/art_aguilera/si_y_amen.shtml",
+      "lcd": 0
+    }
+  ]
+}

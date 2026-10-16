@@ -1,0 +1,117 @@
+Tonos: D
+Tempo: 112 bpm
+
+
+D6 / Cmaj7   | Em7   / D6 / |
+D6 / Cmaj7   | Em7   / D6 / |
+D6 / Cmaj7/D | Em7/D / D6 / |
+D6 / Cmaj7/D | Em7/D / D6 / |
+
+VERSO
+D6                 Cmaj7/D    Em7/D      D6
+   Te pertenezco oh Dios!,       mío e - res tú señor
+D6    Cmaj7/D        Em7/D       D6
+Me rodeas,             por donde quiera que voy
+D6         Cmaj7/D     Em7/D         D6
+Yo contigo estoy,        tú conmigo estás Señor
+D6      Cmaj7/D     Em7/D       D6
+Me rodeas,             por donde quiera que voy
+
+INSTRUMENTAL 1
+D6 / Cmaj7/D  |  Em7/D  /  D6  |
+D6 / Cmaj7/D  |  Em7/D  /  D6  |
+
+VERSO 2
+D6                 Cmaj7/D    Em7/D      D6
+   Te pertenezco oh Dios!,       mío e - res tú señor
+D6    Cmaj7/D        Em7/D       D6
+Me rodeas,             por donde quiera que voy
+D6         Cmaj7/D     Em7/D         D6
+Yo contigo estoy,        tú conmigo estás Señor
+D6       Cmaj7/D     Em7/D       Em7        D/F#
+Me rodeas,             por donde quiera que voy
+
+PRE-CORO
+       Gmaj9          Cmaj9
+Yo tuyo soy, mío eres tú.
+       G/A
+Eres tú
+
+
+CORO
+           D    Gma7 F#m7 Em7
+Puedo confiar,            que no te irás
+           D    Gma7 F#m7 Em7          F#7
+Tengo tu paz,             son las promesas
+   F#/A#    Bm7 – Bm7/A – G#m7(b5)- Gm6
+Que    me das          Tu miseri  - cordia
+       D/F#    Gma7                 Cma7
+me seguirá, me rodeará, por donde voy
+Gma7/A                       D6
+       Por donde quiera que voy
+
+INSTRUMENTAL 2
+D6 / Cmaj7/D  |  Em7/D  /  D6  |
+D6 / Cmaj7/D  |  Em7/D  /  D6  |
+
+VERSO – PRE-CORO
+
+CORO 2
+           D    Gma7 F#m7 Em7
+Puedo confiar,            que no te irás
+           D    Gma7 F#m7 Em7          F#7
+Tengo tu paz,             son las promesas
+   F#/A#    Bm7 – Bm7/A – G#m7(b5)- Gm6
+Que    me das          Tu miseri  - cordia
+       D/F#    Gma7                 Cma7
+me seguirá, me rodeará, por donde voy
+Cmaj9                      Bm7
+    Por donde quiera que voy
+
+PUENTE
+Bm7          Bbma7(b5)      Gm6
+   Tú Dios   eres      mi escudo, por donde voy
+D/F#
+     Por donde quiera que voy
+Bm7       Bbma7(b5)          Gm6
+    Tu gracia       me rode - a, por donde voy
+D/F#
+     Por donde quiera que voy
+Bm7          Bbma7(b5)      Gm6
+   Tú Dios   eres      mi escudo, por donde voy
+G/A
+     Por donde quiera que voy
+D      C       Bbma7               Gm7
+Tu gracia me rodea, por donde voy, por donde voy
+D#ma7(#11)
+         Por donde quiera que voy
+
+INSTRUMENTAL 3
+(Dma7(#11)) / Gma7 F#m7 | Em7 / / / |
+         D  / Gma7 F#m7 | Em7
+
+CORO 3
+Em7          F#7
+son las promesas
+   F#/A#    Bm7 – Bm7/A – G#m7(b5)- Gm6
+Que    me das          Tu miseri  - cordia
+       D/F#    Gma7                 Cma7
+me seguirá, me rodeará, por donde voy
+
+           D    Gma7 F#m7 Em7
+Puedo confiar,            que no te irás
+           D    Gma7 F#m7 Em7          F#7
+Tengo tu paz,             son las promesas
+   F#/A#    Bm7 – Bm7/A – G#m7(b5)- Gm6
+Que    me das          Tu miseri  - cordia
+       D/F#    Gma7                 Cma7
+me seguirá, me rodeará, por donde voy
+       G#m7(b5)          Gma7
+por donde    voy, por donde  voy
+Gm6
+Por donde quiera que voy
+
+FINAL
+D / / | Bbma7/C  / / | Bbma7 / Am7   |
+Gm7 / D#ma7 | / / D | D/C / / | / / /   |
+Bbma7 / Am7 | Gm7 / Dm7 – D#ma7 |

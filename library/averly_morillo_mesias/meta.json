@@ -1,0 +1,14 @@
+{
+  "id": "averly_morillo_mesias",
+  "title": "Mesías",
+  "artist": "Averly Morillo",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/averly_morillo/mesias.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "upperroom_santo",
+  "title": "Santo",
+  "artist": "Upperroom",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/upperroom/santo.shtml",
+      "lcd": 0
+    }
+  ]
+}

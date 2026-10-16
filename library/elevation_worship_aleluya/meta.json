@@ -1,0 +1,14 @@
+{
+  "id": "elevation_worship_aleluya",
+  "title": "Aleluya",
+  "artist": "Elevation Worship",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/elevation_worship/aleluya.shtml",
+      "lcd": 0
+    }
+  ]
+}

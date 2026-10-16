@@ -1,0 +1,163 @@
+(Capo en el III traste)
+
+*** El traste con Capo es |--0--| en la tablatura.
+
+INTRO:
+    Eb           F            Gm             Bb/D
+1ª|------------|------------|--------------|---------------|
+2ª|-------3----|-------3----|-------3------|---------------|
+3ª|-0----------|-0----------|-0------------|-2------0------|
+4ª|---0--------|---4--------|---4----------|---------------|
+5ª|-3---3------|-5---5------|------------2-|------2--------|
+6ª|------------|------------|-0---0--------|---------------|
+
+VERSO 1: Arpegio 1 + Arpegio 2
+
+Arpegio 1
+    Eb           F            Gm             Bb/D
+1ª|------------|------------|--------------|---------------|
+2ª|-------3----|-------3----|-------3------|---------------|
+3ª|-0----------|-0----------|-0------------|-2------0------|
+4ª|---0--------|---4--------|---4----------|---------------|
+5ª|-3---3------|-5---5------|------------2-|------2--------|
+6ª|------------|------------|-0---0--------|---------------|
+
+Arpegio 2
+    Eb           F            Gm             Bb/D
+1ª|------------|------------|--------------|---------------|
+2ª|-------3----|-------3----|-------3------|--------0------|
+3ª|-0----------|-0----------|-0------------|-2-------------|
+4ª|---0--------|---4--------|---4----------|---------------|
+5ª|-3---3------|-5---5------|------------2-|------2--------|
+6ª|------------|------------|-0---0--------|---------------|
+
+   Eb                 F
+     Me despierto con un motivo
+   Gm                Bb/D
+     Caminar junto a ti
+             Eb     F
+     He decidido vivir
+                 Gm  Bb/D
+     Mi vida contigo
+
+VERSO 2: Arpegio 1 + Arpegio 2
+   Eb                F
+     Me levantas con nuevas fuerzas
+   Gm              Bb/D
+     Y me das libertad
+                     Eb        F
+     Soy joven por siempre en ti
+                  Gm  Bb/D
+     Tú eres mi fuente
+
+PRE-ESTRIBILLO: Arpegio 3 (x2)
+
+Arpegio 3
+    Eb            F             Gm            Bb/D
+1ª|-------------|-------------|-------------|-------------|
+2ª|-5-----5-----|-7-----7-----|-8-----8-----|-3-----3-----|
+3ª|---0---------|---0---------|---0---------|---0---------|
+4ª|-----0-------|-----0-------|-----0-------|-----0-------|
+5ª|-3-----------|-5-----------|-7-----------|-2-----------|
+6ª|-------------|-------------|-------------|-------------|
+
+     Eb             F
+     Como el sol brillando en majestad
+     Gm               Bb/D
+     En color transformó la oscuridad
+     Eb             F             Gm (Bb/D)
+     Nuevo soy encontré mi identidad
+
+ESTRIBILLO: Arpegio 4 (x4)
+
+Arpegio 4
+    Eb               F                Gm              Bb/D
+1ª|----------------|----------------|---------------|----------------|
+2ª|-------3--------|-------3--------|-------3-------|-------0--------|
+3ª|-0---------0----|-0---------0----|-0---------0---|-2---------2----|
+4ª|---0---------0--|---4---------4--|---4---------4-|---0---------0--|
+5ª|-3---3----------|-5---5----------|---------------|-2---2----------|
+6ª|----------------|----------------|-0---0---------|----------------|
+
+    (Bb/D)       Eb F Gm
+     Vida tú me das
+     Bb/D        Eb F Gm
+     Vida tú me das
+ Bb/D             Eb             F
+     Tu amor me lleva mucho más allá
+            Gm               Bb/D
+     De lo que yo puedo imaginar
+           Eb                 F
+     A tu libertad yo puedo entrar
+           Gm                  Bb/D
+     Eres todo lo que quiero y más
+
+ACORDES:
+    Eb     F    Gm    Bb/D
+1ª|--3--|--2--|--3--|--3--|
+2ª|--3--|--3--|--3--|--3--|
+3ª|--0--|--2--|--0--|--2--|
+4ª|--2--|--0--|--2--|--0--|
+5ª|--3--|-----|--2--|--2--|
+6ª|-----|-----|--0--|-----|
+
+VERSO 3:
+   Eb               F
+     Tú me guías en cada paso
+   Gm                  Bb/D
+     Suficiente es tu amor
+                  Eb       F
+     No existe mejor decisión
+                   Gm      Bb/D
+     Que darte mi vida, Señor
+
+PRE-ESTRIBILLO:
+     Eb             F
+     Como el sol brillando en majestad
+     Gm               Bb/D
+     En color transformó la oscuridad
+     Eb             F             Gm (Bb/D)
+     Nuevo soy encontré mi identidad
+
+ESTRIBILLO:
+    (Bb/D)       Eb F Gm
+     Vida tú me das
+     Bb/D        Eb F Gm
+     Vida tú me das
+ Bb/D             Eb             F
+     Tu amor me lleva mucho más allá
+            Gm               Bb/D
+     De lo que yo puedo imaginar
+           Eb                 F
+     A tu libertad yo puedo entrar
+           Gm                  Bb/D
+     Eres todo lo que quiero y más
+
+PUENTE:
+ //: Eb F Gm Bb/D ://
+
+PRE-ESTRIBILLO (x2)
+     Eb             F
+ //: Como el sol brillando en majestad
+     Gm               Bb/D
+     En color transformó la oscuridad
+     Eb             F             Gm (Bb/D)
+     Nuevo soy encontré mi identidad ://
+
+ESTRIBILLO:
+    (Bb/D)       Eb F Gm
+     Vida tú me das
+     Bb/D        Eb F Gm
+     Vida tú me das
+ Bb/D             Eb             F
+     Tu amor me lleva mucho más allá
+            Gm               Bb/D
+     De lo que yo puedo imaginar
+           Eb                 F
+     A tu libertad yo puedo entrar
+           Gm                  Bb/D
+     Eres todo lo que quiero y más
+
+FINAL: Eb
+
+¡Toda la gloria y la honra sea para el Señor y Salvador Jesucristo!

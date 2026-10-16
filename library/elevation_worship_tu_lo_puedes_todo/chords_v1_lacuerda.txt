@@ -1,0 +1,191 @@
+|| --------------------------------------------- ||
+|| Los acordes que llevan en medio un "/"        ||
+|| pertenecen al mismo acorde                    ||
+|| Por ejemplo "Bb /D" seria Bb con bajo en D   ||
+|| --------------------------------------------- ||
+
+
+Tonalidad:
+Eb
+BPM:
+73
+Tempo:
+6/8
+
+INTRO:
+
+| Eb | Ebsus Eb | Eb Bb /D  | Ab /C |
+| Eb | Ebsus Eb | Cm  Bb    | Ab    |
+
+
+VERSO 1
+Eb                Ebsus
+Cuándo empecé a olvidar
+Eb                Ebsus
+Tus obras y tu bondad
+Cm          Bb      Ab          Eb Ebsus
+Cuándo perdí la fe por lo imposible
+Eb                 Ebsus
+Cuándo empecé a pensar
+       Eb           Ebsus
+Que necesitaba algo más
+   Cm          Bb    Ab           Eb    Bb /D
+A veces me cuesta creer en tus milagros
+
+
+CORO 1
+
+Eb            Ebsus | Eb Bb /D | Ab |
+Tú lo puedes todo
+Cm       Bb     Ab  | Cm Bb   | Ab |
+Tú lo puedes todo
+Eb            Ebsus | Eb Bb D | Ab |
+Tú lo puedes todo
+Cm     Bb      Ab
+Tú lo puedes todo
+    Cm       Bb         Ab   Fm - Eb
+Como voy a negar lo que Dios hará
+
+
+INSTRUMENTAL (2x)
+Eb - Ebsus
+
+
+VERSO 2
+
+Eb               Ebsus
+Hoy veo con claridad
+Eb                  Ebsus
+En ti mi confianza está
+  Cm      Bb     Ab                 Eb
+Pongo mi fe en aquel que hace milagros
+ Bb /D
+Milagros
+
+
+CORO 1 (2x)
+
+
+PUENTE 1
+
+Eb        Bb /Eb
+Puedes creerlo
+                Cm /Eb
+Que nuestros ojos verán
+ Bb /Eb         Ab /Eb
+Lo que Dios hará, lo que Dios hará
+Eb       Bb /Eb
+Ya es un hecho
+ Cm /Eb
+Él un camino abrirá
+ Bb /Eb   Ab /Eb
+Se moverá, se moverá
+
+
+PUENTE 2
+
+Eb           Bb
+Puedes creerlo
+ Cm
+Que nuestros ojos verán
+ Bb               Ab
+Lo que Dios hará, lo que Dios hará
+Eb         Bb
+Ya es un hecho
+ Cm
+Él un camino abrirá
+ Bb           Ab
+Se moverá, se moverá
+
+
+PUENTE 3
+
+Eb       Fm
+Puedes creerlo
+ Cm
+Que nuestros ojos verán
+ Bb              Ab
+Lo que Dios hará, lo que Dios hará
+Eb          Fm
+Ya es un hecho
+              Cm
+Él un camino abrirá
+ Bb              Ab
+Se moverá, se moverá
+
+
+VAMP 1 (2x):
+
+Eb        Ab /Ebsus
+Todo es posible
+Eb        Ab /Ebsus
+Todo es posible
+Eb /G      Bb
+Todo es posible
+ Cm    Bb                   Ab Abm
+Como voy a negar lo que Dios hará
+
+
+VAMP 2 (1x):
+
+
+Eb /Bb       Ab /Bb
+Todo es posible
+Eb /Bb       Ab /Bb
+Todo es posible
+Eb /G        Bb /D
+Todo es posible
+ Cm           Bb           Ab Abm
+Como voy a negar lo que Dios hará
+ Cm           Bb           Ab Abm
+Como voy a negar lo que Dios hará
+ Cm           Bb           Ab Abm
+Como voy a negar lo que Dios hará
+
+
+INSTRUMENTAL
+
+
+CORO 1
+
+
+ESTRIBILLO (3x)
+
+                   Eb
+He llegado hasta aquí
+                Bb /D
+Te he visto obrar
+          Bbm /Ab
+Tu gracia pude sentir
+              Ab /C  Abm /B
+Cuando no la merecí
+                    Eb
+Ahora sé quién yo soy
+                  Bb /D
+Pero sé que hay más
+            Bbm /Db
+Por fe llegué hasta aquí
+                   Ab /C   Abm /B
+No quiero mirar atrás
+                 Eb
+Tienes más para mí
+                 Bbm /Db
+Tienes más para mí
+              Ab /C
+No has terminado la historia
+                Abm /B
+Tienes más para mí
+
+
+CORO 2
+
+Eb             Ebsus | Eb Bb /D | Ab |
+Dios lo puede todo
+Cm          Bb  Ab   | Cm Bb   | Ab |
+Dios lo puede todo
+Eb             Ebsus | Eb Bb D | Ab |
+Dios lo puede todo
+Cm       Bb      Ab
+Dios lo puede todo
+      Cm     Bb             Ab Fm - Eb
+Como voy a negar lo que Dios hará

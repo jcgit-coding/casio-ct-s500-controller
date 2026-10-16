@@ -1,0 +1,14 @@
+{
+  "id": "twice_otra_oportunidad",
+  "title": "Otra Oportunidad",
+  "artist": "Twice",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/twice/otra_oportunidad.shtml",
+      "lcd": 0
+    }
+  ]
+}

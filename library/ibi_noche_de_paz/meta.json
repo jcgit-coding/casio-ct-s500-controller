@@ -1,0 +1,14 @@
+{
+  "id": "ibi_noche_de_paz",
+  "title": "Noche de Paz",
+  "artist": "La IBI",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ibi/noche_de_paz.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "barak_tu_presencia",
+  "title": "Tu Presencia",
+  "artist": "Barak",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/barak/tu_presencia.shtml",
+      "lcd": 0
+    }
+  ]
+}

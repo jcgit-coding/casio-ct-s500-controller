@@ -1,0 +1,46 @@
+*Nota* Las líneas "| |" simbolizan un compás,
+en el verso cada acordes es igual a una blanca
+*Nota* Las líneas " / ", significa la duración del acorde
+en el coro, el G#m7 y el C#m7 duran tres tiempos
+
+-- Verso para repetir el verso --
+ | E    Bdim7 | A       B    |
+Mi anhelo,        es buscar de día
+ | E    Bdim7 | A       Cdim7      | G#m7  C#m7 |
+y noche,          de tu amor y la ternu-----ra
+| F#m7     B    | E     Bdim7  | A    B  |
+   de tu Espíritu Señor
+
+
+-- Verso para ir el coro --
+ | E    Bdim7 | A       B    |
+Mi anhelo,        es buscar de día
+ | E    Bdim7 | A       Cdim7      | G#m7  C#m7 |
+y noche,          de tu amor y la ternu-----ra
+| F#m7     B    | E          | Bm7 - coro|
+   de tu Espíritu Señor
+
+
+-- Coro para ir al verso --
+Bdim7 |  A         | B           Baug       |
+En tu presencia, hay plenitud de gozo
+      | G#m7 / / Cdim7 | C#m7    /     /     Ddim7 |
+En tu presencia,        delicias a tu diestra
+  | F#m7                  |
+por siempre y para siempre
+  | B            | E     Bdim7 | A    B  |
+me gozo, en tu presencia
+
+
+-- Coro para repetir el coro --
+Bdim7 |  A         | B           Baug       |
+En tu presencia, hay plenitud de gozo
+      | G#m7 / / Cdim7 | C#m7    /     /     Ddim7 |
+En tu presencia,        delicias a tu diestra
+  | F#m7                  |
+por siempre y para siempre
+  | B             | E       | Bm7 - coro|
+me gozo, en tu presencia
+
+
+Cualquier duda, escríbeme a erikjs.glz@gmail.com

@@ -1,0 +1,14 @@
+{
+  "id": "barak_dios_fuerte",
+  "title": "Dios Fuerte",
+  "artist": "Barak",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/barak/dios_fuerte.shtml",
+      "lcd": 0
+    }
+  ]
+}

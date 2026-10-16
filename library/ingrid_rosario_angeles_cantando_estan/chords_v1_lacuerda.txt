@@ -1,0 +1,109 @@
+TIEMPO: 115
+COMPAS: 4/4
+ESCALA: D
+-------------------------------
+
+INTRO 1
+D | D | D | D |
+
+INTRO 2.1 (banda entera)
+D | Em7 | Bm7 | A4 - A - |
+
+INTRO 2.2
+D/F# - G - | A4 - A - | D | D |
+
+VERSO 1
+D/F# G      A      Bm7
+Ángeles cantando están,
+D/F#    G   A Bm7
+Tan dulcísima canción
+D/F#    G       A    Bm7
+Las montañas su eco dan,
+D/F#   G      A  D
+Como fiel contestación.
+
+CORO (1v)
+  D             Em7              Bm7
+Glo oh oh oh oh oh, Oh oh oh  oh oh
+             A4 A   D/F#   G      A4  A
+Oh oh oh oh oh ria, a Dios en lo al - to
+  D             Em7              Bm7
+Glo oh oh oh oh oh, Oh oh oh  oh oh
+             A4 A  D/F#    G     A4  A   (Interludio)
+Oh oh oh oh oh ria, a Dios en lo a - al - to.
+
+INTERLUDIO (4x)
+D/F# - G - | A - Bm7 - |
+
+VERSO 2
+D/F#  G       A   Bm7
+Oh venid pronto a Belen,
+D/F#  G      A  Bm7
+Para contemplar con fe
+D/F#  G     A   Bm7
+ A Jesús autor del bien,
+D/F#   G      A    D
+ Al recién nacido Rey.
+
+CORO (2v)
+  D             Em7              Bm7
+Glo oh oh oh oh oh, Oh oh oh  oh oh
+             A4 A  D/F#    G     A4   A
+Oh oh oh oh oh ria, a Dios en lo al - to
+  D             Em7              Bm7
+Glo oh oh oh oh oh, Oh oh oh  oh oh
+             A4 A  D/F#    G     A4   A   (Instrumental)
+Oh oh oh oh oh ria, a Dios en lo a - al - to.
+
+INSTRUMENTAL (4x)
+D - Em7 - | Bm7 - A - |
+
+SOLO 1.1 (guitarra)
+G/B | A/C# | D/F# | G |
+
+SOLO 1.2 (guitarra)
+G/B | A/C# | D/F# | G - Bm7 A | - - - - |
+
+VERSO 3
+D   A/D    G/B      A/D G/D
+Ángeles cantando están,
+ D      A/D D
+Tan dulcísima canción
+D/F#   G        A  Bm7
+Las montañas su eco dan,
+D/F#   G      A  D
+Como fiel contestación.
+
+CORO (3v)
+     Bm             G/B              A4
+/ / Glo oh oh oh oh oh, Oh oh oh  oh oh
+            F#m     D      Em    Bm   A
+Oh oh oh oh oh ria, a Dios en lo al - to. / /
+
+SALIDA
+D/F#   G     A4    A D/F#     G    A4   A  (Final)
+A Dios en lo al - to, a Dios en lo a - al - to.
+
+FINAL
+D - Em7 - | Bm7 - A - |
+
+FIN
+D - Em7 - | Bm7 - A G
+
+--------------------------------------
+SIMBOLOGIA:
+- - - - = Representa un tiempo cada linea.
+      | = Representa una barra de compas.
+(1v) o (2v) = Primera o segunda ves de un verso
+             Con un cambio en la segunda ves.
+(2x) o (4x) = Representa las veces que se repetirá
+              toda la parte donde este colocado.
+
+Te invito a seguirme desde mi pagina oficial
+donde todos los días comparto acordes y
+partituras gratis!
+facebook.com/juanlopezmusica
+
+Nota: cuento con los pdf de acordes
+de esta canción en todas las tonalidades,
+Visita mi pagina para mas información.

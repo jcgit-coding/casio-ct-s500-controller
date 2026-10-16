@@ -1,0 +1,14 @@
+{
+  "id": "barak_la_tierra_canta",
+  "title": "La tierra canta",
+  "artist": "Barak",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/barak/la_tierra_canta.shtml",
+      "lcd": 0
+    }
+  ]
+}

@@ -171,7 +171,10 @@ async function lcArtistPage(artistSlug) {
 function groupSongs(songs) {
     const groups = new Map();
     for (const song of songs) {
-        const baseSlug = song.slug.replace(/\d+$/, '');
+        // Solo agrupa como versión si el slug termina en dígito precedido de LETRA
+        // (ej: tu_fidelidad2 → tu_fidelidad). NO agrupa salmo_126, salmo_3, goza_10.
+        const trailingDigit = /^(.+[a-z])(\d)$/.exec(song.slug);
+        const baseSlug = trailingDigit ? trailingDigit[1] : song.slug;
         if (!groups.has(baseSlug)) {
             groups.set(baseSlug, { title: song.title, versions: [] });
         }

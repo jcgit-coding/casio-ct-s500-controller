@@ -1,0 +1,61 @@
+;V1 V2 C V3 C2 B V4 C2
+
+[v1]
+.    F
+ La muerte hablábamos;
+.      Dm          Bb
+ Promesas ya quebramos;
+.G                       C
+ Tuvimos corazones tan feroz.
+
+[v2]
+.    F
+ La ley no reveló
+.          Dm           Bb
+ Lo que en sombras escondió
+.    G                             C
+ Nuestra gran culpa, amarga mal selló
+
+[C]
+.   Dm      Bb/D       F   C/E
+ Mi única esperanza eres tu, Dios!
+.   Dm      Bb/D         F
+ Mi única esperanza eres tu.
+
+[v3]
+.    F
+ Necios e hipócritas
+.    Dm               Bb
+ Nos traes a la verdad
+.  G                         C
+ Para tu gloria, Tú nos renuevas.
+---
+[C2]
+.   Dm      Bb/D       F   C/E
+ Mi única esperanza eres tu, Dios!
+.   Dm      Bb/D       F   C/E
+ Mi única esperanza eres tu, Dios!
+.   Dm      Bb/D       F   C/E
+ Mi única esperanza eres tu, Dios!
+.   Dm      Bb/D         F
+ Mi única esperanza eres tu.
+
+[B]
+.   F/A                         Bb
+ Restauras los puentes que quemamos
+.    Dm                        C
+ Nos diste esperanza que perdimos
+.   F/A                   Bb
+ Pagaste deuda que no pudimos
+.Dm                        C
+ Desechaste mi culpa tan atroz.
+
+[v4]
+.    F
+ Cuando vida cesa
+.      Dm        Bb
+ Serás mi esperanza
+.    G                           C
+ Porque en tu palabra hay confianza.
+
+;Coro 2

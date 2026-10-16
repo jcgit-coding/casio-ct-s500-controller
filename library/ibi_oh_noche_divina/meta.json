@@ -1,0 +1,14 @@
+{
+  "id": "ibi_oh_noche_divina",
+  "title": "Oh noche divina!",
+  "artist": "La IBI",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ibi/oh_noche_divina.shtml",
+      "lcd": 0
+    }
+  ]
+}

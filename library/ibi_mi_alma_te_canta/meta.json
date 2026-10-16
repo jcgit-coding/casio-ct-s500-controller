@@ -1,0 +1,14 @@
+{
+  "id": "ibi_mi_alma_te_canta",
+  "title": "Mi alma te canta",
+  "artist": "La IBI",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ibi/mi_alma_te_canta.shtml",
+      "lcd": 0
+    }
+  ]
+}

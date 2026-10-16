@@ -1,0 +1,14 @@
+{
+  "id": "twice_tengo_un_fuego",
+  "title": "Tengo un fuego",
+  "artist": "Twice",
+  "genre": "Worship",
+  "original_key": "C",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/twice/tengo_un_fuego.shtml",
+      "lcd": 0
+    }
+  ]
+}
