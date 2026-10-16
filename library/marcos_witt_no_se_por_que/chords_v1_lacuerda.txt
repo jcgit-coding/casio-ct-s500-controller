@@ -3,9 +3,9 @@ MIm   MImmaj7 MIm7      MIm/DO#
 NO SE POR QUE, SEÑOR TU ME TOCASTE
 LAm    LAmmaj7 LAm7            RE
 NO SE POR QUE, EN MI TU TE FIJASTE
-MIm
+Em
 PERO SI SE
-       LAm        SI      MIm
+       Am        B      Em
 QUE GRANDE ES TU AMOR POR MI.
 
 Segunda Estrofa:
@@ -13,19 +13,19 @@ MIm  MImmaj7 MIm7     MIm/DO#
 MI CORAZON,   ESTA AGRADECIDO
 LAm   LAmmaj7 LAm7         RE
 MI CORAZON,   ESTA A TI RENDIDO
-MIm
+Em
 CONTIGO SIEMPRE
     LAm   SI7    MIm   MI (MI para pasar al coro)
 QUIERO SEÑOR ESTAR.
 
 Coro:
-        LAm      RE
+        Am      D
 PORQUE FUERA DE TI
-       SOL         MIm
+       G         Em
 NADA DESEO EN LA TIERRA
-       LAm             RE
+       Am             D
 TU PRESENCIA ES MAS HERMOSA
-               MIm  LAm  MI
+               Em  Am  E
 QUE CUALQUIER CO---------SA //.
 
 Tercera Estrofa:
@@ -33,29 +33,29 @@ MIm  MImmaj7  MIm7        MIm/DO#
 ERES SEÑOR,   MI GOZO Y MI ALEGRIA
 LAm     LAmmaj7  LAm7           RE
 TU ESTAS SEÑOR, CONMIGO TODO EL DIA
-MIm
+Em
 Y EN TI YO SIEMPRE
     LAm SI      MIm  MI (MI para pasar al coro)
 QUIERO SEÑOR ESTAR.
 Despues del Coro:
-MIm                    LAm
+Em                    Am
 ME HAS LIBRADO DE LA MUERTE
-RE                 SOL
+D                 G
 ME HAS DADO NUEVA VIDA
-MIm                LAm
+Em                Am
 ME QUITASTE MI TRISTEZA
-SI                 MIm
+B                 Em
 ME CEÑISTE DE ALEGRÍA
 
-          LAm        RE
+          Am        D
 POR TANTO NUNCA CALLARÉ
-SOL      MIm  LAm     SI
+G      Em  Am     B
 A TI CANTARÉ, TE ALABARÉ
-       MIm  LAm  MI
+       Em  Am  E
 GLORIA MI--------A
-LAm          RE
+Am          D
 CRISTO MI SEÑOR
-SOL      MIm  LAm     SI
+G      Em  Am     B
 A TI CANTARÉ, TE ALABARÉ
        MIm  LAm  MI (SI van A terminar LA cancion, MI es MIm)
 GLORIA MI--------A

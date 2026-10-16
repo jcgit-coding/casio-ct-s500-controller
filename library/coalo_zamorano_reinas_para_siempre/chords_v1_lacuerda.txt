@@ -1,51 +1,51 @@
 //MI – SI - SOL#m – FA#//
 
-MI            SI         SOL#m               FA#
+E            B         G#m               F#
 El Rey del universo       En todo su esplendor
-MI               SI                      SOL#m
+E               B                      G#m
 El verbo hecho carne    Dio todo por amor
-               FA#
+               F#
 Lo hizo por amor
 
-MI               SI      SOL#m                FA#
+E               B      G#m                F#
 El Salvador del mundo      Vestido en majestad
-MI          SI                               SOL#m
+E          B                               G#m
 Cordero inmolado              Su sangre me salvó
-                  FA#
+                  F#
 Victoria a mí me dio
 
-DO#m             FA#                       SI LA#m SOL#m
+C#m             F#                       B A#m G#m
 La luz del cielo hoy    La oscuridad venció
-DO#m                               FA#
+C#m                               F#
 En la cruz al mundo amó
 
-SI     RE#m     MI         DO#m    FA#
+B     D#m     E         C#m    F#
 Reina, reina,   Sobre todo nombre, Cristo
-SI     RE#m      MI          DO#m   FA#     MI
+B     D#m      E          C#m   F#     E
 Reina, reina    Para siempre reina Cristooooo el Rey
-SI                SOL#m  -   FA#
+B                G#m  -   F#
           Él es el Rey
 
-MI               SI       SOL#m              FA#
+E               B       G#m              F#
 El Salvador del mundo      Vestido en majestad
-MI          SI                              SOL#m
+E          B                              G#m
 Cordero inmolado              Su sangre me salvó
-                  FA#
+                  F#
 Victoria a mí me dio
 
 DO#m             FA#                      SI – LA# SOL#m
 La luz del cielo hoy    La oscuridad venció
-DO#m                FA#
+C#m                F#
 En la cruz al mundo amó
 
-SI     RE#m     MI         DO#m     FA#
+B     D#m     E         C#m     F#
 Reina, reina,   Sobre todo nombre, Cristo
-SI        RE#m     MI           DO#m   FA#
+B        D#m     E           C#m   F#
 Reina, él reina    Para siempre reina Cristo
 
-SI      RE#m    MI         DO#m     FA#
+B      D#m    E         C#m     F#
 Reina, reina,   Sobre todo nombre, Cristo
-SOL#m      SI       MI          DO#m   FA#
+G#m      B       E          C#m   F#
 Reina, él reina    Para siempre reina Cristo
             //Mi – Si - Fa#//
 EL Rey
@@ -59,23 +59,23 @@ MI – SI –     FA#
 MI – SI –           FA#
  Mi Dios,    Él reina para siempre
 
-MI SI  FA#        SOL#m
+E B  F#        G#m
 Resucitó     Él la muerte venció
-MI SI  FA#            SOL#m
+E B  F#            G#m
 Jesús, reina para siempre
-MI SI  FA#        SOL#m
+E B  F#        G#m
 Resucitó    Sentado en majestad
 MI SI             FA#       SOL#m  (MIx4)
 Mi Dios, Él reina para siempre
 
 Guitarra y voces     x4
 
-SI      RE#m    MI         DO#m     FA#
+B      D#m    E         C#m     F#
 Reina, reina,   Sobre todo nombre, Cristo
-SOL#m      SI       MI          DO#m   FA#
+G#m      B       E          C#m   F#
 Reina, él reina    Para siempre reina Cristo
 
-SI           RE#m  MI                   DO#m   FA#    SOL#m
+B           D#m  E                   C#m   F#    G#m
                          Para siempre reina Cristo el Rey
-SI            MI                     DO#m  FA#         SI
+B            E                     C#m  F#         B
                 Para siempre reina Cristooooooo el Rey

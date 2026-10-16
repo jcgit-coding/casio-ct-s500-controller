@@ -2,64 +2,64 @@
 
 P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
 
-LA(add9)                FA#m7
+A(add9)                F#m7
   Tu me sedujiste con tu amor
 
-REmaj9                      MI
+Dmaj9                      E
   Yo me permití seducir
 
-LA(add9)              FA#m7
+A(add9)              F#m7
    Tu me abrazaste oh Señor
 
-REmaj9                      MI
+Dmaj9                      E
   Me sentí seguro en ti
 
-SIm7          Sim7/La    RE/MI     MI/SOL#
+Bm7          Bm7/A    D/E     E/G#
 Mas que a nadie te deseo a ti
 
-LA La(add9)    LA/DO#   REsus2     LA/DO#
+A A(add9)    A/C#   Dsus2     A/C#
 Has saciado toda mi necesidad
 
-SIm7         Sim7/La    MI7sus4      MI/SOL#
+Bm7         Bm7/A    E7sus4      E/G#
 Yo me entrego entero a tu amor
 
-LAREadd9)          LA/DO#  Re(add9)   RE/FA#   MI
+A Dadd9)          A/C#  D(add9)   D/F#   E
 Jesucristo eres tan fácil de amar
 
-     LA      FA#m7     REmaj9              MIsus4   MI
+     A      F#m7     Dmaj9              Esus4   E
 Te anhelo, mi deseo es amarte y darme todo a ti
 
-    LA    FA#m7        REmaj9      MIsus4  MI         LA   MIsus4
+    A    F#m7        Dmaj9      Esus4  E         A   Esus4
 Tu eres mi vida y por siempre yo te amaré     Señor Jesús
 
 MLA  La(add9)                        FA#m7
       En un mundo donde falta tanto amor
 
-REmaj9                    MI
+Dmaj9                    E
 Ellos necesitan de ti
 
-LA(add9)                     FA#m7
+A(add9)                     F#m7
 Señor ayúdame a mostrarles tu amor
 
-REmaj9                       MI
+Dmaj9                       E
   Que vean tu amor en mi
 
-      LA
+      A
 Te anhelo...
 
-   FA#m9   REmaj9  MI  RE LA  SIm  LA  MI FA#m  MI
+   F#m9   Dmaj9  E  D A  Bm  A  E F#m  E
 Te anhelo
 
-LA  La(add9)         FA#m7          REmaj9
+A  A(add9)         F#m7          Dmaj9
 Y te anhelo oh, es mi deseo siempre amarte
 
-             MIsus4   MI
+             Esus4   E
 y darme todo a ti
 
-LALa(add9)          FA#m7      REmaj9
+A A(add9)          F#m7      Dmaj9
 tu eres, tu eres mi vida y por siempre
 
-      MIsus4   MI
+      Esus4   E
 yo te amaré
 
 FA#FA#m7m7(add4)  RREmaj9  Fa#m7(add4) ReMaj9
@@ -68,15 +68,15 @@ Señor Jesús
 FA#FA#m7add4)  REmaj9  Fa#m7(add4)
 Te Anhelo
 
-               REmaj9
+               Dmaj9
 Oh por siempre,
 
- LAsus4  La(add9)
+ Asus4  A(add9)
 Siempre    amaré
 
 ACORDES QUE QUIZA NO ENCUENTREN POR AQUI.
 
-LA  La(add9)  REmaj9  Sim7/La  RE/MI  MI/SOL#  LA/DO#
+A  A(add9)  Dmaj9  Bm7/A  D/E  E/G#  A/C#
 E       0        0       X       0       4        0
 A       0        0       0       0       2        4
 D       2        0       4       0       2        2
@@ -84,7 +84,7 @@ G       2        2       4       2       1        2
 B       0        2       3       3       0        2
 E       0        0       2       2       0        0
 
-    REEsus2  MI7sus4  Re(add9)  RE/FA#  MIsus4  FA#m9
+    D Esus2  E7sus4  D(add9)  D/F#  Esus4  F#m9
 E      X       0         0        2       0      4
 A      X       2         0        0       2      4
 D      0       0         0        0       2      2

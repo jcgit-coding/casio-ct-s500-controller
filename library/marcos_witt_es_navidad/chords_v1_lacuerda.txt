@@ -1,12 +1,12 @@
-Intro: /DO FA DO/
+Intro: /C F C/
 
-   DO       FA       SOL     DO
+   C       F       G     C
 Un aire de paz corre por las calles
-LAm         SOL            FA   SOL
+Am         G            F   G
 pasa envolviendo cada corazón
-LAm     SOL     FA      DO
+Am     G     F      C
 y la ciudad se viste de luces
-SIb               SOL
+Bb               G
 celebrando la estación.
 
 Por todas partes la gente comparte (Idem estrofa)
@@ -15,17 +15,17 @@ y las familias unidas festejan
 bajo el calor de cada hogar.
 
 CORO:
-    DO  SOL     FA       DO
+    C  G     F       C
 /Es Navidad, la Tierra celebra.
-   LAm       SOL      FA   SOL
+   Am       G      F   G
 El rico y el pobre compartirán
-DO            SOL        FA    DO
+C            G        F    C
 la dicha y el gozo que en aquel día
-LAm      SOL     FA     SOL
+Am      G     F     G
 Cristo Jesús nos vino a dar./
-                      DO
+                      C
 
-/DO FA DO/
+/C F C/
 
 Este es un tiempo anticipado (Idem estrofa)
 que grandes y chicos anhelan vivir:
@@ -34,16 +34,16 @@ el júbilo eterno de compartir.
 
 CORO
 Arreglo (notas naturales):
-  SOL SOL RE SI DO DO LA  -  RE RE SI DO DO LA
-  SOL SOL RE SI DO DO LA  -  RE RE RE, RE RE RE
+  G G D B C C A  -  D D B C C A
+  G G D B C C A  -  D D D, D D D
 
-    SIb                 FA
+    Bb                 F
 Nos une la Paz, la fe, la esperanza
-    LAm               SOL
+    Am               G
 nos une el amor la felicidad.
-SIb                FA
+Bb                F
 pinta a tu vida con estas palabras
-SIb        FA       SOL     LA
+Bb        F       G     A
 son los colores de la Navidad.
 
 2 veces CORO

@@ -1,64 +1,64 @@
-INTRO: //SI MI SOL#m FA#//
+INTRO: //B E G#m F#//
 
-SI
+B
 Vi el amanecer
-MI
+E
 Me diste a conocer
-SOL#m                      FA#
+G#m                      F#
 Una promesa que fuerte abracé
-SI              MI
+B              E
 Hoy a compezar todo lo que harás
-SOL#m               FA#
+G#m               F#
 Nada puede pagar la gracia que me das
 
 Pre-Coro:
-MI
+E
 Ha sido para mi aire para vivir
-SI
+B
 Tan fuerte ese latir
 
 Que anima mi existir
-SOL#m
+G#m
 Mis ojos tengo en ti
-                    MI
+                    E
 Paciente y creo en ti
 
 CORO:
-SI
+B
 Siempre Fiel Tú vas conmigo
-RE#m
+D#m
 Confiaré en tus caminos
-SOL#m
+G#m
 Nunca fallas
       MI            RE#m(arreglo de pase)
 No Tú nunca fallas
 
-SI
+B
 Hoy vivo por por la fe
-MI
+E
 Y no por lo que puedo ver
-SOL#m              FA#
+G#m              F#
 He decidido que en ti voy a creer
 
 PRE-CORO
 
-SI
+B
 Siempre Fiel Tú vas conmigo
-RE#m
+D#m
 Confiaré en tus caminos
-SOL#m
+G#m
 Nunca fallas
-      MI
+      E
 No Tú nunca fallas
-SI
+B
 Siempre Fiel
 
 Dios infinito
-RE#m
+D#m
 Confiaré en tus motivos
-SOL#m
+G#m
 Nunca fallas
-      MI
+      E
 No Tú nunca fallas
 
 ////SI RE#m SOL#m MI////

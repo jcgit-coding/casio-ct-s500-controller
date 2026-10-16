@@ -1,6 +1,6 @@
 (Acordes Originales de la Grabacion)
 
-FAFA Fa(add9)   SOLm7  Fa(add9)/La       DO/RE
+F F F(add9)   Gm7  F(add9)/A       C/D
 No hay Dios tan grande    como tu
 
  REm7    SOLm7    Sib/Do    DO+aug           FA9  SOLm7         
@@ -12,13 +12,13 @@ DFA(b9)      Fa(add9)   SOLm7     FA/LA     MIbmaj7
 RE/DO7      SOLm7   Do7(b9)         FA     MIb    FA/LA
       No lo hay,             no lo hay
 
-       SIb      SOLm7   Sib/Do   DO/SIb       LAm7   RE7       
+       Bb      Gm7   Bb/C   C/Bb       Am7   D7       
 No hay Dios que pueda   hacer             las obras 
 
-    SOLm7     Sib/Do            DO  FAmaj7     MIb     FA/LA
+    Gm7     Bb/C            C  Fmaj7     Eb     F/A
 Como las, como las que haces          tu
 
-       SIb        FA/LA     SOLm7   Sib/Do    DO/SIb   LAm7     RE7 
+       Bb        F/A     Gm7   Bb/C    C/Bb   Am7     D7 
 No hay Dios que    pue   -   da      hacer              las obras
 
   SIbFAOLm7  Sib(add9)    DO     Fa(add9)

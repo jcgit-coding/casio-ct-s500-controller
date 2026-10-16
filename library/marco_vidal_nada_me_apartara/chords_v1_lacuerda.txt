@@ -1,94 +1,94 @@
-DO                   MIm
+C                   Em
  ¿Y qué argumento hay? ¿Qué se puede decir?
-FA                 DO
+F                 C
    si Dios está conmigo
-FA                   DO   SOL
+F                   C   G
  ¿Quién estará contra mí?
-             DO                      MIm
+             C                      Em
  ¿Y quién acusará a los que Él ha escogido?
-FA                    DO
+F                    C
    si Él es quien justifica
-FA                  LAm   SOL
+F                  Am   G
    quien levanta al caído
 
-   LAm          SOL
+   Am          G
  Y nada me apartará de su amor
-   FA             DO            SOL/SI
+   F             C            G/B
  y nada me arrancará su perdón
-         LAm                    SOL
+         Am                    G
  no hay condenación si Cristo es el que murió
-       FA                      DO
+       F                      C
  si es el que ahora está a la diestra de Dios
-                FA                       DO
+                F                       C
  abogando por nosotros pues pagó toda la deuda
 
- FA DO LAm SOL
- FA DO SOLsus4 SOL
+ F C Am G
+ F C Gsus4 G
 
-             DO                   MIm
+             C                   Em
  Qué cosa pasará, que no pueda ayudarnos
-FA                     DO
+F                     C
    a cumplir con el llamado
-FA                       LAm  SOL
+F                       Am  G
    por el cual nos ha salvado
 
-   LAm          SOL
+   Am          G
  Y nada me apartará de su amor
-   FA             DO            SOL/SI
+   F             C            G/B
  y nada me arrancará su perdón
-         LAm                    SOL
+         Am                    G
  no hay condenación si Cristo es el que murió
-       FA                      DO
+       F                      C
  si es el que ahora está a la diestra de Dios
-                FA                       DO
+                F                       C
  abogando por nosotros pues pagó toda la deuda
-                   FA                      DO
+                   F                      C
  Él nos ha reconciliado, garantía de vida eterna
 
-LAm
+Am
     Ni la vida ni la muerte
-MIm                 LAm
+Em                 Am
     ni el pasado ni el presente
-MIm            LAm
+Em            Am
     ni ninguna cosa creada
-   FA                       DO
+   F                       C
  y nada me podrá apartar de tu increíble amor
-MIm           LAm
+Em           Am
    ni lo alto ni profundo
-MIm            LAm
+Em            Am
    nada que exista en el mundo
-MIm           LAm
+Em           Am
    ni ninguna circunstancia
- FA                      DO
+ F                      C
  nadie me podrá apartar de su invencible amor
 
  --CAMBIO DE TONO--
 
-   SIm           LA
+   Bm           A
  Y nada me apartará de su amor
-   SOL            RE            LA/DO#
+   G            D            A/C#
  y nada me arrancará su perdón
-         SIm                     LA
+         Bm                     A
  no hay condenación si Cristo es el que murió
-       SOL                      RE
+       G                      D
  si es el que ahora está a la diestra de Dios
-                SOL                       RE
+                G                       D
  abogando por nosotros pues pagó toda la deuda
-                   SOL                      RE
+                   G                      D
  Él nos ha reconciliado, garantía de vida eterna
 
- SOL RE SIm LA
- SOL RE LA7sus4 LA7
+ G D Bm A
+ G D A7sus4 A7
 
-                  RE                   FA#m
+                  D                   F#m
  ¿Y qué argumento hay? ¿Qué se puede decir?
-SOL                 RE
+G                 D
    si Dios está conmigo
-SOL                      RE
+G                      D
    Dime quién puede contra mí
 
 
- Solsus4: 300013
+ Gsus4: 300013
  Sol/Si : x20030
  La/Do# : x43330
  La7sus4: x02030

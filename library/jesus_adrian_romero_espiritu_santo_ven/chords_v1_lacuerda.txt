@@ -1,62 +1,62 @@
-INTRO: LA MI FA#m RE MI
+INTRO: A E F#m D E
 
 
-LA              MI                      RE
+A              E                      D
 Hoy venimos a buscar un destello de tu gloria,
-LA              MI                RE     LA/DO#
+A              E                D     A/C#
 Queremos conocer tu amor y tu persona
 
 PUENTE:
-SIm               LA                  MI
+Bm               A                  E
 Prometiste que vendrías a llenarnos otra vez
-SIm             RE         MI
+Bm             D         E
 Anhelamos tu presencia hoy aquí
 
 CORO:
-LA             MI
+A             E
 Espíritu santo ven,
-FA#m           RE
+F#m           D
 Espíritu santo ven
-LA                 SI
+A                 B
 Manda tu fuego consúmenos señor
-RE/SI                  MI
+D/B                  E
 Derrama de tu aceite hoy aquí
 
-LA             MI
+A             E
 Espíritu santo ven,
-FA#m           RE
+F#m           D
 Espíritu santo ven
-LA                 SI
+A                 B
 Ven con tu lluvia inundamos señor,
-RE/SI                      MI
+D/B                      E
 Tu agua fresca sacia nuestra sed,
-       LA
+       A
 muevete otra vez
 
-LA                    MI                  RE
+A                    E                  D
 Anhelamos tu poder fluyendo en nuestras vidas
-LA                    MI                 RE        LA/DO#
+A                    E                 D        A/C#
 Como bálsamo hoy ven a sanar nuestras heridas
 
 
 INSTRUMENTAL:
 
-FA#m MI RE LA MI //
+F#m E D A E //
 
 Sube 1 tono
 
-SI            FA#
+B            F#
 Espíritu santo ven,
-SOL#m           MI
+G#m           E
 Espíritu santo ven
-SI                 DO#
+B                 C#
 Ven con tu lluvia inundamos señor,
-MI/DO#                      FA#
+E/C#                      F#
 Tu agua fresca sacia nuestra sed,
-       SI
+       B
 muevete otra vez
 
-FINAL: SI FA# SOL#m FA# SI
+FINAL: B F# G#m F# B
 
 
 Esta cancion pertenece a Rey de Reyes,

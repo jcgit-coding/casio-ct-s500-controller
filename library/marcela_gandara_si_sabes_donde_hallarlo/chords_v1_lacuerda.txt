@@ -1,79 +1,79 @@
 ft marcos vidal
 
-RE                        LA
+D                        A
 Si sabes dónde hallarlo
-RE                   SIm
+D                   Bm
 Si sabes dónde buscarlo
-RE    SOL             RE
+D    G             D
 Llévame, necesito encontrarlo
-RE               LA
+D               A
 Si sabes dónde pasea
- SIm
+ Bm
 Y lo que su alma desea
-LA   SOL    MIm                LA
+A   G    Em                A
 Cuéntame, necesito escucharlo
 
-RE  SOL                 LA
+D  G                 A
 No estará en un hermoso lugar
-SIm
+Bm
 Con riquezas y grandeza
-RE             LA
+D             A
 Tú no lo hallarás
-SOL                          LA
+G                          A
 No estará, en donde piensas que está
-SIm                       LA            RE
+Bm                       A            D
 Donde menos lo imaginas, Allí lo encontrarás
 
-RE                        LA
+D                        A
 Si sabes con quien platica
-LA          SIm          LA   SOL
+A          Bm          A   G
 Y en donde pasa sus días Llévame
-               RE
+               D
 Necesito encontrarlo
-RE                        LA
+D                        A
 Si sabes con quién comparte
-LA      SIm               LA     SOL
+A      Bm               A     G
 El pan y vino en la tarde Cuéntame
-             RE      MIm
+             D      Em
 Necesito escucharlo
 
 
 
-RE  SOL                  LA
+D  G                  A
 Estará entre la gente al pasar
-SIm
+Bm
 Entre niños y sonrisas
-LA            RE
+A            D
 Allí tú lo verás
-SOL                      LA
+G                      A
 Lo hallarás, en donde hay necesidad
-SIm
+Bm
 Donde menos lo imaginas
-LA            RE
+A            D
 Allí lo encontrarás
 
-LA
+A
 Ayer lo oí decir
-SIm                           SOL
+Bm                           G
 Quien viene a mí no lo echo fuera
-LA              RE
+A              D
 Yo no le hecho fuera
-LA              RE
+A              D
 También lo oí decir
-SOL
+G
 Soy el descanso que has buscado
-SIm                       LA
+Bm                       A
 Y la esperanza que has deseado
 
-RE    SOL                      LA
+D    G                      A
 Me hallarás entre la gente al pasar
-SIm                      LA            RE
+Bm                      A            D
 Entre niños y sonrisas, allí tú me verás
-SOL                        LA
+G                        A
 Me hallarás en donde hay necesidad
-SIm                        LA            RE
+Bm                        A            D
 Donde menos me imaginas, Allí me encontrarás
-LA              SIm       SOL  LA            RE
+A              Bm       G  A            D
 Donde menos lo imaginas, Allí lo encontrarás
 
 

@@ -1,16 +1,16 @@
-SOL                LAm
+G                Am
 // Algo esta cayendo aqui
-RE                  SOL 
+D                  G 
 es tan fuerte sobre mi
-MIm               LAm
+Em               Am
   mis manos levantare
-RE                SOL 
+D                G 
  y su gloria tocare//
 
 Coro:
-  RE        SOL                RE           MIm-LAm
+  D        G                D           Em-Am
 //Esta cayendo, su gloria sobre mi sanando heridas,
-          SIm   DO                    SOL 
+          Bm   C                    G 
 levantando al caido su gloria esta aqui//
 
 

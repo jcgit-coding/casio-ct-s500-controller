@@ -2,49 +2,49 @@ Hola!, espero que disfruten de esta canción de este gran adorador.
 
 
 Intro
-DO-SOL/SI-LAm-FA
+C-G/B-Am-F
 
 
-FA       DO                 SOL/SI
+F       C                 G/B
    Se escuchan todas las canciones
-         LAm                       FA
+         Am                       F
 De las generaciones llegando hacia a ti
-   DO                  SOL/SI                LAm
+   C                  G/B                Am
 Santos de todas las naciones portando tu gloria
-            FA
+            F
 Cantan para ti
-SOL
+G
 Desde el norte y sur
-   FA                  SOL - (LAm)-FA
+   F                  G - (Am)-F
 Proclamamos que hay esperanza en Jesús
 
 
 
 Coro
-           DO              FA/DO
+           C              F/C
 Asombroso Dios, tan glorioso Dios
-           LAm    -  SOL  - FA
+           Am    -  G  - F
 Sanas el dolor de todo corazón
-           DO                    FA/DO
+           C                    F/C
 Lo impuro limpiarás las cargas quitaras
-           LAm      -  SOL      - FA
+           Am      -  G      - F
 Nuestras lagrimas conviertes en canción
-           DO   FA
+           C   F
 Asombroso Dios
 
 
 
-   DO               SOL/SI               LAm
+   C               G/B               Am
 Belleza surge de ceniza de gozo tus nos llenas
-             FA
+             F
 Cuando cerca estas
-  DO                SOL/SI
+  C                G/B
 Hablas luz a las tinieblas
-             LAm              FA
+             Am              F
 Lagrimas tu secas nos das de tu amor
-           SOL            FA
+           G            F
 Desde el norte y sur proclamamos que hay
-    SOL        FA
+    G        F
 Esperanza en Jesús
 
 
@@ -53,12 +53,12 @@ Coro (x1)
 
 Instrumental
 
-DO-SOL-LAm-FA (x2)
+C-G-Am-F (x2)
 
 
-FA                     DO                   FA/DO
+F                     C                   F/C
    Se escucha en las naciones se oyen las canciones
-              LAm   -  SOL     -   FA
+              Am   -  G     -   F
 Nos rodea el canto de las generaciones.
 
 

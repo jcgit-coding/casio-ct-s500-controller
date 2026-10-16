@@ -6,30 +6,30 @@ el tema esta en DO mayor
  me parece que suena así pero ustedes eligen
 
 
- DO SOLm REm FA (x2)
+ C Gm Dm F (x2)
 
 --1/8-8-8/13-13-12-12/6-6-6/13-13-12-12/5-5-5/13-13-12-12/5-5-5-7-8-10-8-e (x2)
 
 
 
 
-DO          LAm       DO        REm    SOL
+C          Am       C        Dm    G
    atrapado fui por tu ojos de amor
-               LAm         DO        REm     SOL
+               Am         C        Dm     G
    con sumido estoy por tu sueño mi señor
-                     REm         LAm
+                     Dm         Am
 y no te cambio por nada de este mundo
-                 FA      SOL
+                 F      G
 tu presencia es solo para mi
-             REm         LAm      FA          SOL
+             Dm         Am      F          G
 mejor es un dia solo contigo que mil lejos de ti
 
 
 coro
 
-  DO                      SOLm
+  C                      Gm
  y cuanto mas te conozco mucho mas yo te amo
-REm       FA
+Dm       F
 mi amado preferido
 
 
@@ -38,39 +38,39 @@ intro DO SOLm REm  FA
 
 
 
-                     REm         LAm
+                     Dm         Am
 ///y no te cambio por nada de este mundo
-                 FA      SOL
+                 F      G
 tu presencia es solo para mi
-             REm         LAm      FA          SOL
+             Dm         Am      F          G
 mejor es un dia solo contigo que mil lejos de ti///
 
-   DO                      SOLm
+   C                      Gm
 /// y cuanto mas te conozco mucho mas yo te amo
-REm       FA
+Dm       F
 mi amado preferido///
 
 
 
-intrumental: DO SOLm REm  FA
+intrumental: C Gm Dm  F
 
-DO           SOLm       REm  FA
+C           Gm       Dm  F
 hooooooooo hoooooooo hoooooo hoooooo
 
-DO                  SOLm                 REm                FA
+C                  Gm                 Dm                F
 pase lo que pase  cueste lo q cueste te alabare  yo te seguire
-DO              SOLm                    REm                FA
+C              Gm                    Dm                F
 pase lo que pase  cueste lo q cueste yo me alegrare con tigo yo danzare
 
-   DO         SOLm        REm      FA
+   C         Gm        Dm      F
 //hooooooooo hoooooooo hoooooo  hoooooo //
 
-DO                SOLm                          REm      FA
+C                Gm                          Dm      F
 pase lo que pase  cueste lo q cueste yo me alegrare yo te Serbia
-DO                 SOLm                          REm      FA
+C                 Gm                          Dm      F
 pase lo que pase  cueste lo q cueste yo me gozare con tigo yo saltare
 
-    DO         SOLm        REm      FA
+    C         Gm        Dm      F
 //hooooooooo hoooooooo hoooooo    hooooo //
 
 

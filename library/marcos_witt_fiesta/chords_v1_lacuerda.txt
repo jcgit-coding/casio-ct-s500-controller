@@ -2,48 +2,48 @@
 
 P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
 
-LAsus4      LA         MI/LA      LA
+Asus4      A         E/A      A
 ¡Fies   -   ta! Hay que cele  -  brar
 
-LAsus4/FA#   FA#m7            MI       FA#m7
+Asus4/F#   F#m7            E       F#m7
   ¡Fies   -   ta! Nos vamos a ale   -   grar
 
-LAsus4      MI/LA       LA     LAsus4/FA#   FA#m7     MI   FA#m7
+Asus4      E/A       A     Asus4/F#   F#m7     E   F#m7
 Cristo es el moti   -   vo de la alegrí   -   a y la celebración
 
-     Fa#m7/Si    SI7           RE/MI  LA/MI  MIsus4
+     F#m7/B    B7           D/E  A/E  Esus4
 Nos ha traí   -   do un nuevo    dí     -      a
 
-RE/MI                          SOL/LA      RE/LA     LA
+D/E                          G/A      D/A     A
 Ahora es tiempo de festejar
 
-SIm7                    MI             SIm7                MI
+Bm7                    E             Bm7                E
 Hay mucha gente que no sabe gozar de la vida que Jesús nos dio
 
-SIm7              MI                   SIm7               MI
+Bm7              E                   Bm7               E
 Es una vida donde hay que expresar todo lo que Cristo regaló
 
-FA#sus4                  FA#         FA#sus4      FA#
+F#sus4                  F#         F#sus4      F#
   Uno de los frutos del espíritu es el gozo del Señor
 
-MIsus4            MI                 MIsus4
+Esus4            E                 Esus4
   Y ese gozo te podrá sostener, darte fuerza en la debilidad
 
-SIm7                MI              SIm7            MI
+Bm7                E              Bm7            E
 Hay algunos que te irán a decir que reír no es espiritual
 
- SIm7             MI                SIm7               MI
+ Bm7             E                Bm7               E
 Tienen años sin poder sonreír, no lo ven como algo anormal
 
-FA#sus4                  FA#          FA#sus4              FA#
+F#sus4                  F#          F#sus4              F#
 Cuando compruebas lo que hizo Jesús al morir por ti en la cruz
 
-MIsus4                    MI             MIsus4
+Esus4                    E             Esus4
   La victoria obtuvo al resucitar en su victoria nos podemos gozar
 
 ACORDES QUE QUIZA NO ENCUENTREN POR AQUI.
 
-   LAsus4  MI/LA  LAsus4/FA#  Fa#m7/Si  RE/MI  LA/MI MIsus4
+   Asus4  E/A  Asus4/F#  F#m7/B  D/E  A/E Esus4
 E     0      0         2          0       0      0      0
 A     0      0         0          2       0      4      2
 D     2      2         2          2       2      2      2
@@ -51,7 +51,7 @@ G     2      1         2          2       2      2      2
 B     3      0         3          2       3      5      0
 E     0      0         0          2       2      0      0
 
-   SOL/LA  RE/LA  FA#sus4
+   G/A  D/A  F#sus4
 E     3      X       2
 A     0      0       4
 D     0      0       4

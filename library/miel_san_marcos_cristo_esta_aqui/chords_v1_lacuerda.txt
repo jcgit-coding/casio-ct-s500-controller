@@ -1,22 +1,22 @@
-Inicio: FA-SIb-FA-SIb
+Inicio: F-Bb-F-Bb
 
-FA     SIb   FA
+F     Bb   F
 Cristo esta aquí
 
-FA         SIb        FA
+F         Bb        F
 Su presencia siento en mi
 
-FA    SIb-FA  FA-SIb-FA   FA-SIb-FA
+F    Bb-F  F-Bb-F   F-Bb-F
 Dadle honra      poder  y  gloria
 
-REm-SOLm-DO      SIb    FA
+Dm-Gm-C      Bb    F
   Aleluya,  a su majestad
 
-FA         SIb
+F         Bb
 Alzo mis manos
 
-       FA       REm       SOLm
+       F       Dm       Gm
 Señor te alabo te adoro y te amo
 
-DO   SIb  FA
+C   Bb  F
  Aleluya

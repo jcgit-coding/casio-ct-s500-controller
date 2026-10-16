@@ -1,29 +1,29 @@
-Introduccion: FA  SIb  DO  FA
+Introduccion: F  Bb  C  F
 
-    FA             SIb       DO FA               SIb DO     FA
+    F             Bb       C F               Bb C     F
 1-//Gracias por la cruz oh Dios__ el precio que pagaste por mí
-                  REm         DO     SIb    SOLm   FA    DO
+                  Dm         C     Bb    Gm   F    C
     Llevando mí pecado ahí; sublime amor tu gracia me Salvó
 
 
-    FA             SIb  DO FA             SIb DO     FA
+    F             Bb  C F             Bb C     F
 2- Gracias por tu amor Dios__ tus manos clavadas por mí
-                   REm         DO    SIb     SOLm    FA    DO
+                   Dm         C    Bb     Gm    F    C
      Me has lavado oh Señor; conozco hoy tu abrazo y tu perdón
 
 
-                    FA      DO SOL-7 FA      SIb
+                    F      C G-7 F      Bb
 Estribillo: Digno es el Señor_ en su trono está
-                   DO  SIb    FA    SOLm   FA    DO
+                   C  Bb    F    Gm   F    C
             Hoy te coronamos rey; y reinas con poder
-              FA        DO    SOLm     FA   SIb
+              F        C    Gm     F   Bb
             Altísimo Señor; Jesús hijo_ de Dios
-                    DO  SIb        FA    SIb  SOLm           FA  DO  SOLm
+                    C  Bb        F    Bb  Gm           F  C  Gm
             Que al amanecer en la cruz murió;  digno es el Señor
-                    SOLm                   FA  DO  SOLm
+                    Gm                   F  C  Gm
             Digno es el Señor//
 
 
 
-         SOLm          FA  DO  SOLm
+         Gm          F  C  Gm
 Coda: // digno es el Señor//

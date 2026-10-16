@@ -4,35 +4,35 @@ y luego entran los demás instrumentos.
 
 Intro. SOLm, FA, RE#, RE  
 
-      SOLm   FA        RE#    RE
+      Gm   F        D#    D
 ////Al Rey Hossana, al Rey aleluya////
 
-                      SOLm    FA
+                      Gm    F
 Me ha enseñado su grandeza
-                     LA#     RE
+                     A#     D
 Me ha mostrado su belleza
-                   SOLm
+                   Gm
 Me vistió de su realeza 
-   FA       LA# RE#     RE
+   F       A# D#     D
 De su salvación yo cantaré
 
-                  SOLm    FA
+                  Gm    F
 Ha cambiado mi tristeza
-               LA#     RE
+               A#     D
 Ha ungido mi cabeza
-                  SOLm
+                  Gm
 Me cubrió de su belleza
-   FA       LA# RE#     RE
+   F       A# D#     D
 De su redención yo cantaré
 
 
-       DOm           SOLm
+       Cm           Gm
 Yo me asombro me maravillo
-     RE                SOLm  SOLm7
+     D                Gm  Gm7
 Y derramo mi canto en honor a Él
-       DOm          SOLm
+       Cm          Gm
 No hay nadie mas glorioso
-       LA           RE
+       A           D
 Tan hermoso como mi Rey
 
 

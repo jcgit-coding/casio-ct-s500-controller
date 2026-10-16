@@ -1,127 +1,127 @@
-DO SOL/SI
+C G/B
 
- DO
+ C
   Muros rodeando estoy
- SOL/SI
+ G/B
   Pensé que caerían hoy
- DO                        SOL
+ C                        G
   Mas nunca me has fallado Dios
- DO
+ C
   La espera terminará
- SOL/SI
+ G/B
   Sé que has vencido ya
- DO                   SOL
+ C                   G
  Nunca me has fallado Dios
 
- DO          RE
+ C          D
   En ti confiaré
-            SOL
+            G
  Tu promesa sigue en pié
-    DO
+    C
  Tú eres fiel
- DO            RE
+ C            D
   Confiado andaré
-              SOL
+              G
  En tus manos estaré
-      DO         SOL/SI
+      C         G/B
  Siempre has sido fiel
 
- DO SOL/SI
+ C G/B
 
- DO
+ C
  La noche acabará
- SOL/SI
+ G/B
   Tu Palabra se cumplirá
- DO                SOL
+ C                G
  Mi corazón te alabará
- DO
+ C
   Cristo, mi Salvador
- SOL/SI
+ G/B
   Cúbreme con tu amor
- DO                SOL
+ C                G
  Mi corazón te alabará
 
 [Coro 2]
- DO          RE
+ C          D
   En ti confiaré
-            SOL
+            G
  Tu promesa sigue en pié
-    DO
+    C
  Tú eres fiel
- DO            RE
+ C            D
   Confiado andaré
-              SOL
+              G
  En tus manos estaré
-      DO         SOL/SI
+      C         G/B
  Siempre has sido fiel
- DO          RE
+ C          D
   En ti confiaré
-            SOL
+            G
  Tu promesa sigue en pié
-    DO
+    C
  Tú eres fiel
- DO            RE
+ C            D
   Confiado andaré
-              SOL
+              G
  En tus manos estaré
-      DO         SOL/SI
+      C         G/B
  Siempre has sido fiel
 
- SOL/SI DO
- RE SOL
+ G/B C
+ D G
 
- SOL/SI DO
+ G/B C
            Yo sé que tú
- SOL/SI DO
+ G/B C
            mueves montañas
- RE/FA# SOL
+ D/F# G
            Yo creo en ti
- RE/FA# SOL
+ D/F# G
            Sé que lo harás otra vez
- SOL/SI DO
+ G/B C
            Abriste el mar
- SOL/SI DO
+ G/B C
            En el desierto
- RE/FA# SOL
+ D/F# G
            Yo creo en ti
- RE/FA# SOL
+ D/F# G
            Sé que lo harás otra vez
 
- SOL/SI DO
+ G/B C
            Yo sé que tú
- SOL/SI DO
+ G/B C
            mueves montañas
- RE/FA# SOL
+ D/F# G
            Yo creo en ti
- RE/FA# SOL
+ D/F# G
            Sé que lo harás otra vez
- SOL/SI DO
+ G/B C
            Abriste el mar
- SOL/SI DO
+ G/B C
            En el desierto
- RE/FA# SOL
+ D/F# G
            Yo creo en ti
- RE/FA# SOL
+ D/F# G
            Sé que lo harás otra vez
 
 [Coro 3]
- DO          RE
+ C          D
   En ti confiaré
-            SOL
+            G
  Tu promesa sigue en pié
-    DO
+    C
  Tú eres fiel
- DO            RE
+ C            D
   Confiado andaré
-              SOL
+              G
  En tus manos estaré
-      DO         SOL/SI
+      C         G/B
  Siempre has sido fiel
-              SOL
+              G
  En tus manos estaré
-      DO         SOL/SI
+      C         G/B
  Siempre has sido fiel
-                 SOL/SI
+                 G/B
  Siempre has sido fiel
 
 

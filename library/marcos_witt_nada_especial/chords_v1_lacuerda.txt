@@ -1,6 +1,6 @@
 (NO son los acordes originales)
 
-FAmaj9  DO               FAmaj7 
+Fmaj9  C               Fmaj7 
    QUISIERA HABER SIDO UN ANGEL
 
 MIm7m7(add11)            REm7      SOL
@@ -12,19 +12,19 @@ DE TU   NACIMIENTO LA NOCHE DE     NAVIDAD
   SDOm9      SOLm7    Do(add9)/Sol
 QUISIERA HABER SIDO UNA ESTRELLA
 
-       FAmaj9               RE/FA#
+       Fmaj9               D/F#
 Y CON MI LUZ ALUMBRAR AQUEL PEQUEÑO LUGAR
 
 DSOLE     Sol(Omit3)     FAmaj7
 DONDE HABRIAS DE       DESCANSAR
 
-         DOmaj7   SOLm9    Solm7/Sib   DO
+         Cmaj7   Gm9    Gm7/Bb   C
 MAS NO SOY NADA ESPECIAL
 
-         FAmaj7           SIb
+         Fmaj7           Bb
 NO TENGO MUCHO QUE PODRIA DAR
 
-     DO         RE/FA#
+     C         D/F#
 SOLO TENGO ESTE CORAZON 
 
         Rem7(add4) Sol7sus2
@@ -33,31 +33,31 @@ QUE HOY TE VENGO A ENTREGAR
   SOLm   DOmaj7   Solm(add11)   DOsus4,sus2
 MAS NO SOY NADA    ESPECIAL 
 
-  SIb    FAmaj9         Sib(add9)
+  Bb    Fmaj9         Bb(add9)
 NO TENGO MUCHO QUE PODRIA DAR
 
-     DO          RE/FA#
+     C          D/F#
 SOLO TENGO ESTE CORAZON
 
-   REm7    SOL        DO
+   Dm7    G        C
 QUE HOY TE VENGO A ENTREGAR
 
-FAmaj7   DO              FAmaj7
+Fmaj7   C              Fmaj7
     QUISIERA HABER SIDO UN MAGO
 
-      MIm7            REm6   SOL
+      Em7            Dm6   G
 PARA PODERTE TRAER MI MEJOR REGALO
 
-   DO     LAm9   REm7    SOL     DO7
+   C     Am9   Dm7    G     C7
 Y PONERLO DELANTE DE TUS PIES
 
-  DOSOLm7                Do(add9)
+  C Gm7                C(add9)
 Y QUISIERA HABER SIDO EL DUEÑO
 
-   FAmaj7              RE/FA#
+   Fmaj7              D/F#
 DEL MEJOR MESON, DE TODA LA REGION
 
-DO/RE       SOL      FAmaj7
+C/D       G      Fmaj7
 Y DARTE MI MEJOR HABITACION
 
 MAS...

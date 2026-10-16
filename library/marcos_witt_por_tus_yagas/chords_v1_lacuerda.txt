@@ -1,53 +1,53 @@
 IntrSI LA#m MI Si(add)/Re# LA/MI MI/RE La(add9)/Do#
-RE LA/DO# FA#7 SIm7 RE/MI MI
+D A/C# F#7 Bm7 D/E E
 
-LA(add9)            MI/SOL#      Do#/Fa
+A(add9)            E/G#      C#/F
 Toda enfermedad tu llevaste al morir
-FA#m7        FA#m/MI    Si7/Re#     LA/MI  Do#7/Fa
+F#m7        F#m/E    B7/D#     A/E  C#7/F
 y por mi sufriste en silencio mi dolor
-FA#m7    Fa#Maj7/Fa  FA#m/MIE     Si9/Re#
+F#m7    F#Maj7/F  F#m/EE     B9/D#
 por MI REbelión    azotado y   herido
 SImRMI       Sim7/La   MI/SOL#  Re(add9)/Fa# Mi(add9) MI/RE
 y por darme paz     recibiste          mi castigo.
 
 
-       DO#m7              RE6/9
+       C#m7              D6/9
 Por tu llaga sano soy,soy fruto de tu afliccion
-Fa#sus4/Sol#      Do#/Fa     Fa#m7          Fa#Maj7/Fa
+F#sus4/G#      C#/F     F#m7          F#Maj7/F
 oh mesias   salvador hoy te rindo adoracion
-       FA#m/MI       Si9/Re#
+       F#m/E       B9/D#
 pusiste tu vida en expiación por la mia
-  LA SIm7        La(add9)/Do#   REmaj7   MIsus4
+  A Bm7        A(add9)/C#   Dmaj7   Esus4
 Jesucristo mi rey           glorioso    mesias.
 
-MI/SOL# SIm LA/DO# FA#7 SIm  MiA
+E/G# Bm A/C# F#7 Bm  E A
 
-LA(add9)          MI/SOL#        Do#/Fa
+A(add9)          E/G#        C#/F
  Varon de dolores fuiste desechado
-   FA#m7   FA#m/MI  Si7/Re#     LA6/9/MI Do#7/Fa
+   F#m7   F#m/E  B7/D#     A6/9/E C#7/F
 en todo quebranto experimentado
-FA#m7   Fa#Maj7/Fa    FA#m/MIE     Si9/Re#
+F#m7   F#Maj7/F    F#m/EE     B9/D#
 como un cordero    al matadero    llevado
 SImRMI     Sim7/La    MI/SOL#  Re(add9)/Fa# Mi(add9) MI/RE
 y con tu sangre   limpiaste               mi pecado.
 
-       DO#m7              RE6/9
+       C#m7              D6/9
 Por tu llaga sano soy,soy fruto de tu afliccion
-Fa#sus4/Sol#      Do#/Fa     Fa#m7          Fa#Maj7/Fa
+F#sus4/G#      C#/F     F#m7          F#Maj7/F
 oh mesias   salvador hoy te rindo adoracion
-       FA#m/MI       Si9/Re#
+       F#m/E       B9/D#
 pusiste tu vida en expiación por la mia
-  LA SIm7        La(add9)/Do#   REmaj7   MIsus4
+  A Bm7        A(add9)/C#   Dmaj7   Esus4
 Jesucristo mi rey           glorioso    mesias.
 
 
-RE LA/DO#  Mib/Sib Sol7/Si DO  FAsus4
+D A/C#  Eb/Bb G7/B C  Fsus4
 
 SMIb    Sib(add9)/Re        Mib(add9)
 Por tu llaga sano soy,soy fruto de tu afliccion
 SOLsus4/LA          RE/FA#         SOLm7          SolmMaj7/Fa#
 oh mesias   salvador hoy te rindo adoracion
-       SOLm/FA       Do9/Mi
+       Gm/F       C9/E
 pusiste tu vida en expiación por la mia
   SMIbDOm7       Sib(add9)/Re   Mib(add9)    FA7sus4
 Jesucristo mi rey             glorioso     mesias.
@@ -56,11 +56,11 @@ SMIb   Sib(add9)/Re        Mib(add9)
 Por tu llaga sano soy,soy fruto de tu afliccion
 SOLsus4/LA          RE/FA#         SOLm7          SolmMaj7/Fa#
 oh mesias   salvador hoy te rindo adoracion
-       SOLm/FA       Do9/Mi
+       Gm/F       C9/E
 pusiste tu vida en expiación por la mia
   SMIbDOm7       Sib(add9)/Re   Mib(add9)    FA7sus4
 Jesucristo mi rey             glorioso     mesias.
 
 
-Fa(add9)/La Solm Rem/Fa Do9/Mi MibMaj7/Fa Fa/Mib Rem7
+F(add9)/A Gm Dm/F C9/E EbMaj7/F F/Eb Dm7
  MIb SSIbRe Sol7/Si DOm MIbmaj7 FA7sus4 Sib(add9)

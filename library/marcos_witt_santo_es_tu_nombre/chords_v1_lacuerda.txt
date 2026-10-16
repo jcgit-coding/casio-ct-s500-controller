@@ -1,17 +1,17 @@
-DO          RE           SOL    SOL7
+C          D           G    G7
 Tú habitas la alabanza de tu pueblo
 
-DO  RE         SOL  SOL7
+C  D         G  G7
 Coronado con poder
 
-    DO        RE  SIm          MIm
+    C        D  Bm          Em
 Angeles alrededor cantan con nosotros
 
-   DO      LAm      RE 
+   C      Am      D 
 Alabanza y gloria a tí, Señor.
 
-DO          SOL        MIm    DO         RE
+C          G        Em    C         D
 Santo es tu Nombre, oh Dios, Santo eres tú,
 
-DO            SOL      MIm      DO    RE  SOL
+C            G      Em      C    D  G
 La creación declara tu gloria, Santo eres tú.

@@ -1,27 +1,27 @@
-Intro: MI
+Intro: E
 
-         MI                   DO#m
+         E                   C#m
  No hay amor comparable a los brazos del Padre
-        SI            LA
+        B            A
  Él es Creador por mí se entregó
-      MI                  DO#m
+      E                  C#m
  mi deseo es seguirte ante ti Dios rendirme
-       SI              LA
+       B              A
  con todo mi ser yo te buscaré
 
-               MI                     DO#m
+               E                     C#m
  Me quiero acercar a ti, me quiero acercar a ti
-                   LA         SI      DO#m
+                   A         B      C#m
  No hay nadie como tú solo en ti confiaré
 
-       MI                     DO#m
+       E                     C#m
  Tu presencia me abraza, me rodea tu gracia
-         SI              LA
+         B              A
  en ti esperaré, solo tú eres fiel
 
-           LA         MI             SI
+           A         E             B
  Mi gran anhelo es adorarte con devoción
-         LA               DO#m           SI
+         A               C#m           B
  a ti me rindo, pues eres digno de adoración
 
 

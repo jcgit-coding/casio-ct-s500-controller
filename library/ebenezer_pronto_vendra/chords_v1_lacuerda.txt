@@ -1,20 +1,20 @@
 Verso 1
-LAm           SOL          LAm      FA-SOL-LAm
+Am           G          Am      F-G-Am
 Su amada se prepara para las bodas
-LAm         SOL                 LAm   MI
+Am         G                 Am   E
 Su amada se prepara para estar con E--el
-FA          SOL                 DO-MIm-LAm
+F          G                 C-Em-Am
 Su amada se prepara para la gran fie-es-ta
-FA        REm           MI
+F        Dm           E
 Su amada se prepara para recibir al rey
 
 Coro
 
-    FA  (SOL)  LAm
+    F  (G)  Am
 Pronto vendrá mi amado
-    FA (SOL) LAm
+    F (G) Am
 Pronto vendrá mi rey
-    FA (SOL) LAm        SOLm DO
+    F (G) Am        Gm C
 Pronto vendrá mi amado
-FA    REm    MI
+F    Dm    E
 Y me llevara con el

@@ -1,53 +1,53 @@
-Intro: FA# - SOL# - LA#m - DO# - FA# - SOL# - DO# - SOL#
+Intro: F# - G# - A#m - C# - F# - G# - C# - G#
 
 
-      DO#            SOL#
+      C#            G#
 Jesús mi Rey y sacerdote
-   LA#m       FAm
+   A#m       Fm
 mediante tu sangre
-     FA#             SOL#    LA#m
+     F#             G#    A#m
 como sacrificio vivo me presentaré
-     FA#        SOL#
+     F#        G#
 para alabar al padre
 
-        DO#       SOL#
+        C#       G#
 Con melodías y cánticos
-       LA#m    FAm
+       A#m    Fm
 de agradecimiento
-         FA#     LA#m
+         F#     A#m
 te exaltaré y creeré
-        FA#      RE#m      SOL#
+        F#      D#m      G#
 que habitarás en mi adoración
 
 Coro:
-  DO#  SOL#    FA#  SOL#    LA#m
+  C#  G#    F#  G#    A#m
 Recibe hoy el fruto de mis labios
-  DO#          FA#   FAm  LA#m
+  C#          F#   Fm  A#m
 recibe hoy mi sacri  fi  cio
-  DO#         FA#     SOL#  LA#m
+  C#         F#     G#  A#m
 recibe la canción de mi corazón
- DO#         FA# - SOL# - LA#m
+ C#         F# - G# - A#m
 y manifiéstate
 
 
 Instrumental: fa# - sol# - fam - la#m
 
-             FA#     SOL#
+             F#     G#
 Tu gloria desciende
-             FAm     LA#m
+             Fm     A#m
 sobre mi alabanza
-              FA#    SOL#
+              F#    G#
 tus hijos se unen
-             FAm        LA#m
+             Fm        A#m
 clamando por tu presencia
 
-              FA#     SOL#
+              F#     G#
 Tu gloria desciende
-              FAm     LA#m
+              Fm     A#m
 sobre mi alabanza
-              FA#     SOL#
+              F#     G#
 tus hijos se unen
-               FAm   LA#m   DO#
+               Fm   A#m   C#
 tus hijos te claman... manifiéstate
- FA#   SOL#   LA#m     DO#
+ F#   G#   A#m     C#
                        Manifiestate

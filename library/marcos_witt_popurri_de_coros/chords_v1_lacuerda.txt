@@ -1,84 +1,84 @@
 (ACORDES ORIGINALES DE LA GRABACION)
 
-   SOL       MIm
+   G       Em
 Alabaré, alabaré,
 
-LAm7   RE         SOL    DO/RE
+Am7   D         G    C/D
 Ala - baré a mi Señor
 
-SOL(add9)    MIm
+G(add9)    Em
 Alabaré, alabaré
 
-LAm7    RE       SOL    DO/RE
+Am7    D       G    C/D
 Ala - baré a mi Señor
 
-Sol(add9)
+G(add9)
   Juan vió el número
 
-MIm
+Em
 De los redimidos
 
-SOL(add9)             RE
+G(add9)             D
 Y todos alababan al Señor
 
-LAm7   RE    LAm7       RE
+Am7   D    Am7       D
 Unos oraban, otros cantaban
 
-    SOLAm7     RE     Sol(add9)   DO/RE
+    G Am7     D     G(add9)   C/D
 Pero todos alababan al Señor
 
-  SOL     DO         SIm7        MIm7
+  G     C         Bm7        Em7
 Alabad           A Jehová
 
-        SOL/RE          MIm7      RE7
+        G/D          Em7      D7
 Naciones todas, pueblos todos alabadle
 
-      LAm7        RE7
+      Am7        D7
 Porque ha engrandecido
 
-        LAm7   RE7        SOL    RE7
+        Am7   D7        G    D7
 Sobre nosotros su misericordia
 
-      SOL     DO        SIm7       MIm7
+      G     C        Bm7       Em7
 Y la verdad         en Jehová
 
-       Fa7/Sol   SOL7     DO
+       F7/G   G7     C
 Es para siempre aleluya, amén
 
-    Dom7/Mib   SOL/RE        MIm7
+    Cm7/Eb   G/D        Em7
 Y la verdad de Jehová 
 
-         LAm7     RE7    SOL
+         Am7     D7    G
 Es para siempre aleluya amén
 
-     Ladim7/Mib  SOL/RE     MIm7
+     Adim7/Eb  G/D     Em7
 ( Y la verdad de Jehová 
 
-    FA  LAm7     RE  Fa(add9)/Sol     DO/RE    RE/MI     MI
+    F  Am7     D  F(add9)/G     C/D    D/E     E
 es para siempre aleluya amén )
 
-         LA
+         A
 Yo tengo gozo en mi alma
 
-FA#m7
+F#m7
 Gozo en mi alma
 
-LA         FA#m7         MI
+A         F#m7         E
 Gozo en mi alma, y en mi ser
 
-        LA          LA/SOL
+        A          A/G
 Es como ríos de agua viva
 
-RE/FA#      Rem/Fa
+D/F#      Dm/F
 Ríos de agua viva
 
-LA/MI         MI        LA  
+A/E         E        A  
 Ríos de agua viva en mi ser
 
-  LA/MI                 FA/SOL     SOL
+  A/E                 F/G     G
 ( Ríos de agua viva en mi ser )
 
-       FA      SOL/FA     MIm7      LAm7
+       F      G/F     Em7      Am7
 Donde está el espíritu de Dios
 
 SDO Sol(add9)      Do(add9) 
@@ -90,7 +90,7 @@ Donde  está el espíritu de  Dios
 SDO(add9)          Do(add9)
   Ahí siempre hay libertad
 
-    SOL       DO
+    G       C
 Libertad, libertad,
 
   FA#7L       SibMaj7/Sol      Fa#7(b9)
@@ -102,53 +102,53 @@ Donde está el espíritu de Dios
 SDO(add9)        Do(add9)
 Ahí siempre hay libertad
 
-    FA                  REm7
+    F                  Dm7
 Yo tengo un amigo que me ama
 
-   DO      FA
+   C      F
 Me ama, me ama
 
-DO  FA                  REm7
+C  F                  Dm7
 Yo tengo un amigo que me ama
 
-  FADO      Fa(add9)
+  F C      F(add9)
 Su nombre es Jesús
 
-  FA   SIb       Fa(add9)
+  F   Bb       F(add9)
 Que me ama, que me ama,
 
-       DO                  FA
+       C                  F
 Que me ama, si, con tierno amor
 
-  FA   SIb      Fa(add9)        REm7
+  F   Bb      F(add9)        Dm7
 Que me ama, que me a      -      ma,
 
-  FADO      Fa(add9)     DO/RE
+  F C      F(add9)     C/D
 Su nombre es Jesús
 
-    SOL                  MIm7
+    G                  Em7
 Yo tengo un amigo que me ama
 
- LAm7  RE      SOL
+ Am7  D      G
 Me a - ma, me ama
 
-RE  SOL                 MIm7
+D  G                 Em7
 Yo tengo un amigo que me ama 
 
-    LAm7  RE9  SOL     FA/SOL
+    Am7  D9  G     F/G
 Su nombre es Jesús
 
-      DO        RE/DO     SIm7       MIm7
+      C        D/C     Bm7       Em7
 Que me a    -    ma, que me a    -    ma
 
-     LAm7    RE             SOL      FA/SOL
+     Am7    D             G      F/G
 Que me ama, si, con tierno amor
 
-DO Do(add9)      RE/DO      SIm7         MIm7
+C C(add9)      D/C      Bm7         Em7
 Que me a     -     ma, que me a     -     ma
 
-  REsus4  RE   SOL       
+  Dsus4  D   G       
 Su nombre es Jesús
 
-RE7     SOL
+D7     G
     Alabaré....

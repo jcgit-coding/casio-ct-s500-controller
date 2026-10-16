@@ -1,34 +1,34 @@
 (Acordes Originales de la Grabacion)
 
-     SOL    DO/SOL      SOL                  DO     
+     G    C/G      G                  C     
 NOS HEMOS CONGREGADO EN ESTE DIA PARA DARLE GLORIA
-   SOL                                          DO
+   G                                          C
 LA MUSICA TOCAMOS LAS VOCES ELEVAMOS PARA DARLE HONRA
-SOL/SI   DO                 RE
+G/B   C                 D
   UN     SON DE JUBILO HA LLENADO ESTE LUGAR 
   MSOL LAm7              Sol(add9)   RE7sus4
   CON   EL PROPOSITO DE SU NOMBRE   LEVANTAR
-RE7         SOL9sus4  SOL      SOL9sus4
+D7         G9sus4  G      G9sus4
 OH ALABADLE          ALABADLE
 SOLRDRDO  RRE9sus4 Re(add9) Do(add9) Re(add9) Do(add9) Re9sus4
 SOLO A   EL
 RDRE(add9)  Do(add9)    Re(add9) SOL9sus4 SOL      SOL9sus4
    A    -    DO    -    RADLE           ADORADLE
-SOLRERE   RE7sus4  Re(add9)  DO  Re(add9)  RE6/9
+G D D   D7sus4  D(add9)  C  D(add9)  D6/9
 EL HA SIDO FIEL
 RDRDO(add9)   Do(add9) Re(add9) Do(add9)
   CAN    -    TAD      LA     GLORIA DE SU NOMBRE
-         RE        MIm7
+         D        Em7
 PUES ES DIGNO DE EXALTAR
-SImDO  DO          Do(add9)      RE6/9   RE7sus4
+Bm C  C          C(add9)      D6/9   D7sus4
 DECLAREMOSLE A LOS PUEBLOS DE SU AMOR Y MAJESTAD
-  SOL DOSOL9sus4  Sol(add9) RE7sus4  RE       Do(add9)
+  G C G9sus4  G(add9) D7sus4  D       C(add9)
 ALABADLE          ADORAD             A JESUS EL REY
-    SOL       DO/SOL   SOL                        DO
+    G       C/G   G                        C
 LAS MANOS LEVANTADAS CORAZONES HACIA EL CIELO ESPERANDO
-     SOL                                         DO
+     G                                         C
 SIN DUDA LO SABEMOS QUE SU PRESENCIA SE ESTA MANIFESTANDO
-SOL   DO                      RE
+G   C                      D
 AL SENTARSE SOBRE EL TRONO DE NUESTRA ADORACION 
 LSOL                      Sol(add9) RE7sus4
 DEJAMOS QUE EL GOBIERNE SOBRE TODA CREACION
@@ -46,7 +46,7 @@ LMI(add9)   Mi(add9)    MI9sus4
 EL HA SIDO   FIEL
 DRELAdd9)  Re(add9)                     MI      La(add9)
 CANTAD LA GLORIA DE SU NOMBRE PUES ES DIGNO DE EXALTAR
-DREm7  Re(add9)                 MI6/9   MI7sus4
+D Dm7  D(add9)                 E6/9   E7sus4
 DECLAREMOSLE A LOS PUEBLOS DE SU AMOR Y MAJESTAD
   LA  RE  LA9suLA La(add9) MI9sus4  MI     Re(add9)   La
 ALABADLE           ADORAD           A JESUS EL REY

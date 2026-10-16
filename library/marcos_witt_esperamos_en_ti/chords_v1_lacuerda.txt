@@ -1,17 +1,17 @@
-LA           LA/DO#  RE
+A           A/C#  D
 sea tu misericordia,     sobre nosotros
-   LA      LA/DO#   MI  MI/SOL#
+   A      A/C#   E  E/G#
 segun esperamos en ti
-     LA            LA/DO# RE
+     A            A/C# D
 sea tu benevolencia,     sobre los pueblos
-   LA     LA/FA#    MI MI/SOL#
+   A     A/F#    E E/G#
 segun esperamos en ti
           coro
-     RE MI MI/SOL# FA#m       LA   LA/FA# RE  MI MI/SOL#
+     D E E/G# F#m       A   A/F# D  E E/G#
 esperamos en      ti, en tu amor y tu   bondad
-     RE MI MI/SOL# FA#m     LA        RE
+     D E E/G# F#m     A        D
 esperamos en      ti, por amor de tu nombre
-        MI      LA  LA/FA#
+        E      A  A/F#
           salvanos
-      LA         RE    MI   LA
+      A         D    E   A
 por amor de tu nombre salvanos

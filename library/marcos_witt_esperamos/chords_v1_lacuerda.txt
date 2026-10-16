@@ -1,8 +1,8 @@
-LA 
+A 
 Sea tu misericordia
- FA#m
+ F#m
 sobre nosotros
- LA                MI  
+ A                E  
 segun esperamos en Ti
 
 Sea tu benevolencia
@@ -10,15 +10,15 @@ sobre los pueblos
 segun esperamos en Ti
 
 Estribillo:
- LA      MI   FA#
+ A      E   F#
 Esperamos en Ti
 
 en tu amor
-         MI
+         E
 y en tu bondad
- LA      MI   FA#
+ A      E   F#
 Esperamos en Ti 
-       LA         RE         LA 
+       A         D         A 
 //Por amor de tu nombre salvanos//
 
 

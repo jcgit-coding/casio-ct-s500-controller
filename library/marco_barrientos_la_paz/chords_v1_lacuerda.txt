@@ -12,22 +12,22 @@ Saludos coatza
 
 
 
-SOLm     FA     RE#       RE
+Gm     F     D#       D
 
 MIm*SI   RE*    DO*      Si(7)
 La paz os dejo, mi paz os doy,
 
-SOLm     FA     RE#       RE
+Gm     F     D#       D
 
 MIm*SI   RE*    DO*      Si(7)
 Yo no la doy como el mundo la da.
 
-SOLm     FA     RE#       RE
+Gm     F     D#       D
 
 MIm*SI   RE*    DO*      Si(7)
 No se turbe vuestro corazon,
 
-RE#        FA
+D#        F
 
 DO*        RE*
 no tengas miedo.
@@ -35,31 +35,31 @@ no tengas miedo.
 
 Coro
 
-LA#        FA/LA       SOLm
+A#        F/A       Gm
 
 SOL*       RE/FA#*     MIm*
 Señor yo recibo de tu paz,
-    FA/LA           RE#
+    F/A           D#
 
     RE/FA#*         DO*
 no la que el mundo me da,
-     LA#             FA
+     A#             F
 
      SOL*            RE*
 en mi corazon no habra temor.
 
-LA#        FA/LA       SOLm
+A#        F/A       Gm
 
 SOL*       RE/FA#*     MIm*
 Señor necesito de tu paz,
 
-    FA/LA           RE#
+    F/A           D#
 
     RE/FA#*         DO*
 
 y mi corazon sabra que Tu eres
 
- LA#   FA  LA#
+ A#   F  A#
 
  SOL*  RE* SOL*
 Poderoso Dios

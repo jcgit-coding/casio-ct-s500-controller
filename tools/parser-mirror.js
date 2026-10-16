@@ -3,8 +3,8 @@
 
 const EN_ROOT = '[CDEFGAB]';
 const EN_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
-const EN_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${EN_PAREN}(?:\\/\\d+)?`;
-const EN_BASS  = '(?:\\/[CDEFGAB](?:#|b)?)?';
+const EN_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${EN_PAREN}(?:\\/\\d+)?`;
+const EN_BASS  = '(?:\\/[CDEFGAB](?:#|b)?(?:[A-G][#b]?)?)?';
 
 const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';
 const ES_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
@@ -12,6 +12,7 @@ const ES_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus
 const ES_BASS  = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
 
 const CHORD_STRIP_RE = new RegExp(`(?:${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g');
+const CHORD_FIND_RE  = new RegExp(`${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS}`, 'g');
 const SECTION_LABEL_RE = /^((?:Coro|Estrofa|Verso|Puente|Intro|Outro|Bridge|Chorus|Verse|Pre-?[Cc]oro|Pre-?[Cc]horus|Vamp|Tag|Interludio|Instrumental|Solo|Final|Llave)(?:\s+\d+)?)\s*(?:\([^)]*\))?\s*:?\s*$/i;
 
 const isChordLine = (line) => {
@@ -28,4 +29,4 @@ const isChordLine = (line) => {
   return leftover.length === 0;
 };
 
-module.exports = { isChordLine, SECTION_LABEL_RE, CHORD_STRIP_RE, ES_ROOT, EN_ROOT };
+module.exports = { isChordLine, SECTION_LABEL_RE, CHORD_STRIP_RE, CHORD_FIND_RE, ES_ROOT, EN_ROOT };

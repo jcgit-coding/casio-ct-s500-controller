@@ -1,84 +1,84 @@
 Capo: 4
 
- SOL
+ G
 
- SOL
+ G
  Me pregunto si recuerdas
 
  Con asombro aquella vez
-                       DO9
+                       C9
  Cuando tus ojos se abrieron
-                  MIm7 DO9
+                  Em7 C9
  Y la luz pudiste ver
 
  Canta si es así
 
- SOL
+ G
   Veo el mundo en luz
 
  Lo veo con asombro
 
  Veo el mundo en fe
-               DO9
+               C9
  Veo color en todo
 
  Veo como tú ves
-                SOL
+                G
  Y camino en tu luz
 
-                  SOL
+                  G
  Me pregunto si recuerdas
 
  Con asombro aquella vez
-                     DO9
+                     C9
  Que pasaste por las aguas
-              MIm7   DO9
+              Em7   C9
  Y volviste a nacer
 
  Canta si es así
 
- SOL
+ G
   Veo el mundo en luz
 
  Lo veo con asombro
 
  Veo el mundo en fe
-               DO9
+               C9
  Veo color en todo
 
  Veo como tú ves
-                SOL
+                G
  Y camino en tu luz
 
- MIm7
+ Em7
   Veo con tu amor
 
  Y veo con tu gracia
- DO9
+ C9
   Veo como tú ves
-                SOL
+                G
  Y camino en tu luz
 
  Y camino con asombro
-                  DO9
+                  C9
  Al desierto vida das
-                  SOL
+                  G
  Y lo vuelves asombroso
 
  Canta si es así
 
- MIm7
+ Em7
  Veo tu Reino aquí
 
  Veo un mundo libre
- DO9
+ C9
   Veo como Jesús
-                  SOL
+                  G
  Al desierto vida das
 
- SOL
+ G
 
- SOL
+ G
   Veo como tú ves
 
  Caminaré sin miedo
@@ -86,11 +86,11 @@ Capo: 4
  Veo como tú ves
 
  De ti no me avergüenzo
- DO9
+ C9
   Veo como Jesús
-                SOL
+                G
  Y camino en tu luz
- SOL
+ G
   Veo el mundo en luz
 
  Lo veo con asombro
@@ -98,43 +98,43 @@ Capo: 4
  Veo el mundo en fe
 
  Veo color en todo
- DO9
+ C9
   Veo como tú ves
-                SOL
+                G
  Y camino en tu luz
 
  Canta si es así
 
- MIm7
+ Em7
   Veo con tu amor
 
  Y veo con tu gracia
- DO9
+ C9
   Veo como tú ves
-                SOL
+                G
  Y camino en tu luz
 
  Y camino con asombro
-                  DO9
+                  C9
  Al desierto vida das
-                  SOL
+                  G
  Y lo vuelves asombroso
 
  Canta si es así
 
- MIm7
+ Em7
  Veo tu Reino aquí
 
  Veo un mundo libre
- DO9
+ C9
   Veo como Jesús
-                  DO9
+                  C9
  Al desierto vida das
-                  SOL
+                  G
  Y lo vuelves asombroso
-                  DO9
+                  C9
  Al desierto vida das
-                  SOL
+                  G
  Y lo vuelves asombroso
 
 

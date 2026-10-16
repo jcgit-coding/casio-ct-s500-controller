@@ -1,15 +1,15 @@
-Intro: SOL  DO
+Intro: G  C
 
-DO       SOL RE       MIm
+C       G D       Em
 Sopla en mi, sopla en mi
-  DO     SOL    LA7      RE
+  C     G    A7      D
 Espiritu santo, sopla en mi
-DO       SOL RE       MIm
+C       G D       Em
 Sopla en mi, sopla en mi
-  DO     SOL    RE       SOL
+  C     G    D       G
 Espiritu santo, sopla en mi
 
-  MIm       LAm        RE   SOL
+  Em       Am        D   G
 //Ayer ya paso, te necesito hoy
-  DO     SOL   RE       SOL
+  C     G   D       G
 Espiritu santo sopla en mi//Bis

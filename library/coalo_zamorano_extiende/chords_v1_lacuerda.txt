@@ -2,35 +2,35 @@ INTRO:
 Sol/do9/lam7/do9   x4
 
 
-SOL   DO9           LAm7  DO9
+G   C9           Am7  C9
 Niños tan solos y gente sufriendo esta
- SOL       DO9      LAm7      DO9
+ G       C9      Am7      C9
 Buscando alimento, hay alguien que les pueda dar
-SOL        DO9          LAm7     DO9
+G        C9          Am7     C9
 Vendiendo sus cuerpos solo por un pedazo de pan
-SOL    DO9           LAm7  DO9              LAm7
+G    C9           Am7  C9              Am7
 Y madres llorando por niños que ya no estan
                 MIm   fa#/re   SOL            RE
 Abramos nuestros ojos               A LA realidad
 
 
 CORO:
-SOL  MIm      SIb           LAm7
+G  Em      Bb           Am7
 Extiende      tu mano para ayudar
-SOL   MIm       SIb           LAm7
+G   Em       Bb           Am7
 Extiende      tu corazón para dar
-SOL   MIm           SIb           LAm7
+G   Em           Bb           Am7
 Comprende     que si ayudas a los demás
-        SIb          FA
+        Bb          F
 Su voluntad tu cumplirás
 
 (siguiente estrofa misma secuencia)
 
 CORO
 
-MIm            MIb
+Em            Eb
 Dime quien lo hará
-MIm        MIb    FA
+Em        Eb    F
 Dime quien ira y cumplirá su voluntad
 
 (solo: misma secuencia)

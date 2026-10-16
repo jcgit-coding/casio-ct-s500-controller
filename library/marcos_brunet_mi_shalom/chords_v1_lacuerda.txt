@@ -1,50 +1,50 @@
 CAPO EN EL 2 ESPACIO
 
- INTRO: DO
+ INTRO: C
 
- SOL         RE/FA#            MIm
+ G         D/F#            Em
     Una vez más   entro a tu lugar
-               DO  RE/FA#
+               C  D/F#
  y puedo descansar   en  Ti
- SOL        RE/FA#
+ G        D/F#
     eres mi paz
-          MIm               DO  RE/FA#
+          Em               C  D/F#
  mi seguridad encuentro sanidad  en   Ti
- SOL        RE/FA#                MIm
+ G        D/F#                Em
     eres tan manso y humilde de corazón
-          DO        RE/FA#
+          C        D/F#
  necesito tanto tu carácter en mí
- SOL        RE/FA#            MIm
+ G        D/F#            Em
     eres mi fuerza y mi provisión
-             DO    RE/FA#  MIm  RE/FA# SOL DO
+             C    D/F#  Em  D/F# G C
  todas mis fuentes están en Ti
 
-    SOL        SOL/SI          DO
+    G        G/B          C
  entrego en la cruz toda ansiedad
-                 MIm         RE
+                 Em         D
  sé que estás cuidando de mí
-    SOL       SOL/SI         DO
+    G       G/B         C
  confío en Ti Jesús cada día más
-                 MIm         RE
+                 Em         D
  sé que estás cuidando de mí
 
-   DO RE MIm SIm
+   C D Em Bm
  Papá
-      DO                RE
+      C                D
  mi Papá me cuidarás, me cuidarás
-            MIm             SIm
+            Em             Bm
  todo el tiempo, yo confiaré en Ti
 
- SOL
+ G
    Mi shalom eres Tú
- SIm
+ Bm
    mi paz, mi salud
- DO
+ C
    mi prosperidad
-    MIm       RE
+    Em       D
  LA Roca de MI   salvación
 
- CÁNTICO Y FINAL: Do Re Mim Sim
+ CÁNTICO Y FINAL: C D Em Bm
 
  Re/Fa#: 200230
  Sol/Si: x20033

@@ -1,25 +1,25 @@
-SOL          RE  MIm  DO    SOL RE
+G          D  Em  C    G D
 Venid fieles todos a Belén marchemos
-   MIm       RE          LAm      RE
+   Em       D          Am      D
 de gozo triunfantes  y llenos de amor.
-     SOL         DO      LAm     RE
+     G         C      Am     D
 Y al Rey de los Cielos humilde veremos.
-SOL                 SOL      RE
+G                 G      D
 Venid y adoremos. Venid y adoremos
-   DO  SI  LAm  SOL SOLb  SOL    DO   RE      SOL
+   C  B  Am  G Gb  G    C   D      G
 Venid  y    A - DO - RE - mos a  Cris-to el Señor.
 
 En pobre pesebre yace reclinado (Idem)
 al hombre ofreciendo eternal salvación.
 El Santo Mesias el Verbo humanado.
 Venid y adoremos. Venid y adoremos
-  DO  SI  LAm   SOL SOLb  SOL   DO  RE           MIm  RE  DO
+  C  B  Am   G Gb  G   C  D           Em  D  C
 Venid  y    A - DO - RE - mos a Cri-sto el Señor.
 
-    MIm   RE     DO
+    Em   D     C
 Adoreee - mos
 
-DO SI LAm SI DO RE MI   LA
+C B Am B C D E   A
 
 (percusión y base vocal)
 Cantad jubilosas célicas criaturas (Idem)
@@ -27,37 +27,37 @@ Resuenen los cielos con vuestra canción.
 Al Dios bondadoso gloria en las alturas.  [Todos]
 Venid y adoremos. Venid y adoremos
 
-  RE  REb  SIm   LA  LAb   LA      RE  MI     FA#m
+  D  Db  Bm   A  Ab   A      D  E     F#m
 Venid  y    A  - DO - RE - mos  a Cris-to el Señor 
 
-FA#m  MI  Si/Re#
+F#m  E  B/D#
 
-  RE  REb  SIm  LA  LAb   LA     RE  MI      LA 
+  D  Db  Bm  A  Ab   A     D  E      A 
 Venid  y    A - DO - RE - mos  a Cristo el Señor.
 
-LA  SOL  FA
+A  G  F
  
-SIb        MIb
+Bb        Eb
 Venid y adoremos
-REm        FA
+Dm        F
 Venid y adoremos
  RE#  REm DOm  LA#  LA   LA#   RE# FA      LA #
 Venid  y   A - DO - RE - mos a Cristo el Señor.
 
-LA#  SOL#  FA#
+A#  G#  F#
 
 
-SI              MI
+B              E
 Venid y adoremos a Cristo el Señor.
-RE#m                FA#
+D#m                F#
 Venid y adoremos a Cristo el Señor.
 
-  MI  RE# DO#m  SI  LA#   SI    MI FA#     LAb
+  E  D# C#m  B  A#   B    E F#     Ab
 Venid  y    A - DO - RE - mos a Cristo el Señor.
 
-LAbm SOLb DO#/FAb
+Abm Gb C#/Fb
 
-  MI  RE# DO#m  SI   LA#  SI    MI  FA#     SI
+  E  D# C#m  B   A#  B    E  F#     B
 Venid  y   A  - DO - RE - mos a Cristo el Señor.
 
 La\do#    SI

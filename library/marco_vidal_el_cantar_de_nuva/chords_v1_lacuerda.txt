@@ -1,53 +1,53 @@
-SOL       FA            SOL     FA
+G       F            G     F
 
 Somos árboles desnudos en la nieve
-    SOL                FA             MIm     FA
+    G                F             Em     F
 Esperando a que el amanecer nos descongele
-          SI7                                MIm
+          B7                                Em
 Y al que mas y al que menos esconde alguna herida
-                 DO
+                 C
 Bajo la corteza fría
 
-         SOL                FA           SOL    FA
+         G                F           G    F
 
 Se intercambian sonrisas y gestos de sombrero
-         SOL             FA           MIm     FA
+         G             F           Em     F
 Mientras el corazón estornuda a bajo cero
-    SI7                                MIm                   DO
+    B7                                Em                   C
 Esperando que el día nos traiga en una mano la caricia del verano
 
 CORO
 
-     DO                     FA#            SIm      MI          LAm
+     C                     F#            Bm      E          Am
 Y resulta que tu nos conoces paso a paso cada milímetro de miedo
-      RE7        SOL
+      D7        G
 Cada gramo de fracaso,
-         DO                   FA#            SIm         MI          LAm             RE7
+         C                   F#            Bm         E          Am             D7
 Y hasta veces te acercas por nuestro invernadero para grabarnos un mensaje con tu formor
-         SOL
+         G
  de carpintero
 
-      DO                          LAm SI7       MIm
+      C                          Am B7       Em
 Y repetimos como el viejo pescador a quien iremos.  
-                        DO7
+                        C7
 Hemos avanzado nuestra fuerza es hoy mayor
-             MIm      DO7
+             Em      C7
 Y no hemos conseguido atenuar nuestro dolor
-       MIm                 DO7
+       Em                 C7
 Nos contemplan siglos intentando sobrevivir
-      MIm              DO7
+      Em              C7
 Somos gladiadores la consigna es resistir
-     MIm
+     Em
 Unos viven la abundancia 
-       DO7
+       C7
 Otros mueren en soledad
-      MIm                      DO7
+      Em                      C7
 Unos rien otros lloran unos se revelan otros se conforman
-     MIm                                DO7
+     Em                                C7
 Y se besa la desgracia con la suerte la vida con la muerte en esta
-         MIm
+         Em
  Eterna Búsqueda de paz
-       DO7   
+       C7   
 Ese clamor por libertad.
 
 MISMO ACORDES QUE EL CORO.

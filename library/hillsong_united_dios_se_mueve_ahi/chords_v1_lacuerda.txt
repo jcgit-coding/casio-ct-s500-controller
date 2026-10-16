@@ -1,61 +1,61 @@
-INTRO: SOL RE LA
-       SOL RE LA
-SOL                       RE       LA
+INTRO: G D A
+       G D A
+G                       D       A
 CUANDO UN CORAZON SALE DE LA OSCURIDAD
-SOL                       RE     LA
+G                       D     A
 Y A LA TENTANCION ALGUIEN SALE A ENFRENTAR
-SOL                       RE            LA
+G                       D            A
 CUANDO ALGUIEN MUERE A SI MISMO PARA SERVIR
-SOL           SOL
+G           G
 YO SE, YO SE, YO SE, YO SE...
 
 CORO (X2)
-SIm                SOL
+Bm                G
 DIOS SE MUEVE AHI, ESTA AHI ALELUYA
-RE                         LA
+D                         A
 DIOS SE MUEVE AHI CON SU PODER EN MI
-SIm                SOL
+Bm                G
 DIOS SE MUEVE AHI ALELUYA
-RE                        LA
+D                        A
 DIOS SE MUEVE AHI, EL SE MUEVE AQUI
 
-SOL RE LA
+G D A
 
-SOL                     RE           LA
+G                     D           A
 CUANDO ALGUIEN CAE DE RODILLAS A SUS PIES
-SOL                      RE    LA
+G                      D    A
 O SE PARA CON FIRMEZA EN LA VERDAD
-SOL                     RE       LA
+G                     D       A
 CUANDO SE COMPARTE SU PALABRA DE PODER
-SOL           SOL
+G           G
 YO SE, YO SE, YO SE, YO SE...
 
 CORO (X2)
-SIm                SOL
+Bm                G
 DIOS SE MUEVE AHI, ESTA AHI ALELUYA
-RE                         LA
+D                         A
 DIOS SE MUEVE AHI CON SU PODER EN MI
-SIm                SOL
+Bm                G
 DIOS SE MUEVE AHI ALELUYA
-RE                        LA
+D                        A
 DIOS SE MUEVE AHI, EL SE MUEVE AQUI
 
 PASAJE:
 //SOL RE SOL
-SIm SOL LA//
+Bm G A//
 
 
 PUENTE:
-  SIm                SOL
+  Bm                G
 //VEMOS GENERACIONES FIRMES EN LA VERDAD
-RE                    LA
+D                    A
 EN TODAS LAS NACIONES DIOS SE MOVERA//
 
-SOL                 RE             LA
+G                 D             A
 CUANDO EL EVANGELIO IMPULSA AL CORAZON
-SOL                    RE     LA
+G                    D     A
 Y ALGUIEN RESPONDE ENVIAME YO VOY
-SOL    SOL    SOL    SOL
+G    G    G    G
 YO SE, YO SE, YO SE, YO SE...
 
 CORO (X2)

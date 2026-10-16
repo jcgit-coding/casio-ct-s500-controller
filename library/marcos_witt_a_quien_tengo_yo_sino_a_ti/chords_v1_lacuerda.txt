@@ -1,42 +1,42 @@
 (Acordes originales de la grabacion.
 
-LA          LA+(aug)    LA6
+A          A+(aug)    A6
 ¿A QUIEN TENGO YO SINO A TI?
-      La+(aug)               
+      A+(aug)               
 FUERA DE TI NO QUIERO NADA
-LA        LA+(aug)      LA6
+A        A+(aug)      A6
 HE PUESTO EN TI MI ESPERANZA
   SImLA+(aug)                      Sim(add2)
 PARA CONTAR TODAS TUS OBRAS
 SImFa#7/La#                  Sim(add2)
 MI CORAZON DESFALLECIA 
-               MIsus4     MI
+               Esus4     E
 MAS MI ROCA ERAS TU
-FA#m    DO#+(aug)7/MI#          LA/MI
+F#m    C#+(aug)7/E#          A/E
 CASTILLO Y REFUGIO ERES TU
-SI          Si(add2)/Re#        REmaj7
+B          B(add2)/D#        Dmaj7
 FUERZA DE MI SALVACION
-    SIm7   MI
+    Bm7   E
 ERES TU SEÑOR 
-LA           LA+(aug)      LA6
+A           A+(aug)      A6
 ¿A QUIEN TENGO ALLA SINO A TI?
   SIm  LA+(aug)                 Sim(add2)
 PERO DE AQUI NO QUIERO NADA
 SIma#7/La#                Sim(add2)
 MI CARNE DESFALLECIA 
-               MIsus4       MI
+               Esus4       E
 MAS MI ROCA ERAS TU
-FA#m   DO#+(aug)7/MI#            LA/MI
+F#m   C#+(aug)7/E#            A/E
 CASTILLO Y REFUGIO ERES TU
-SI      Si(add2)/Re#          LA/SI     SIm
+B      B(add2)/D#          A/B     Bm
 FUERZA DE MI SAL   -   VA  -  CION
-         ReMaj7/Mi    MI/RE    DO#m7
+         DMaj7/E    E/D    C#m7
 ESCUDO, ESTANDARTE ERES TU,
-          MI/FA#       FA#m7      MI/FA#
+          E/F#       F#m7      E/F#
 EL SOL DE JUSTI    -    CIA    ERES TU
-FA#m7      SIm7     RE/MI  MI  RE/MI  MI
+F#m7      Bm7     D/E  E  D/E  E
   SE   -   ÑOR, ERES TU
-LA          LA+(aug)     LA6
+A          A+(aug)     A6
 ¿A QUIEN TENGO YO SINO A TI?
-       LA+(aug)        LA   REmaj7  FAmaj7  REm  LA
+       A+(aug)        A   Dmaj7  Fmaj7  Dm  A
 FUERA DE TI NO QUIERO NADA

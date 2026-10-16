@@ -1,12 +1,12 @@
-Intro: /LA RE MI LA/
+Intro: /A D E A/
 
-    LA       RE      MI      LA
+    A       D      E      A
 Un aire de paz corre por las calles
-FA#m       MI        RE    MI
+F#m       E        D    E
 pasa envolviendo cada corazón
-FA#m       MI      RE     LA
+F#m       E      D     A
 y la ciudad se viste de luces
-SOL                MI
+G                E
 celebrando la estación.
 
 Por todas partes la gente comparte
@@ -15,48 +15,48 @@ y las familias unidas festejan
 bajo el calor de cada hogar.
 
 CORO:
-    LA   MI      RE      LA
+    A   E      D      A
 /Es Navidad, la tierra celebra
-   FA#m        MI      RE   MI
+   F#m        E      D   E
 El rico y el pobre compartirán
-LA           MI          RE    LA
+A           E          D    A
 la dicha y el gozo que en aquel día
-FA#m      MI     RE     MI
+F#m      E     D     E
 Cristo Jesús nos vino a dar/  La
 
 
 
-/LA RE MI LA/
+/A D E A/
 
 Este es un tiempo anticipado
 que grandes y chicos anhelan vivir:
 La alegría de todos los pueblos
 el júbilo eterno de compartir.
 
-    SOL            RE
+    G            D
 Nos une la paz, la fe, la esperanza
-    FA#m                  MI
+    F#m                  E
 nos une el amor la felicidad.
-SOL                 RE
+G                 D
 pinta a tu vida con estas palabras
-FA#m            RE       MI     FA#
+F#m            D       E     F#
 son los colores de la navidad
 
 CORO:
-    SI   FA#     MI       SI
+    B   F#     E       B
 /Es navidad, la tierra celebra.
-   SOL#m        FA#      MI    FA#
+   G#m        F#      E    F#
 El rico y el pobre compartirán
-SI            FA#        MI    SI
+B            F#        E    B
 La dicha y el gozo que en aquel día
-SOL#m      FA#     MI     FA#
+G#m      F#     E     F#
 Cristo Jesús nos vino a dar./
 
-     SI    SOL#m FA#
+     B    G#m F#
 //////Es Navidad
-MI     SI  FA#
+E     B  F#
 Es Navidad//////
-SI
+B
 
 
 bueno espero que esté bien porque yo soy bajista

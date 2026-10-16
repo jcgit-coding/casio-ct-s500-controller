@@ -1,37 +1,37 @@
-DO              FA                      SOL
+C              F                      G
 Tu le diste al hombre un lenguaje muy bello
-DO                   FA        SOL
+C                   F        G
 tu nos diste la música para alabarte
-LAm         MIm     FA        DO
+Am         Em     F        C
 estoy agradecido y quiero cantarte
-LAm         MIm     FA          SOL
+Am         Em     F          G
 estoy agradecido y quiero adorarte.
 
-DO     FA               SOL
+C     F               G
 Tu me hiciste con un propósito
-DO              FA                SOL
+C              F                G
 en tus planes estaba que yo te adorara
-LAm         MIm     FA        DO
+Am         Em     F        C
 estoy agradecido y quiero cantarte
-LAm        MIm      FA       SOL
+Am        Em      F       G
 estoy agradecido y quiero adorarte.
 
- DO                 FA       SOL
+ C                 F       G
 //yo quiero ser un adorador oh
-DO                  FA   SOL
+C                  F   G
 yo quiero ser un adorador oh...
-    LAm                    MIm
+    Am                    Em
 contemplar la hermosura de tu santidad
-    FA                 SOL
+    F                 G
 adorarte en espíritu y en verdad
-LAm              FA  SOL        DO
+Am              F  G        C
 yo quiero ser Señor.....un adorador//
 
-FA        DO      SOL          DO
+F        C      G          C
 Mi gozo será habitar en tu presencia
-FA        DO       SOL          DO
+F        C       G          C
 mi gozo será contemplar tu santidad
-FA              DO      SOL      DO
+F              C      G      C
 con júbilo vendré a ti y te cantaré
-FA              DO      SOL      DO
+F              C      G      C
 con júbilo vendré a ti y te adoraré.

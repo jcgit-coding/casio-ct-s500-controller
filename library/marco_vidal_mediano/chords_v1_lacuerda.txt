@@ -1,34 +1,34 @@
-SOL          RE            SOL          RE
+G          D            G          D
  Medio hobbit, medio niño, medio grande, medio chico
-     SOL    RE/FA# MIm7          LA7
+     G    D/F# Em7          A7
  ilusión y estado  puro de inquietud
-            SOL        RE                 SOL        RE
+            G        D                 G        D
  siempre al borde y siempre ileso, tan sencillo y tan travieso
-         SOL RE/FA#   MIm7   LA7
+         G D/F#   Em7   A7
  y nadie mira tan de frente como tú
 
-       FA
+       F
  Y has visto como nieve esta mañana
- MIm7
+ Em7
  cómo está blanca tu ventana
-     FAmaj7                            MIm7                  LAsus4 LA7
+     Fmaj7                            Em7                  Asus4 A7
  que siempre Dios responde un niño como tú que le ora con el alma
-   REm7                             SIm7
+   Dm7                             Bm7
  y cómo te ibas a quedar tu sin canción
-              MI        FA           SOL          LA
+              E        F           G          A
  si un tercio de mi corazón, vive perdido en tu mirada
 
-    RE             DO#m      FA#7     SIm7
+    D             C#m      F#7     Bm7
  Mediano, toca otra vez el violín para mí
-             FA#m                 SOL             RE/FA#   MIm7   LAsus4 LA7
+             F#m                 G             D/F#   Em7   Asus4 A7
  me haces sentir orgulloso y me encanta que todos sepan que eres mío
-    RE             DO#m   FA#7     SIm7
+    D             C#m   F#7     Bm7
  Mediano, no dejes nunca jamás de reír
-              SOL                  RE/FA#
+              G                  D/F#
  sabes que el sol no brilla si tu lloras
-  MIm7                      LAsus4 LA7
+  Em7                      Asus4 A7
  y nada en el mundo es igual
-     SOL
+     G
  sin ti
 
 

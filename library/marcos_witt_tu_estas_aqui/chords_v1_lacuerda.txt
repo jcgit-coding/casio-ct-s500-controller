@@ -1,20 +1,20 @@
-MI                DO#m
+E                C#m
 Aunque mis ojos no te puedan ver
-            LA                MI
+            A                E
 Te puedo sentir sé que estás aquí.
-   LA/E    MI                DO#m
+   A/E    E                C#m
 Aunque mis manos no pueden tocar
-            LA                MI        SI
+            A                E        B
 Tu rostro Señor sé que estas aquí, Wo u wo o
 
 
-       DO#m         LA
+       C#m         A
 MI CORAZÓN PUEDE SENTIR TU PRESENCIA
-MI             SI
+E             B
 TÚ ESTÁS AQUÍ, TÚ ESTÁS AQUÍ.
-DO#m         LA
+C#m         A
 PUEDO SENTIR TU MAJESTAD
-MI             SI
+E             B
 TÚ ESTÁS AQUÍ, TÚ ESTÁS AQUÍ.
 
 MI CORAZÓN PUEDE MIRAR TU HERMOSURA
@@ -22,5 +22,5 @@ TÚ ESTÁS AQUÍ, TÚ ESTÁS AQUÍ.
 PUEDO SENTIR TU GRAN AMOR
 TÚ ESTÁS AQUÍ, TÚ ESTÁS AQUÍ.
 
-          DO#m           SI
+          C#m           B
 TÚ ESTÁS AQUÍ, TÚ ESTÁS AQUÍ.

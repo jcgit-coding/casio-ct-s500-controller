@@ -1,22 +1,22 @@
-Intro: SOL - RE - LA - SIm - SOL
+Intro: G - D - A - Bm - G
 
 
- RE                              LA 
+ D                              A 
 //Y danzando en cielos abiertos    Y danzando en cielos abiertos
- SIm                              SOL 
+ Bm                              G 
 Y danzando en cielos abiertos, ¡Haz llover, haz llover! //
 
 
 Solo: RE - LA - SIm - SOL x2
 
 
-         RE             LA
+         D             A
 ////Dios oyó nuestra alabanza
-      SIm          SOL
+      Bm          G
 Y los cielos Él abrió
-       RE            LA 
+       D            A 
 Ahora estamos ascendiendo
-         SIm            SOL
+         Bm            G
 Para ver su rostro////
 
 
@@ -26,17 +26,17 @@ cambia la intensidad, se toca con distorsión,
 más rockera!!
 
 
-      SOL     LA          SIm     LA/DO#
+      G     A          Bm     A/C#
 //// Todo   poderoso     Todo   poderoso ////
 
 
-     SOL                     LA 
+     G                     A 
 ////Tuyo es el reino, tuyo es el poder
-SIm                            LA/DO#
+Bm                            A/C#
 Tuya es la gloria,  por siempre amén! ////
 
 
-    SOL    LA      SIm         LA/DO#
+    G    A      Bm         A/C#
 ////El Shaddai     más que suficiente////
 
 

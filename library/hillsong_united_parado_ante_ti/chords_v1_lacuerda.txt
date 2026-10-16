@@ -1,36 +1,36 @@
 VOZ:
-            MI             LA              DO#m
+            E             A              C#m
             Parado ante  Ti  Te Doy Mi Adoracion
-                            LA        SI
+                            A        B
             Yo Quiero De Tu Amor Jesus Mi Todo
-            MI             LA              DO#m
+            E             A              C#m
             Te Pertenesco A Ti Tu Te Diste Por Mi
-                            LA        SI
+                            A        B
             Tu Gracia Me Salvo Jesus Mi Todo
 
-PRECORO:    DO#m    LA      MI      SI
+PD CORO:    C#m    A      E      B
              Guardame En Ti  No Me Dejes Ir
-                 DO#m    LA
+                 C#m    A
                  Contigo Quiero Estar
-                  MI        SI
+                  E        B
                    Por La Eternidad
 
 CORO:
-             MI                SI             DO#m
+             E                B             C#m
              Y Hoy Que Estas Aqui Todo Es Diferente
-                               LA
+                               A
                     Es Tan Diferente o Dios
-                MI                SI        LA
+                E                B        A
                 Pues Yo No Soy Igual Yo Renaci
-                             SI                  MI
+                             B                  E
             Contigo Quiero Estar Contigo Quiero Estar
 
                      (Vuelve Al Intro)
 
 PUENTE:
-                 DO#m        SI         LA
+                 C#m        B         A
                  Por Siempre Yo Te Cantare
-         DO#m        SI         LA        SI
+         C#m        B         A        B
          En Tu Precencia Es Donde Quiero Estar Señor
 
                       (Vuelve Al PreCoro)

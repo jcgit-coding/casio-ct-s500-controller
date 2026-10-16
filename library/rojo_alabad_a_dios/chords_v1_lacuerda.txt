@@ -8,33 +8,33 @@ La guitarra electrica hace solo quintas
 
 
 -estrofa-
-LAsus2         LAsus2/SOL#        REsus2
+Asus2         Asus2/G#        Dsus2
 En el cielo se oye, se escucha el rosanar
-LAsus2               LAsus2/SOL#
+Asus2               Asus2/G#
 sonidos de angeles, cantando su majestad
-  REsus2            SIm
+  Dsus2            Bm
 todo para un rey, cantadle tambien.
-     REsus2
+     Dsus2
 a jesucristo el rey.
 
 
-MI               REsus2  MI               REsus2
+E               Dsus2  E               Dsus2
 glorioso es nuestro Dios, alzamos nuestra voz
-MI          REsus2/FA# MI/SOL#          REsus2
+E          Dsus2/F# E/G#          Dsus2
 divino es nuestro Dios, alzamos nuestro amor... a èl
 
 -coro-
- LAsus2        LAsus2/SOL#
+ Asus2        Asus2/G#
 alabad a Dios, alabad a Dios
-FA#m        REsus2    SIm
+F#m        Dsus2    Bm
 Èl es santo, Él es santo
 
 
-LAsus2            LAsus2/SOL#     REsus2
+Asus2            Asus2/G#     Dsus2
 Tú tú mira al cielo levanta un resonar
-       LAsus2            LAsus2/SOL#
+       Asus2            Asus2/G#
 se escucha un gran clamor de aquellos que él salvo
-REsus2              SIm              REsus2
+Dsus2              Bm              Dsus2
 todo para un rey cantadle también a Jesucristo el rey
 
 
@@ -43,24 +43,24 @@ todo para un rey cantadle también a Jesucristo el rey
 En la parte de "naranaranana" se hace la misma secuencia del coro
 
 
-LAsus2      LAsus2/SOL#
+Asus2      Asus2/G#
 adoremos exaltemos
-FA#m        REsus2  SIm
+F#m        Dsus2  Bm
 Èl es santo, Èl es santo
-MI               REsus2   MI             REsus2
+E               Dsus2   E             Dsus2
 con dulces nuestro Dios, Su amor nos rescato
-MI      REsus2/FA# MI/SOL#       REsus2
+E      Dsus2/F# E/G#       Dsus2
 en su infino Dios, su amor nos redimio
 
 alaba al rey....
 
-LAsus2   LAsus2/SOL#
+Asus2   Asus2/G#
 aleluya aleluya
-FA#m        REsus2   SIm
+F#m        Dsus2   Bm
 Èl es santo Èl es santo(2x)
-LAsus2   LAsus2/SOL#
+Asus2   Asus2/G#
 adoremos exaltemos,
-FA#m        REsus2   SIm
+F#m        Dsus2   Bm
 Èl es santo Èl es santo(3x) y termina en Lasus2
 
 
@@ -73,7 +73,7 @@ Lasus2      x02200
 Lasus2/Sol# 4x2200
 Resus2      xx0230
 Resus2/Fa#  2x0230
-Mi          022100
-Mi/Sol#     422100
+E          022100
+E/G#     422100
 fa#m        244222
 sim         224432

@@ -1,25 +1,25 @@
 ESTROFA:
 
 
-  DO                    LA-7
+  C                    A-7
 EL GOZO QUE EL SEÑOR APUESTO EN MI
-  RE-7              SOL
+  D-7              G
 ES LA FUERZA DE MI VIDA
-    DO                   LA-7
+    C                   A-7
 EL GOZO QUE EL SEÑOR A PUESTO EN MI 
-  RE-7              SOL
+  D-7              G
 ES LA FUERZA DE MI VIDA
 
 
 
 CORO:
-  LA-7            FA
+  A-7            F
 POR ESO YO ME GOZARE EN EL
-  LA-7                   FA   SOL
+  A-7                   F   G
 Y EL PONDRA SU RISA EN MI BOCA
-  LA-7
+  A-7
 YO CANTARE 
-  FA
+  F
 YO GRITARE 
-  RE-7     SOL        DO
+  D-7     G        C
 Y ME ALEGRARE SOLO EN EL

@@ -1,119 +1,119 @@
-intro:      REsus4/DO  RE/DO(X2)
+intro:      Dsus4/C  D/C(X2)
                                        estos son acordes que van al principio
 
- REsus4/DO               RE/DO
+ Dsus4/C               D/C
 Antes que la lámpara se apague                           resus4/do
-  SIm7             MIm                                 6/---0------
+  Bm7             Em                                 6/---0------
 Antes que los ojos se cierren                          5/---3------
-  REsus4/DO           RE/DO                            4/---2------
+  Dsus4/C           D/C                            4/---2------
 Antes que el fuego se acabe                            3/---0------
-  SIm7                      MIm                        2/---3------
+  Bm7                      Em                        2/---3------
 Y todo este perdido solo en apariencias                1/---3------
 
-REsus4/DO      RE                                         RE/DO
+Dsus4/C      D                                         D/C
 Se escucha una voz                                     6/---0------
-REsus4/DO    RE                                        5/---3------
+Dsus4/C    D                                        5/---3------
 En el silencio                                         4/---0------
                                                        3/---0------
-  SOL   FA         MIm          RE                     2/---3------
+  G   F         Em          D                     2/---3------
 Samuel Samuel despiértate despiértate                  1/---2------
-  SOL   FA                 MIm
+  G   F                 Em
 Samuel Samuel no vayas al hombre
-            RE
+            D
 Corre hacia mí
 
-            LAm                RE/FA#
+            Am                D/F#
 Y yo te mostraré lo que esta por venir
-            REsus4/DO      LAm
+            Dsus4/C      Am
 Solo quédate conmigo...
-             MIm      RE/FA#
+             Em      D/F#
 Quédate conmigo...
 
- REsus4/DO                RE/DO
+ Dsus4/C                D/C
 Haaa estoy buscando una generación
-         SIm7
+         Bm7
 Que no juegue con lo santo
-         MIm
+         Em
 Y que no venda mis tesoros
 
-REsus4/DO               RE/DO
+Dsus4/C               D/C
 Haa estoy buscando una generación
-         SIm7
+         Bm7
 Que me preste sus oídos
-          MIm
+          Em
 Y se interese en mi corazón
 
 
-LAm      SIm7   DO      RE
+Am      Bm7   C      D
 Gente que crece en el secreto
- LAm    SIm7     DO      RE
+ Am    Bm7     C      D
 Yo recompenso en público...
 
 
- SOL    FA            MIm
+ G    F            Em
 Samuel Samuel despiértate
-     RE
+     D
 Hay mucho que hacer
- SOL    FA                 MIm
+ G    F                 Em
 Samuel Samuel no vayas al hombre
-            RE
+            D
 Corre hacia mí
 
-        LAm                        RE
+        Am                        D
 Y yo te mostraré lo que está por venir
-                DO   LAm
+                C   Am
 Solo quédate conmigo
- MIm          RE
+ Em          D
 Quédate conmigo...
- DO
+ C
 Quédate conmigo...
- LAm                              MIm
+ Am                              Em
 Quédate conmigo...  y hazme oír tu voz
-                   RE
+                   D
 Solo quiero oír tu voz
 
 
- SOL              FA
+ G              F
 Aquí estoy aquí estoy
-            MIm           RE
+            Em           D
 Hoy me despierto hoy me levanto
- SOL              FA
+ G              F
 Aquí estoy aquí estoy
-            MIm           RE
+            Em           D
 Corro hacia ti yo corro hacia ti
-            LAm                    RE
+            Am                    D
 Muéstrame Señor lo que esta por venir
 
 
-               DO        LAm
+               C        Am
 Yo me quedo contigo...
-               MIm       RE
+               Em       D
 Yo me quedo contigo...
-            DO          LAm
+            C          Am
 Me quedo contigo a tu lado
-                    MIm
+                    Em
 Yo quiero crecer contigo
-                  RE
+                  D
 Quiero crecer contigo
-               DO                        LAm
+               C                        Am
 Te presto mis oídos para escuchar tus secretos
-          MIm            RE
+          Em            D
 Cuenta conmigo cuenta conmigo
-                  DO
+                  C
 Aunque sea solo un niño
-                      LAm
+                      Am
 Yo quiero escuchar tu voz
-                       MIm             RE
+                       Em             D
 Y transmitir tu corazón en esta generación
-      REsus4/DO    RE/DO
+      Dsus4/C    D/C
 Yo me quedo contigo...
 
 
-    REsus4/DO   RE/DO               REsus4/DO
+    Dsus4/C   D/C               Dsus4/C
 Aquí estoy aquí estoy solo muéstrame Señor
-                RE/DO
+                D/C
 Lo que esta por venir
-           REsus4/DO    REsus4/DO
+           Dsus4/C    Dsus4/C
 Yo me quedo contigo  contigo...
 
 

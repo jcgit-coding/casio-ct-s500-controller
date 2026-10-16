@@ -2,37 +2,37 @@
 
 P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
 
-  DOFA      REm    DO/MI       Fa(add9)
+  C F      Dm    C/E       F(add9)
 Jesús es mi Rey Soberano
 
-  DO/SOL     LAm     SOL
+  C/G     Am     G
 Mi gozo es cantar su loor
 
-   REm7              FAmaj7
+   Dm7              Fmaj7
 Es Rey y me ve cual hermano,
 
   SoL13     SOL+aug7  DOmaj7     REm      SOL
 Es Rey y me imparte su amor
 
-   DO      REm7     DO/MI          FAmaj7
+   C      Dm7     C/E          Fmaj7
 Dejando su trono             de Gloria
 
-   SOLm7  DO/MI       FAmaj7
+   Gm7  C/E       Fmaj7
 Me vino a sacar de la escoria
 
-REm7    FA#dim7        DO/SOL
+Dm7    F#dim7        C/G
 Y yo soy feliz,
 
            LAm  REm9    SoL13(b9)  FAmaj7
 Y yo soy feliz     por               él
 
-  DOFA       REm7   DO/MI      Fa(add9)
+  C F       Dm7   C/E      F(add9)
 Jesús es mi amigo anhelado
 
-    DO/SOL        LAm        SOL
+    C/G        Am        G
 Y en sombras o en luz siempre va
 
-  REm7     LAm7        SIbmaj7
+  Dm7     Am7        Bbmaj7
 Paciente y humilde a mi lado
 
 SoL13  SOL+aug7    DOmaj9
@@ -41,10 +41,10 @@ Ayuda y socorro   me da
 REm7  SFA   DOmaj7   REm7     DO/MI      Fa(add9)
       Por     eso constante lo sigo
 
-     SOLm7      DO   DO/MI   FAmaj7
+     Gm7      C   C/E   Fmaj7
 Porque el es mi Rey    y mi   amigo
 
-REm     RE9        DO/SOL
+Dm     D9        C/G
 Y yo soy feliz,
 
            RE9  REm7    SoL13    FAmaj7
@@ -52,13 +52,13 @@ Y yo soy feliz   por               él
 
 (SoL13    SOL+aug7    SOL7)
 
-  LAm7    SOL/SI     DO/MI
+  Am7    G/B     C/E
 Dejando su trono de Gloria
 
 FAFA#79)  SOLm9   Fa#7(b9)       FAmaj9
    El  me  vino  a  sacar de la escoria
 
-Re9/Fa#      LAb
+D9/F#      Ab
    Y yo soy feliz
 
 MIm7         LA9   REm9       SoL13(b9)  FAmaj7    DOmaj7

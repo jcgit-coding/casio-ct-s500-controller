@@ -1,25 +1,25 @@
-intro: REm - FA - DO - LAm
+intro: Dm - F - C - Am
 1:------5-5-5-5-----------------------------|
 2:-6-6-8-------8-6-6-5--5-5-6-8-8-8-8-5-5---|
 3:---------------------------------------7--|
 
-       REm                  DO
+       Dm                  C
 Me emociona poder verte y conocerte
-       REm                  DO
+       Dm                  C
 Me enloquece escucharte y abrazarte
-  LA#                       DO
+  A#                       C
       lo que has hecho de mi 
-                    SOL
+                    G
       al fin lo comprendí
-  LA#                     DO
+  A#                     C
       Sé que estando contigo 
-                    LAm
+                    Am
       nada lo puede impedir
 
 coro:
-    REm     FA              DO
+    Dm     F              C
 creeré, viviré contigo haré historia 
-LAm
+Am
 iaiaiaiai!!!!
 
 se tu imagen
@@ -55,7 +55,7 @@ dices que apenas comenzamos
 
 en mi corazón ya comenzó
 el avivamiento de tu amor
-SI 
+B 
 no existe otra cosa mejor
 
 interludio:

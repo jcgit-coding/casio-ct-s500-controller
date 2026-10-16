@@ -1,55 +1,55 @@
-INTRO:  RE  LA  SOL
+INTRO:  D  A  G
 
 
-SOL          RE
+G          D
 Eres la sanidad
-                       LA
+                       A
 La cura para toda mi enfermedad
-                         SOL
+                         G
 Redimes todo lo que tuve que pasar
-RE                       SOL   SOLsus2
+D                       G   Gsus2
 Oh Señor me sanas con tu amor
-          RE
+          D
 Eres mi amigo fiel
-                                 LA
+                                 A
 Llegaste en la noche cuando a ti clamé
-                              RE
+                              D
 Mi alma consolaste hasta el amanecer
-         LA             SOL   LA
+         A             G   A
 Oh Señor tan fiel es tu amor
 
 CORO
 
-RE
+D
 |||Eres padre eterno
-LA
+A
 Dios de paz
 
-   SIm     LA
+   Bm     A
 Emmanuel, aquí conmigo
-SOL
+G
 Siempre estás
-RE
+D
 Consolador, ayudador
-    LA                    SIm7       SOL
+    A                    Bm7       G
 La autoridad descansa (en tus hombros)|||
 
-RE
+D
 Tú eres el autor
-                            LA
+                            A
 La última palabra en cada situación
-                              SI
+                              B
 Confiaré en tu tiempo, tienes el control
-SOL              LA          SOL      LA
+G              A          G      A
 Oh Señor constante es tu amor  uh   oh,
 
-PUENTE:  |||RE  LA SIm7  SOL |||
+PUENTE:  |||D  A Bm7  G |||
 
-       RE
+       D
 |||||||Me asombro
-LA
+A
 De tus nombres
-SIm7         SOL
+Bm7         G
 Que me dicen eres Dios||||||||  (coro 2 veces)
 
 

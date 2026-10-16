@@ -1,76 +1,76 @@
-SOL( DO/SOL-SOL)     SOL(Do/SOL-Sol)  DO7   DO
+G( C/G-G)     G(C/G-G)  C7   C
 Hay poder,               poder              sin    igual
-  Sol(Do/Sol-Sol)
+  G(C/G-G)
 poder,
-     RE(Lam7/RE-Re)          SOL     (DO/RE)
+     D(Am7/D-D)          G     (C/D)
 En Jesús,            quien murió;
-      SOL( DO/SOL-SOL)  SOL( DO/SOL-SOL)   DO7     DO
+      G( C/G-G)  G( C/G-G)   C7     C
 Hay poder,             poder               sin      igual
-   Sol(Do/Sol-Sol)
+   G(C/G-G)
  poder,
-        LAm7 ( SOL/SI - DO)    RE     SOL    (MIb)
+        Am7 ( G/B - C)    D     G    (Eb)
 En la sangre                  que él vertió.
   SOL#                DO#   SOL# (SOL# sus-Sol#M)
 ¿Quieres ser salvo de toda maldad?
-    MIb            SOL#         MIb
+    Eb            G#         Eb
 Tan solo hay poder  en      mi Jesús;
   SOL#            DO#    SOL# (SOL# sus-Sol#M)
 ¿Quieres vivir y  gozar santidad?
      MIb              SOL#   (Mi)(Sube A La)
 Tan solo hay poder en Jesús.
-      LA( RE/LA-LA)      LA( RE/LA-LA)    MI/RE    RE
+      A( D/A-A)      A( D/A-A)    E/D    D
 Hay poder,              poder              sin    igual
-  LA( RE/LA-LA)
+  A( D/A-A)
 poder,
 
-     MI(Sim7/MI-Mi)          LA     (RE/MI)
+     E(Bm7/E-E)          A     (D/E)
 En Jesús,            quien murió;
-      LA( RE/LA-LA)      LA( RE/LA-LA)     MI/RE     RE
+      A( D/A-A)      A( D/A-A)     E/D     D
 Hay poder,             poder               sin      igual
-   LA( RE/LA-LA)
+   A( D/A-A)
  poder,
-        SIm7 (LA/DO#-RE)    MI     LA    (FA)
+        Bm7 (A/C#-D)    E     A    (F)
 En la sangre               que él vertió.
-   SIb                  MIb       SIb(SIbsus-Sib)
+   Bb                  Eb       Bb(Bbsus-Bb)
 ¿Quieres ser libre de orgullo y pasión?
-     FA            SIb        FA
+     F            Bb        F
 Tan solo hay poder en     mi Jesús;
-   SIb                MIb     SIb(SIbsus-Sib)
+   Bb                Eb     Bb(Bbsus-Bb)
 ¿Quieres vencer toda cruel tentación?
      FA                SIb   (FA#M)(Sube A Si)
 Tan solo hay poder en Jesús.
-      SI( MI/SI-SI)       SI( MI/SI-SI)    FA#M/MI  MI
+      B( E/B-B)       B( E/B-B)    F#M/E  E
 Hay poder,              poder              sin    igual
-  SI( MI/SI-SI)
+  B( E/B-B)
 poder,
 
-     FA# (Do#m7/FA# -Fa#M)          SI     (MI/FA# )
+     F# (C#m7/F# -F#M)          B     (E/F# )
 En Jesús,                   quien murió;
-      SI( MI/SI-SI)      SI( MI/SI-SI)     FA#M/MI    MI
+      B( E/B-B)      B( E/B-B)     F#M/E    E
 Hay poder,             poder               sin      igual
-   SI( MI/SI-SI)
+   B( E/B-B)
  poder,
-        DO#m7(Si/Re#-MI)    FA#         SI   (SOL)
+        C#m7(B/D#-E)    F#         B   (G)
 En la sangre                que    él vertió.
 (Sube a Do)
-      DO( FA/DO-DO)       DO( FA/DO-DO)    SOL/FA   FA
+      C( F/C-C)       C( F/C-C)    G/F   F
 Hay poder,              poder              sin    igual
-  DO( FA/DO-DO)
+  C( F/C-C)
 poder,
 
-     SOL(Rem7/SOL-Sol)              DO  (FA/SOL)
+     G(Dm7/G-G)              C  (F/G)
 En Jesús,                   quien murió;
-      DO( FA/DO-DO)     DO( FA/DO-DO)     SOL/FA     FA
+      C( F/C-C)     C( F/C-C)     G/F     F
 Hay poder,             poder               sin      igual
-   DO( FA/DO-DO)
+   C( F/C-C)
  poder,
-        REm7  (DO/MI-FA)    SOL        LAm7   (RE/FA#)
+        Dm7  (C/E-F)    G        Am7   (D/F#)
 En la sangre                que    él vertió...
-        REm7  (DO/MI-FA)    SOL        LAm7   (RE/FA#)
+        Dm7  (C/E-F)    G        Am7   (D/F#)
 En la sangre                que    él vertió...
-        REm7  (DO/MI-FA)    SOL        DO  (SIb-LAm7-SOL)
+        Dm7  (C/E-F)    G        C  (Bb-Am7-G)
 En la sangre                que    él vertió...
-SOL    SOL    SOL      LAm  SOL/LA   DO
+G    G    G      Am  G/A   C
 Hay    po -   der      en     Je -   sús
 
 

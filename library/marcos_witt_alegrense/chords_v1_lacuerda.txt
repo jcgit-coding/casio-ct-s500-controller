@@ -2,43 +2,43 @@
 
 P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION
 
-    SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
+    Gm7  Dm7   Ebmaj9       F  Gm7   Dm7  Ebmaj9
 ALEGRENSE                       ALEGRENSE
 
-FA  SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
+F  Gm7  Dm7   Ebmaj9       F  Gm7   Dm7  Ebmaj9
 ALEGRENSE                       ALEGRENSE
 
 ReRE74/La        RE7              Re7(#9)
   LOS QUE CONFIAN EN EL SEÑOR
 
-    SOLm7  REm7   MIbmaj9
+    Gm7  Dm7   Ebmaj9
 ALEGRENSE
 
-FA  SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
+F  Gm7  Dm7   Ebmaj9       F  Gm7   Dm7  Ebmaj9
 ALEGRENSE                       ALEGRENSE
 
-FA  SOLm7  REm7   MIbmaj9       FA  SOLm7   REm7  MIbmaj9
+F  Gm7  Dm7   Ebmaj9       F  Gm7   Dm7  Ebmaj9
 ALEGRENSE                       ALEGRENSE
 
 REsRE7          RE7            Re7(#9)
 LOS QUE CONFIAN EN EL SEÑOR
 
-    SOLm7   REm7   SOLm7
+    Gm7   Dm7   Gm7
 ALEGRENSE
 
-SIb         Sib(add9)     DOm7
+Bb         Bb(add9)     Cm7
 CON VOCES DE JUBILO
 
-          SOLm7        Solm7/Fa
+          Gm7        Gm7/F
 EXALTEN SU NOMBRE
 
-              MIbmaj9       DOm7
+              Ebmaj9       Cm7
 PORQUE EL NOS DEFIENDE
 
 RE7sus4/La       Re7(#9)
 ALEGRENSE
 
-    SOLm7
+    Gm7
 ALEGRENSE....
 
 

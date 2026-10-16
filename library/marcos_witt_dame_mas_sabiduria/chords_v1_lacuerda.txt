@@ -1,70 +1,70 @@
 (Acordes Originales de la Grabación)
 
-  LAm                 SOL
+  Am                 G
 SEÑOR MANIFIESTA TU PODER
 
-                     FA
+                     F
 HAZ QUE VUELVA A RENACER
 
-         MI
+         E
 EN MI CORAZÓN
 
-        REm7   SIm7     MI7         LAm7
+        Dm7   Bm7     E7         Am7
 TU QUE HICISTE      LOS CIELOS Y LA TIERRA 
 
-             LAm/MI     MI     REm
+             Am/E     E     Dm
 LE DISTE PAZ Y GO   -   ZO 
 
 MLA   La(add9)    DO#m7    DOm7    SIm7    MI+(aug)
 A MI CORAZON 
 
-MI   LA9    LA+(aug)/FA    La6/Fa#       LA#dim7    SIm7
+E   A9    A+(aug)/F    A6/F#       A#dim7    Bm7
 SE - ÑOR,                             DAME MAS SABIDURIA 
 
 MSImSIm7im7(add4)      MMI    Sim7(add4)     Mi
     PARA QUE YO CADA DIA PUEDA ASI CON ALEGRIA
 
- MI+(aug)MI   LAmaj7  DO#m7  DOm7  SIm7  Mi(aug)
+ E+(aug) E   Amaj7  C#m7  Cm7  Bm7  E(aug)
 ALABARTE A TI SEÑOR
 
-MI   LAmaj7  SOL/LA   LA/DO#         RE       Rem/Fa
+E   Amaj7  G/A   A/C#         D       Dm/F
 SE  -  ÑOR           BENDITO SEA TU NOMBRE
 
-                 LA
+                 A
 TU NOMBRE SEA BENDITO 
 
-FA#m7   SIm7   MI        LA
+F#m7   Bm7   E        A
 Y GLORIFICADO POR LA ETERNIDAD 
 
- LAm                  SOL 
+ Am                  G 
 SEÑOR TU ERES MI PROTECTOR
 
-                  FA
+                  F
 GLORIA SEA AL SALVADOR
 
-        MI
+        E
 POR SU AMOR
 
-     REm   SIm7     MI        LAm7     MIm7   LAm
+     Dm   Bm7     E        Am7     Em7   Am
 MANIFIESTA      TU PODER SANTIFICADO 
 
-             LAm/MI    MI     Rem/Fa
+             Am/E    E     Dm/F
 PARA QUE YO POSTRA  -  DO 
 
-  MI          LAmaj7    DO#m7   DOm7    SIm7   MI+(aug)
+  E          Amaj7    C#m7   Cm7    Bm7   E+(aug)
 ADORE ANTE TUS PIES
 
-MI    LAmaj7
+E    Amaj7
 SE  -  ÑOR..
 
-   RE/MI       LA
+   D/E       A
 TU NOMBRE SEA BENDITO 
 
 FA#m7 SIm7SIm7  MI       LA       Sim7(add4)  LA/DO#  RE
 Y GLORIFICADO POR LA ETERNIDAD
 
-   MI           FA#m7    Fa#/La#
+   E           F#m7    F#/A#
 TU NOMBRE SEA BENDITO       Y
 
-    LASIm7   MI          La(add9)
+    A Bm7   E          A(add9)
 GLORIFICADO      POR LA ETERNIDAD

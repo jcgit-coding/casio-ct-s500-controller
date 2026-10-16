@@ -196,8 +196,8 @@ const RepertorioApp = {
         const EN_ROOT = '[CDEFGAB]';
         // Sufijo inglés: accidental, calificador, extensión base, paréntesis numérico (9), (9/13), (add2), (maj7), etc.
         const EN_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
-        const EN_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+|sus[24]?|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${EN_PAREN}(?:\\/\\d+)?`;
-        const EN_BASS  = '(?:\\/[CDEFGAB](?:#|b)?)?';
+        const EN_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${EN_PAREN}(?:\\/\\d+)?`;
+        const EN_BASS  = '(?:\\/[CDEFGAB](?:#|b)?(?:[A-G][#b]?)?)?';
 
         // Notación española/solfège: DO RE MI FA SOL LA SI (y mayúsculas mixtas como Sol, Sim, Fa#)
         const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';

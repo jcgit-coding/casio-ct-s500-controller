@@ -1,28 +1,28 @@
-INTRO: FA#m
+INTRO: F#m
 
 
-FA#m - RE - DO#            FA#m - RE - DO#       FA#m - RE - DO#
+F#m - D - C#            F#m - D - C#       F#m - D - C#
 Si pudiera yo subir al cielo allí te encontrarías si bajara a lo
-                          RE
+                          D
 profundo de la tierra también allí te encontraría
-FA#m - RE - DO#            FA#m - RE - DO#          FA#m - RE
+F#m - D - C#            F#m - D - C#          F#m - D
 Si volara yo hacia el este tu mano veré ella me guiaría si me
- DO#                            RE
+ C#                            D
 quedara a vivir en el oeste también ahí me darías tu ayuda
 
 
                                      Coro
-  LA                MI            FA#m           RE
+  A                E            F#m           D
 //Me tienes rodeado por completo estoy bajo tu control //
-  FA#m                 RE                   LA          MI
+  F#m                 D                   A          E
 //Narana narana narana Narana narana narana bajo tu control//
 
 
 
 
-FA#m - RE - DO#           FA#m - RE - DO#             FA#m - RE - DO#
+F#m - D - C#           F#m - D - C#             F#m - D - C#
 Para ti no hay diferencia entre la oscuridad y la luz para ti hasta la
-              RE
+              D
 noche brilla como la luz del sol
 
 
@@ -38,7 +38,7 @@ despertar todavía todavía estarías conmigo
 
 
 
-  FA#m                 RE                   LA        MI
+  F#m                 D                   A        E
 //Narana narana narana Narana narana narana bajo tu control//
 
 

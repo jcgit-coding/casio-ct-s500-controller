@@ -2,90 +2,90 @@ FT Marcos Vidal
 
  CAPO EN EL 2 ESPACIO
 
- INTRO: LA RE/FA#
-        LA RE/FA#
+ INTRO: A D/F#
+        A D/F#
 
-     LA                     FA#m
+     A                     F#m
  Solamente una palabra, solamente una oración
-         SIm7                     MI6sus4  MIsus4
+         Bm7                     E6sus4  Esus4
  cuando llegue a tu presencia Oh Señor
-         DO#           RE#/SOL   FA#m     MI       RE  LA/DO#
+         C#           D#/G   F#m     E       D  A/C#
  no me importa en qué lugar de la mesa me hagas sentar
-       SIm7                   MIsus4
+       Bm7                   Esus4
  o el color de mi corona si la llego a ganar
 
-     LA                         FA#m
+     A                         F#m
  Solamente una palabra si es que aún me queda voz
-      SIm7       LA/DO#     MIsus4
+      Bm7       A/C#     Esus4
  y si logro articularla tu presencia
-         DO#         RE#/SOL      FA#m MI   RE  LA/DO#
+         C#         D#/G      F#m E   D  A/C#
  no te quiero hacer preguntas solo una petición
-      SIm7                      MIsus4
+      Bm7                      Esus4
  y si puede ser a solas, mucho mejor
 
- LA/DO#    RE     MIsus4        DO#m FA#m MI
+ A/C#    D     Esus4        C#m F#m E
       Solo déjame mirarte cara a ca - ra
-      RE            MI          DO#m FA#m MI
+      D            E          C#m F#m E
  y perderme como un niño en tu mira - da
-      REmaj7      MI/RE         MI    DO#  FA#m
+      Dmaj7      E/D         E    C#  F#m
  y que pase mucho tiempo, y que nadie diga nada
-          RE      LA/DO# SIm7        MI6sus4  MI LA/DO#
+          D      A/C# Bm7        E6sus4  E A/C#
  porque estoy viendo al Maestro cara a ca  -  ra
-         RE             MI           DO#m FA#m MI
+         D             E           C#m F#m E
  que se ahogue en mi recuerdo en tu mira - da
-         RE           MI/RE          DO#   FA#m MI
+         D           E/D          C#   F#m E
  quiero amarte en el silencio y sin pala - bras
-      REmaj7      MI/RE         MI    DO# FA#m9
+      Dmaj7      E/D         E    C# F#m9
  y que pase mucho tiempo, y que nadie diga nada
-      RE  LA/DO# SIm7  MIsus4
+      D  A/C# Bm7  Esus4
  solo dé - jame mirarte
-          LA  RE/FA#  LA  RE/FA#
+          A  D/F#  A  D/F#
  cara a cara
 
-          LA
+          A
  Si mis tesoros han perdido todo su valor
-           RE
+           D
  y en este mundo ya no encuentro más satisfacción
-                FA#m                 MIsus4
+                F#m                 Esus4
  es porque he probado y he podido ver
-            MI
+            E
  a Cristo Jesús
-            LA
+            A
  si todo es nada comparado a lo que hay en ti
-            RE
+            D
  lo que estimaba ya no es importante para mi
-                FA#m                 MIsus4
+                F#m                 Esus4
  es porque he probado y he podido ver
-            MI
+            E
  a Cristo Jesús, a Cristo Jesús
 
-      LA                   LA/DO#  RE
+      A                   A/C#  D
  Te deseo más que a la vida, te  deseo más cada día
- MI/SI   FA#m MIsus4           RE  RE/FA#
+ E/B   F#m Esus4           D  D/F#
    te   deseo   más todavía, Jesús
-      LA                          RE
+      A                          D
  te deseo más que a la vida, te deseo más cada día
-  MI/SI  FA#m MI/SOL#          RE
+  E/B  F#m E/G#          D
  y te   deseo   más todavía, Jesús
 
- MI/SOL# FA#m MI RE MI/SOL#
+ E/G# F#m E D E/G#
 
-         FA#m               DO#m                RE
+         F#m               C#m                D
  Cuanto deseo verte, cara a cara quiero verte Jesús
-                                MI/SOL#
+                                E/G#
  más que a la vida, más que a la vida
-         FA#m                   MI RE
+         F#m                   E D
  cuanto deseo verte cara a cara
 
-        SIm7            MI         DO#m   FA#m MI
+        Bm7            E         C#m   F#m E
  Cuando caiga ante tus plantas, de rodi - llas
-     RE         MI/RE         DO# FA#m9 MI
+     D         E/D         C# F#m9 E
  déjame llorar pegado a tus heri - das
-       RE         MI/RE        SI/RE# DO#   FA#add11 FA#m
+       D         E/D        B/D# C#   F#add11 F#m
  y que pase mucho tiempo, y que nadie  me lo impi  -  da
-                   MI   RE   MIsus4
+                   E   D   Esus4
  que he esperado este momento
-              RE  LA/DO#  MIsus4  RE
+              D  A/C#  Esus4  D
  toda mi vida
 
 
@@ -95,8 +95,8 @@ FT Marcos Vidal
  Remaj7 : xx0222
  Mi/Re  : xx0100
           x56400
- Mi6sus4: 022220
- Misus4 : 022200
+ E6sus4: 022220
+ Esus4 : 022200
  Mi/Si  : x22100
  Mi/Sol#: 4x245x
  Fa#m   : 200220

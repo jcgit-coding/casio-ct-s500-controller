@@ -1,18 +1,18 @@
-Intro: LAm, SOL, FA, LAm, SOL, FA
-       FA, SOL, LAm
+Intro: Am, G, F, Am, G, F
+       F, G, Am
 
-   LAm      SOL       FA   (SOL)
+   Am      G       F   (G)
 Te necesito más que ayer
-LAm          SOL     FA    (SOL/MI)
+Am          G     F    (G/E)
 Yo te quiero más que ayer
 
-FA       LAm  SOL
+F       Am  G
 Sin Tu prese--ncia
-FA         LAm   SOL
+F         Am   G
 No quiero estar jamás
-FA         FA  SOL  DO   (DO/LA)
+F         F  G  C   (C/A)
 Mi alma te anh-ela  más
-            FA/RE   FA  SOL  LAm
+            F/D   F  G  Am
 Te necesito más     que     ayer
 
 

@@ -1,23 +1,23 @@
 Tempo 3/4
 
-LAm          REm   SOL      DO     FA        REm    MI    LAm
+Am          Dm   G      C     F        Dm    E    Am
 //Rey de los cielos y de la tierra , nos humillamos y te adoramos.//
 
 
-          FA         SOL               FA           SOL
+          F         G               F           G
 //Ante el Rey toda rodilla se dobla y a él rendimos adoración
-      FA           SOL           LAm   SOL
+      F           G           Am   G
 Majestad, honra y gloria sean al Rem eeey.//
 
 
-  LAm                        MIm        LAm                   MIm
+  Am                        Em        Am                   Em
 //Quién como el Señor de los cielos,   ante ti la tierra tiembla,
-LAm               MIm                    LAm                   MIm
+Am               Em                    Am                   Em
 y como Moisés te pedimos muéstranos tu gloria, muéstranos tu gloria//
 
 
 coro:
-  LAm             MIm                  LAm            MIm
+  Am             Em                  Am            Em
 //Gloria, gloria, hoy queremos ver tu gloria, gloria .manifiéstate
-         LAm            MIm               FA        SOL
+         Am            Em               F        G
 con tu gloria, gloria, permítenos ver tu gloria     aahh//

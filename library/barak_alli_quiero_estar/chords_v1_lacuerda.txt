@@ -1,31 +1,31 @@
-Intro: RE,SOL,RE,SOL
+Intro: D,G,D,G
 
-            RE                  SOL    SIm    FA#m            SOL
+            D                  G    Bm    F#m            G
 millares de ángeles, postrados están, cantan aleluya a su majestad
-      RE                SOL    SIm         FA#m            SOL
+      D                G    Bm         F#m            G
 24 ancianos humillados están gritan santo santo cordero de Dios
 
 coro
-              RE    LA                 SIm (FA#m-SOL)
+              D    A                 Bm (F#m-G)
 allí quiero estar,       allí quiero estar
-          RE               FA#m     SOL
+          D               F#m     G
 en tu presencia es donde, quiero habitar
 
-Intro:RE,SOL
-      RE                 SOL     SIm        FA#m             SOL
+Intro:D,G
+      D                 G     Bm        F#m             G
 24 ancianos, humillados están, gritan santo santo cordero de Dios
 
 Coro:
-              RE    LA                 SIm (FA#m-SOL)
+              D    A                 Bm (F#m-G)
 allí quiero estar,       allí quiero estar
-          RE                FA#m     SOL
+          D                F#m     G
 en tu presencia es donde, quiero habitar x2
 
 
 Coro:
-              RE    LA                SIm (FA#m-SOL)
+              D    A                Bm (F#m-G)
 allí quiero estar,       allí quiero estar
-          RE                FA#m     SOL
+          D                F#m     G
 en tu presencia es donde, quiero habitar x2
 
 Dios los bendiga... espero que sea de bendicion...

@@ -5,46 +5,46 @@ P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
 (INTRO)
 (DOm(add9)  SOL   LA#dim7   MIm7   LAm7   RE7  SOL  MIm7   LAm7   RE6)
 
- SOL  SOLmaj9    SOL   MI7      LAm9   RE6   LAm9  RE6
+ G  Gmaj9    G   E7      Am9   D6   Am9  D6
 Divi   -   no compañe - ro del camino
 
     RE7Am9          RE6   Re7(b9)          SOL    MIm7  LAm7  RE7
 Tu presencia siento yo             al transitar
 
- SOL      RE#m    MIm/RE       DO     LAm7  RE
+ G      D#m    Em/D       C     Am7  D
 Cristo ha disi  -  pado toda sombra
 
-        SIm7  MIm7         LAm7     RE        SOL
+        Bm7  Em7         Am7     D        G
 Ya tengo luz,        la luz divi  -  na de su amor
 
-  RE    DO/RE           SOLmaj7     SOL    MIsus4
+  D    C/D           Gmaj7     G    Esus4
 Quédate Señor ya se hace tarde
 
 MI/SORE7SOLLAm7         RE    Re7(b9)        Sol    MIm7   LAm7   RE
   Te    ofrezco el corazón            para posar
 
- SOL  RE#m     MIm/RE      SOL      DO     Dom7/Fa
+ G  D#m     Em/D      G      C     Cm7/F
 Hazlo  tu       mora   -   da permanente
 
-    SOL   MIm7     LAm7    RE         SOL    MIm7  LAm7
+    G   Em7     Am7    D         G    Em7  Am7
 Acéptalo,       acéptalo        MI Salvador
 
-    SOL SOLmaj9           SOL      MI7         LAm9   RE6  LAm9
+    G Gmaj9           G      E7         Am9   D6  Am9
 Las som    -   bras de la no   -   che se aproximan
 
 RE6 RE7    LAm7         RE6   Re7(b9)      SOL     LAm7   RE7
       Y en ellas el tentador           acechará
 
-SOL   RE#m  MIm/RE     SOL      DO     LAm7     RE
+G   D#m  Em/D     G      C     Am7     D
 No me dejes  solo      en el camino
 
-   SIm7   MIm7      LAm7   RE             SOL    (Dom7/Fa)
+   Bm7   Em7      Am7   D             G    (Cm7/F)
 Ayúdame,         ayúdame          hasta llegar
 
-    SOL    MIm7      LAm7    RE           SOL     DOm6
+    G    Em7      Am7    D           G     Cm6
 Acéptalo,         acéptalo         MI salvador
 
-    SOL    MIm7      LAm7    RE           SOL
+    G    Em7      Am7    D           G
 Acéptalo,         acéptalo         MI salvador
 
 ACORDES QUE QUIZA NO ENCUENTREN POR AQUI:
@@ -57,7 +57,7 @@ G      0          3        4      0    2      5        0
 B      4          2        3      0    0      4        3
 E      3          3        5      0    2      5        0
 
-   DO/RE  SOLmaj7  MIsus4  MI/SOL#  Dom7/Fa  DOm6
+   C/D  Gmaj7  Esus4  E/G#  Cm7/F  Cm6
 E    0       3        0        4       1       X
 A    3       2        2        2       1       0
 D    0       0        2        2       1       5

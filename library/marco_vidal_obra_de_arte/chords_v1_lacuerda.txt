@@ -1,77 +1,77 @@
 CAPO EN EL 1 ESPACIO
 
- Intro: LAm DO/SOL SOL
-        LAm
+ Intro: Am C/G G
+        Am
 
-  LAm           DO/SOL       SOL     LAm          DO/SOL        SOL
+  Am           C/G       G     Am          C/G        G
  Siente como el viento te acaricia, siente como el sol te da su luz
-LAm           DO/SOL       REm         LAm        FA          SOL        LAm
+Am           C/G       Dm         Am        F          G        Am
  abre bien los ojos no te pierdas lo mejor, el misterio de la vida alrededor
-             DO/SOL      SOL     LAm        DO/SOL   SOL
+             C/G      G     Am        C/G   G
  viste alguna vez el horizonte, cuando funde al amanecer
-    LAm      DO/SOL       REm          LAm        FA          SOL           LAm
+    Am      C/G       Dm          Am        F          G           Am
  no hay paleta de colores que pueda pintar, un paisaje tan hermoso al despertar
 
-          DO/SOL       SOL      REm         LAm
+          C/G       G      Dm         Am
  Cuando el sol me da calor y el mar tengo delante
-       DO/SOL        SOL        FA
+       C/G        G        F
  siento que la brisa sopla para mi
-         DO/SOL        SOL      REm         LAm
+         C/G        G      Dm         Am
  no hay palabras que decir ante tal obra de arte
-      FA         SOL          LAm
+      F         G          Am
  sólo sé que no existen porque si
 
- LAm      DO/SOL          SOL    LAm        DO/SOL       SOL
+ Am      C/G          G    Am        C/G       G
  Ríos que recorren las montañas, mares que jamás se llenarán
- LAm          DO/SOL     REm         LAm          FA           SOL         LAm
+ Am          C/G     Dm         Am          F           G         Am
  todo tiene un equilibro nada es al azar, cada instante el Creador está detrás
-              DO/SOL         SOL     LAm         DO/SOL           SOL
+              C/G         G     Am         C/G           G
  sal de tu espiral de cosas tristes, deja atrás aquello que te hirió
-  LAm           DO/SOL          REm       LAm
+  Am           C/G          Dm       Am
  piensa en los detalles que te acabo de decir
-        FA          SOL        LAm
+        F          G        Am
  que lo más valioso somos tu y yo
 
-         DO/SOL       SOL      REm         LAm
+         C/G       G      Dm         Am
  Cuando el sol me da calor y el mar tengo delante
-       DO/SOL        SOL        FA
+       C/G        G        F
  siento que la brisa sopla para mi
-         DO/SOL        SOL      REm         LAm
+         C/G        G      Dm         Am
  no hay palabras que decir ante tal obra de arte
-      FA         SOL          LAm   DO/SOL
+      F         G          Am   C/G
  sólo sé que no existen porque si
 
-      FAmaj7
+      Fmaj7
  Puede ser, puede ser que lo hicieras para mi
- LAm     DOmaj7     FAmaj7
+ Am     Cmaj7     Fmaj7
     puede ser, puede ser, puede ser que lo hicieras para mi
 
-        DO/SOL       SOL      REm         LAm
+        C/G       G      Dm         Am
  Cuando el sol me da calor y el mar tengo delante
-       DO/SOL        SOL        FA
+       C/G        G        F
  siento que la brisa sopla para mi
-         DO/SOL        SOL      REm         LAm
+         C/G        G      Dm         Am
  no hay palabras que decir ante tal obra de arte
-      FA         SOL          LAm
+      F         G          Am
  sólo sé que no existen porque si
 
-        DO/SOL       SOL      REm         LAm
+        C/G       G      Dm         Am
  Cuando el sol me da calor y el mar tengo delante
-       DO/SOL        SOL        FA
+       C/G        G        F
  siento que la brisa sopla para mi
-         DO/SOL        SOL      REm         LAm
+         C/G        G      Dm         Am
  no hay palabras que decir ante tal obra de arte
-      FA         SOL          LAm  FA
+      F         G          Am  F
  sólo sé que no existen porque si
-       REm              MIm        FA
+       Dm              Em        F
  puede ser que tú lo hicieras para mi
-      REm        MIm          LAm
+      Dm        Em          Am
  pero sé que no existe porque si
 
 
  Do/Sol: 332010
  Domaj7: x32000
- Fa    : 033210
+ F    : 033210
  Famaj7: x03210
 
 

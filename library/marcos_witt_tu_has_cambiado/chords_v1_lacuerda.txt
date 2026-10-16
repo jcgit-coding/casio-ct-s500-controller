@@ -1,28 +1,28 @@
 CORO:
-  SOL     MIm        LA-7
+  G     Em        A-7
 TU HAS CAMBIADO MI LAMENTO 
-  SI-7    DO      RE
+  B-7    C      D
 Y MI TRISTEZA EN DANZA
-  SOL   MIm LA-7  DO      RE     SOL
+  G   Em A-7  C      D     G
 NO CALLARE CANTARE DE TU GOZO EN MI //
 
 
 ESTROFA:
-  SOL        DO     SOL
+  G        C     G
 DONDE SOLO HABIA DOLOR
-   SOL    DO   SOL
+   G    C   G
 EL TRAJO SANIDAD
-             DO     SOL
+             C     G
 DONDE HABIA DESTRUCCION
-        DO        SOL
+        C        G
 EL NOS DIO CONSOLACION
-           FA           MIm
+           F           Em
 SIENTO SU DULCE, DULCE AMOR
-           SOL
+           G
 QUE ME ILUMINA
-        FA             MIm
+        F             Em
 VEO EL RESPLANDOR DEL SOL
-        RE              DO   RE   SOL
+        D              C   D   G
 QUE BRILLANDO ESTA CON SU ALEGRIA
 
 
@@ -43,11 +43,11 @@ TU HAS......//
 
 ESTROFA 2:
   
- FA     SOL      FA      SOL
+ F     G      F      G
 TU IRA SERA MOMENTANEA SEÑOR
-                 LA
+                 A
 MAS TU GRACIA Y FAVOR
-   SOL       DO     RE  SOL
+   G       C     D  G
 DURARA PARA TODA LA VIDA
 
 

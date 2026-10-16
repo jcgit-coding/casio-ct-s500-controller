@@ -8,7 +8,7 @@ Pero lo mas importante es lo que te voy a decir
 Es lo que hizo Cristo por el pobre pecador
 Entregó su vida solo por amor
 
-DO   LAm   DO         DO  SOL  RE       SOL
+C   Am   C         C  G  D       G
 El        amor        El        a   -   mor
 
 ¡DRUMS!
@@ -21,16 +21,16 @@ El amor no se envanece, y nunca dejará de ser
 No se goza en la injusticia, no se goza en la maldad
 No se goza en la mentira,  mas se goza en la verdad
 
-       LAm       SOL      LAm      SOL
+       Am       G      Am      G
 Si tu quieres llegar a conocer el amor
 
-       LAm        SOL      LAm        SOL
+       Am        G      Am        G
 Lo que tienes que hacer es abrir tu corazón
 
-       LAm     SOL     LAm        SOL
+       Am     G     Am        G
 El te puede cambiar y nunca serás igual
 
-        LAm     SOL        LAm        DO
+        Am     G        Am        C
 Por su amor llegarás a su morada celestial
 
 ¡DRUMS!
@@ -41,7 +41,7 @@ Cristo quiere en ti vivir hoy recibe el amor
 
 ACORDES DE LA CANCION:
 
-   DO  LAm  SOL  RE
+   C  Am  G  D
 E   0    0   3    X
 A   3    0   2    0
 D   2    2   0    0

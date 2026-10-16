@@ -1,21 +1,21 @@
 (ACORDES ORIGINALES DE LA GRABACION)
 
-REbmaj9            SIbm7
+Dbmaj9            Bbm7
    TU QUE JUSTO ME HACES
 
-             Solb(add2)
+             Gb(add2)
 QUE LLEVAS MIS CARGAS
 
-             LAb7
+             Ab7
 Y PERMANECES FIEL
 
-REb(add9)          SIbm7
+Db(add9)          Bbm7
    TU QUE CUBRES MI VIDA
 
-  DOb/MIb   SOLbmaj9
+  Cb/Eb   Gbmaj9
 DE AMOR  Y  JUSTICIA
 
-REb    Reb(add9)/LAb       Lab
+Db    Db(add9)/Ab       Ab
 OH CORDERO FIEL
 
 RSIbm7dd9)    Lab/Do   Sibm7(add4)
@@ -30,10 +30,10 @@ RSIbm7dd9)  Lab/Do   Sibm7(add4)
 SOLbb/Lab   Solb(add9)
  EL VELO  QUE  AYER
 
-  SOLbSOLb4   Solb(add9)    LAb   REb    Solb(add9)
+  Gb Gb4   Gb(add9)    Ab   Db    Gb(add9)
 ME SEPARO   DE   TI
 
-REbmaj9            SIbm7
+Dbmaj9            Bbm7
    TU QUE JUSTO ME HACES...
 
     SIbAb7sus4   LA/DO#   Sib(add9)  MIsus2,sus4  LA6/9
@@ -45,7 +45,7 @@ SRE RESOLdd9)  SOL/SI  LLA   Re(add9) La    Sol(add2)/Si
 SOLus4/La    Sol(add9)
  LLEVASTE   EN   TI
 
-MIm7    SOL/LA    LA7   SOL/LA   LA
+Em7    G/A    A7   G/A   A
 TODO MI DOLOR
 
 RESOLd9) LA    Sol(add9)/Si
@@ -54,5 +54,5 @@ RESOLd9) LA    Sol(add9)/Si
  RSOLj7/La  FA#m7     Sol(add9)
 EL   VE   -   LO   QUE   AYER
 
-   LAsus4    LA/SOL      REmaj9
+   Asus4    A/G      Dmaj9
 ME SEPARO  DE  TI

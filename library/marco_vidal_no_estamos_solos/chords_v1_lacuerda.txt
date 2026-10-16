@@ -1,61 +1,61 @@
-INTRO: RE SOL RE LA/DO# SIm
-        SOL RE/FA# MIm LA7sus4 LA7
+INTRO: D G D A/C# Bm
+        G D/F# Em A7sus4 A7
 
-    RE                  SOL               LA      RE   SOL
+    D                  G               A      D   G
  Un día entenderemos lo que hoy se escapa de nuestra razón
-     RE/FA#      MIm        FA#sus4   FA#7     SIm  LA
+     D/F#      Em        F#sus4   F#7     Bm  A
  y sabremos todo lo que tu moviste a nuestro favor
-     SOL       RE/FA#     MIm        FA#sus4  FA#7
+     G       D/F#     Em        F#sus4  F#7
  un ejército de ángeles lucharon por nosotros
-              SIm         RE           MIm       LA
+              Bm         D           Em       A
  y aunque el miedo nos llevó a dudar, siempre supimos
-     RE                          SOL
+     D                          G
  que nunca estuvimos solos, que fuiste un escudo fuerte
-          RE/FA#         SOL      MIm       FA#sus4  FA#7
+          D/F#         G      Em       F#sus4  F#7
  que ni de noche y ni de día tu mirada se apartó
-        SIm              LA
+        Bm              A
  porque fue tu amor nuestra bandera
- SOL     RE/FA#           MIm
+ G     D/F#           Em
  tu misericordia nuestra protección
-       LA                MIm  LA
+       A                Em  A
  para preservarnos, para protegernos
-       MIm  LA        RE   SOL RE LA/DO# SIm SOL RE/FA# MIm LA7sus4 LA7
+       Em  A        D   G D A/C# Bm G D/F# Em A7sus4 A7
  para preservarnos la vida
 
-   RE                      SOL         LA      RE  SOL
+   D                      G         A      D  G
  Y ya nunca olvidaremos lo que anoche ayer nos enseñó
-    RE/FA#       MIm        FA#sus4   FA#7     SIm  LA
+    D/F#       Em        F#sus4   F#7     Bm  A
  cantaremos todo lo que tu moviste a nuestro favor
-     SOL       RE/FA#     MIm        FA#sus4  FA#7
+     G       D/F#     Em        F#sus4  F#7
  un ejército de ángeles lucharon por nosotros
-              SIm         RE           MIm       LA
+              Bm         D           Em       A
  y aunque el miedo nos llevó a dudar, siempre supimos
-     RE                          SOL
+     D                          G
  que nunca estuvimos solos, que fuiste un escudo fuerte
-          RE/FA#         SOL      MIm       FA#sus4  FA#7
+          D/F#         G      Em       F#sus4  F#7
  que ni de noche y ni de día tu mirada se apartó
-        SIm              LA
+        Bm              A
  porque fue tu amor nuestra bandera
- SOL     RE/FA#           MIm
+ G     D/F#           Em
  tu misericordia nuestra protección
-       LA                MIm  LA
+       A                Em  A
  para preservarnos, para protegernos
-       MIm  LA        SIm  LA SOL LA
+       Em  A        Bm  A G A
  para preservarnos la vida
 
- SIm LA SOL LA
+ Bm A G A
 
-     RE                          SOL
+     D                          G
  que nunca estuvimos solos, que fuiste un escudo fuerte
-          RE/FA#         SOL      MIm       FA#sus4  FA#7
+          D/F#         G      Em       F#sus4  F#7
  que ni de noche y ni de día tu mirada se apartó
-        SIm              LA
+        Bm              A
  porque fue tu amor nuestra bandera
- SOL     RE/FA#           MIm
+ G     D/F#           Em
  tu misericordia nuestra protección
-       LA                MIm  LA
+       A                Em  A
  para preservarnos, para protegernos
-       MIm  LA        RE   SOL RE LA/DO# SIm SOL RE
+       Em  A        D   G D A/C# Bm G D
  para preservarnos la vida
 
 

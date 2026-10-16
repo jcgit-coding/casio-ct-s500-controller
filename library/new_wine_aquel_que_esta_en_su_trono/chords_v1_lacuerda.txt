@@ -1,30 +1,30 @@
 4/4
 
-FA#              SI           SOL#m
+F#              B           G#m
 // Que todo sea como es en el cielo
-              FA#     DO#
+              F#     C#
 Tu rostro por siempre miraremos.
-         SI                SOL#m  FA#
+         B                G#m  F#
 Que todo sea como es en el cielo aquí.// 4 veces
 
 
 Cambia tonalidad
 
-  SIm                    MIm
+  Bm                    Em
 /// Aquel que está en su Trono
-     LA                 RE 
+     A                 D 
 Que habita en luz inaccesible
-SOL      MIm           FA#7
+G      Em           F#7
 Dios Todopoderoso los ángeles te cantan
-          SIm
+          Bm
 Dios Todopoderoso///
-FA#7      SIm
+F#7      Bm
 / Dios Poderoso ////
 
 
-SIm                           LA 
+Bm                           A 
 //A una voz los cielos cantan,   A una voz la tierra canta
-MIm                            FA#
+Em                            F#
 A una voz hoy te cantamos Aleluya //
 
 

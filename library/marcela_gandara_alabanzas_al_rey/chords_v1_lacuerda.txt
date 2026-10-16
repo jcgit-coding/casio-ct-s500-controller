@@ -1,59 +1,59 @@
 Alabanzas al Rey - Marcela Gandara
 
-        DOm        SOL          SOL#        RE#
+        Cm        G          G#        D#
 E --------------------------------------------------
 B ----3-4--------4-3----------3-4-3-----------------
 G 3/5---------3/5-----------5-------5-3-----3-------
 D --------------------------------------6-5---------
 
-      DOm      SOL       SOL#
+      Cm      G       G#
 E -------3------------------------------------------
 B -3/4-6------4-6-3-----4-3---3-4-6-3---------------
 G --------------------------5---------3-5---5-3-----
 D ----------------------------------------------3-5-
 
-      DOm                    FAm
+      Cm                    Fm
 //hoy vengo a ofrecerme postrada ante ti
-       SOL#             SOL  A -3-5-6-3-
+       G#             G  A -3-5-6-3-
 mi corazon puede estar ahi
-   DOm               FAm
+   Cm               Fm
 el cielo se viste de gala
-  SOL#             SOL    D -5-------
+  G#             G    D -5-------
 jamas se a visto asi//    A ---6-5-3-
-       FAm
+       Fm
 y en humilde pecebre
-  SOL#        SOL
+  G#        G
 alli en belen a nacido el rey
 
 CORO
-             SOL# RE#            LA#  DOm
+             G# D#            A#  Cm
 alabanzas al Rey,   alabanzas al Rey
-             SOL# RE#            LA# D -5-------
+             G# D#            A# D -5-------
 alabanzas al Rey    al Rey de Israel A ---6-5-3-
-    DOm              FAm
+    Cm              Fm
 
-   DOm                    FAm
+   Cm                    Fm
 pastores y magos vinirienon a ti
-      SOL#       SOL
+      G#       G
 a rendir adoracion
-DOm            FA
+Cm            F
 angeles ahora cantan
-    SOL#          SOL
+    G#          G
 a Dios nueva cancion
-        FAm                SOL#
+        Fm                G#
 pues al mundo a llegado regalo de Dios
-SOL
+G
 paz- y salvacion
 
 cOROx2 desp del seg solo
 
-             SOL# RE#            LA#  DOm
+             G# D#            A#  Cm
 alabanzas al Rey,   alabanzas al Rey
-             SOL# RE#            LA#
+             G# D#            A#
 alabanzas al Rey    al Rey de Israel
-             SOL# RE#            LA#  DOm
+             G# D#            A#  Cm
 alabanzas al Rey,   alabanzas al Rey
-             SOL# RE#            LA#
+             G# D#            A#
 alabanzas al Rey    al Rey de Israel ... Emanuel
 
 E --------------------------------------------------
@@ -64,13 +64,13 @@ E -7---7-8-10-8-10-11------------11-10-8-------------
 B ---8---------------11-9-8--------------11-9-8------
 G --------------------------10------------------10-8-
 
- SOL# RE#            LA#  DOm
+ G# D#            A#  Cm
 alabanzas al Rey,   alabanzas al Rey
-             SOL# RE#            LA#
+             G# D#            A#
 alabanzas al Rey    al Rey de Israel
-             SOL# RE#            LA#  DOm
+             G# D#            A#  Cm
 alabanzas al Rey,   alabanzas al Rey
-             SOL# RE#            LA#
+             G# D#            A#
 alabanzas al Rey    al Rey de Israel ... Emanuel
 
 Lo hice yo solito :D ojalá les guste

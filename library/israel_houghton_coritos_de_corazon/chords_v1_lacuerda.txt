@@ -1,129 +1,129 @@
-LA            SIm7
+A            Bm7
 Levanto Mis Manos
-MI4            LA  MI/SOL#
+E4            A  E/G#
 Aunque no Tenga Fuerzas
-FA#m7          SIm7
+F#m7          Bm7
 Levanto Mis Manos
-SI4             LA    LA/DO#
+B4             A    A/C#
 Aunque Tenga mil Problemas
-LA7                 RE
+A7                 D
 Cuando Levanto Mis Manos
-           Mi7/Re
+           E7/D
 Comienzo a Sentir
-      LA/DO#                 FA#m7
+      A/C#                 F#m7
 Una uncio que me hace Cantar
-                    SIm7
+                    Bm7
 Cuando Levanto Mis Manos
-              MI4    MIm9   LA13
+              E4    Em9   A13
 Comienzo a Sentir    (El fuego)
-                   RE
+                   D
 Cuando Levanto Mis Manos
-              Mi7/Re
+              E7/D
 Mis cargas se Van
-       DO#m7          FA#m7
+       C#m7          F#m7
 Nuevas Fuerzas tu me das
-              SIm7
+              Bm7
 Todo esto es Posible
-              MI4
+              E4
 Todo esto es Posible
-     FA#7(9-)     SIm7
+     F#7(9-)     Bm7
 Todo esto es Posible
-              MI4
+              E4
 Todo esto es Posible
-     FA#7(9-)     SIm7
+     F#7(9-)     Bm7
 Todo esto es Posible
-              MI4
+              E4
 Todo esto es Posible
-                     LA
+                     A
 Cuando Levanto Mis Manos
 
-LA    MI/SOL# FA#m7  MIm7 LA7(9-)
+A    E/G# F#m7  Em7 A7(9-)
 Dios esta Aqui (Aleluya)
-    RE
+    D
 Tan cierto como el aire
-Mi7/D    LA    MIm7 LA
+E7/D    A    Em7 A
 Que  Respiro
-    RE                 Mi7/Re
+    D                 E7/D
 Tan cierto como en La Manana
-     LA  MI/SOL#  FA#m7
+     A  E/G#  F#m7
 Se levanta el sol
-    SIm7                    MI
+    Bm7                    E
 Tan cierto que cuando le hablo
-             LA      FA7
+             A      F7
 El me puede oir
 
-SIb   FA/LA  SOLm7   FAm7  SIb7
+Bb   F/A  Gm7   Fm7  Bb7
 Dios esta Aqui (Aleluya)
-    MIb
+    Eb
 Tan cierto como el aire
-Fa7/Mib    SIb    FAm7 SIb
+F7/Eb    Bb    Fm7 Bb
 Que   Respiro
-    MIb                Fa7/Mib
+    Eb                F7/Eb
 Tan cierto como en La Manana
-     SIb FA/LA   SOLm7
+     Bb F/A   Gm7
 Se levanta el sol
-    DOm7                  FA
+    Cm7                  F
 Tan cierto que cuando le hablo
-      RE     SOLm7    DO
+      D     Gm7    C
 El me puede oir
-    DOm7                  FA
+    Cm7                  F
 Tan cierto que cuando le hablo
-      RE     SOLm7    DO
+      D     Gm7    C
 El me puede oir
-    DOm7                  FA
+    Cm7                  F
 Tan cierto que cuando le hablo
-            SIb
+            Bb
 El me puede oir
 
-SIb           DOm
+Bb           Cm
 Dios ha Sido bueno
-MIb   FA      MIbm7 SIb
+Eb   F      Ebm7 Bb
 Dios ha Sido bueno
-FAm7  SIb7     MIb  LAb
+Fm7  Bb7     Eb  Ab
 Dios ha Sido bueno
-DOm    FA    SIb
+Cm    F    Bb
 Bueno Es Dios
-SIb SOLm7       DOm7
+Bb Gm7       Cm7
 Dios ha Sido bueno
-MIb      FA    SIb
+Eb      F    Bb
 Dios ha Sido bueno
-FAm SIb7      MIb  LAb
+Fm Bb7      Eb  Ab
 Dios ha Sido bueno
-DOm7 FA RE  SOLm    DOm7 FA RE  SOLm7
+Cm7 F D  Gm    Cm7 F D  Gm7
 Bueno Es Dios, Bueno Es Dios
-DOm7   FA  MIb
+Cm7   F  Eb
 Bueno Es Dios
 
-   LAb        SIbm
+   Ab        Bbm
 El centro de todo
-     LAb   Lab/Do
+     Ab   Ab/C
 Eres Jesus
-   REb        LAb
+   Db        Ab
 El centro de todo
-      MIb
+      Eb
 Eres Jesus
-         REb                 LAb
+         Db                 Ab
 Desde el principio hasta el fin
-       MIb       FAm
+       Eb       Fm
 Tu has sido Y siempre seras
-REb      MIb
+Db      Eb
 Cristo, Cristo
 
-MIb
+Eb
 De mi ser hasta el cielo
-FAm
+Fm
 Cristo se el centro
-REb
+Db
 Mi vida eres Tu
-MIb
+Eb
 Si mi vida eres Tu
-MIb
+Eb
 De mi ser hasta el cielo
-FAm
+Fm
 Cristo se el centro
-REb
+Db
 Mi vida eres Tu
-MIb
+Eb
 Si mi vida eres Tu
 Db
 Mi vida eres Tu

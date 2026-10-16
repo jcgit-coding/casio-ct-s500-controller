@@ -1,43 +1,43 @@
-Intro: SOL DO SOL
+Intro: G C G
 
- SOL   DO            SOL
+ G   C            G
  Tu verdad es mi canción
-       DO             LAm   RE
+       C             Am   D
  tu bondad mi única opcio - on
- LAm  RE  SOL       DO
+ Am  D  G       C
  Redentor, mi despertar
-         SOL         RE           SOL
+         G         D           G
  mi amanecer, mi renacer, mi libertad
 
-        DO          SOL
+        C          G
  Y sólo Tú Cristo Jesús
-         RE           MIm
+         D           Em
  eres el centro de mi vida
-         DO           SOL        RE
+         C           G        D
  y nadie más puede llenar mi corazón
-        MIm
+        Em
  que es Tuyo
-            DO            SOL
+            C            G
  lo que Tu amor ya conquistó
-               RE     MIm
+               D     Em
  por mí en la cruz me basta
-              DO            SOL
+              C            G
  y hasta el final siempre seré
-            RE          DO    SOL RE SOL
+            D          C    G D G
  solo un deudor te debo todo
 
-  SOL  DO           SOL
+  G  C           G
  Vuélvete, quiero vivir
-      DO            FA RE
+      C            F D
  llámame, quiero servirte
- LAm    RE  SOL   DO       SOL
+ Am    D  G   C       G
   ú - same, moldéame, vacíame
-         RE           SOL
+         D           G
  barro seré en Tu taller
 
-         DO  RE         SOL  RE
+         C  D         G  D
  Te debo todo,  te debo todo
-         DO   SOL
+         C   G
  te debo todo
 
 

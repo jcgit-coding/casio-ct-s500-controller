@@ -5,75 +5,75 @@ P.D. TENGO PARTITURAS PARA PIANO DE ESTA CANCION.
 RSIm7im7(add4)    MIm7
 TU FIDELIDAD ES GRANDE
 
-LAsus4    LA7    SOL         RE    LA/DO#
+Asus4    A7    G         D    A/C#
    TU FIDELIDAD INCOMPARABLE ES
 
-SIm7    Sim7/La  MIm7
+Bm7    Bm7/A  Em7
 NADIE COMO TU   BENDITO DIOS                    EMPEZAR
 
- SOLmaj7    Sol(add9)   SOL/LA        RE    (SOL(add9)  LA)
+ Gmaj7    G(add9)   G/A        D    (G(add9)  A)
   GRANDE        ES        TU     FIDELIDAD
 
 (Se repite en Re)
 
-SIb  LAb  SIb7
+Bb  Ab  Bb7
 
-MIb    DOm7     FAm7
+Eb    Cm7     Fm7
 TU FIDELIDAD ES GRANDE
 
-SIb   Sib/Re  LAb SIb     Lab/Reb     MIb       Sib/Re
+Bb   Bb/D  Ab Bb     Ab/Db     Eb       Bb/D
 TU FIDELIDAD       IN   -   COM   -   PARABLE ES
 
-DOm7    Dom7/Sib     FAm11
+Cm7    Cm7/Bb     Fm11
 NADIE COMO TU      BENDITO DIOS
 
-LabMaj7/Sib   LAb     MIb        SI7
+AbMaj7/Bb   Ab     Eb        B7
   GRANDE   ES TU FIDELIDAD
 
-MI    DO#m7     MI/FA     FA#m7
+E    C#m7     E/F     F#m7
 TU FIDELIDAD ES GRAN   -    DE
 
-SI             LA/MI  MI      Si/Re#
+B             A/E  E      B/D#
 TU FIDELIDAD INCOMPARABLE ES
 
-DO#m7      MI   FA#m9
+C#m7      E   F#m9
 NADIE COMO TU BENDITO DIOS
 
-LaMaj7/Si   LA MI  SI9 MI     DO7
+AMaj7/B   A E  B9 E     C7
   GRANDE ES TU FIDELIDAD
 
-FA      REm7     SOLm7
+F      Dm7     Gm7
 TU FIDELIDAD ES GRANDE
 
-DO(add9)  DOsus4        DO   SIb  FA        DO
+C(add9)  Csus4        C   Bb  F        C
    TU      FIDE   -   LIDAD INCOMPARABLE ES
 
-REm7            FA    SOLm7
+Dm7            F    Gm7
 NADIE COMO TU BENDITO DIOS
 
-DO13  DO9  Sib/Do     FA   DO/RE  RE  DO/RE
+C13  C9  Bb/C     F   C/D  D  C/D
 GRANDE ES    TU FIDELIDAD
 
-SOL     MIm7    LAm7
+G     Em7    Am7
 TU FIDELIDAD ES GRANDE
 
-DoMaj7/Re  RE7  DO/SOL     SOL     RE     SOL      RE/FA#
+CMaj7/D  D7  C/G     G     D     G      D/F#
    TU FIDELIDAD INCOM   -   PA  -  RA  -  BLE   ES
 
-MIm7         SOL/LA     LAm7  SOL/LA   LAm7
+Em7         G/A     Am7  G/A   Am7
 NADIE COMO TU BENDI   -   TO   DIOS
 
-DOmaj7  Do6/Re  DO/RE    RE7         SOL   (DO  RE)
+Cmaj7  C6/D  C/D    D7         G   (C  D)
 GRANDE    ES      TU  FIDELI    -    DAD
 
 (Se repite en Sol)
 
-MIm
+Em
 
-LAm7      RE7    SOL      MIm7
+Am7      D7    G      Em7
 GRANDE ES TU FIDELIDAD
 
-LAm7SOL   RE7   SOLsus4   Sol(add9)
+Am7 G   D7   Gsus4   G(add9)
 GRANDE ES TU FIDELIDAD
 
 
@@ -87,7 +87,7 @@ G      2          2       2       2        0         2
 B      3          3       0       3        0         0
 E      2          0       0       2        2         3
 
-   Sol/La  Sib/Re  Lab/Re  Dom7/Sib  Fam11  LabMaj7/Sib
+   G/A  Bb/D  Ab/D  Cm7/Bb  Fm11  AbMaj7/Bb
 E     3       X       X        3       1         X
 A     0       X       6        3       1         X
 D     0       0       0        5       1         6
@@ -95,7 +95,7 @@ G     0       3       5        3       1         3
 B     0       3       4        4       1         4
 E     3       1       4        6       1         3
 
-   MI/FDO  LA/MI  FA#m9  LaMaj7/Si  SI9  Do(add9)  DOsus4
+   E/F C  A/E  F#m9  AMaj7/B  B9  C(add9)  Csus4
 E    1      0      2        0       0       0        0
 A    2      0      4        2       2       3        3
 D    2      2      0        2       1       2        3
@@ -103,7 +103,7 @@ G    1      2      0        1       2       0        0
 B    0      2      0        2       2       3        1
 E    0      5      4        0       2       3        1
 
-   DO13  DO9  Sib/Do  DO/RE  DoMaj7/Re  DO/SOL  RE/FA#  SOL/LA
+   C13  C9  Bb/C  C/D  CMaj7/D  C/G  D/F#  G/A
 E    X    0     1       0        0         3       2       3
 A    3    3     3       0        3         3       0       0
 D    3    2     X       0        0         2       0       0
@@ -111,7 +111,7 @@ G    3    3     3       0        0         0       2       0
 B    3    3     3       1        0         1       3       0
 E    6    3     1       0        0         0       2       3
 
-   DOmaj7  Do6/Re  SOLsus4
+   Cmaj7  C6/D  Gsus4
 E     0       0       3
 A     3       3       3
 D     2       0       0

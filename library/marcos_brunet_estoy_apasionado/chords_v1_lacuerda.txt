@@ -6,32 +6,32 @@ y hago estos acorde
 
 
 
-intro:RE LA/DO# SIm SOL RE/FA# MIm RE/FA# SOL LA (x3)
+intro:D A/C# Bm G D/F# Em D/F# G A (x3)
 
-RE LA/DO# SIm SOL RE/FA#
+D A/C# Bm G D/F#
 
 
-MIm           RE/FA#             SOL   LA
+Em           D/F#             G   A
 estoy apasionado por tu presencia
-RE LA/DO#              SIm
+D A/C#              Bm
 jesus   yo te quiero ver
-   SOL         RE/FA#  MIm
+   G         D/F#  Em
 jesus yo te quiero     ver
- RE/FA#             SOL LA
+ D/F#             G A
 jesus yo te quiero ver    amado mi alma
-RE LA/DO#              SIm
+D A/C#              Bm
 jesus    yo te quiero ver
-   SOL         RE/FA#  MIm
+   G         D/F#  Em
 jesus yo te quiero     ver
-  RE/FA#             SOL   LA
+  D/F#             G   A
 jesus yo te quiero ver
-RE             LA/DO#
+D             A/C#
 estoy apasionado
-SIm             SOL
+Bm             G
 estoy apasionado
-RE/FA#  MIm            RE/FA#
+D/F#  Em            D/F#
         estoy apasionado
-   SOL          LA
+   G          A
 estoy apasionado
 
 

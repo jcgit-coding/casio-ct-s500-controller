@@ -1,14 +1,14 @@
-INTRO: FA  REm  LA#  DO
+INTRO: F  Dm  A#  C
 
-FA                     DO
+F                     C
   Llegó el frío del invierno
-          LAm    REm
+          Am    Dm
 lluvia de luces a caído
               DO       SI°
 llenando las calles de color.
-    LA#                 FA
+    A#                 F
 Los niños se llenan de ilución,
-    SOLm             DO
+    Gm             C
 los hombres piensan en ser mejor.
 
 Se oyen cantos navideños (Idem)
@@ -18,13 +18,13 @@ Pero se ven tan solos en las calles
 los hombres esclavos del dolor.
 
 CORO:
-FA      LAm7      REm        FA
+F      Am7      Dm        F
 Jesús nació, la Navidad llegó
-   LA#        FA        SOLm            DO
+   A#        F        Gm            C
 es para ti. Jesús nació para tu paz para tu amor.
-FA      LAm7    REm        FA
+F      Am7    Dm        F
 Jesús nació, la Navidad llegó.
-  LA#         FA        SOLm            DO        FA
+  A#         F        Gm            C        F
 Invitalo a posar en ti. Invitalo a llenar tu corazón.
 
 CODA   RE
@@ -36,17 +36,17 @@ verdadero amor a ti y a mí.
 
 CORO
 
-MIm         MI/RE#  MI/RE             LA
+Em         E/D#  E/D             A
      El es Amor,            tu salvación
-      DO            SI             SOL
+      C            B             G
 y El quiere, quiere vivir por siempre en ti.
 
-/SOL   RE   MIm   DO   SOL  RE/
+/G   D   Em   C   G  D/
   na na ra na na na ra....
 
 CODA   MI
   sube a La
 
 3 veces CORO
-   MI              LA
+   E              A
 Invitalo a tu corazón.

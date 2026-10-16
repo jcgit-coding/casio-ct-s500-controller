@@ -1,82 +1,82 @@
-INTRO: SIm SOL RE RE
-       SIm SOL RE RE
+INTRO: Bm G D D
+       Bm G D D
 
 
-     SIm
+     Bm
 Ni riquezas ni honor,
-      SOL                  RE                RE
+      G                  D                D
 nada tiene un valor que pudiera apartarme de ti
-        SIm                 SOL          RE    RE
+        Bm                 G          D    D
 es tan solo tu amor el que llena mi corazón.
 
 
 PRECORO:
-LA - SIm   SOL                  LA - SIm   SOL
+A - Bm   G                  A - Bm   G
 Cristo,    tu gracia fue la que rescató mi ser
-LA - SIm   SOL                     LA - SIm   SOL   SOL
+A - Bm   G                     A - Bm   G   G
 Padre,     ahora y por siempre tu rostro buscaré.
 
 
 CORO:
-RE            LA              SIm
+D            A              Bm
  Lo que yo soy lo rindo a tus pies
-                              SOL
+                              G
 ante tu gracia y majestad me humillaré
-RE            LA            SIm
+D            A            Bm
  Encuentro más de lo que busqué
-                 SIm
+                 Bm
 en tu eterno amor, en tu eterno amor.
 
 
-INTRO: SIm SOL RE RE
+INTRO: Bm G D D
 
-    SIm
+    Bm
 Mi orgullo dejé,
-      SOL                RE            RE
+      G                D            D
 mis deseos también para darte mi adoración
-        SIm
+        Bm
 Más que fama y honor
-    SOL                RE   RE
+    G                D   D
 mi anhelo es buscarte Dios.
 
 
 PRECORO:
-LA - SIm   SOL                  LA - SIm   SOL
+A - Bm   G                  A - Bm   G
 Cristo,    tu gracia fue la que rescató mi ser
-LA - SIm   SOL                     LA - SIm   SOL   SOL
+A - Bm   G                     A - Bm   G   G
 Padre,     ahora y por siempre tu rostro buscaré.
 
 
 CORO X2:
-RE            LA              SIm
+D            A              Bm
  Lo que yo soy lo rindo a tus pies
-                              SOL
+                              G
 ante tu gracia y majestad me humillaré
-RE            LA            SIm
+D            A            Bm
  Encuentro más de lo que busqué
-                 SIm
+                 Bm
 en tu eterno amor, en tu eterno amor.
 
 
-INTRO: SIm SOL RE RE
-       SIm SOL RE RE
+INTRO: Bm G D D
+       Bm G D D
 
 
 PRECORO X2:
-LA - SIm   SOL                  LA - SIm   SOL
+A - Bm   G                  A - Bm   G
 Cristo,    tu gracia fue la que rescató mi ser
-LA - SIm   SOL                     LA - SIm   SOL   SOL
+A - Bm   G                     A - Bm   G   G
 Padre,     ahora y por siempre tu rostro buscaré.
 
 
 CORO X2:
-RE            LA              SIm
+D            A              Bm
  Lo que yo soy lo rindo a tus pies
-                              SOL
+                              G
 ante tu gracia y majestad me humillaré
-RE            LA            SIm
+D            A            Bm
  Encuentro más de lo que busqué
-                 SIm
+                 Bm
 en tu eterno amor, en tu eterno amor.
 
 
@@ -87,4 +87,4 @@ ante tu gracia y majestad me humillaré
 en tu eterno amor, en tu eterno amor.
 
 
-FIN: RE
+FIN: D

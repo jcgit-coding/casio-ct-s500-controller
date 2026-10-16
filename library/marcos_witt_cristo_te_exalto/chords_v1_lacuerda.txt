@@ -1,29 +1,29 @@
 ESTROFA:
 
-  SOL         DO
+  G         C
 CRISTO TE EXALTO
-   RE      DO   SOL
+   D      C   G
 CRISTO TE ADORO
-        MIm          DO
+        Em          C
 POR QUE TU ERES MI SEÑOR
-       LA-7       DO            RE
+       A-7       C            D
 SOLO A TI DARE LA GLORIA Y EL HONOR //
 
 
 CORO:
 
 
-   SOL             DO
+   G             C
 GLORIOSA ES TU PRESENCIA
-    RE            SOL
+    D            G
 ME CUBRE Y ME DA PAZ
-   MI              LA-7
+   E              A-7
 MI SER SIEMPRE PROCLAMARA
-         DO       RE
+         C       D
 QUE SOLO TU ERES DIGNO 
-     SI-7      MIm
+     B-7      Em
 SOLO TU ERES DIGNO
-     DO       RE         SOL
+     C       D         G
 SOLO TU ERES DIGNO DE ADORAR
 
 

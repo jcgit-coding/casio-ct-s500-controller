@@ -1,39 +1,39 @@
-RE                              RE+7
+D                              D+7
 Vengo a decirte que agradecido estoy
-SOL+7
+G+7
 Pues trasformaste todo mi corazón
-        LA6 LA9  LA6  LA9         LA9   RE
+        A6 A9  A6  A9         A9   D
 Cuanto te amo  Cristo, cuanto te amo
 
-RE                          RE+7
+D                          D+7
 Señor yo te amo y tengo que cantar
-SOL+7
+G+7
 Porque en tus manos siento seguridad
-        LA6 LA9 LA6  LA9          LA9  RE    LA
+        A6 A9 A6  A9          A9  D    A
 Cuanto te amo  Cristo, cuanto te amo
 
 
-Coro:            SIm                 FA#m
+Coro:            Bm                 F#m
          Quiero abrigarme bajo tus alas
-             SOL            RE
+             G            D
          Y abitar en tus moradas
-                SOL  LA    FA#  SIm          SOL - LA
+                G  A    F#  Bm          G - A
          A la sombra de tu majestad
 
-                 SIm           FA#m
+                 Bm           F#m
          Alzo mi vida, alzo mi voz
-                  SOL           RE
+                  G           D
          Alzo mis manos hoy al cielo
-                SOL    LA FA#  SIm, SIm2, SIm3            SOL - LA
+                G    A F#  Bm, Bm2, Bm3            G - A
          Porque grande es tu fidelidad.
 
-RE
+D
 Vengo a decirte (La misma secuencia)
-RE
+D
 Señor yo te amo (La misma secuencia)       La
 
 
-Coro:                SIm             FA#m
+Coro:                Bm             F#m
          //Quiero abrigarme bajo tus alas   (La misma secuencia)
            Y abitar en tus moradas
            A LA sombra de tu majestad     Sol - La
@@ -41,39 +41,39 @@ Coro:                SIm             FA#m
            Alzo mi vida, alzo mi voz
           Alzo mis manos hoy al cielo
           Porque grande es tu fidelidad  [Bis]  Sol - La
-RE
+D
 Vengo a decirte (La misma secuencia)
-RE
+D
 Señor yo te amo (La misma secuencia)
 
-           LA6 LA9 LA6  LA9          LA9  RE
+           A6 A9 A6  A9          A9  D
 // Cuanto te amo  Cristo, cuanto te a...mo (Bis 3)
 
 
 
-         RE+7                      SOL+7
-MI  ------2-------          MI  ---2------------
-SI  ------2-------          SI  -------3--------
-SOL ------2-------          SOL  -----------4---
-RE  --------------          RE  ----------------
-LA  --------------          LA  ----------------
-MI  --------------          MI  -------3--------
+         D+7                      G+7
+E  ------2-------          E  ---2------------
+B  ------2-------          B  -------3--------
+G ------2-------          G  -----------4---
+D  --------------          D  ----------------
+A  --------------          A  ----------------
+E  --------------          E  -------3--------
 
-         LA6                          LA9
-MI  -----2---------          MI  ----------------
-SI  -----2---------          SI  ----------------
-SOL -----2---------          SOL -----2-----------
-RE  -----2---------          RE  -----3-----------
-LA  --------------           LA  ----------------
-MI  --------------           MI  ----------------
+         A6                          A9
+E  -----2---------          E  ----------------
+B  -----2---------          B  ----------------
+G -----2---------          G -----2-----------
+D  -----2---------          D  -----3-----------
+A  --------------           A  ----------------
+E  --------------           E  ----------------
 
-          SIm2                          SIm3
-MI  ---2------------          MI  ----2------------
-SI  ---2---3--------          SI  ----2---3--------
-SOL ---2---2--------          SOL ----2------------
-RE  ---2-------4----          RE  ----2------------
-LA  ---2------------          LA  ----2------------
-MI  ---2------------          MI  ----2------------
+          Bm2                          Bm3
+E  ---2------------          E  ----2------------
+B  ---2---3--------          B  ----2---3--------
+G ---2---2--------          G ----2------------
+D  ---2-------4----          D  ----2------------
+A  ---2------------          A  ----2------------
+E  ---2------------          E  ----2------------
 
 
 
