@@ -122,6 +122,18 @@ const RepertorioApp = {
 
         if (titleEl) titleEl.innerText = this.currentSong.title;
         if (artistEl) artistEl.innerText = this.currentSong.artist;
+
+        const sourceLinkEl = document.getElementById('lib-song-source-link');
+        if (sourceLinkEl) {
+            const sourceUrl = this._songMeta?.versions?.[0]?.source;
+            if (sourceUrl) {
+                sourceLinkEl.href = sourceUrl;
+                sourceLinkEl.style.display = 'inline';
+            } else {
+                sourceLinkEl.style.display = 'none';
+            }
+        }
+
         this.populateTransposeDropdown(this.currentSong.originalKey);
         this.renderChords(this.currentSong.originalContent);
 
