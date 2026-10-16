@@ -287,7 +287,7 @@ INTERLUDIO
 Cm Fm Bb G (A G - A G -A)
 Cm Fm Bb G (A G - A G -A)
 
-(NOTAS: G F Eb F Eb C Bb
+//(NOTAS: G F Eb F Eb C Bb
         Eb F Eb F)
 FINAL
 Eb / Ab   Gm   Ab / F   Ab / Eb  Gb / Db   Adim / C

@@ -37,4 +37,4 @@ D# C# D# F# D# C# G# F# G#
 D# C# D# F# D# C# D# C# D#
 D# C# D# F# D# C# G# F# B G#
 REMATE: G#m
-FINAL (notas): D# [D#-E-F-F#] - G# F# B G#
+//FINAL (notas): D# [D#-E-F-F#] - G# F# B G#
