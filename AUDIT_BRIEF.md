@@ -41,10 +41,12 @@ Una línea es "línea de acordes" si después de quitar todos los acordes y sepa
 
 **Problema:** La app está pensada para cifrado americano. Canciones con `DO RE MI FA SOL LA SI` funcionan en el parser PERO crean inconsistencia al transponer y al tocar (el músico usa cifrado americano). Idealmente todas deberían estar en inglés.
 
+**Dato conocido:** Un grep preliminar mostró que los primeros 10 resultados son todos de `marcos_witt_*`. Es probable que toda la colección de Marcos Witt esté en solfège (55+ canciones). El grep fue truncado a 10 resultados por timeout — el script Node abajo da el número real.
+
 **Qué hacer:**
-1. Buscar todos los `.txt` que contengan acordes en solfège: buscar líneas donde aparezcan `DO`, `SOL`, `SI`, `RE` como tokens de acorde (no como letras de canción).
-2. Listar los archivos afectados con el artista y cantidad aproximada.
-3. Proponer si vale la pena convertirlos automáticamente o reportarlos para re-scraping.
+1. Correr el script Node para obtener la lista completa y el conteo real.
+2. Determinar si es solo Marcos Witt o también otros artistas.
+3. Proponer si vale la pena convertirlos automáticamente (tabla de conversión: DO→C, RE→D, MI→E, FA→F, SOL→G, LA→A, SI→B, SIb→Bb, etc.) o re-scrapear esos artistas.
 
 **Script Node para identificarlos:**
 ```js
@@ -67,6 +69,15 @@ console.log(`\nTotal: ${results.length}`);
 ---
 
 ### TAREA 1B — Líneas con "(notas ...)" que confunden el parser
+
+**Dato conocido:** Solo **8 archivos** en toda la biblioteca tienen el patrón `(notas`. Listados:
+```
+marcos_witt_25_aniversario, marcos_witt_al_rey_hosanna, marcos_witt_es_navidad,
+danilo_montero_porque_para_siempre, marco_barrientos_la_cosecha,
+hillsong_united_amor_inexplicable, juan_carlos_alvarado_glorificate,
+ibi_mas_grande_de_lo_que_imagino
+```
+Problema menor pero localizado — vale la pena limpiarlos.
 
 **Problema observado** (ejemplo real en `marcos_witt_25_aniversario`):
 ```
