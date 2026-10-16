@@ -1,0 +1,744 @@
+﻿
+=== "aleluya" (13 veces) ===
+  marcos_witt_aleluya ÔÇö Marcos Witt
+  rojo_aleluya ÔÇö Rojo
+  marcos_brunet_aleluya ÔÇö Marcos Brunet
+  danilo_montero_aleluya ÔÇö Danilo Montero
+  miel_san_marcos_aleluya ÔÇö Miel San Marcos
+  marco_vidal_aleluya ÔÇö Marcos Vidal
+  jesus_adrian_romero_aleluya ÔÇö Jes├║s Adri├ín Romero
+  ebenezer_aleluya ÔÇö Ebenezer
+  hillsong_united_aleluya ÔÇö Hillsong United
+  fernel_monroy_aleluya ÔÇö Fernel Monroy
+  juan_carlos_alvarado_aleluya ÔÇö Juan Carlos Alvarado
+  elevation_worship_aleluya ÔÇö Elevation Worship
+  ingrid_rosario_aleluya ÔÇö Ingrid Rosario
+
+=== "jes├║s" (9 veces) ===
+  marcos_witt_jesus ÔÇö Marcos Witt
+  rojo_jesus ÔÇö Rojo
+  marcos_brunet_jesus ÔÇö Marcos Brunet
+  danilo_montero_jesus ÔÇö Danilo Montero
+  marco_vidal_jesus ÔÇö Marcos Vidal
+  christine_dclario_jesus ÔÇö Christine d'Clario
+  jesus_adrian_romero_jesus ÔÇö Jes├║s Adri├ín Romero
+  barak_jesus ÔÇö Barak
+  montesanto_jesus ÔÇö Montesanto
+
+=== "gracias" (8 veces) ===
+  marcos_witt_gracias ÔÇö Marcos Witt
+  majo_y_dan_gracias ÔÇö Majo y Dan
+  rojo_gracias ÔÇö Rojo
+  new_wine_gracias ÔÇö New Wine
+  danilo_montero_gracias ÔÇö Danilo Montero
+  jesus_adrian_romero_gracias ÔÇö Jes├║s Adri├ín Romero
+  ebenezer_gracias ÔÇö Ebenezer
+  hillsong_united_gracias ÔÇö Hillsong United
+
+=== "en tu presencia" (8 veces) ===
+  new_wine_en_tu_presencia ÔÇö New Wine
+  danilo_montero_en_tu_presencia ÔÇö Danilo Montero
+  marco_barrientos_en_tu_presencia ÔÇö Marco Barrientos
+  ebenezer_en_tu_presencia ÔÇö Ebenezer
+  hillsong_united_en_tu_presencia ÔÇö Hillsong United
+  fernel_monroy_en_tu_presencia ÔÇö Fernel Monroy
+  en_espiritu_y_en_verdad_en_tu_presencia ÔÇö En Espiritu y en Verdad
+  jaime_murrell_en_tu_presencia ÔÇö Jaime Murrell
+
+=== "aqu├¡ estoy" (7 veces) ===
+  marcos_witt_aqui_estoy ÔÇö Marcos Witt
+  danilo_montero_aqui_estoy ÔÇö Danilo Montero
+  marco_vidal_aqui_estoy ÔÇö Marcos Vidal
+  hillsong_united_aqui_estoy ÔÇö Hillsong United
+  en_espiritu_y_en_verdad_aqui_estoy ÔÇö En Espiritu y en Verdad
+  elevation_worship_aqui_estoy ÔÇö Elevation Worship
+  jaime_murrell_aqui_estoy ÔÇö Jaime Murrell
+
+=== "padre nuestro" (7 veces) ===
+  marcos_witt_padre_nuestro ÔÇö Marcos Witt
+  bethel_music_padre_nuestro ÔÇö Bethel Music
+  marcos_brunet_padre_nuestro ÔÇö Marcos Brunet
+  marco_barrientos_padre_nuestro ÔÇö Marco Barrientos
+  christine_dclario_padre_nuestro ÔÇö Christine d'Clario
+  juan_carlos_alvarado_padre_nuestro ÔÇö Juan Carlos Alvarado
+  barak_padre_nuestro ÔÇö Barak
+
+=== "libre soy" (7 veces) ===
+  new_wine_libre_soy ÔÇö New Wine
+  marco_barrientos_libre_soy ÔÇö Marco Barrientos
+  jesus_adrian_romero_libre_soy ÔÇö Jes├║s Adri├ín Romero
+  ebenezer_libre_soy ÔÇö Ebenezer
+  hillsong_united_libre_soy ÔÇö Hillsong United
+  barak_libre_soy ÔÇö Barak
+  ingrid_rosario_libre_soy ÔÇö Ingrid Rosario
+
+=== "te amo" (6 veces) ===
+  marcos_witt_te_amo ÔÇö Marcos Witt
+  danilo_montero_te_amo ÔÇö Danilo Montero
+  marco_barrientos_te_amo ÔÇö Marco Barrientos
+  ebenezer_te_amo ÔÇö Ebenezer
+  juan_carlos_alvarado_te_amo ÔÇö Juan Carlos Alvarado
+  israel_houghton_te_amo ÔÇö Israel Houghton
+
+=== "te necesito" (6 veces) ===
+  rojo_te_necesito ÔÇö Rojo
+  miel_san_marcos_te_necesito ÔÇö Miel San Marcos
+  marco_barrientos_te_necesito ÔÇö Marco Barrientos
+  christine_dclario_te_necesito ÔÇö Christine d'Clario
+  hillsong_united_te_necesito ÔÇö Hillsong United
+  fernel_monroy_te_necesito ÔÇö Fernel Monroy
+
+=== "abba padre" (6 veces) ===
+  marcos_brunet_abba_padre ÔÇö Marcos Brunet
+  miel_san_marcos_abba_padre ÔÇö Miel San Marcos
+  marco_barrientos_abba_padre ÔÇö Marco Barrientos
+  jesus_adrian_romero_abba_padre ÔÇö Jes├║s Adri├ín Romero
+  en_espiritu_y_en_verdad_abba_padre ÔÇö En Espiritu y en Verdad
+  montesanto_abba_padre ÔÇö Montesanto
+
+=== "santo" (6 veces) ===
+  new_wine_santo ÔÇö New Wine
+  jesus_adrian_romero_santo ÔÇö Jes├║s Adri├ín Romero
+  upperroom_santo ÔÇö Upperroom
+  coalo_zamorano_santo ÔÇö Coalo Zamorano
+  en_espiritu_y_en_verdad_santo ÔÇö En Espiritu y en Verdad
+  ingrid_rosario_santo ÔÇö Ingrid Rosario
+
+=== "hay libertad" (5 veces) ===
+  artag_hay_libertad ÔÇö Art Aguilera
+  miel_san_marcos_hay_libertad ÔÇö Miel San Marcos
+  barak_hay_libertad ÔÇö Barak
+  ibi_hay_libertad ÔÇö La IBI
+  art_aguilera_hay_libertad ÔÇö Art Aguilera
+
+=== "heme aqu├¡" (5 veces) ===
+  marcos_witt_heme_aqui ÔÇö Marcos Witt
+  marco_barrientos_heme_aqui ÔÇö Marco Barrientos
+  christine_dclario_heme_aqui ÔÇö Christine d'Clario
+  jesus_adrian_romero_heme_aqui ÔÇö Jes├║s Adri├ín Romero
+  ebenezer_heme_aqui ÔÇö Ebenezer
+
+=== "hossana" (5 veces) ===
+  marcos_witt_hossana ÔÇö Marcos Witt
+  marco_barrientos_hossana ÔÇö Marco Barrientos
+  hillsong_united_hossana ÔÇö Hillsong United
+  coalo_zamorano_hossana ÔÇö Coalo Zamorano
+  ingrid_rosario_hossana ÔÇö Ingrid Rosario
+
+=== "rey de gloria" (5 veces) ===
+  marcos_witt_rey_de_gloria ÔÇö Marcos Witt
+  marco_barrientos_rey_de_gloria ÔÇö Marco Barrientos
+  christine_dclario_rey_de_gloria ÔÇö Christine d'Clario
+  ebenezer_rey_de_gloria ÔÇö Ebenezer
+  en_espiritu_y_en_verdad_rey_de_gloria ÔÇö En Espiritu y en Verdad
+
+=== "santo esp├¡ritu" (5 veces) ===
+  marcos_witt_santo_espiritu ÔÇö Marcos Witt
+  marco_barrientos_santo_espiritu ÔÇö Marco Barrientos
+  marco_vidal_santo_espiritu ÔÇö Marcos Vidal
+  averly_morillo_santo_espiritu ÔÇö Averly Morillo
+  twice_santo_espiritu ÔÇö Twice
+
+=== "en la cruz" (5 veces) ===
+  chris_tomlin_en_la_cruz ÔÇö Chris Tomlin
+  marco_vidal_en_la_cruz ÔÇö Marcos Vidal
+  hillsong_united_en_la_cruz ÔÇö Hillsong United
+  juan_carlos_alvarado_en_la_cruz ÔÇö Juan Carlos Alvarado
+  en_espiritu_y_en_verdad_en_la_cruz ÔÇö En Espiritu y en Verdad
+
+=== "nuestro dios" (5 veces) ===
+  chris_tomlin_nuestro_dios ÔÇö Chris Tomlin
+  marco_barrientos_nuestro_dios ÔÇö Marco Barrientos
+  israel_houghton_nuestro_dios ÔÇö Israel Houghton
+  en_espiritu_y_en_verdad_nuestro_dios ÔÇö En Espiritu y en Verdad
+  montesanto_nuestro_dios ÔÇö Montesanto
+
+=== "tu amor" (5 veces) ===
+  marcos_brunet_tu_amor ÔÇö Marcos Brunet
+  danilo_montero_tu_amor ÔÇö Danilo Montero
+  marco_barrientos_tu_amor ÔÇö Marco Barrientos
+  christine_dclario_tu_amor ÔÇö Christine d'Clario
+  barak_tu_amor ÔÇö Barak
+
+=== "yahweh" (5 veces) ===
+  new_wine_yahweh ÔÇö New Wine
+  christine_dclario_yahweh ÔÇö Christine d'Clario
+  hillsong_united_yahweh ÔÇö Hillsong United
+  en_espiritu_y_en_verdad_yahweh ÔÇö En Espiritu y en Verdad
+  elevation_worship_yahweh ÔÇö Elevation Worship
+
+=== "canta al se├▒or" (5 veces) ===
+  danilo_montero_canta_al_senior ÔÇö Danilo Montero
+  marco_barrientos_canta_al_senior ÔÇö Marco Barrientos
+  hillsong_united_canta_al_senior ÔÇö Hillsong United
+  coalo_zamorano_canta_al_senor ÔÇö Coalo Zamorano
+  ingrid_rosario_canta_al_senior ÔÇö Ingrid Rosario
+
+=== "venga tu reino" (5 veces) ===
+  marco_barrientos_venga_tu_reino ÔÇö Marco Barrientos
+  ebenezer_venga_tu_reino ÔÇö Ebenezer
+  hillsong_united_venga_tu_reino ÔÇö Hillsong United
+  ibi_venga_tu_reino ÔÇö La IBI
+  jaime_murrell_venga_tu_reino ÔÇö Jaime Murrell
+
+=== "a quien ir├®" (4 veces) ===
+  marcos_witt_a_quien_ire ÔÇö Marcos Witt
+  danilo_montero_a_quien_ire ÔÇö Danilo Montero
+  marco_barrientos_a_quien_ire ÔÇö Marco Barrientos
+  juan_carlos_alvarado_a_quien_ire ÔÇö Juan Carlos Alvarado
+
+=== "a t├¡ sea la gloria" (4 veces) ===
+  marcos_witt_a_ti_sea_la_gloria ÔÇö Marcos Witt
+  abel_zavala_a_ti_sea_la_gloria ÔÇö Abel Zavala
+  marcela_gandara_a_ti_sea_la_gloria ÔÇö Marcela Gandara
+  coalo_zamorano_a_ti_sea_la_gloria ÔÇö Coalo Zamorano
+
+=== "dame de beber" (4 veces) ===
+  marcos_witt_dame_de_beber ÔÇö Marcos Witt
+  new_wine_dame_de_beber ÔÇö New Wine
+  marco_barrientos_dame_de_beber ÔÇö Marco Barrientos
+  juan_carlos_alvarado_dame_de_beber ÔÇö Juan Carlos Alvarado
+
+=== "de gloria en gloria" (4 veces) ===
+  marcos_witt_de_gloria_en_gloria ÔÇö Marcos Witt
+  miel_san_marcos_de_gloria_en_gloria ÔÇö Miel San Marcos
+  marco_barrientos_de_gloria_en_gloria ÔÇö Marco Barrientos
+  christine_dclario_de_gloria_en_gloria ÔÇö Christine d'Clario
+
+=== "el poderoso de israel" (4 veces) ===
+  marcos_witt_el_poderoso_de_israel ÔÇö Marcos Witt
+  marco_barrientos_el_poderoso_de_israel ÔÇö Marco Barrientos
+  jesus_adrian_romero_el_poderoso_de_israel ÔÇö Jes├║s Adri├ín Romero
+  juan_carlos_alvarado_el_poderoso_de_israel ÔÇö Juan Carlos Alvarado
+
+=== "grandes cosas" (4 veces) ===
+  marcos_witt_grandes_cosas ÔÇö Marcos Witt
+  miel_san_marcos_grandes_cosas ÔÇö Miel San Marcos
+  ebenezer_grandes_cosas ÔÇö Ebenezer
+  hillsong_united_grandes_cosas ÔÇö Hillsong United
+
+=== "hay momentos" (4 veces) ===
+  marcos_witt_hay_momentos ÔÇö Marcos Witt
+  danilo_montero_hay_momentos ÔÇö Danilo Montero
+  marco_vidal_hay_momentos ÔÇö Marcos Vidal
+  juan_carlos_alvarado_hay_momentos ÔÇö Juan Carlos Alvarado
+
+=== "la bendici├│n" (4 veces) ===
+  marcos_witt_la_bendicion ÔÇö Marcos Witt
+  new_wine_la_bendicion ÔÇö New Wine
+  hillsong_united_la_bendicion ÔÇö Hillsong United
+  elevation_worship_la_bendicion ÔÇö Elevation Worship
+
+=== "noche de paz" (4 veces) ===
+  marcos_witt_noche_de_paz ÔÇö Marcos Witt
+  rojo_noche_de_paz ÔÇö Rojo
+  christine_dclario_noche_de_paz ÔÇö Christine d'Clario
+  ibi_noche_de_paz ÔÇö La IBI
+
+=== "poderoso" (4 veces) ===
+  marcos_witt_poderoso ÔÇö Marcos Witt
+  danilo_montero_poderoso ÔÇö Danilo Montero
+  jesus_adrian_romero_poderoso ÔÇö Jes├║s Adri├ín Romero
+  hillsong_united_poderoso ÔÇö Hillsong United
+
+=== "tu eres dios" (4 veces) ===
+  marcos_witt_tu_eres_dios ÔÇö Marcos Witt
+  marco_barrientos_tu_eres_dios ÔÇö Marco Barrientos
+  marco_vidal_tu_eres_dios ÔÇö Marcos Vidal
+  en_espiritu_y_en_verdad_tu_eres_dios ÔÇö En Espiritu y en Verdad
+
+=== "tu fidelidad" (4 veces) ===
+  marcos_witt_tu_fidelidad ÔÇö Marcos Witt
+  rojo_tu_fidelidad ÔÇö Rojo
+  marco_vidal_tu_fidelidad ÔÇö Marcos Vidal
+  juan_carlos_alvarado_tu_fidelidad ÔÇö Juan Carlos Alvarado
+
+=== "tu palabra" (4 veces) ===
+  marcos_witt_tu_palabra ÔÇö Marcos Witt
+  juan_carlos_alvarado_tu_palabra ÔÇö Juan Carlos Alvarado
+  marcela_gandara_tu_palabra ÔÇö Marcela Gandara
+  twice_tu_palabra ÔÇö Twice
+
+=== "santa la noche" (4 veces) ===
+  majo_y_dan_santa_la_noche ÔÇö Majo y Dan
+  rojo_santa_la_noche ÔÇö Rojo
+  hillsong_united_santa_la_noche ÔÇö Hillsong United
+  twice_santa_la_noche ÔÇö Twice
+
+=== "mi dios" (4 veces) ===
+  chris_tomlin_mi_dios ÔÇö Chris Tomlin
+  rojo_mi_dios ÔÇö Rojo
+  new_wine_mi_dios ÔÇö New Wine
+  miel_san_marcos_mi_dios ÔÇö Miel San Marcos
+
+=== "santo es el se├▒or" (4 veces) ===
+  chris_tomlin_santo_es_el_senior ÔÇö Chris Tomlin
+  new_wine_santo_es_el_senior ÔÇö New Wine
+  hillsong_united_santo_es_el_senior ÔÇö Hillsong United
+  juan_carlos_alvarado_santo_es_el_senior ÔÇö Juan Carlos Alvarado
+
+=== "santo por siempre" (4 veces) ===
+  chris_tomlin_santo_por_siempre ÔÇö Chris Tomlin
+  bethel_music_santo_por_siempre ÔÇö Bethel Music
+  miel_san_marcos_santo_por_siempre ÔÇö Miel San Marcos
+  ibi_santo_por_siempre ÔÇö La IBI
+
+=== "por siempre" (4 veces) ===
+  bethel_music_por_siempre ÔÇö Bethel Music
+  marco_barrientos_por_siempre ÔÇö Marco Barrientos
+  en_espiritu_y_en_verdad_por_siempre ÔÇö En Espiritu y en Verdad
+  ingrid_rosario_por_siempre ÔÇö Ingrid Rosario
+
+=== "ya no soy esclavo" (4 veces) ===
+  bethel_music_ya_no_soy_esclavo ÔÇö Bethel Music
+  marco_barrientos_ya_no_soy_esclavo ÔÇö Marco Barrientos
+  christine_dclario_ya_no_soy_esclavo ÔÇö Christine d'Clario
+  twice_ya_no_soy_esclavo ÔÇö Twice
+
+=== "no me averg├╝enzo" (4 veces) ===
+  rojo_no_me_averguenzo ÔÇö Rojo
+  miel_san_marcos_no_me_averguenzo ÔÇö Miel San Marcos
+  hillsong_united_no_me_averguenzo ÔÇö Hillsong United
+  coalo_zamorano_no_me_averguenzo ÔÇö Coalo Zamorano
+
+=== "solo t├║" (4 veces) ===
+  rojo_solo_tu ÔÇö Rojo
+  marco_barrientos_solo_tu ÔÇö Marco Barrientos
+  marco_vidal_solo_tu ÔÇö Marcos Vidal
+  coalo_zamorano_solo_tu ÔÇö Coalo Zamorano
+
+=== "como en el cielo" (4 veces) ===
+  new_wine_como_en_el_cielo ÔÇö New Wine
+  miel_san_marcos_como_en_el_cielo ÔÇö Miel San Marcos
+  hillsong_united_como_en_el_cielo ÔÇö Hillsong United
+  elevation_worship_como_en_el_cielo ÔÇö Elevation Worship
+
+=== "abre mis ojos" (4 veces) ===
+  danilo_montero_abre_mis_ojos ÔÇö Danilo Montero
+  marco_barrientos_abre_mis_ojos ÔÇö Marco Barrientos
+  jesus_adrian_romero_abre_mis_ojos ÔÇö Jes├║s Adri├ín Romero
+  hillsong_united_abre_mis_ojos ÔÇö Hillsong United
+
+=== "nadie como t├║" (4 veces) ===
+  danilo_montero_nadie_como_tu ÔÇö Danilo Montero
+  miel_san_marcos_nadie_como_tu ÔÇö Miel San Marcos
+  marco_vidal_nadie_como_tu ÔÇö Marcos Vidal
+  upperroom_nadie_como_tu ÔÇö Upperroom
+
+=== "eres dios" (4 veces) ===
+  miel_san_marcos_eres_dios ÔÇö Miel San Marcos
+  marco_vidal_eres_dios ÔÇö Marcos Vidal
+  christine_dclario_eres_dios ÔÇö Christine d'Clario
+  barak_eres_dios ÔÇö Barak
+
+=== "abre los cielos" (4 veces) ===
+  marco_barrientos_abre_los_cielos ÔÇö Marco Barrientos
+  jesus_adrian_romero_abre_los_cielos ÔÇö Jes├║s Adri├ín Romero
+  ebenezer_abre_los_cielos ÔÇö Ebenezer
+  hillsong_united_abre_los_cielos ÔÇö Hillsong United
+
+=== "agnus dei" (4 veces) ===
+  marco_barrientos_agnus_dei ÔÇö Marco Barrientos
+  marco_vidal_agnus_dei ÔÇö Marcos Vidal
+  upperroom_agnus_dei ÔÇö Upperroom
+  en_espiritu_y_en_verdad_agnus_dei ÔÇö En Espiritu y en Verdad
+
+=== "hosanna" (4 veces) ===
+  marco_barrientos_hosanna ÔÇö Marco Barrientos
+  ebenezer_hosanna ÔÇö Ebenezer
+  hillsong_united_hosanna ÔÇö Hillsong United
+  juan_carlos_alvarado_hosanna ÔÇö Juan Carlos Alvarado
+
+=== "dios es rey" (4 veces) ===
+  christine_dclario_dios_es_rey ÔÇö Christine d'Clario
+  hillsong_united_dios_es_rey ÔÇö Hillsong United
+  israel_houghton_dios_es_rey ÔÇö Israel Houghton
+  en_espiritu_y_en_verdad_dios_es_rey ÔÇö En Espiritu y en Verdad
+
+=== "s├│lo t├║" (4 veces) ===
+  christine_dclario_solo_tu ÔÇö Christine d'Clario
+  hillsong_united_solo_tu ÔÇö Hillsong United
+  juan_carlos_alvarado_solo_tu ÔÇö Juan Carlos Alvarado
+  ingrid_rosario_solo_tu ÔÇö Ingrid Rosario
+
+=== "remolineando" (3 veces) ===
+  misioneros_remolineando ÔÇö Misioneros de Cristo
+  miel_san_marcos_remolineando ÔÇö Miel San Marcos
+  fernel_monroy_remolineando ÔÇö Fernel Monroy
+
+=== "poderoso dios" (3 veces) ===
+  marcos_witt_poderoso_dios ÔÇö Marcos Witt
+  miel_san_marcos_poderoso_dios ÔÇö Miel San Marcos
+  marco_barrientos_poderoso_dios ÔÇö Marco Barrientos
+
+=== "adonai" (3 veces) ===
+  marcos_witt_adonai ÔÇö Marcos Witt
+  hillsong_united_adonai ÔÇö Hillsong United
+  fernel_monroy_adonai ÔÇö Fernel Monroy
+
+=== "al que es digno" (3 veces) ===
+  marcos_witt_al_que_es_digno ÔÇö Marcos Witt
+  ebenezer_al_que_es_digno ÔÇö Ebenezer
+  coalo_zamorano_al_que_es_digno ÔÇö Coalo Zamorano
+
+=== "al rey" (3 veces) ===
+  marcos_witt_al_rey ÔÇö Marcos Witt
+  marcos_brunet_al_rey ÔÇö Marcos Brunet
+  marco_vidal_al_rey ÔÇö Marcos Vidal
+
+=== "canci├│n feliz" (3 veces) ===
+  marcos_witt_cancion_feliz ÔÇö Marcos Witt
+  miel_san_marcos_cancion_feliz ÔÇö Miel San Marcos
+  ebenezer_cancion_feliz ÔÇö Ebenezer
+
+=== "como el ciervo" (3 veces) ===
+  marcos_witt_como_el_ciervo ÔÇö Marcos Witt
+  new_wine_como_el_ciervo ÔÇö New Wine
+  miel_san_marcos_como_el_ciervo ÔÇö Miel San Marcos
+
+=== "damos honor a t├¡" (3 veces) ===
+  marcos_witt_damos_honor_a_ti ÔÇö Marcos Witt
+  danilo_montero_damos_honor_a_ti ÔÇö Danilo Montero
+  marco_barrientos_damos_honor_a_ti ÔÇö Marco Barrientos
+
+=== "el gozo" (3 veces) ===
+  marcos_witt_el_gozo ÔÇö Marcos Witt
+  marco_barrientos_el_gozo ÔÇö Marco Barrientos
+  juan_carlos_alvarado_el_gozo ÔÇö Juan Carlos Alvarado
+
+=== "el gozo del se├▒or" (3 veces) ===
+  marcos_witt_el_gozo_del_senior ÔÇö Marcos Witt
+  abel_zavala_el_gozo_del_senior ÔÇö Abel Zavala
+  miel_san_marcos_el_gozo_del_senior ÔÇö Miel San Marcos
+
+=== "en t├¡" (3 veces) ===
+  marcos_witt_en_ti ÔÇö Marcos Witt
+  marco_barrientos_en_ti ÔÇö Marco Barrientos
+  coalo_zamorano_en_ti ÔÇö Coalo Zamorano
+
+=== "eres santo" (3 veces) ===
+  marcos_witt_eres_santo ÔÇö Marcos Witt
+  christine_dclario_eres_santo ÔÇö Christine d'Clario
+  ebenezer_eres_santo ÔÇö Ebenezer
+
+=== "fiesta" (3 veces) ===
+  marcos_witt_fiesta ÔÇö Marcos Witt
+  miel_san_marcos_fiesta ÔÇö Miel San Marcos
+  juan_carlos_alvarado_fiesta ÔÇö Juan Carlos Alvarado
+
+=== "hermoso" (3 veces) ===
+  marcos_witt_hermoso ÔÇö Marcos Witt
+  marcos_brunet_hermoso ÔÇö Marcos Brunet
+  christine_dclario_hermoso ÔÇö Christine d'Clario
+
+=== "lev├íntate" (3 veces) ===
+  marcos_witt_levantate ÔÇö Marcos Witt
+  christine_dclario_levantate ÔÇö Christine d'Clario
+  hillsong_united_levantate ÔÇö Hillsong United
+
+=== "lev├íntate se├▒or" (3 veces) ===
+  marcos_witt_levantate_senior ÔÇö Marcos Witt
+  miel_san_marcos_levantate_senior ÔÇö Miel San Marcos
+  juan_carlos_alvarado_levantate_senior ÔÇö Juan Carlos Alvarado
+
+=== "ll├®name" (3 veces) ===
+  marcos_witt_llename ÔÇö Marcos Witt
+  ebenezer_llename ÔÇö Ebenezer
+  coalo_zamorano_llename ÔÇö Coalo Zamorano
+
+=== "me gozar├®" (3 veces) ===
+  marcos_witt_me_gozare ÔÇö Marcos Witt
+  ebenezer_me_gozare ÔÇö Ebenezer
+  juan_carlos_alvarado_me_gozare ÔÇö Juan Carlos Alvarado
+
+=== "mil gracias" (3 veces) ===
+  marcos_witt_mil_gracias ÔÇö Marcos Witt
+  miel_san_marcos_mil_gracias ÔÇö Miel San Marcos
+  juan_carlos_alvarado_mil_gracias ÔÇö Juan Carlos Alvarado
+
+=== "nada especial" (3 veces) ===
+  marcos_witt_nada_especial ÔÇö Marcos Witt
+  marco_vidal_nada_especial ÔÇö Marcos Vidal
+  coalo_zamorano_nada_especial ÔÇö Coalo Zamorano
+
+=== "nuestro salvador" (3 veces) ===
+  marcos_witt_nuestro_salvador ÔÇö Marcos Witt
+  hillsong_united_nuestro_salvador ÔÇö Hillsong United
+  coalo_zamorano_nuestro_salvador ÔÇö Coalo Zamorano
+
+=== "quiero levantar mis manos" (3 veces) ===
+  marcos_witt_quiero_levantar_mis_manos ÔÇö Marcos Witt
+  majo_y_dan_quiero_levantar_mis_manos ÔÇö Majo y Dan
+  ebenezer_quiero_levantar_mis_manos ÔÇö Ebenezer
+
+=== "rodeado" (3 veces) ===
+  marcos_witt_rodeado ÔÇö Marcos Witt
+  new_wine_rodeado ÔÇö New Wine
+  upperroom_rodeado ÔÇö Upperroom
+
+=== "sendas dios har├í" (3 veces) ===
+  marcos_witt_sendas_dios_hara ÔÇö Marcos Witt
+  jesus_adrian_romero_sendas_dios_hara ÔÇö Jes├║s Adri├ín Romero
+  juan_carlos_alvarado_sendas_dios_hara ÔÇö Juan Carlos Alvarado
+
+=== "te exaltamos" (3 veces) ===
+  marcos_witt_te_exaltamos ÔÇö Marcos Witt
+  marco_barrientos_te_exaltamos ÔÇö Marco Barrientos
+  hillsong_united_te_exaltamos ÔÇö Hillsong United
+
+=== "t├│mame en tus brazos" (3 veces) ===
+  marcos_witt_tomame_en_tus_brazos ÔÇö Marcos Witt
+  abel_zavala_tomame_en_tus_brazos ÔÇö Abel Zavala
+  hillsong_united_tomame_en_tus_brazos ÔÇö Hillsong United
+
+=== "torre fuerte" (3 veces) ===
+  marcos_witt_torre_fuerte ÔÇö Marcos Witt
+  rojo_torre_fuerte ÔÇö Rojo
+  en_espiritu_y_en_verdad_torre_fuerte ÔÇö En Espiritu y en Verdad
+
+=== "tu misericordia" (3 veces) ===
+  marcos_witt_tu_misericordia ÔÇö Marcos Witt
+  danilo_montero_tu_misericordia ÔÇö Danilo Montero
+  marco_vidal_tu_misericordia ÔÇö Marcos Vidal
+
+=== "tu nombre levantar├®" (3 veces) ===
+  marcos_witt_tu_nombre_levantare ÔÇö Marcos Witt
+  marco_barrientos_tu_nombre_levantare ÔÇö Marco Barrientos
+  coalo_zamorano_tu_nombre_levantare ÔÇö Coalo Zamorano
+
+=== "tuyo es el reino" (3 veces) ===
+  marcos_witt_tuyo_es_el_reino ÔÇö Marcos Witt
+  hillsong_united_tuyo_es_el_reino ÔÇö Hillsong United
+  averly_morillo_tuyo_es_el_reino ÔÇö Averly Morillo
+
+=== "esperanza de vida" (3 veces) ===
+  majo_y_dan_esperanza_de_vida ÔÇö Majo y Dan
+  marcos_brunet_esperanza_de_vida ÔÇö Marcos Brunet
+  en_espiritu_y_en_verdad_esperanza_de_vida ÔÇö En Espiritu y en Verdad
+
+=== "esp├¡ritu de dios" (3 veces) ===
+  majo_y_dan_espiritu_de_dios ÔÇö Majo y Dan
+  marco_barrientos_espiritu_de_dios ÔÇö Marco Barrientos
+  grupo_grace_espiritu_de_dios ÔÇö Grupo Grace
+
+=== "cuan grande amor" (3 veces) ===
+  chris_tomlin_cuan_grande_amor ÔÇö Chris Tomlin
+  ebenezer_cuan_grande_amor ÔÇö Ebenezer
+  hillsong_united_cuan_grande_amor ÔÇö Hillsong United
+
+=== "de tal manera" (3 veces) ===
+  abel_zavala_de_tal_manera ÔÇö Abel Zavala
+  jesus_adrian_romero_de_tal_manera ÔÇö Jes├║s Adri├ín Romero
+  jaime_murrell_de_tal_manera ÔÇö Jaime Murrell
+
+=== "hoy te rindo mi ser" (3 veces) ===
+  abel_zavala_hoy_te_rindo_mi_ser ÔÇö Abel Zavala
+  danilo_montero_hoy_te_rindo_mi_ser ÔÇö Danilo Montero
+  hillsong_united_hoy_te_rindo_mi_ser ÔÇö Hillsong United
+
+=== "la ni├▒a de tus ojos" (3 veces) ===
+  abel_zavala_la_ninia_de_tus_ojos ÔÇö Abel Zavala
+  danilo_montero_la_ninia_de_tus_ojos ÔÇö Danilo Montero
+  jesus_adrian_romero_la_ninia_de_tus_ojos ÔÇö Jes├║s Adri├ín Romero
+
+=== "lo ├║nico que quiero" (3 veces) ===
+  abel_zavala_lo_unico_que_quiero ÔÇö Abel Zavala
+  marco_barrientos_lo_unico_que_quiero ÔÇö Marco Barrientos
+  marcela_gandara_lo_unico_que_quiero ÔÇö Marcela Gandara
+
+=== "amor sin condici├│n" (3 veces) ===
+  bethel_music_amor_sin_condicion ÔÇö Bethel Music
+  marco_barrientos_amor_sin_condicion ÔÇö Marco Barrientos
+  twice_amor_sin_condicion ÔÇö Twice
+
+=== "bueno es dios" (3 veces) ===
+  bethel_music_bueno_es_dios ÔÇö Bethel Music
+  ebenezer_bueno_es_dios ÔÇö Ebenezer
+  elevation_worship_bueno_es_dios ÔÇö Elevation Worship
+
+=== "cordero y le├│n" (3 veces) ===
+  bethel_music_cordero_y_leon ÔÇö Bethel Music
+  marcos_brunet_cordero_y_leon ÔÇö Marcos Brunet
+  new_wine_cordero_y_leon ÔÇö New Wine
+
+=== "dios manda lluvia" (3 veces) ===
+  rojo_dios_manda_lluvia ÔÇö Rojo
+  marco_barrientos_dios_manda_lluvia ÔÇö Marco Barrientos
+  jesus_adrian_romero_dios_manda_lluvia ÔÇö Jes├║s Adri├ín Romero
+
+=== "eres todo poderoso" (3 veces) ===
+  rojo_eres_todo_poderoso ÔÇö Rojo
+  jesus_adrian_romero_eres_todo_poderoso ÔÇö Jes├║s Adri├ín Romero
+  coalo_zamorano_eres_todo_poderoso ÔÇö Coalo Zamorano
+
+=== "eres t├║" (3 veces) ===
+  rojo_eres_tu ÔÇö Rojo
+  danilo_montero_eres_tu ÔÇö Danilo Montero
+  coalo_zamorano_eres_tu ÔÇö Coalo Zamorano
+
+=== "tuyo soy" (3 veces) ===
+  rojo_tuyo_soy ÔÇö Rojo
+  en_espiritu_y_en_verdad_tuyo_soy ÔÇö En Espiritu y en Verdad
+  jaime_murrell_tuyo_soy ÔÇö Jaime Murrell
+
+=== "digno" (3 veces) ===
+  marcos_brunet_digno ÔÇö Marcos Brunet
+  marco_barrientos_digno ÔÇö Marco Barrientos
+  elevation_worship_digno ÔÇö Elevation Worship
+
+=== "esp├¡ritu santo" (3 veces) ===
+  marcos_brunet_espiritu_santo ÔÇö Marcos Brunet
+  en_espiritu_y_en_verdad_espiritu_santo ÔÇö En Espiritu y en Verdad
+  jaime_murrell_espiritu_santo ÔÇö Jaime Murrell
+
+=== "soberano" (3 veces) ===
+  marcos_brunet_soberano ÔÇö Marcos Brunet
+  new_wine_soberano ÔÇö New Wine
+  hillsong_united_soberano ÔÇö Hillsong United
+
+=== "alabanzas al rey" (3 veces) ===
+  new_wine_alabanzas_al_rey ÔÇö New Wine
+  jesus_adrian_romero_alabanzas_al_rey ÔÇö Jes├║s Adri├ín Romero
+  marcela_gandara_alabanzas_al_rey ÔÇö Marcela Gandara
+
+=== "anhelo tu presencia" (3 veces) ===
+  new_wine_anhelo_tu_presencia ÔÇö New Wine
+  marco_barrientos_anhelo_tu_presencia ÔÇö Marco Barrientos
+  coalo_zamorano_anhelo_tu_presencia ÔÇö Coalo Zamorano
+
+=== "esp├¡ritu santo ven" (3 veces) ===
+  new_wine_espiritu_santo_ven ÔÇö New Wine
+  jesus_adrian_romero_espiritu_santo_ven ÔÇö Jes├║s Adri├ín Romero
+  barak_espiritu_santo_ven ÔÇö Barak
+
+=== "vino nuevo" (3 veces) ===
+  new_wine_vino_nuevo ÔÇö New Wine
+  ebenezer_vino_nuevo ÔÇö Ebenezer
+  hillsong_united_vino_nuevo ÔÇö Hillsong United
+
+=== "vivo est├ís" (3 veces) ===
+  new_wine_vivo_estas ÔÇö New Wine
+  hillsong_united_vivo_estas ÔÇö Hillsong United
+  barak_vivo_estas ÔÇö Barak
+
+=== "vivo estoy" (3 veces) ===
+  new_wine_vivo_estoy ÔÇö New Wine
+  hillsong_united_vivo_estoy ÔÇö Hillsong United
+  en_espiritu_y_en_verdad_vivo_estoy ÔÇö En Espiritu y en Verdad
+
+=== "correr├®" (3 veces) ===
+  danilo_montero_correre ÔÇö Danilo Montero
+  hillsong_united_correre ÔÇö Hillsong United
+  coalo_zamorano_correre ÔÇö Coalo Zamorano
+
+=== "glorif├¡cate" (3 veces) ===
+  danilo_montero_glorificate ÔÇö Danilo Montero
+  miel_san_marcos_glorificate ÔÇö Miel San Marcos
+  juan_carlos_alvarado_glorificate ÔÇö Juan Carlos Alvarado
+
+=== "libre" (3 veces) ===
+  danilo_montero_libre ÔÇö Danilo Montero
+  miel_san_marcos_libre ÔÇö Miel San Marcos
+  hillsong_united_libre ÔÇö Hillsong United
+
+=== "todo lo que respira" (3 veces) ===
+  danilo_montero_todo_lo_que_respira ÔÇö Danilo Montero
+  ibi_todo_lo_que_respira ÔÇö La IBI
+  ingrid_rosario_todo_lo_que_respira ÔÇö Ingrid Rosario
+
+=== "todopoderoso" (3 veces) ===
+  danilo_montero_todopoderoso ÔÇö Danilo Montero
+  miel_san_marcos_todopoderoso ÔÇö Miel San Marcos
+  ebenezer_todopoderoso ÔÇö Ebenezer
+
+=== "tu eres rey" (3 veces) ===
+  danilo_montero_tu_eres_rey ÔÇö Danilo Montero
+  barak_tu_eres_rey ÔÇö Barak
+  ingrid_rosario_tu_eres_rey ÔÇö Ingrid Rosario
+
+=== "asombroso" (3 veces) ===
+  miel_san_marcos_asombroso ÔÇö Miel San Marcos
+  marco_barrientos_asombroso ÔÇö Marco Barrientos
+  hillsong_united_asombroso ÔÇö Hillsong United
+
+=== "av├¡vanos" (3 veces) ===
+  miel_san_marcos_avivanos ÔÇö Miel San Marcos
+  marco_barrientos_avivanos ÔÇö Marco Barrientos
+  en_espiritu_y_en_verdad_avivanos ÔÇö En Espiritu y en Verdad
+
+=== "desciende" (3 veces) ===
+  miel_san_marcos_desciende ÔÇö Miel San Marcos
+  marco_barrientos_desciende ÔÇö Marco Barrientos
+  christine_dclario_desciende ÔÇö Christine d'Clario
+
+=== "dios poderoso" (3 veces) ===
+  miel_san_marcos_dios_poderoso ÔÇö Miel San Marcos
+  fernel_monroy_dios_poderoso ÔÇö Fernel Monroy
+  ibi_dios_poderoso ÔÇö La IBI
+
+=== "emmanuel" (3 veces) ===
+  miel_san_marcos_emmanuel ÔÇö Miel San Marcos
+  hillsong_united_emmanuel ÔÇö Hillsong United
+  en_espiritu_y_en_verdad_emmanuel ÔÇö En Espiritu y en Verdad
+
+=== "este es el d├¡a" (3 veces) ===
+  miel_san_marcos_este_es_el_dia ÔÇö Miel San Marcos
+  jesus_adrian_romero_este_es_el_dia ÔÇö Jes├║s Adri├ín Romero
+  juan_carlos_alvarado_este_es_el_dia ÔÇö Juan Carlos Alvarado
+
+=== "tu nombre" (3 veces) ===
+  miel_san_marcos_tu_nombre ÔÇö Miel San Marcos
+  marco_barrientos_tu_nombre ÔÇö Marco Barrientos
+  marco_vidal_tu_nombre ÔÇö Marcos Vidal
+
+=== "cantamos aleluya" (3 veces) ===
+  marco_barrientos_cantamos_aleluya ÔÇö Marco Barrientos
+  en_espiritu_y_en_verdad_cantamos_aleluya ÔÇö En Espiritu y en Verdad
+  ingrid_rosario_cantamos_aleluya ÔÇö Ingrid Rosario
+
+=== "libertad" (3 veces) ===
+  marco_barrientos_libertad ÔÇö Marco Barrientos
+  jesus_adrian_romero_libertad ÔÇö Jes├║s Adri├ín Romero
+  ebenezer_libertad ÔÇö Ebenezer
+
+=== "te doy gloria" (3 veces) ===
+  marco_barrientos_te_doy_gloria ÔÇö Marco Barrientos
+  hillsong_united_te_doy_gloria ÔÇö Hillsong United
+  en_espiritu_y_en_verdad_te_doy_gloria ÔÇö En Espiritu y en Verdad
+
+=== "te exaltar├®" (3 veces) ===
+  marco_barrientos_te_exaltare ÔÇö Marco Barrientos
+  christine_dclario_te_exaltare ÔÇö Christine d'Clario
+  hillsong_united_te_exaltare ÔÇö Hillsong United
+
+=== "contigo" (3 veces) ===
+  christine_dclario_contigo ÔÇö Christine d'Clario
+  elevation_worship_contigo ÔÇö Elevation Worship
+  twice_contigo ÔÇö Twice
+
+=== "magn├¡fico" (3 veces) ===
+  christine_dclario_magnifico ÔÇö Christine d'Clario
+  ebenezer_magnifico ÔÇö Ebenezer
+  hillsong_united_magnifico ÔÇö Hillsong United
+
+=== "creo en ti" (3 veces) ===
+  jesus_adrian_romero_creo_en_ti ÔÇö Jes├║s Adri├ín Romero
+  coalo_zamorano_creo_en_ti ÔÇö Coalo Zamorano
+  twice_creo_en_ti ÔÇö Twice
+
+=== "levanto mis manos" (3 veces) ===
+  jesus_adrian_romero_levanto_mis_manos ÔÇö Jes├║s Adri├ín Romero
+  fernel_monroy_levanto_mis_manos ÔÇö Fernel Monroy
+  juan_carlos_alvarado_levanto_mis_manos ÔÇö Juan Carlos Alvarado
+
+=== "tu eres santo" (3 veces) ===
+  ebenezer_tu_eres_santo ÔÇö Ebenezer
+  hillsong_united_tu_eres_santo ÔÇö Hillsong United
+  ingrid_rosario_tu_eres_santo ÔÇö Ingrid Rosario
+
+=== "no hay otro nombre" (3 veces) ===
+  hillsong_united_no_hay_otro_nombre ÔÇö Hillsong United
+  juan_carlos_alvarado_no_hay_otro_nombre ÔÇö Juan Carlos Alvarado
+  twice_no_hay_otro_nombre ÔÇö Twice
+
+Grupos con 3+ repeticiones: 128

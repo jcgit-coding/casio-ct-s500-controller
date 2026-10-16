@@ -1,0 +1,1368 @@
+{
+  "date": "2026-10-14T23:06:32.654Z",
+  "summary": {
+    "ok": 280,
+    "info": 127,
+    "warnings": 8,
+    "errors": 0
+  },
+  "issues": [
+    {
+      "id": "grupograce_brazos_papa",
+      "title": "Los brazos de papá",
+      "artist": "Grupo Grace",
+      "file": "chords.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_renuevame",
+      "title": "Renuevame",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (2 líneas)"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_fidelidad",
+      "title": "Tu fidelidad",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (1 líneas)",
+        "23 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_yo_te_busco",
+      "title": "Yo te busco",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_dios_imparable",
+      "title": "Dios Imparable",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_somos_el_pueblo",
+      "title": "Somos el Pueblo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "16 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_25_aniversario",
+      "title": "25 Aniversario",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "9 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_a_cada_instante",
+      "title": "A cada instante",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_a_cristo_le_voy",
+      "title": "A Cristo le voy",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "24 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_a_quien_tengo_yo_sino_a_ti",
+      "title": "a quien tengo yo sino a ti",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "14 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_abre_hoy_los_cielos",
+      "title": "Abre hoy los cielos",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_aclama_a_dios",
+      "title": "Aclama a Dios",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_agradecimiento",
+      "title": "Agradecimiento",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "4 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_ahora_es_el_tiempo",
+      "title": "Ahora es el tiempo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_al_estar_aqui",
+      "title": "Al Estar Aqui",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_al_que_es_digno",
+      "title": "Al que es digno",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_al_rey_hosanna",
+      "title": "Al rey hosanna",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_alabad_a_jehova",
+      "title": "Alabad a Jehová",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_alabadle",
+      "title": "Alabadle",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "24 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_alabe_al_senor",
+      "title": "Alabe al Señor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "12 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_alegre_muy_alegre",
+      "title": "Alegre, muy alegre",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_alegrense",
+      "title": "Alegrense",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "11 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_aleluya_a_nuestro_dios",
+      "title": "Aleluya a nuestro Dios",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_amor_eterno",
+      "title": "Amor Eterno",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_aqui_estoy_otra_vez",
+      "title": "Aquí estoy otra vez",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_bendecire_tu_nombre",
+      "title": "Bendeciré tu nombre",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_cantare_danzare",
+      "title": "Cantaré, danzaré",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_celebrare_me_alegrare",
+      "title": "Celebraré Me Alegraré",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "15 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_cristo_reina",
+      "title": "Cristo Reina",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "12 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_cristo_rey_victorioso",
+      "title": "Cristo rey victorioso",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_cristo_te_exalto",
+      "title": "Cristo Te Exalto",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "9 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_cuan_bello_es_el_senior",
+      "title": "Cuan bello es el Señor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_cuan_grande_es_el",
+      "title": "Cuan grande es El",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_dame_de_beber",
+      "title": "Dame de beber",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_dame_mas_sabiduria",
+      "title": "Dame más sabiduría",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (1 líneas)",
+        "16 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_danzare_cantare",
+      "title": "Danzare, Cantare",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_declaramos_tu_majestad",
+      "title": "Declaramos tu majestad",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_dios_de_alianzas",
+      "title": "Dios de alianzas",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_dios_de_pactos",
+      "title": "Dios de pactos",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_dios_en_todo_tiempo",
+      "title": "Dios en todo tiempo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_divino_companiero_del_camino",
+      "title": "Divino Compañero del Camino",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_echad_la_hoz",
+      "title": "Echad la Hoz",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_el_amor",
+      "title": "El Amor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_el_deseado_de_las_naciones",
+      "title": "El Deseado de las Naciones",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_el_gozo",
+      "title": "El Gozo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_el_me_levantara",
+      "title": "El me levantará",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_el_poderoso_de_israel",
+      "title": "El Poderoso De Israel",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "17 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_en_navidad",
+      "title": "En navidad",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "13 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_en_ti",
+      "title": "En tí",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_eres_mi_pastor",
+      "title": "Eres mi pastor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_es_aqui_es_ahora",
+      "title": "Es aquí, es ahora",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "11 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_es_navidad",
+      "title": "Es Navidad",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_fiesta",
+      "title": "Fiesta",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_grande_eres_tu",
+      "title": "Grande eres tú",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_has_cambiado",
+      "title": "Has Cambiado",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_hay_una_respuesta",
+      "title": "Hay una respuesta",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_hossana",
+      "title": "Hossana",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "12 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_hoy",
+      "title": "Hoy",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_jesus",
+      "title": "Jesús",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_jesus_es_el_senior",
+      "title": "Jesus es el señor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "8 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_jesus_es_mi_rey_soberano",
+      "title": "Jesús es mi Rey Soberano",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_jesus_nacio",
+      "title": "Jesús Nació",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_la_anunciacion",
+      "title": "La Anunciación",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_la_bendicion",
+      "title": "La Bendición",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_las_naciones_proclamen",
+      "title": "Las naciones proclamen",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_lavame",
+      "title": "Lávame",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "20 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_le_levantare",
+      "title": "Le levantaré",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_levantamos_tu_nombre",
+      "title": "Levantamos tu nombre",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "9 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_levantate",
+      "title": "Levántate",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "Ratio acordes/letra muy bajo (4%)",
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_levantate_senior",
+      "title": "Levántate señor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_llename",
+      "title": "Lléname",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "5 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_maravilloso_dios",
+      "title": "Maravilloso Dios",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "12 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_me_asombra_tu_amor",
+      "title": "Me asombra tu amor",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_me_has_llamado_a_conocerte",
+      "title": "Me has llamado a conocerte",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "10 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_mi_alma_tiene_sed",
+      "title": "Mi alma tiene sed",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_mi_deseo_de_navidad",
+      "title": "Mi deseo de navidad",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_mi_pan",
+      "title": "Mi pan",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_mil_gracias",
+      "title": "Mil gracias",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "5 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_mira",
+      "title": "Mira",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_muevete",
+      "title": "Muévete",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_nada_especial",
+      "title": "Nada Especial",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "17 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_nadie_pudo_amarme_como_cristo",
+      "title": "Nadie pudo amarme como Cristo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_necesitas_conocerle",
+      "title": "Necesitas Conocerle",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_no_se_por_que",
+      "title": "No se por qué",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "11 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_nuestro_padre_eres_tu",
+      "title": "Nuestro padre eres tú",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_pan_de_vida",
+      "title": "Pan de vida",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_paz_cuan_dulce_paz",
+      "title": "Paz, Cuan Dulce Paz",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (1 líneas)",
+        "21 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_perdonados",
+      "title": "Perdonados",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "9 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_poema_de_salvacion",
+      "title": "Poema de salvación",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_pon_aceite_en_mi_vida",
+      "title": "Pon aceite en mi vida",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "6 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_popurri_de_coros",
+      "title": "Popurri de Coros",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_popurri_ranchero",
+      "title": "Popurri Ranchero",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_por_tu_sangre",
+      "title": "Por tu sangre",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_por_tus_yagas",
+      "title": "Por tus yagas",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (1 líneas)"
+      ]
+    },
+    {
+      "id": "marcos_witt_preparad_el_camino",
+      "title": "Preparad el Camino",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "13 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_que_lindo_es_mi_cristo",
+      "title": "Que lindo es mi Cristo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_quiero_cantar_una_linda_cancion",
+      "title": "Quiero cantar una linda canción",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_quiero_llenar_tu_trono_de_alabanzas",
+      "title": "Quiero llenar tu trono de alabanzas",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_quiero_mas_de_ti",
+      "title": "Quiero más de tí",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "10 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_rodeado",
+      "title": "Rodeado",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "6 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_salmo_121",
+      "title": "Salmo 121",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (2 líneas)",
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_sana_nuestra_tierra",
+      "title": "Sana nuestra tierra",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "7 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_sananos",
+      "title": "Sananos",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_santo_espiritu",
+      "title": "Santo Espíritu",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_se_exalta_nuestro_dios",
+      "title": "Se exalta nuestro Dios",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_se_oye_en_las_naciones",
+      "title": "Se oye en las naciones",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "9 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_sendas_antiguas",
+      "title": "Sendas antiguas",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (4 líneas)",
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_simplemente_gracias",
+      "title": "Simplemente Gracias",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_solo_en_ti",
+      "title": "Solo en tí",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "4 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_somos",
+      "title": "Somos",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_suenen_dulces_himnos",
+      "title": "Suenen dulces himnos",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "4 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_te_anhelo",
+      "title": "Te Anhelo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_te_mire_a_los_ojos",
+      "title": "Te mire a los ojos",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tengo_sed",
+      "title": "Tengo Sed",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tentacion",
+      "title": "Tentación",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tiempo",
+      "title": "Tiempo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "12 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_todo_a_cristo",
+      "title": "Todo a Cristo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_toma_mi_ser",
+      "title": "Toma mi ser",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_toma_toda_mi_vida",
+      "title": "Toma toda mi vida",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_eres_el_gozo",
+      "title": "Tu eres el gozo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_eres_escudo",
+      "title": "Tu eres escudo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_eres_fiel",
+      "title": "Tu eres fiel",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "3 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_estas_aqui",
+      "title": "Tú estas aquí",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_has_cambiado",
+      "title": "Tu Has Cambiado",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "12 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_iglesia",
+      "title": "Tu Iglesia",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "4 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_me_haces_tan_feliz",
+      "title": "Tu me haces tan feliz",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "5 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_mirada_medley",
+      "title": "Tu mirada medley",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "18 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_y_yo",
+      "title": "Tu y Yo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "6 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_tu_cordero_de_dios",
+      "title": "Tu, Cordero De Dios",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "WARNING",
+      "issues": [
+        "Acordes concatenados (1 líneas)",
+        "17 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_ven_rio_poderoso",
+      "title": "Ven río poderoso",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_vencio",
+      "title": "Venció",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_vision_pastoral",
+      "title": "Visión Pastoral",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "32 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_vive_tu_alegria",
+      "title": "Vive tu alegría",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_yo_creo",
+      "title": "Yo Creo",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "2 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    },
+    {
+      "id": "marcos_witt_yo_soy",
+      "title": "Yo Soy",
+      "artist": "Marcos Witt",
+      "file": "chords_v1_lacuerda.txt",
+      "severity": "INFO",
+      "issues": [
+        "1 líneas en MAYÚSCULAS no detectadas como acordes"
+      ]
+    }
+  ]
+}

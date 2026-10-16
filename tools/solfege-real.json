@@ -1,0 +1,980 @@
+[
+  {
+    "id": "marcos_witt_a_quien_tengo_yo_sino_a_ti",
+    "artist": "Marcos Witt",
+    "esTokens": 50,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_al_rey",
+    "artist": "Marcos Witt",
+    "esTokens": 31,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_alabadle",
+    "artist": "Marcos Witt",
+    "esTokens": 49,
+    "enTokens": 1
+  },
+  {
+    "id": "marcos_witt_alegrense",
+    "artist": "Marcos Witt",
+    "esTokens": 45,
+    "enTokens": 5
+  },
+  {
+    "id": "marcos_witt_cristo_te_exalto",
+    "artist": "Marcos Witt",
+    "esTokens": 23,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_dame_mas_sabiduria",
+    "artist": "Marcos Witt",
+    "esTokens": 65,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_declaramos_tu_majestad",
+    "artist": "Marcos Witt",
+    "esTokens": 26,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_dios_a_sido_bueno",
+    "artist": "Marcos Witt",
+    "esTokens": 49,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_dios_ha_sido_bueno",
+    "artist": "Marcos Witt",
+    "esTokens": 28,
+    "enTokens": 12
+  },
+  {
+    "id": "marcos_witt_divino_companiero_del_camino",
+    "artist": "Marcos Witt",
+    "esTokens": 74,
+    "enTokens": 9
+  },
+  {
+    "id": "marcos_witt_el_amor",
+    "artist": "Marcos Witt",
+    "esTokens": 27,
+    "enTokens": 5
+  },
+  {
+    "id": "marcos_witt_el_deseado_de_las_naciones",
+    "artist": "Marcos Witt",
+    "esTokens": 49,
+    "enTokens": 6
+  },
+  {
+    "id": "marcos_witt_el_gozo",
+    "artist": "Marcos Witt",
+    "esTokens": 18,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_el_poderoso_de_israel",
+    "artist": "Marcos Witt",
+    "esTokens": 9,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_es_navidad",
+    "artist": "Marcos Witt",
+    "esTokens": 60,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_esperamos",
+    "artist": "Marcos Witt",
+    "esTokens": 14,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_esperamos_en_ti",
+    "artist": "Marcos Witt",
+    "esTokens": 36,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_fiesta",
+    "artist": "Marcos Witt",
+    "esTokens": 64,
+    "enTokens": 11
+  },
+  {
+    "id": "marcos_witt_hay_poder",
+    "artist": "Marcos Witt",
+    "esTokens": 168,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_hay_una_respuesta",
+    "artist": "Marcos Witt",
+    "esTokens": 62,
+    "enTokens": 6
+  },
+  {
+    "id": "marcos_witt_jesus_es_mi_rey_soberano",
+    "artist": "Marcos Witt",
+    "esTokens": 43,
+    "enTokens": 14
+  },
+  {
+    "id": "marcos_witt_jesus_nacio",
+    "artist": "Marcos Witt",
+    "esTokens": 44,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_la_anunciacion",
+    "artist": "Marcos Witt",
+    "esTokens": 44,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_levantate",
+    "artist": "Marcos Witt",
+    "esTokens": 1,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_mi_dios_es_grande_y_fuerte",
+    "artist": "Marcos Witt",
+    "esTokens": 20,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_nada_especial",
+    "artist": "Marcos Witt",
+    "esTokens": 40,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_necesitas_conocerle",
+    "artist": "Marcos Witt",
+    "esTokens": 47,
+    "enTokens": 4
+  },
+  {
+    "id": "marcos_witt_no_hay_dios_tan_grande_como_tu",
+    "artist": "Marcos Witt",
+    "esTokens": 25,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_no_se_por_que",
+    "artist": "Marcos Witt",
+    "esTokens": 38,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_oh_moradora_de_sion",
+    "artist": "Marcos Witt",
+    "esTokens": 26,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_paz_cuan_dulce_paz",
+    "artist": "Marcos Witt",
+    "esTokens": 75,
+    "enTokens": 17
+  },
+  {
+    "id": "marcos_witt_popurri_de_coros",
+    "artist": "Marcos Witt",
+    "esTokens": 134,
+    "enTokens": 1
+  },
+  {
+    "id": "marcos_witt_por_tus_yagas",
+    "artist": "Marcos Witt",
+    "esTokens": 79,
+    "enTokens": 1
+  },
+  {
+    "id": "marcos_witt_preparad_el_camino",
+    "artist": "Marcos Witt",
+    "esTokens": 18,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_resucito",
+    "artist": "Marcos Witt",
+    "esTokens": 51,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_salmo_121",
+    "artist": "Marcos Witt",
+    "esTokens": 120,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_santo_es_tu_nombre",
+    "artist": "Marcos Witt",
+    "esTokens": 26,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_sendas_antiguas",
+    "artist": "Marcos Witt",
+    "esTokens": 101,
+    "enTokens": 25
+  },
+  {
+    "id": "marcos_witt_te_anhelo",
+    "artist": "Marcos Witt",
+    "esTokens": 84,
+    "enTokens": 16
+  },
+  {
+    "id": "marcos_witt_te_necesito_mas_que_ayer",
+    "artist": "Marcos Witt",
+    "esTokens": 23,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_tentacion",
+    "artist": "Marcos Witt",
+    "esTokens": 42,
+    "enTokens": 6
+  },
+  {
+    "id": "marcos_witt_tu_estas_aqui",
+    "artist": "Marcos Witt",
+    "esTokens": 20,
+    "enTokens": 1
+  },
+  {
+    "id": "marcos_witt_tu_fidelidad",
+    "artist": "Marcos Witt",
+    "esTokens": 127,
+    "enTokens": 27
+  },
+  {
+    "id": "marcos_witt_tu_has_cambiado",
+    "artist": "Marcos Witt",
+    "esTokens": 40,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_tu_sangre_derramaste",
+    "artist": "Marcos Witt",
+    "esTokens": 29,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_tu_cordero_de_dios",
+    "artist": "Marcos Witt",
+    "esTokens": 27,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_un_adorador",
+    "artist": "Marcos Witt",
+    "esTokens": 58,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_venid_fieles_todos",
+    "artist": "Marcos Witt",
+    "esTokens": 104,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_witt_salmo",
+    "artist": "Marcos Witt",
+    "esTokens": 120,
+    "enTokens": 41
+  },
+  {
+    "id": "majo_y_dan_cara_a_cara_te_deseo",
+    "artist": "Majo y Dan",
+    "esTokens": 136,
+    "enTokens": 0
+  },
+  {
+    "id": "majo_y_dan_esplendor",
+    "artist": "Majo y Dan",
+    "esTokens": 109,
+    "enTokens": 0
+  },
+  {
+    "id": "abel_zavala_el_gozo_del_senior",
+    "artist": "Abel Zavala",
+    "esTokens": 32,
+    "enTokens": 0
+  },
+  {
+    "id": "abel_zavala_tomame_de_tu_mano",
+    "artist": "Abel Zavala",
+    "esTokens": 23,
+    "enTokens": 1
+  },
+  {
+    "id": "rojo_alabad_a_dios",
+    "artist": "Rojo",
+    "esTokens": 54,
+    "enTokens": 6
+  },
+  {
+    "id": "rojo_bajo_control",
+    "artist": "Rojo",
+    "esTokens": 43,
+    "enTokens": 0
+  },
+  {
+    "id": "rojo_contigo_hare_historia",
+    "artist": "Rojo",
+    "esTokens": 19,
+    "enTokens": 0
+  },
+  {
+    "id": "rojo_es_navidad",
+    "artist": "Rojo",
+    "esTokens": 71,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_brunet_abrazame",
+    "artist": "Marcos Brunet",
+    "esTokens": 16,
+    "enTokens": 4
+  },
+  {
+    "id": "marcos_brunet_cuanto_mas_te_conozco",
+    "artist": "Marcos Brunet",
+    "esTokens": 69,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_brunet_estoy_apasionado",
+    "artist": "Marcos Brunet",
+    "esTokens": 45,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_brunet_mi_inspiracion",
+    "artist": "Marcos Brunet",
+    "esTokens": 52,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_brunet_mi_shalom",
+    "artist": "Marcos Brunet",
+    "esTokens": 52,
+    "enTokens": 4
+  },
+  {
+    "id": "marcos_brunet_principe_de_paz",
+    "artist": "Marcos Brunet",
+    "esTokens": 67,
+    "enTokens": 4
+  },
+  {
+    "id": "marcos_brunet_romance_eterno",
+    "artist": "Marcos Brunet",
+    "esTokens": 52,
+    "enTokens": 0
+  },
+  {
+    "id": "marcos_brunet_samuel",
+    "artist": "Marcos Brunet",
+    "esTokens": 97,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_a_cara_descubierta",
+    "artist": "New Wine",
+    "esTokens": 19,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_aquel_que_esta_en_su_trono",
+    "artist": "New Wine",
+    "esTokens": 22,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_danzando_en_cielos_abiertos",
+    "artist": "New Wine",
+    "esTokens": 29,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_dia_y_noche",
+    "artist": "New Wine",
+    "esTokens": 31,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_kabod_el_peso_de_tu_gloria",
+    "artist": "New Wine",
+    "esTokens": 12,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_manifiestate",
+    "artist": "New Wine",
+    "esTokens": 64,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_rey_de_los_cielos",
+    "artist": "New Wine",
+    "esTokens": 32,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_rey_de_los_cielos_kabod_el_peso_de_tu_gloria",
+    "artist": "New Wine",
+    "esTokens": 63,
+    "enTokens": 0
+  },
+  {
+    "id": "new_wine_te_amo_cristo",
+    "artist": "New Wine",
+    "esTokens": 12,
+    "enTokens": 1
+  },
+  {
+    "id": "danilo_montero_dulce_refugio",
+    "artist": "Danilo Montero",
+    "esTokens": 34,
+    "enTokens": 0
+  },
+  {
+    "id": "danilo_montero_enseniame",
+    "artist": "Danilo Montero",
+    "esTokens": 101,
+    "enTokens": 0
+  },
+  {
+    "id": "miel_san_marcos_cristo_esta_aqui",
+    "artist": "Miel San Marcos",
+    "esTokens": 32,
+    "enTokens": 0
+  },
+  {
+    "id": "miel_san_marcos_doxologia_de_avivamiento",
+    "artist": "Miel San Marcos",
+    "esTokens": 28,
+    "enTokens": 5
+  },
+  {
+    "id": "miel_san_marcos_mover_tu_corazon",
+    "artist": "Miel San Marcos",
+    "esTokens": 63,
+    "enTokens": 0
+  },
+  {
+    "id": "miel_san_marcos_nos_postramos",
+    "artist": "Miel San Marcos",
+    "esTokens": 17,
+    "enTokens": 0
+  },
+  {
+    "id": "miel_san_marcos_salvado_librado",
+    "artist": "Miel San Marcos",
+    "esTokens": 16,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_a_el_sea_la_gloria",
+    "artist": "Marco Barrientos",
+    "esTokens": 26,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_aleluya_aleluya",
+    "artist": "Marco Barrientos",
+    "esTokens": 13,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_cantamos_aleluya",
+    "artist": "Marco Barrientos",
+    "esTokens": 62,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_consume_con_tu_fuego",
+    "artist": "Marco Barrientos",
+    "esTokens": 54,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_honra_y_gloria",
+    "artist": "Marco Barrientos",
+    "esTokens": 63,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_la_paz",
+    "artist": "Marco Barrientos",
+    "esTokens": 29,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_sopla_en_mi",
+    "artist": "Marco Barrientos",
+    "esTokens": 26,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_su_amor_es_para_siempre",
+    "artist": "Marco Barrientos",
+    "esTokens": 21,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_barrientos_te_entrego",
+    "artist": "Marco Barrientos",
+    "esTokens": 21,
+    "enTokens": 2
+  },
+  {
+    "id": "marco_vidal_anclados_en_la_colina",
+    "artist": "Marcos Vidal",
+    "esTokens": 72,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_vidal_cuanto_te_amo",
+    "artist": "Marcos Vidal",
+    "esTokens": 87,
+    "enTokens": 2
+  },
+  {
+    "id": "marco_vidal_deudor",
+    "artist": "Marcos Vidal",
+    "esTokens": 54,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_vidal_el_cantar_de_nuva",
+    "artist": "Marcos Vidal",
+    "esTokens": 55,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_vidal_mediano",
+    "artist": "Marcos Vidal",
+    "esTokens": 48,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_vidal_nada_me_apartara",
+    "artist": "Marcos Vidal",
+    "esTokens": 96,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_vidal_no_estamos_solos",
+    "artist": "Marcos Vidal",
+    "esTokens": 126,
+    "enTokens": 0
+  },
+  {
+    "id": "marco_vidal_obra_de_arte",
+    "artist": "Marcos Vidal",
+    "esTokens": 123,
+    "enTokens": 0
+  },
+  {
+    "id": "christine_dclario_eres_dios",
+    "artist": "Christine d'Clario",
+    "esTokens": 32,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_abre_los_cielos",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 60,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_algo_esta_cayendo_aqui",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 16,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_cerca_de_ti",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 46,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_creo_en_ti",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 20,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_el_aire_de_tu_casa",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 43,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_ese_vacio_vacio",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 11,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_espiritu_santo_ven",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 61,
+    "enTokens": 2
+  },
+  {
+    "id": "jesus_adrian_romero_luces_de_colores",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 138,
+    "enTokens": 7
+  },
+  {
+    "id": "jesus_adrian_romero_maria",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 123,
+    "enTokens": 0
+  },
+  {
+    "id": "jesus_adrian_romero_mi_amado_jesus",
+    "artist": "Jesús Adrián Romero",
+    "esTokens": 30,
+    "enTokens": 0
+  },
+  {
+    "id": "ebenezer_pronto_vendra",
+    "artist": "Ebenezer",
+    "esTokens": 32,
+    "enTokens": 0
+  },
+  {
+    "id": "ebenezer_tu_me_hicistes_libre",
+    "artist": "Ebenezer",
+    "esTokens": 14,
+    "enTokens": 0
+  },
+  {
+    "id": "hillsong_united_abre_los_cielos",
+    "artist": "Hillsong United",
+    "esTokens": 40,
+    "enTokens": 0
+  },
+  {
+    "id": "hillsong_united_dios_se_mueve_ahi",
+    "artist": "Hillsong United",
+    "esTokens": 64,
+    "enTokens": 0
+  },
+  {
+    "id": "hillsong_united_emanuel",
+    "artist": "Hillsong United",
+    "esTokens": 130,
+    "enTokens": 0
+  },
+  {
+    "id": "hillsong_united_jesus_lover_of_my_soul",
+    "artist": "Hillsong United",
+    "esTokens": 23,
+    "enTokens": 0
+  },
+  {
+    "id": "hillsong_united_parado_ante_ti",
+    "artist": "Hillsong United",
+    "esTokens": 35,
+    "enTokens": 1
+  },
+  {
+    "id": "hillsong_united_yo_si_creo_en_cristo",
+    "artist": "Hillsong United",
+    "esTokens": 42,
+    "enTokens": 0
+  },
+  {
+    "id": "juan_carlos_alvarado_entra_en_la_presencia",
+    "artist": "Juan Carlos Alvarado",
+    "esTokens": 32,
+    "enTokens": 2
+  },
+  {
+    "id": "fernel_monroy_remolineando",
+    "artist": "Fernel Monroy",
+    "esTokens": 28,
+    "enTokens": 0
+  },
+  {
+    "id": "juan_carlos_alvarado_quien_nos_separa",
+    "artist": "Juan Carlos Alvarado",
+    "esTokens": 52,
+    "enTokens": 1
+  },
+  {
+    "id": "marcela_gandara_alabanzas_al_rey",
+    "artist": "Marcela Gandara",
+    "esTokens": 66,
+    "enTokens": 17
+  },
+  {
+    "id": "marcela_gandara_eterno_amor",
+    "artist": "Marcela Gandara",
+    "esTokens": 100,
+    "enTokens": 1
+  },
+  {
+    "id": "marcela_gandara_gracias_por_la_cruz",
+    "artist": "Marcela Gandara",
+    "esTokens": 62,
+    "enTokens": 0
+  },
+  {
+    "id": "marcela_gandara_si_sabes_donde_hallarlo",
+    "artist": "Marcela Gandara",
+    "esTokens": 77,
+    "enTokens": 0
+  },
+  {
+    "id": "marcela_gandara_siempre_estaras",
+    "artist": "Marcela Gandara",
+    "esTokens": 79,
+    "enTokens": 0
+  },
+  {
+    "id": "marcela_gandara_siempre_fiel",
+    "artist": "Marcela Gandara",
+    "esTokens": 31,
+    "enTokens": 0
+  },
+  {
+    "id": "israel_houghton_coritos_de_corazon",
+    "artist": "Israel Houghton",
+    "esTokens": 134,
+    "enTokens": 3
+  },
+  {
+    "id": "barak_alli_quiero_estar",
+    "artist": "Barak",
+    "esTokens": 39,
+    "enTokens": 0
+  },
+  {
+    "id": "barak_perdoname",
+    "artist": "Barak",
+    "esTokens": 88,
+    "enTokens": 0
+  },
+  {
+    "id": "coalo_zamorano_extiende",
+    "artist": "Coalo Zamorano",
+    "esTokens": 36,
+    "enTokens": 0
+  },
+  {
+    "id": "coalo_zamorano_reinas_para_siempre",
+    "artist": "Coalo Zamorano",
+    "esTokens": 100,
+    "enTokens": 0
+  },
+  {
+    "id": "en_espiritu_y_en_verdad_gracias_por_la_cruz",
+    "artist": "En Espiritu y en Verdad",
+    "esTokens": 54,
+    "enTokens": 9
+  },
+  {
+    "id": "en_espiritu_y_en_verdad_veo_amor",
+    "artist": "En Espiritu y en Verdad",
+    "esTokens": 86,
+    "enTokens": 0
+  },
+  {
+    "id": "elevation_worship_el_que_resucito",
+    "artist": "Elevation Worship",
+    "esTokens": 215,
+    "enTokens": 0
+  },
+  {
+    "id": "elevation_worship_mi_guerrero_poderoso",
+    "artist": "Elevation Worship",
+    "esTokens": 69,
+    "enTokens": 0
+  },
+  {
+    "id": "elevation_worship_nombres",
+    "artist": "Elevation Worship",
+    "esTokens": 40,
+    "enTokens": 2
+  },
+  {
+    "id": "elevation_worship_plenitud",
+    "artist": "Elevation Worship",
+    "esTokens": 168,
+    "enTokens": 0
+  },
+  {
+    "id": "elevation_worship_ven_ante_su_trono",
+    "artist": "Elevation Worship",
+    "esTokens": 93,
+    "enTokens": 0
+  },
+  {
+    "id": "ingrid_rosario_no_dejare_de_hablar",
+    "artist": "Ingrid Rosario",
+    "esTokens": 65,
+    "enTokens": 0
+  },
+  {
+    "id": "ingrid_rosario_padre_de_la_creacion",
+    "artist": "Ingrid Rosario",
+    "esTokens": 15,
+    "enTokens": 0
+  },
+  {
+    "id": "ingrid_rosario_todo_lo_que_respira",
+    "artist": "Ingrid Rosario",
+    "esTokens": 22,
+    "enTokens": 0
+  },
+  {
+    "id": "art_aguilera_asombroso_dios",
+    "artist": "Art Aguilera",
+    "esTokens": 52,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_amor_sin_condicion",
+    "artist": "Twice",
+    "esTokens": 84,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_anclado",
+    "artist": "Twice",
+    "esTokens": 75,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_asombro",
+    "artist": "Twice",
+    "esTokens": 41,
+    "enTokens": 1
+  },
+  {
+    "id": "twice_aun_en_la_batalla",
+    "artist": "Twice",
+    "esTokens": 151,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_calvario",
+    "artist": "Twice",
+    "esTokens": 63,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_conectado",
+    "artist": "Twice",
+    "esTokens": 88,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_el_camino",
+    "artist": "Twice",
+    "esTokens": 156,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_el_que_resucito",
+    "artist": "Twice",
+    "esTokens": 130,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_el_vencio",
+    "artist": "Twice",
+    "esTokens": 104,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_en_cada_latido",
+    "artist": "Twice",
+    "esTokens": 70,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_lo_haras_otra_vez",
+    "artist": "Twice",
+    "esTokens": 96,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_me_quiero_acercar",
+    "artist": "Twice",
+    "esTokens": 24,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_mi_corazon_late_por_ti",
+    "artist": "Twice",
+    "esTokens": 72,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_por_siempre_cantare",
+    "artist": "Twice",
+    "esTokens": 105,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_por_siempre_y_siempre",
+    "artist": "Twice",
+    "esTokens": 38,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_santo_espiritu",
+    "artist": "Twice",
+    "esTokens": 70,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_tocar_el_cielo",
+    "artist": "Twice",
+    "esTokens": 39,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_tu_amor_me_levanto",
+    "artist": "Twice",
+    "esTokens": 132,
+    "enTokens": 0
+  },
+  {
+    "id": "twice_yo_tambien",
+    "artist": "Twice",
+    "esTokens": 137,
+    "enTokens": 0
+  },
+  {
+    "id": "jaime_murrell_espiritu_santo",
+    "artist": "Jaime Murrell",
+    "esTokens": 54,
+    "enTokens": 0
+  },
+  {
+    "id": "jaime_murrell_tu_amor_es_como_un_rio",
+    "artist": "Jaime Murrell",
+    "esTokens": 31,
+    "enTokens": 0
+  }
+]

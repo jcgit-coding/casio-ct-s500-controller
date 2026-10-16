@@ -13,7 +13,7 @@ const ES_BASS  = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?
 
 const CHORD_STRIP_RE = new RegExp(`(?:${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS})`, 'g');
 const CHORD_FIND_RE  = new RegExp(`${ES_ROOT}${ES_QUAL}${ES_BASS}|${EN_ROOT}${EN_QUAL}${EN_BASS}`, 'g');
-const SECTION_LABEL_RE = /^((?:Coro|Estrofa|Verso|Puente|Intro|Outro|Bridge|Chorus|Verse|Pre-?[Cc]oro|Pre-?[Cc]horus|Vamp|Tag|Interludio|Instrumental|Solo|Final|Llave)(?:\s+\d+)?)\s*(?:\([^)]*\))?\s*:?\s*$/i;
+const SECTION_LABEL_RE = /^[<>[(\-=*~./+#:\s]*((?:\d+[º°]?[\s.:\-#]*)?(?:Coro|Estrofa|Verso|Puente|Intro|Outro|Bridge|Chorus|Verse|Pre\s?-?(?:[Cc]oro|[Cc]horus|Estribillo)|Vamp|Tag|Interludio|Instrumental|Solo|Final|Llave|Estribillo|Intermedio|Coda|Bajada|Refr[aá]n|Refrain)(?:[\s:.#\-–]*(?:\d+|I{1,3}|IV|V|VI{0,3}|IX|XI{0,3}))?)\s*(?:x\s*\d+|\(\s*x\s*\d+\s*\)|veces)?\s*(?:\([^)]*\))?[<\])>\-=*~./+#:\s]*$/i;
 
 const isChordLine = (line) => {
   const trimmed = line.trim();

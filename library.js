@@ -64,6 +64,22 @@ const RepertorioApp = {
             this._applyTransposeShift(false);
         });
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
+
+        // ← → para navegar entre canciones del evento activo
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+            const evt = EventsMgr?.getAll?.()?.find?.(ev => ev.id === EventsMgr.activeEventId);
+            if (!evt?.songs?.length) return;
+            const songs = evt.songs.map(s => (typeof s === 'string' ? { id: s, versionFile: null } : s));
+            const curId = RepertorioApp.currentSong?._id;
+            const idx = songs.findIndex(s => s.id === curId);
+            if (idx === -1) return;
+            const next = e.key === 'ArrowRight' ? songs[idx + 1] : songs[idx - 1];
+            if (!next) return;
+            e.preventDefault();
+            RepertoireSync.openSong(next.id, next.versionFile || '');
+        });
     },
 
     _shiftTranspose(delta) {
@@ -212,7 +228,10 @@ const RepertorioApp = {
         );
 
         // Etiquetas de sección conocidas (para styling y detección)
-        const SECTION_LABEL_RE = /^((?:Coro|Estrofa|Verso|Puente|Intro|Outro|Bridge|Chorus|Verse|Pre-?[Cc]oro|Pre-?[Cc]horus|Vamp|Tag|Interludio|Instrumental|Solo|Final|Llave)(?:\s+\d+)?)\s*(?:\([^)]*\))?\s*:?\s*$/i;
+        // Tolera decoración de bordes ([Coro], -CORO-, ::Coro::, "-- Coro --", "+++Coro+++"),
+        // número delante (2.Pre-Coro, 1ºVerso), número/romano/#1/x2/(x2)/veces después;
+        // captura el label limpio en el grupo 1.
+        const SECTION_LABEL_RE = /^[<>[(\-=*~./+#:\s]*((?:\d+[º°]?[\s.:\-#]*)?(?:Coro|Estrofa|Verso|Puente|Intro|Outro|Bridge|Chorus|Verse|Pre\s?-?(?:[Cc]oro|[Cc]horus|Estribillo)|Vamp|Tag|Interludio|Instrumental|Solo|Final|Llave|Estribillo|Intermedio|Coda|Bajada|Refr[aá]n|Refrain)(?:[\s:.#\-–]*(?:\d+|I{1,3}|IV|V|VI{0,3}|IX|XI{0,3}))?)\s*(?:x\s*\d+|\(\s*x\s*\d+\s*\)|veces)?\s*(?:\([^)]*\))?[<\])>\-=*~./+#:\s]*$/i;
 
         const isChordLine = (line) => {
             const trimmed = line.trim();
@@ -259,8 +278,9 @@ const RepertorioApp = {
         const htmlLines = lines.map(line => {
             const trimmed = line.trim();
             // Etiqueta de sección → resaltar con estilo propio
-            if (trimmed && SECTION_LABEL_RE.test(trimmed)) {
-                const label = trimmed.replace(/:$/, '');
+            const secMatch = SECTION_LABEL_RE.exec(trimmed);
+            if (secMatch) {
+                const label = (secMatch[1] || trimmed).trim().replace(/^[\s:.#\-–]+|[\s:.#\-–]+$/g, '');
                 return `<span style="display:inline-block;margin-top:10px;margin-bottom:2px;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);opacity:0.75;">${label}</span>`;
             }
             let parsedLine = line;
@@ -340,14 +360,16 @@ const RepertorioApp = {
         const viewer = document.getElementById('lib-chords-view');
         if (!document.fullscreenElement) {
             viewer.requestFullscreen().catch(err => {
-                alert(`Error al intentar modo pantalla completa: ${err.message}`);
+                console.warn('Fullscreen error:', err.message);
             });
-            viewer.style.height = "100vh";
-            viewer.style.padding = "50px";
+            viewer.classList.add('fullscreen-song');
+            viewer.style.height = '';
+            viewer.style.padding = '';
         } else {
             document.exitFullscreen();
-            viewer.style.height = "450px";
-            viewer.style.padding = "30px";
+            viewer.classList.remove('fullscreen-song');
+            viewer.style.height = '';
+            viewer.style.padding = '';
         }
     }
 };
@@ -414,9 +436,10 @@ const RepertoireSync = {
                 }
             } else {
                 // Búsqueda activa: mostrar resultados planos agrupados por artista
+                const norm = t => (t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+                const qn = norm(q);
                 const filtered = this.allSongs.filter(s =>
-                    (s.title && s.title.toLowerCase().includes(q)) ||
-                    (s.artist && s.artist.toLowerCase().includes(q))
+                    norm(s.title).includes(qn) || norm(s.artist).includes(qn)
                 );
                 this._renderSearchResults(filtered, q);
             }
