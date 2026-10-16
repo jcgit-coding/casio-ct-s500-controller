@@ -141,7 +141,10 @@ const RepertorioApp = {
 
         const sourceLinkEl = document.getElementById('lib-song-source-link');
         if (sourceLinkEl) {
-            const sourceUrl = this._songMeta?.versions?.[0]?.source;
+            const activeFile = this._activeVersion;
+            const versions = this._songMeta?.versions || [];
+            const activeVersion = activeFile ? versions.find(v => v.file === activeFile) : versions[0];
+            const sourceUrl = activeVersion?.source;
             if (sourceUrl) {
                 sourceLinkEl.href = sourceUrl;
                 sourceLinkEl.style.display = 'inline';
@@ -353,7 +356,38 @@ const RepertorioApp = {
     },
 
     renderChords(htmlContent) {
-        document.getElementById('lib-chords-view').innerHTML = htmlContent;
+        const viewer = document.getElementById('lib-chords-view');
+        viewer.innerHTML = htmlContent;
+        this._renderSectionTOC(viewer);
+    },
+
+    _renderSectionTOC(viewer) {
+        document.getElementById('_section-toc')?.remove();
+        const spans = [...viewer.querySelectorAll('span')].filter(s =>
+            s.style.textTransform === 'uppercase' && s.style.color === 'var(--accent)'
+        );
+        if (spans.length < 3) return;
+
+        const toc = document.createElement('div');
+        toc.id = '_section-toc';
+        toc.style.cssText = 'position:absolute;right:-36px;top:0;display:flex;flex-direction:column;gap:3px;';
+
+        spans.forEach((span, i) => {
+            const label = span.textContent.trim().slice(0, 4);
+            const btn = document.createElement('button');
+            btn.textContent = label;
+            btn.title = span.textContent.trim();
+            btn.style.cssText = 'font-size:8px;font-weight:800;padding:3px 4px;border-radius:4px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:var(--accent);cursor:pointer;letter-spacing:0.04em;white-space:nowrap;';
+            btn.onclick = () => span.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            toc.appendChild(btn);
+        });
+
+        const wrap = viewer.parentElement;
+        const prevPos = wrap.style.position;
+        wrap.style.position = 'relative';
+        wrap.appendChild(toc);
+        // restore if it wasn't set
+        if (!prevPos) wrap.style.position = 'relative';
     },
 
     toggleFullscreen() {
@@ -459,6 +493,28 @@ const RepertoireSync = {
             return;
         }
 
+        // Recientes
+        this._loadRecents();
+        let recentsHtml = '';
+        if (this._recentIds?.length) {
+            const recents = this._recentIds
+                .map(id => songs.find(s => s.id === id))
+                .filter(Boolean);
+            if (recents.length) {
+                recentsHtml = `<div style="margin-bottom:14px;">
+                    <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);opacity:0.7;padding:2px 0 5px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:6px;">Recientes</div>
+                    ${recents.map(s => `
+                        <div style="display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;margin-bottom:3px;"
+                             onclick="RepertoireSync.openSong('${s.id}')"
+                             onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                             onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                            <span style="font-size:12px;font-weight:600;color:var(--text);flex:1;">${s.title}</span>
+                            <span style="font-size:10px;color:var(--text-muted);">${s.artist}</span>
+                        </div>`).join('')}
+                </div>`;
+            }
+        }
+
         const byArtist = {};
         songs.forEach(s => {
             const a = s.artist || 'Sin artista';
@@ -468,7 +524,7 @@ const RepertoireSync = {
         const sorted = Object.keys(byArtist).sort((a, b) => a.localeCompare(b, 'es'));
 
         wrap.style.paddingRight = '28px';
-        wrap.innerHTML = sorted.map(artist => {
+        wrap.innerHTML = recentsHtml + sorted.map(artist => {
             const count = byArtist[artist].length;
             const initial = artist[0].toUpperCase();
             const aid = 'art-' + artist.replace(/[^a-z0-9]/gi, '_');
@@ -612,6 +668,18 @@ const RepertoireSync = {
     _alphaJumpFn: null,
     _alphaJump(letter) { if (this._alphaJumpFn) this._alphaJumpFn(letter); },
     
+    _recentIds: null,
+
+    _loadRecents() {
+        try { this._recentIds = JSON.parse(localStorage.getItem('casio_recents') || '[]'); } catch { this._recentIds = []; }
+    },
+
+    _saveRecent(id) {
+        if (!this._recentIds) this._loadRecents();
+        this._recentIds = [id, ...this._recentIds.filter(x => x !== id)].slice(0, 8);
+        try { localStorage.setItem('casio_recents', JSON.stringify(this._recentIds)); } catch {}
+    },
+
     async openSong(id, versionFile) {
         try {
             const metaRes = await fetch(`library/${id}/meta.json?v=` + Date.now());
@@ -624,12 +692,16 @@ const RepertoireSync = {
             if (!res.ok) throw new Error('File not found: ' + file);
             const text = await res.text();
 
-            RepertorioApp._pendingSongId = id;
-            RepertorioApp._songMeta      = meta;
+            RepertorioApp._pendingSongId  = id;
+            RepertorioApp._songMeta       = meta;
+            RepertorioApp._activeVersion  = file;
             RepertorioApp.setSong(meta.title, meta.artist, text, meta.original_key);
 
             // Show version picker if multiple versions exist
             this._renderVersionPicker(id, meta, file);
+
+            // Save to recents
+            this._saveRecent(id);
         } catch(e) {
             console.error(e);
             alert('Error loading song: ' + e.message);
@@ -666,8 +738,8 @@ const RepertoireSync = {
                     : '';
                 return `<span style="display:inline-flex;align-items:center;gap:2px;">
                     <button onclick="RepertoireSync.openSong('${id}','${v.file}')"
-                        style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};
-                        background:${isActive ? 'var(--accent)' : 'transparent'};color:${isActive ? '#000' : 'var(--text-muted)'};cursor:pointer;">
+                        style="font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.2)'};
+                        background:${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.05)'};color:${isActive ? '#000' : 'var(--text)'};cursor:pointer;min-height:34px;">
                         ${site(v.file)} v${i+1}${ratingStr}
                     </button>${linkHtml}</span>`;
             }).join('');
