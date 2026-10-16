@@ -152,21 +152,30 @@ Eventos guardados en `localStorage` como `casio_events`. Cada evento contiene `{
 
 ## 9. Herramientas de construcción de librería (`tools/`)
 
-### `scrape-artist.js` — Solo lacuerda.net
+### `lacuerda-import.js` — Solo lacuerda.net
 Scraper Node.js (sin dependencias npm) para poblar `library/` automáticamente.
 
 ```bash
-node tools/scrape-artist.js --artist "marcos-witt"
-node tools/scrape-artist.js --artist "grupo-grace" --delay 2000
-node tools/scrape-artist.js --artist "marcos-witt" --max 50
+node tools/lacuerda-import.js --artist "marcos-witt"
+node tools/lacuerda-import.js --artist "grupo-grace" --delay 2000
+node tools/lacuerda-import.js --artist "toma_tu_lugar" --display-name "Marcos Brunet" --artist-id "marcos_brunet"
+node tools/lacuerda-import.js --artist "marcos-witt" --max 50
 ```
+
+**REGLA OBLIGATORIA — múltiples versiones:**
+- Se importan **TODAS** las versiones de tipo "Letra y Acordes" (tipo R) disponibles para cada canción.
+- Cada versión se guarda como archivo separado: `chords_v1_lacuerda.txt`, `chords_v2_lacuerda.txt`, etc.
+- La calificación (`lcd`) de cada versión queda en `meta.json` bajo `versions[].lcd`.
+- Solo si **no existe ninguna versión R** se acepta como fallback una tablatura (tipo T).
+- Tipos Bajo (B), Piano (P), Ukulele (U) y similares (K) se descartan siempre.
+- **Nunca importar solo la primera versión** cuando hay múltiples disponibles.
 
 **Cómo funciona:**
 1. Descarga la página del artista de `acordes.lacuerda.net/{slug}/`
 2. Lee todos los `<li lcd='N'>` del bloque `b_main` (lista completa, no solo el top-10)
 3. **Agrupa por canción base:** `tu_fidelidad`, `tu_fidelidad2`, `tu_fidelidad3` → un solo directorio `marcos_witt_tu_fidelidad/`
-4. Ordena versiones por `lcd` (votos de calificación) descendente — la mejor primero
-5. Descarga cada URL en `.shtml` (contenido completo) y guarda `chords_v1_lacuerda.txt`, `chords_v2_lacuerda.txt`, etc.
+4. Ordena versiones por `lcd` (votos) descendente — la mejor primero
+5. Descarga **todas** las versiones R en `.shtml` y guarda `chords_v1_lacuerda.txt`, `chords_v2_lacuerda.txt`, etc.
 6. Actualiza `library/index.json` con upsert (no destruye entradas existentes de otros artistas)
 
 **Notas:**
