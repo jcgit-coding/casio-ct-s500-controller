@@ -758,6 +758,7 @@ window.RepertoireSync = RepertoireSync;
 // ================= EVENTS MANAGER =================
 const EventsMgr = {
     activeEventId: null,
+    _cloudSha: null,  // SHA del events.json en GitHub para upserts
 
     getAll() {
         try { return JSON.parse(localStorage.getItem('casio_events') || '[]'); } catch { return []; }
@@ -765,6 +766,38 @@ const EventsMgr = {
 
     save(events) {
         localStorage.setItem('casio_events', JSON.stringify(events));
+        this._pushToCloud(events).catch(e => console.warn('Events cloud sync failed:', e));
+    },
+
+    async _pushToCloud(events) {
+        const pat = localStorage.getItem('github_pat');
+        if (!pat) return;
+        const path = `https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/events.json`;
+        const body = { message: 'chore(events): sync events', content: btoa(unescape(encodeURIComponent(JSON.stringify(events, null, 2)))) };
+        if (this._cloudSha) body.sha = this._cloudSha;
+        const res = await fetch(path, { method: 'PUT', headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        if (res.ok) { const d = await res.json(); this._cloudSha = d.content?.sha; }
+    },
+
+    async loadFromCloud() {
+        const pat = localStorage.getItem('github_pat');
+        // Siempre cargar el archivo público (funciona sin PAT desde GitHub Pages)
+        try {
+            const res = await fetch('library/events.json?v=' + Date.now());
+            if (res.ok) {
+                const events = await res.json();
+                if (Array.isArray(events) && events.length) {
+                    localStorage.setItem('casio_events', JSON.stringify(events));
+                    this.render();
+                }
+            }
+        } catch(e) { /* usa localStorage */ }
+        // Obtener SHA para futuros pushes
+        if (pat) {
+            fetch(`https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/events.json`, {
+                headers: { 'Authorization': `token ${pat}` }
+            }).then(r => r.ok ? r.json() : null).then(d => { if (d?.sha) this._cloudSha = d.sha; }).catch(()=>{});
+        }
     },
 
     init() {
@@ -773,6 +806,7 @@ const EventsMgr = {
         // Set today's date as default
         const dp = document.getElementById('lib-date-picker');
         if (dp && !dp.value) dp.value = new Date().toISOString().slice(0, 10);
+        this.loadFromCloud();
         this.render();
     },
 

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "evt_viernes_20261016",
+    "name": "Viernes 16 oct",
+    "date": "2026-10-16",
+    "songs": [
+      { "id": "bethel_music_eres_digno_de_adorar", "versionFile": null, "transpose": 0 },
+      { "id": "grupo_grace_sucedera",              "versionFile": null, "transpose": 0 },
+      { "id": "new_wine_el_movimiento_de_gloria",  "versionFile": null, "transpose": 0 },
+      { "id": "ebenezer_me_gozare",                "versionFile": null, "transpose": 0 }
+    ]
+  }
+]
