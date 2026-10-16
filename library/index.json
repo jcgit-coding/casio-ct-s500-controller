@@ -20403,5 +20403,33 @@
         "artist":  "Grupo Grace",
         "genre":  "Worship",
         "original_key":  "C"
+    },
+    {
+        "artist":  "Tradicional",
+        "title":  "Así se alaba a Dios",
+        "genre":  "Coro",
+        "original_key":  "C",
+        "id":  "coritos_asi_se_alaba_a_dios"
+    },
+    {
+        "artist":  "Dominio Público",
+        "title":  "Vamos a alabar a Jehová",
+        "genre":  "Coro",
+        "original_key":  "A",
+        "id":  "coritos_vamos_alabar_jehova"
+    },
+    {
+        "artist":  "Tradicional",
+        "title":  "El Maestro de Galilea (Déjalo que te toque)",
+        "genre":  "Coro",
+        "original_key":  "C",
+        "id":  "coritos_el_maestro_de_galilea"
+    },
+    {
+        "artist":  "Tradicional",
+        "title":  "Ya llegó el Espíritu Santo",
+        "genre":  "Coro",
+        "original_key":  "C",
+        "id":  "coritos_ya_llego_el_espiritu_santo"
     }
 ]
