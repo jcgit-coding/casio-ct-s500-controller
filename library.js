@@ -57,12 +57,6 @@ const RepertorioApp = {
         document.getElementById('lib-transpose-down')?.addEventListener('click', () => this._shiftTranspose(-1));
         document.getElementById('lib-transpose-up')?.addEventListener('click', () => this._shiftTranspose(+1));
         document.getElementById('lib-transpose-reset')?.addEventListener('click', () => this._resetTranspose());
-        document.getElementById('lib-transpose-select')?.addEventListener('change', (e) => {
-            if (!this.currentSong) return;
-            const toIdx = parseInt(e.target.value, 10);
-            this._semitoneShift = toIdx;
-            this._applyTransposeShift(false);
-        });
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
 
         // ← → para navegar entre canciones del evento activo
@@ -94,31 +88,19 @@ const RepertorioApp = {
         this._applyTransposeShift();
     },
 
-    _applyTransposeShift(updateSelect) {
+    _applyTransposeShift() {
         this.applyTranspose(this._semitoneShift);
-        const sel = document.getElementById('lib-transpose-select');
         const lbl = document.getElementById('lib-transpose-label');
-        if (sel && updateSelect !== false) sel.value = this._semitoneShift;
         if (lbl) {
-            const noteIdx = (this.notes.indexOf(this.normalizeNoteRoot(this.currentSong?.originalKey || 'C')) + this._semitoneShift) % 12;
-            lbl.textContent = this.noteLabels[noteIdx] || this.notes[noteIdx] || 'C';
+            const st = this._semitoneShift;
+            lbl.textContent = st === 0 ? '0' : (st > 0 ? `+${st}` : `${st}`);
         }
     },
 
     populateTransposeDropdown(originalKey) {
         this._semitoneShift = 0;
-        const sel = document.getElementById('lib-transpose-select');
         const lbl = document.getElementById('lib-transpose-label');
-        const root = originalKey ? this.normalizeNoteRoot(originalKey) : 'C';
-        const fromIdx = this.notes.indexOf(root);
-        if (lbl) lbl.textContent = this.noteLabels[fromIdx] || root;
-        if (!sel) return;
-        sel.innerHTML = this.noteLabels.map((label, i) => {
-            const steps = (i - fromIdx + 12) % 12;
-            const orig = steps === 0 ? ' ★' : '';
-            return `<option value="${steps}">${label}${orig}</option>`;
-        }).join('');
-        sel.value = 0;
+        if (lbl) lbl.textContent = '0';
     },
 
     setSong(title, artist, rawText, originalKey) {
