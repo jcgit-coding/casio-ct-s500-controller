@@ -1928,12 +1928,13 @@ input[type="range"].rc-fader::-moz-range-thumb {
 
 /* Fullscreen: fuente grande, sin bordes, padding cómodo */
 .fullscreen-song {
-    font-size: 28px !important;
-    padding: 48px 60px !important;
+    font-size: 18px !important;
+    padding: 32px 48px !important;
     border-radius: 0 !important;
     border: none !important;
     height: 100vh !important;
     min-height: 100vh !important;
+    overflow-y: auto !important;
 }
 .fullscreen-song .chord { font-size: 1em; }
 
