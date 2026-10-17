@@ -766,7 +766,6 @@ const EventsMgr = {
 
     save(events) {
         localStorage.setItem('casio_events', JSON.stringify(events));
-        this._pushToCloud(events).catch(e => console.warn('Events cloud sync failed:', e));
     },
 
     async _pushToCloud(events) {
@@ -787,11 +786,13 @@ const EventsMgr = {
             if (res.ok) {
                 const cloud = await res.json();
                 if (Array.isArray(cloud)) {
-                    // Mezclar: cloud gana sobre localStorage para eventos con el mismo id
+                    // Cloud es la fuente de verdad; eventos locales sin ID en cloud se agregan al final
                     const local = this.getAll();
                     const merged = [...cloud];
                     local.forEach(le => { if (!merged.find(ce => ce.id === le.id)) merged.push(le); });
                     localStorage.setItem('casio_events', JSON.stringify(merged));
+                    this.render();
+                } else {
                     this.render();
                 }
             }
