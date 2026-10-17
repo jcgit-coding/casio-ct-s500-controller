@@ -98,7 +98,7 @@
                             var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
                             var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
                             var pad=function(n){return n<10?'0'+n:n;};
-                            el.textContent=V+' · '+days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+                            el.textContent=V+' '+days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
                         }).catch(function(){});
                 })();
                 </script>
