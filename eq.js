@@ -3,7 +3,7 @@ const EQ_SECTIONS = [
         title: 'Volume & Panning',
         controls: [
             { label: 'Volume',  cc: 7,  def: 100, tip: 'Volume' },
-            { label: 'EXPRESSION',  cc: 11, def: 127, tip: 'EXPRESSION (dynamics)' },
+            { label: 'EXPRESSION',  cc: 11, def: 100, tip: 'EXPRESSION (dynamics)' },
             { label: 'PAN',  cc: 10, def: 64,  tip: 'Pan (left/right)' },
         ]
     },
