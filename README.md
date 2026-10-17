@@ -203,6 +203,20 @@ Genera `tools/validation-report.json`.
 
 ## 9. Historial de Versiones (reciente)
 
+### v285 · sáb 17 oct 2026 · COT
+- **tune(eq) · `derive()`:** Deltas de ambiente recalibrados para no saturar perfiles extremos.
+  - **Vivo:** Cutoff +10 → **+6** (el +10 sobreexcitaba roles ya brillantes: pluck 84→94, arp 86→96, bell 88→98); Resonance +2 → **+1** (el +2 volvía ásperas cañas con resonancia ya alta); Attack −5 → **−4**; Reverb −8 → **−6** con suelo 5 → **8** (no secar tanto el sustain percibido en PA); Chorus +8 → **+4** y Eco +6 → **+3** (menos emborronado en directo).
+  - **Sala:** Reverb +40 (clamp 32–96) → **+30 (clamp 30–90)** — el +40 saturaba roles ya húmedos (voice 50→90, pad_glass 52→92, synth_pad 48→88) y bañaba en exceso los graves (bass 10→50); Eco +12 → **+10**.
+  - **Jazz:** Cutoff −8 → **−5** (el −8 oscurecía en exceso perfiles ya cálidos: guitar_jazz 60→52); Resonance +2 → **+1**; Reverb +4 (clamp 12–60) → **+6 (clamp 14–58)** (club cálido sin quedar seco); Eco −6 → **−4**.
+  - *Limitación conocida:* con un delta aditivo único, los bajos siguen ganando más reverb del ideal en Sala (10→40); corregirlo exigiría deltas por rol (fuera del alcance de esta revisión).
+- **tune(eq) · 24 roles corregidos** (solo valores numéricos; sin tocar `TONE_ROLE`/`CAT_ROLE`/`CAT_SUS_RELEASE`):
+  - **Sin vibrato donde no corresponde (76/77/78 → 64):** `clav`, `mallet` (marimba/xilófono/tambores de acero), `dulcimer`, `accordion` (el musette es detune, no LFO), `harmonica`, `bagpipe` (drones estables), `ethnic_pluck` (sitar/tanpura/zheng/pipa).
+  - **Vibrato alineado con la orquestación:** `strings_solo` 72/76/64 → **70/72/68** (rate/depth/delay de solista); `strings_ens` depth 72 → **68** (vibrato de ensemble sutil).
+  - **Chorus reducido en instrumentos solistas o no-ensemble** (evita diluir el timbre): `mallet`, `dulcimer`, `harmonica`, `guitar_acoustic`, `guitar_jazz`, `guitar_drive`, `guitar_dist`, `guitar_mute`, `guitar_talk`, `folk_pluck`, `harp`, `pizz`, `strings_solo`, `sax`, `flute`, `ethnic_string`, `ethnic_pluck`, `ethnic_flute`, `ethnic_reed`, `ethnic_perc`.
+  - **Eco ajustado para articulación:** `guitar_drive` 14→8, `guitar_dist` 16→10, `ethnic_perc` 14→8.
+  - **Pizzicato:** Cutoff 68 → **72** (más mordiente/ataque).
+- **cache-bust:** `index.html` → v285.
+
 ### v284 · sáb 17 oct 2026 · COT
 - **feat(eq):** Cobertura total por nombre. `getToneEnvPreset` ya no usa cadenas `if/else` ni fallback de categoría para los tonos del manual: cada uno de los **764 tonos** de `raw_tones.js` mapea explícitamente a un **rol** en `TONE_ROLE` (verificado 764/764, **0 fallbacks**). Se añadieron roles nuevos (`pluck`, `arp`, `seq_bass`, `pad_saw`, `pad_glass`, `dulcimer`, `bagpipe`, `harmonica`, `vocoder`, `sfx`, `ethnic_string/pluck/flute/reed/perc`, `lead_soft`, `guitar_12str`, `guitar_talk`, `bass_slap`, `brass_hard`…). Total: **60 roles**. `CAT_ROLE` (33) queda solo como último recurso.
 - **refactor(eq):** Eliminados `TONE_ENV_MATRIX` (132 objetos duplicados) y las 101 ramas de firma; `derive()` genera Vivo/Sala/Jazz desde el perfil Estudio del rol. Archivo más corto (1317 → 1259 líneas) y editable tono a tono. Verificado: 9 CCs por perfil, valores 0–127, 240 perfiles distintos.
