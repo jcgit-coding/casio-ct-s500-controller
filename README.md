@@ -12,7 +12,7 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 - `index.html`: La estructura visual, construida semánticamente. Carga iconos Material UI y la tipografía Montserrat.
 - `style.css`: Motor de diseño. Utiliza CSS Variables (`--panel-bg`, `--accent`, etc.) para gestionar dinámicamente un Tema Claro / Tema Oscuro. Usa una arquitectura puramente basada en Flexbox para lograr un diseño "Responsive" extremo (funciona igual de bien en monitores 4K que en smartphones verticales).
 - `app.js`: El cerebro de la aplicación. Gestiona la conexión MIDI, el "State Management" global, los listeners de la interfaz y la inyección en el DOM.
-- `eq.js`: Motor EQ, `TONE_ENV_MATRIX` (33 categorías × 4 ambientes) y `getToneEnvPreset` (perfiles por rol). Usa **solo los CCs que el CT-S500 honra** (71,73,74,76,77,78,91,93,94); los CC102/103/104 fueron eliminados (el hardware los ignora). El Active DSP real del CT-S500 requiere SysEx.
+- `eq.js`: Motor EQ y perfiles por rol (`ROLES`, `TONE_ROLE` nombre→rol de los 764 tonos, `CAT_ROLE` por categoría, `derive()`, `getToneEnvPreset`). Usa **solo los CCs que el CT-S500 honra** (71,73,74,76,77,78,91,93,94); los CC102/103/104 fueron eliminados (el hardware los ignora). El Active DSP real del CT-S500 requiere SysEx.
 - `midi.js`: Conexión y routing MIDI (Web MIDI API).
 - `presets.js`: Persistencia local y sincronización GitHub de presets de usuario.
 - `harmony.js`: Motor de armonía y acordes.
@@ -60,8 +60,8 @@ Cuando se cambia un instrumento (Program Change), Casio tarda unos milisegundos 
 ## 4. Perfiles Acústicos Inteligentes (Smart Acoustic Profiles)
 
 Seleccionar un sonido no es suficiente; un Órgano necesita distorsión y rotary, mientras que un Piano necesita Reverb profunda.
-La constante `ENVIRONMENTS` en `app.js` es un motor de diseño sonoro automatizado: 4 ambientes (Estudio/Vivo/Sala/Jazz) × 33 categorías = 132 perfiles.
-- Cuando la aplicación detecta que el usuario seleccionó un tono desde un `optgroup` (ej. cambió de "PIANO" a "ELEC.ORGAN"), inyecta automáticamente una matriz de valores predefinidos:
+El motor de perfiles vive en `eq.js`: 60 **roles** de carácter EQ («piano», «pluck», «ethnic_flute», «sfx»…) × 4 ambientes (Estudio/Vivo/Sala/Jazz). Cada uno de los **764 tonos** de `raw_tones.js` mapea por su nombre a un rol vía `TONE_ROLE` (0 fallbacks); `derive()` genera Vivo/Sala/Jazz desde el perfil Estudio del rol.
+- Cuando la aplicación detecta que el usuario seleccionó un tono desde un `optgroup` (ej. cambió de "PIANO" a "ELEC.ORGAN"), inyecta automáticamente el perfil del rol correspondiente:
   - *String Ensemble / Choir:* Ataques lentos, liberación larga, Reverb profunda. CC72 neutral elevado (75–78) para preservar el decay natural.
   - *Synth Lead:* Filtros (Cutoff) cerrados, alta resonancia, vibrato activo y Portamento.
   - *Elec. Organ:* Activación del DSP Rotatorio, cero resonancia.
@@ -202,6 +202,11 @@ Genera `tools/validation-report.json`.
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v284 · sáb 17 oct 2026 · COT
+- **feat(eq):** Cobertura total por nombre. `getToneEnvPreset` ya no usa cadenas `if/else` ni fallback de categoría para los tonos del manual: cada uno de los **764 tonos** de `raw_tones.js` mapea explícitamente a un **rol** en `TONE_ROLE` (verificado 764/764, **0 fallbacks**). Se añadieron roles nuevos (`pluck`, `arp`, `seq_bass`, `pad_saw`, `pad_glass`, `dulcimer`, `bagpipe`, `harmonica`, `vocoder`, `sfx`, `ethnic_string/pluck/flute/reed/perc`, `lead_soft`, `guitar_12str`, `guitar_talk`, `bass_slap`, `brass_hard`…). Total: **60 roles**. `CAT_ROLE` (33) queda solo como último recurso.
+- **refactor(eq):** Eliminados `TONE_ENV_MATRIX` (132 objetos duplicados) y las 101 ramas de firma; `derive()` genera Vivo/Sala/Jazz desde el perfil Estudio del rol. Archivo más corto (1317 → 1259 líneas) y editable tono a tono. Verificado: 9 CCs por perfil, valores 0–127, 240 perfiles distintos.
+- **cache-bust:** `index.html` → v284.
 
 ### v283 · sáb 17 oct 2026 · COT
 - **fix(eq):** Eliminada la sección **EQ Casio** (CC104/103/102) — verificado que el CT-S500 **ignora** esos CCs. Reescritos todos los presets (33 categorías + 101 modelos de firma por tono = **540 objetos**) usando **solo los CCs soportados** (71,73,74,76,77,78,91,93,94), con perfiles por rol (piano, cuerdas, vientos, órganos, pads, guitarras, bajos, percusión melódica, etc.) para Studio/Live/Hall/Jazz. Se conserva `64` cuando es el neutro de diseño (p. ej. sin vibrato en piano).

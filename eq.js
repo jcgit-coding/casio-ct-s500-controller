@@ -87,947 +87,890 @@ function susRelease(part) {
 }
 
 // ======================================================================
-//  TONE + ENVIRONMENT PRESET MATRIX (33 CASIO INSTRUMENT CATEGORIES)
-//  Role-based Studio / Live / Hall / Jazz profiles built ONLY from CCs the
-//  CT-S500 actually honours (71,73,74,76,77,78,91,93,94). For the bipolar
-//  controls 64 = the tone's designed neutral, kept wherever neutral is the
-//  musically correct choice (e.g. no vibrato on piano).
+//  TONE PROFILES  --  role-based Studio / Live / Hall / Jazz
+//  Every tone in raw_tones.js resolves to a ROLE: first by its exact name
+//  (TONE_ROLE, 764 entries), then by category (CAT_ROLE). Each role defines
+//  a Studio base profile; Live / Hall / Jazz derive from it via derive().
+//  Only CCs the CT-S500 honours are used (71,73,74,76,77,78,91,93,94).
+//  For the bipolar controls 64 = the tone's designed neutral, kept wherever
+//  neutral is the musically correct choice (e.g. no vibrato on piano).
 // ======================================================================
-const TONE_ENV_MATRIX = {
-    "PIANO": {
-        "Studio": { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 },
-        "Live":    { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 },
-        "Hall":    { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 },
-        "Jazz":    { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 }
-    },
-    "HARPSICHORD": {
-        "Studio": { '74':80, '71':70, '73':52, '76':64, '77':64, '78':64, '91':16, '93':0, '94':0 },
-        "Live":    { '74':90, '71':72, '73':47, '76':64, '77':64, '78':64, '91':8, '93':8, '94':6 },
-        "Hall":    { '74':78, '71':70, '73':55, '76':64, '77':64, '78':68, '91':56, '93':0, '94':12 },
-        "Jazz":    { '74':72, '71':72, '73':54, '76':64, '77':64, '78':64, '91':20, '93':0, '94':0 }
-    },
-    "ELEC.PIANO": {
-        "Studio": { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 },
-        "Live":    { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 },
-        "Hall":    { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 },
-        "Jazz":    { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 }
-    },
-    "CLAVI": {
-        "Studio": { '74':82, '71':76, '73':52, '76':66, '77':68, '78':64, '91':14, '93':22, '94':0 },
-        "Live":    { '74':92, '71':78, '73':47, '76':66, '77':68, '78':64, '91':6, '93':30, '94':6 },
-        "Hall":    { '74':80, '71':76, '73':55, '76':66, '77':68, '78':68, '91':54, '93':20, '94':12 },
-        "Jazz":    { '74':74, '71':78, '73':54, '76':66, '77':68, '78':64, '91':18, '93':18, '94':0 }
-    },
-    "VIB./CHROM.PERC.": {
-        "Studio": { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 },
-        "Live":    { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 },
-        "Hall":    { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 },
-        "Jazz":    { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 }
-    },
-    "ELEC.ORGAN": {
-        "Studio": { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 },
-        "Live":    { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 },
-        "Hall":    { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 },
-        "Jazz":    { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 }
-    },
-    "PIPE ORGAN": {
-        "Studio": { '74':72, '71':64, '73':62, '76':64, '77':64, '78':64, '91':50, '93':0, '94':18 },
-        "Live":    { '74':82, '71':66, '73':57, '76':64, '77':64, '78':64, '91':42, '93':8, '94':24 },
-        "Hall":    { '74':70, '71':64, '73':65, '76':64, '77':64, '78':68, '91':90, '93':0, '94':30 },
-        "Jazz":    { '74':64, '71':66, '73':64, '76':64, '77':64, '78':64, '91':54, '93':0, '94':12 }
-    },
-    "ACCORDION": {
-        // Bellows instrument: nasal midrange character, reduced bass, tight articulation
-        "Studio": { '74':74, '71':68, '73':56, '76':72, '77':70, '78':64, '91':20, '93':14, '94':0 },
-        "Live":    { '74':84, '71':70, '73':51, '76':72, '77':70, '78':64, '91':12, '93':22, '94':6 },
-        "Hall":    { '74':72, '71':68, '73':59, '76':72, '77':70, '78':68, '91':60, '93':12, '94':12 },
-        "Jazz":    { '74':66, '71':70, '73':58, '76':72, '77':70, '78':64, '91':24, '93':10, '94':0 }
-    },
-    "ACOUS.GUITAR": {
-        "Studio": { '74':76, '71':66, '73':58, '76':64, '77':64, '78':64, '91':22, '93':16, '94':0 },
-        "Live":    { '74':86, '71':68, '73':53, '76':64, '77':64, '78':64, '91':14, '93':24, '94':6 },
-        "Hall":    { '74':74, '71':66, '73':61, '76':64, '77':64, '78':68, '91':62, '93':14, '94':12 },
-        "Jazz":    { '74':68, '71':68, '73':60, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 }
-    },
-    "ELEC.GUITAR": {
-        "Studio": { '74':80, '71':66, '73':58, '76':66, '77':64, '78':64, '91':22, '93':24, '94':8 },
-        "Live":    { '74':90, '71':68, '73':53, '76':66, '77':64, '78':64, '91':14, '93':32, '94':14 },
-        "Hall":    { '74':78, '71':66, '73':61, '76':66, '77':64, '78':68, '91':62, '93':22, '94':20 },
-        "Jazz":    { '74':72, '71':68, '73':60, '76':66, '77':64, '78':64, '91':26, '93':20, '94':2 }
-    },
-    "ACOUS.BASS": {
-        "Studio": { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 },
-        "Live":    { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 },
-        "Hall":    { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 },
-        "Jazz":    { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 }
-    },
-    "ELEC.BASS": {
-        "Studio": { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 },
-        "Live":    { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 },
-        "Hall":    { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 },
-        "Jazz":    { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 }
-    },
-    "SYNTH-BASS": {
-        "Studio": { '74':72, '71':68, '73':54, '76':64, '77':64, '78':64, '91':10, '93':10, '94':0 },
-        "Live":    { '74':82, '71':70, '73':49, '76':64, '77':64, '78':64, '91':5, '93':18, '94':6 },
-        "Hall":    { '74':70, '71':68, '73':57, '76':64, '77':64, '78':68, '91':50, '93':8, '94':12 },
-        "Jazz":    { '74':64, '71':70, '73':56, '76':64, '77':64, '78':64, '91':14, '93':6, '94':0 }
-    },
-    "SOLO STRINGS": {
-        "Studio": { '74':74, '71':66, '73':70, '76':72, '77':76, '78':64, '91':32, '93':12, '94':0 },
-        "Live":    { '74':84, '71':68, '73':65, '76':72, '77':76, '78':64, '91':24, '93':20, '94':6 },
-        "Hall":    { '74':72, '71':66, '73':73, '76':72, '77':76, '78':68, '91':72, '93':10, '94':12 },
-        "Jazz":    { '74':66, '71':68, '73':72, '76':72, '77':76, '78':64, '91':36, '93':8, '94':0 }
-    },
-    "STRING ENSEMBLE": {
-        "Studio": { '74':72, '71':64, '73':78, '76':70, '77':72, '78':72, '91':40, '93':16, '94':12 },
-        "Live":    { '74':82, '71':66, '73':73, '76':70, '77':72, '78':72, '91':32, '93':24, '94':18 },
-        "Hall":    { '74':70, '71':64, '73':81, '76':70, '77':72, '78':76, '91':80, '93':14, '94':24 },
-        "Jazz":    { '74':64, '71':66, '73':80, '76':70, '77':72, '78':72, '91':44, '93':12, '94':6 }
-    },
-    "SOLO BRASS": {
-        "Studio": { '74':76, '71':66, '73':60, '76':70, '77':68, '78':66, '91':24, '93':0, '94':0 },
-        "Live":    { '74':86, '71':68, '73':55, '76':70, '77':68, '78':66, '91':16, '93':8, '94':6 },
-        "Hall":    { '74':74, '71':66, '73':63, '76':70, '77':68, '78':70, '91':64, '93':0, '94':12 },
-        "Jazz":    { '74':68, '71':68, '73':62, '76':70, '77':68, '78':66, '91':28, '93':0, '94':0 }
-    },
-    "BRASS ENSEMBLE": {
-        "Studio": { '74':76, '71':66, '73':58, '76':64, '77':64, '78':64, '91':26, '93':8, '94':0 },
-        "Live":    { '74':86, '71':68, '73':53, '76':64, '77':64, '78':64, '91':18, '93':16, '94':6 },
-        "Hall":    { '74':74, '71':66, '73':61, '76':64, '77':64, '78':68, '91':66, '93':6, '94':12 },
-        "Jazz":    { '74':68, '71':68, '73':60, '76':64, '77':64, '78':64, '91':30, '93':4, '94':0 }
-    },
-    "SYNTH-BRASS": {
-        "Studio": { '74':80, '71':70, '73':56, '76':64, '77':64, '78':64, '91':22, '93':18, '94':12 },
-        "Live":    { '74':90, '71':72, '73':51, '76':64, '77':64, '78':64, '91':14, '93':26, '94':18 },
-        "Hall":    { '74':78, '71':70, '73':59, '76':64, '77':64, '78':68, '91':62, '93':16, '94':24 },
-        "Jazz":    { '74':72, '71':72, '73':58, '76':64, '77':64, '78':64, '91':26, '93':14, '94':6 }
-    },
-    "SAX": {
-        "Studio": { '74':76, '71':66, '73':60, '76':72, '77':72, '78':66, '91':26, '93':10, '94':0 },
-        "Live":    { '74':86, '71':68, '73':55, '76':72, '77':72, '78':66, '91':18, '93':18, '94':6 },
-        "Hall":    { '74':74, '71':66, '73':63, '76':72, '77':72, '78':70, '91':66, '93':8, '94':12 },
-        "Jazz":    { '74':68, '71':68, '73':62, '76':72, '77':72, '78':66, '91':30, '93':6, '94':0 }
-    },
-    "REED": {
-        // Oboe/clarinet: nasal midrange character, reduced bass, penetrating presence
-        "Studio": { '74':78, '71':70, '73':62, '76':70, '77':68, '78':66, '91':26, '93':0, '94':0 },
-        "Live":    { '74':88, '71':72, '73':57, '76':70, '77':68, '78':66, '91':18, '93':8, '94':6 },
-        "Hall":    { '74':76, '71':70, '73':65, '76':70, '77':68, '78':70, '91':66, '93':0, '94':12 },
-        "Jazz":    { '74':70, '71':72, '73':64, '76':70, '77':68, '78':66, '91':30, '93':0, '94':0 }
-    },
-    "PIPE": {
-        // Flute/recorder: airy, bright, breathed attack, natural space
-        "Studio": { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 },
-        "Live":    { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 },
-        "Hall":    { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 },
-        "Jazz":    { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 }
-    },
-    "SYNTH-LEAD": {
-        "Studio": { '74':80, '71':68, '73':58, '76':66, '77':66, '78':68, '91':22, '93':24, '94':10 },
-        "Live":    { '74':90, '71':70, '73':53, '76':66, '77':66, '78':68, '91':14, '93':32, '94':16 },
-        "Hall":    { '74':78, '71':68, '73':61, '76':66, '77':66, '78':72, '91':62, '93':22, '94':22 },
-        "Jazz":    { '74':72, '71':70, '73':60, '76':66, '77':66, '78':68, '91':26, '93':20, '94':4 }
-    },
-    "SYNTH-PAD": {
-        "Studio": { '74':72, '71':66, '73':78, '76':64, '77':64, '78':80, '91':48, '93':30, '94':20 },
-        "Live":    { '74':82, '71':68, '73':73, '76':64, '77':64, '78':80, '91':40, '93':38, '94':26 },
-        "Hall":    { '74':70, '71':66, '73':81, '76':64, '77':64, '78':84, '91':88, '93':28, '94':32 },
-        "Jazz":    { '74':64, '71':68, '73':80, '76':64, '77':64, '78':80, '91':52, '93':26, '94':14 }
-    },
-    "CHOIR": {
-        // Human voices: slow breath attack, warm midrange, hall reverb, natural vibrato
-        "Studio": { '74':68, '71':62, '73':80, '76':66, '77':68, '78':74, '91':50, '93':18, '94':16 },
-        "Live":    { '74':78, '71':64, '73':75, '76':66, '77':68, '78':74, '91':42, '93':26, '94':22 },
-        "Hall":    { '74':66, '71':62, '73':83, '76':66, '77':68, '78':78, '91':90, '93':16, '94':28 },
-        "Jazz":    { '74':60, '71':64, '73':82, '76':66, '77':68, '78':74, '91':54, '93':14, '94':10 }
-    },
-    "EDM SYNTH": {
-        "Studio": { '74':84, '71':70, '73':54, '76':64, '77':64, '78':64, '91':20, '93':30, '94':14 },
-        "Live":    { '74':94, '71':72, '73':49, '76':64, '77':64, '78':64, '91':12, '93':38, '94':20 },
-        "Hall":    { '74':82, '71':70, '73':57, '76':64, '77':64, '78':68, '91':60, '93':28, '94':26 },
-        "Jazz":    { '74':76, '71':72, '73':56, '76':64, '77':64, '78':64, '91':24, '93':26, '94':8 }
-    },
-    "CASIO CLASSIC": {
-        "Studio": { '74':72, '71':66, '73':62, '76':66, '77':64, '78':64, '91':22, '93':15, '94':0 },
-        "Live":    { '74':82, '71':68, '73':57, '76':66, '77':64, '78':64, '91':14, '93':23, '94':6 },
-        "Hall":    { '74':70, '71':66, '73':65, '76':66, '77':64, '78':68, '91':62, '93':13, '94':12 },
-        "Jazz":    { '74':64, '71':68, '73':64, '76':66, '77':64, '78':64, '91':26, '93':11, '94':0 }
-    },
-    "INDIAN": {
-        "Studio": { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 },
-        "Live":    { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 },
-        "Hall":    { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 },
-        "Jazz":    { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 }
-    },
-    "INDONESIAN": {
-        "Studio": { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 },
-        "Live":    { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 },
-        "Hall":    { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 },
-        "Jazz":    { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 }
-    },
-    "ARABIC": {
-        "Studio": { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 },
-        "Live":    { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 },
-        "Hall":    { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 },
-        "Jazz":    { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 }
-    },
-    "CHINESE": {
-        "Studio": { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 },
-        "Live":    { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 },
-        "Hall":    { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 },
-        "Jazz":    { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 }
-    },
-    "BRAZILIAN": {
-        "Studio": { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 },
-        "Live":    { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 },
-        "Hall":    { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 },
-        "Jazz":    { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 }
-    },
-    "ETHNIC OTHERS": {
-        "Studio": { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 },
-        "Live":    { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 },
-        "Hall":    { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 },
-        "Jazz":    { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 }
-    },
-    "GM TONES": {
-        "Studio": { '74':72, '71':66, '73':62, '76':66, '77':64, '78':64, '91':22, '93':15, '94':0 },
-        "Live":    { '74':82, '71':68, '73':57, '76':66, '77':64, '78':64, '91':14, '93':23, '94':6 },
-        "Hall":    { '74':70, '71':66, '73':65, '76':66, '77':64, '78':68, '91':62, '93':13, '94':12 },
-        "Jazz":    { '74':64, '71':68, '73':64, '76':66, '77':64, '78':64, '91':26, '93':11, '94':0 }
-    }
+const ROLES = {
+    piano:          { 74:72, 71:64, 73:58, 76:64, 77:64, 78:64, 91:22, 93:0,  94:0 },
+    piano_pad:      { 74:70, 71:64, 73:70, 76:66, 77:66, 78:70, 91:44, 93:24, 94:14 },
+    ep:             { 74:70, 71:64, 73:60, 76:66, 77:64, 78:64, 91:22, 93:20, 94:0 },
+    harpsi:         { 74:80, 71:70, 73:52, 76:64, 77:64, 78:64, 91:16, 93:0,  94:0 },
+    clav:           { 74:82, 71:76, 73:52, 76:66, 77:68, 78:64, 91:14, 93:22, 94:0 },
+    mallet:         { 74:80, 71:66, 73:58, 76:76, 77:72, 78:62, 91:26, 93:14, 94:0 },
+    bell:           { 74:88, 71:64, 73:54, 76:64, 77:64, 78:64, 91:34, 93:10, 94:10 },
+    dulcimer:       { 74:84, 71:64, 73:50, 76:68, 77:70, 78:64, 91:28, 93:16, 94:4 },
+    organ:          { 74:74, 71:64, 73:58, 76:78, 77:74, 78:64, 91:24, 93:26, 94:0 },
+    organ_pipe:     { 74:72, 71:64, 73:62, 76:64, 77:64, 78:64, 91:50, 93:0,  94:18 },
+    accordion:      { 74:74, 71:68, 73:56, 76:72, 77:70, 78:64, 91:20, 93:14, 94:0 },
+    harmonica:      { 74:74, 71:70, 73:58, 76:72, 77:70, 78:64, 91:22, 93:12, 94:0 },
+    harmonium:      { 74:74, 71:70, 73:60, 76:64, 77:64, 78:64, 91:26, 93:8,  94:0 },
+    bagpipe:        { 74:76, 71:72, 73:60, 76:68, 77:70, 78:66, 91:18, 93:12, 94:0 },
+    guitar_acoustic:{ 74:76, 71:66, 73:58, 76:64, 77:64, 78:64, 91:22, 93:16, 94:0 },
+    guitar_12str:   { 74:78, 71:66, 73:56, 76:64, 77:64, 78:64, 91:24, 93:20, 94:0 },
+    guitar_jazz:    { 74:60, 71:64, 73:60, 76:64, 77:64, 78:64, 91:24, 93:14, 94:0 },
+    guitar_clean:   { 74:80, 71:66, 73:58, 76:66, 77:64, 78:64, 91:22, 93:24, 94:8 },
+    guitar_drive:   { 74:76, 71:70, 73:56, 76:68, 77:64, 78:64, 91:22, 93:18, 94:14 },
+    guitar_dist:    { 74:74, 71:72, 73:54, 76:66, 77:64, 78:64, 91:20, 93:14, 94:16 },
+    guitar_mute:    { 74:72, 71:66, 73:52, 76:64, 77:64, 78:64, 91:16, 93:16, 94:0 },
+    guitar_synth:   { 74:80, 71:68, 73:60, 76:68, 77:68, 78:68, 91:26, 93:26, 94:16 },
+    guitar_pad:     { 74:66, 71:62, 73:78, 76:66, 77:66, 78:72, 91:44, 93:22, 94:16 },
+    guitar_talk:    { 74:78, 71:74, 73:54, 76:72, 77:70, 78:64, 91:18, 93:20, 94:10 },
+    folk_pluck:     { 74:82, 71:66, 73:54, 76:64, 77:64, 78:64, 91:18, 93:14, 94:0 },
+    bass:           { 74:68, 71:64, 73:58, 76:64, 77:64, 78:64, 91:10, 93:0,  94:0 },
+    bass_slap:      { 74:78, 71:68, 73:50, 76:64, 77:64, 78:64, 91:12, 93:12, 94:6 },
+    bass_synth:     { 74:72, 71:68, 73:54, 76:64, 77:64, 78:64, 91:10, 93:10, 94:0 },
+    seq_bass:       { 74:76, 71:70, 73:48, 76:64, 77:64, 78:64, 91:10, 93:14, 94:4 },
+    strings_solo:   { 74:74, 71:66, 73:70, 76:72, 77:76, 78:64, 91:32, 93:12, 94:0 },
+    strings_ens:    { 74:72, 71:64, 73:78, 76:70, 77:72, 78:72, 91:40, 93:16, 94:12 },
+    synth_strings:  { 74:78, 71:68, 73:78, 76:70, 77:70, 78:68, 91:36, 93:22, 94:14 },
+    pad_strings:    { 74:78, 71:68, 73:76, 76:70, 77:72, 78:70, 91:40, 93:24, 94:16 },
+    pad_saw:        { 74:80, 71:66, 73:74, 76:64, 77:70, 78:80, 91:46, 93:30, 94:18 },
+    pad_glass:      { 74:82, 71:64, 73:66, 76:70, 77:72, 78:76, 91:52, 93:30, 94:22 },
+    harp:           { 74:80, 71:64, 73:58, 76:64, 77:64, 78:64, 91:30, 93:12, 94:0 },
+    pizz:           { 74:68, 71:64, 73:56, 76:64, 77:64, 78:64, 91:22, 93:10, 94:0 },
+    hit:            { 74:74, 71:66, 73:50, 76:64, 77:64, 78:64, 91:28, 93:0,  94:14 },
+    brass_solo:     { 74:76, 71:66, 73:60, 76:70, 77:68, 78:66, 91:24, 93:0,  94:0 },
+    brass_ens:      { 74:76, 71:66, 73:58, 76:64, 77:64, 78:64, 91:26, 93:8,  94:0 },
+    brass_hard:     { 74:82, 71:70, 73:54, 76:64, 77:64, 78:64, 91:22, 93:6,  94:0 },
+    synth_brass:    { 74:80, 71:70, 73:56, 76:64, 77:64, 78:64, 91:22, 93:18, 94:12 },
+    sax:            { 74:76, 71:66, 73:60, 76:72, 77:72, 78:66, 91:26, 93:10, 94:0 },
+    reed:           { 74:78, 71:70, 73:62, 76:70, 77:68, 78:66, 91:26, 93:0,  94:0 },
+    flute:          { 74:82, 71:60, 73:68, 76:72, 77:70, 78:68, 91:34, 93:8,  94:0 },
+    voice:          { 74:68, 71:62, 73:80, 76:66, 77:68, 78:74, 91:50, 93:18, 94:16 },
+    vocoder:        { 74:76, 71:70, 73:60, 76:70, 77:68, 78:66, 91:30, 93:24, 94:14 },
+    synth_lead:     { 74:80, 71:68, 73:58, 76:66, 77:66, 78:68, 91:22, 93:24, 94:10 },
+    lead_soft:      { 74:74, 71:60, 73:62, 76:64, 77:66, 78:66, 91:26, 93:20, 94:8 },
+    pluck:          { 74:84, 71:60, 73:40, 76:64, 77:64, 78:64, 91:18, 93:12, 94:0 },
+    arp:            { 74:86, 71:64, 73:38, 76:64, 77:64, 78:64, 91:24, 93:22, 94:12 },
+    synth_pad:      { 74:72, 71:66, 73:78, 76:64, 77:64, 78:80, 91:48, 93:30, 94:20 },
+    edm:            { 74:84, 71:70, 73:54, 76:64, 77:64, 78:64, 91:20, 93:30, 94:14 },
+    ethnic_string:  { 74:74, 71:64, 73:60, 76:72, 77:74, 78:66, 91:30, 93:16, 94:6 },
+    ethnic_pluck:   { 74:82, 71:66, 73:52, 76:68, 77:70, 78:64, 91:24, 93:16, 94:4 },
+    ethnic_flute:   { 74:80, 71:62, 73:66, 76:72, 77:72, 78:68, 91:32, 93:10, 94:4 },
+    ethnic_reed:    { 74:78, 71:72, 73:56, 76:72, 77:70, 78:66, 91:24, 93:12, 94:6 },
+    ethnic_perc:    { 74:78, 71:66, 73:46, 76:64, 77:64, 78:64, 91:30, 93:8,  94:14 },
+    sfx:            { 74:64, 71:64, 73:50, 76:64, 77:64, 78:64, 91:40, 93:0,  94:16 },
+    generic:        { 74:72, 71:66, 73:62, 76:66, 77:64, 78:64, 91:22, 93:15, 94:0 }
 };
+
+// Casio category -> default role (last-resort fallback for tone names absent
+// from TONE_ROLE, e.g. tones driven over the PC Synth / GM set).
+const CAT_ROLE = {
+    'PIANO': 'piano', 'HARPSICHORD': 'harpsi', 'ELEC.PIANO': 'ep', 'CLAVI': 'clav',
+    'VIB./CHROM.PERC.': 'mallet', 'ELEC.ORGAN': 'organ', 'PIPE ORGAN': 'organ_pipe',
+    'ACCORDION': 'accordion', 'ACOUS.GUITAR': 'guitar_acoustic', 'ELEC.GUITAR': 'guitar_clean',
+    'ACOUS.BASS': 'bass', 'ELEC.BASS': 'bass', 'SYNTH-BASS': 'bass_synth',
+    'SOLO STRINGS': 'strings_solo', 'STRING ENSEMBLE': 'strings_ens', 'SOLO BRASS': 'brass_solo',
+    'BRASS ENSEMBLE': 'brass_ens', 'SYNTH-BRASS': 'synth_brass', 'SAX': 'sax', 'REED': 'reed',
+    'PIPE': 'flute', 'CHOIR': 'voice', 'EDM SYNTH': 'edm', 'CASIO CLASSIC': 'generic',
+    'INDIAN': 'ethnic_string', 'INDONESIAN': 'ethnic_perc', 'ARABIC': 'ethnic_string',
+    'CHINESE': 'ethnic_string', 'BRAZILIAN': 'ethnic_pluck', 'ETHNIC OTHERS': 'folk_pluck',
+    'GM TONES': 'generic', 'SYNTH-LEAD': 'synth_lead', 'SYNTH-PAD': 'synth_pad'
+};
+
+// Tone name (uppercased, exactly as parsed from raw_tones.js) -> role.
+// One entry per tone, so no tone ever needs the category fallback.
+const TONE_ROLE = {
+    "STAGE PIANO": "piano",
+    "CLASSIC GRAND": "piano",
+    "BALLAD PIANO": "piano",
+    "BRIGHT PIANO": "piano",
+    "MELLOW ROCK PIANO": "piano",
+    "MELLOW PIANO": "piano",
+    "DYNAMIC PIANO": "piano",
+    "ADV PIANO PAD": "piano_pad",
+    "GRAND PIANO": "piano",
+    "AMBIENT PIANO": "piano",
+    "POP PIANO": "piano",
+    "ROCK PIANO": "piano",
+    "DANCE PIANO": "piano",
+    "LA PIANO": "piano",
+    "BREEZING PIANO": "piano",
+    "TACK PIANO": "piano",
+    "WIDE GRAND PIANO": "piano",
+    "MONO PIANO": "piano",
+    "HONKY-TONK 1": "piano",
+    "HONKY-TONK 2": "piano",
+    "OCTAVE PIANO 1": "piano_pad",
+    "OCTAVE PIANO 2": "piano_pad",
+    "BASS/PIANO": "piano_pad",
+    "STRINGS PIANO": "piano_pad",
+    "PIANO PAD": "piano_pad",
+    "MODULATED PIANO": "piano_pad",
+    "VOICE PIANO": "voice",
+    "NEW AGE PIANO": "synth_pad",
+    "ELEC.GRAND PIANO": "piano",
+    "AMP E.GRAND": "ep",
+    "MODERN E.G.PIANO": "ep",
+    "HARPSICHORD 1": "harpsi",
+    "HARPSICHORD 2": "harpsi",
+    "COUPLED HARPSICHORD": "harpsi",
+    "AMBIENT HARPSICHORD": "harpsi",
+    "STAGE E.PIANO": "ep",
+    "GALAXIA EP": "ep",
+    "PHASER E.PIANO": "ep",
+    "DYNO E.PIANO": "ep",
+    "AMP 60'S E.PIANO": "ep",
+    "LUCENT EP": "ep",
+    "DYNAMIC EP": "ep",
+    "ELEC.PIANO 1": "ep",
+    "ELEC.PIANO 2": "ep",
+    "ELEC.PIANO 3": "ep",
+    "ELEC.PIANO 4": "ep",
+    "ELEC.PIANO 5": "ep",
+    "ELEC.PIANO 6": "ep",
+    "TREM 60'S E.PIANO": "ep",
+    "60'S E.PIANO": "ep",
+    "AMP E.PIANO 1": "ep",
+    "AMP E.PIANO 2": "ep",
+    "PAN E.PIANO": "ep",
+    "DIGITAL E.PIANO 1": "ep",
+    "DIGITAL E.PIANO 2": "ep",
+    "DIGITAL E.PIANO 3": "ep",
+    "WIDE E.PIANO": "ep",
+    "MELLOW E.PIANO": "piano",
+    "WAH E.PIANO": "ep",
+    "CRUNCH E.PIANO": "ep",
+    "DIZZY E.PIANO": "ep",
+    "ADV E.PIANO PAD 1": "piano_pad",
+    "ADV E.PIANO PAD 2": "piano_pad",
+    "E.PIANO PAD": "piano_pad",
+    "CLAVI 1": "clav",
+    "WAH CLAV": "clav",
+    "AMP CLAVI": "clav",
+    "CLAVI 2": "clav",
+    "CLAVI 3": "clav",
+    "CLAVI 4": "clav",
+    "CLAVI 5": "clav",
+    "CLAVI 6": "clav",
+    "VIBRAPHONE 1": "mallet",
+    "AMBIENT VIBRAPHONE": "mallet",
+    "VIBRAPHONE 2": "mallet",
+    "VIBRAPHONE 3": "mallet",
+    "VIBRAPHONE WIDE": "mallet",
+    "ADV VIBRAPHONE PAD": "mallet",
+    "MARIMBA": "mallet",
+    "ADV MARIMBA PAD": "mallet",
+    "XYLOPHONE": "mallet",
+    "CELESTA": "bell",
+    "GLOCKENSPIEL": "bell",
+    "MUSIC BOX": "bell",
+    "ORGEL": "bell",
+    "TUBULAR BELL": "bell",
+    "CHURCH BELLS": "bell",
+    "JS ORGAN": "organ",
+    "AMP ORGAN 1": "organ",
+    "ROCK ORGAN 1": "organ",
+    "HARD ROCK ORGAN": "organ",
+    "GOSPEL ORGAN 1": "organ",
+    "VELO.ORGAN": "organ",
+    "F-ORGAN": "organ",
+    "V-ORGAN": "organ",
+    "RTF FD ORGAN": "organ",
+    "ROCK OD ORGAN": "organ",
+    "TREMOLO ORGAN": "organ",
+    "DP ORGAN": "organ",
+    "JAZZ ORGAN 1": "organ",
+    "JAZZ ORGAN 2": "organ",
+    "ELEC.ORGAN 1": "organ",
+    "ELEC.ORGAN 2": "organ",
+    "ELEC.ORGAN 3": "organ",
+    "ELEC.ORGAN 4": "organ",
+    "ELEC.ORGAN 5": "organ",
+    "PERC.ORGAN 1": "organ",
+    "PERC.ORGAN 2": "organ",
+    "GOSPEL ORGAN 2": "organ",
+    "FULL DRAWBAR": "organ",
+    "ROCK ORGAN 2": "organ",
+    "ROCK ORGAN 3": "organ",
+    "CLICK ORGAN": "organ",
+    "70'S ORGAN": "organ",
+    "ORGAN PAD": "organ_pipe",
+    "THEATER ORGAN": "organ_pipe",
+    "PERC.ORGAN 3": "organ",
+    "ELEC.ORGAN 6": "organ",
+    "AMP ORGAN 2": "organ",
+    "AMP ORGAN 3": "organ",
+    "ORGAN FLUTE": "organ_pipe",
+    "PUFF ORGAN": "organ_pipe",
+    "REED ORGAN": "organ_pipe",
+    "ROTARY F-ORGAN": "organ",
+    "ROTARY V-ORGAN": "organ",
+    "CHAPEL ORGAN": "organ_pipe",
+    "PIPE ORGAN 1": "organ_pipe",
+    "PIPE ORGAN 2": "organ_pipe",
+    "PIPE ORGAN 3": "organ_pipe",
+    "ACCORDION FRENCH 1": "accordion",
+    "ACCORDION FRENCH 2": "accordion",
+    "ACCORDION FRENCH 3": "accordion",
+    "ACCORDION ITALY 1": "accordion",
+    "ACCORDION ITALY 2": "accordion",
+    "ACCORDION": "accordion",
+    "BANDONEON": "accordion",
+    "BANDONEON SOLO": "accordion",
+    "HARMONICA 1": "accordion",
+    "HARMONICA 2": "accordion",
+    "DYNAMIC NYLON GUITAR": "guitar_acoustic",
+    "DYNAMIC STEEL GUITAR": "guitar_acoustic",
+    "GUITAR PAD": "guitar_pad",
+    "NYLON GUITAR VELO.SLIDE": "guitar_acoustic",
+    "STEEL GUITAR VELO.SLIDE": "guitar_acoustic",
+    "NYLON STR.GUITAR 1": "guitar_acoustic",
+    "NYLON STR.GUITAR 2": "guitar_acoustic",
+    "NYLON STR.GUITAR 3": "guitar_acoustic",
+    "STEEL STR.GUITAR 1": "guitar_acoustic",
+    "STEEL STR.GUITAR 2": "guitar_acoustic",
+    "STEEL STR.GUITAR 3": "guitar_acoustic",
+    "STEEL STR.GUITAR 4": "guitar_acoustic",
+    "12 STR.GUITAR": "guitar_12str",
+    "MANDOLIN": "folk_pluck",
+    "UKULELE": "folk_pluck",
+    "VERSATILE NYLON GUITAR": "guitar_acoustic",
+    "VERSATILE STEEL GUITAR": "guitar_acoustic",
+    "CLEAN LEAD GUITAR": "guitar_clean",
+    "DISTORTION GUITAR 1": "guitar_dist",
+    "DOUBLE TRACK GUITAR": "guitar_drive",
+    "SOLO FEEDBACK GUITAR": "guitar_dist",
+    "CRY DIST GUITAR": "guitar_dist",
+    "TALK GUITAR OH-YEAH": "guitar_talk",
+    "SOLO GUITAR SYNTH": "guitar_synth",
+    "JAZZ GUITAR 1": "guitar_jazz",
+    "JAZZ GUITAR 2": "guitar_jazz",
+    "OD OCT JAZZ GUITAR": "guitar_jazz",
+    "CRUNCH JAZZ GUITAR": "guitar_jazz",
+    "CLEAN GUITAR 1": "guitar_clean",
+    "CLEAN GUITAR 2": "guitar_clean",
+    "CLEAN GUITAR 3": "guitar_clean",
+    "CLEAN GUITAR 4": "guitar_clean",
+    "CLEAN GUITAR 5": "guitar_clean",
+    "CLEAN GUITAR 6": "guitar_clean",
+    "CLEAN GUITAR 7": "guitar_clean",
+    "CHORUS CLEAN GUITAR 1": "guitar_clean",
+    "CHORUS CLEAN GUITAR 2": "guitar_clean",
+    "WAH CLEAN GUITAR": "guitar_clean",
+    "CRUNCH ELEC.GUITAR 1": "guitar_drive",
+    "CRUNCH ELEC.GUITAR 2": "guitar_drive",
+    "CRUNCH ELEC.GUITAR 3": "guitar_drive",
+    "CHORUS CRUNCH GUITAR": "guitar_drive",
+    "MUTE GUITAR": "guitar_mute",
+    "CRUNCH MUTE GUITAR": "guitar_drive",
+    "OVERDRIVE MUTE GT": "guitar_drive",
+    "PHASER MUTE GUITAR": "guitar_mute",
+    "AMBIENT MUTE GUITAR": "guitar_mute",
+    "HUM BLUES GUITAR": "guitar_drive",
+    "OVERDRIVE GUITAR 1": "guitar_drive",
+    "OVERDRIVE GUITAR 2": "guitar_drive",
+    "LFO WAH OD GUITAR": "guitar_drive",
+    "WAH OD GUITAR": "guitar_drive",
+    "CRY OD GUITAR": "guitar_drive",
+    "FLANGER OD GUITAR": "guitar_drive",
+    "DISTORTION GUITAR 2": "guitar_dist",
+    "DISTORTION GUITAR 3": "guitar_dist",
+    "DISTORTION GUITAR 4": "guitar_dist",
+    "WAH DIST GUITAR": "guitar_dist",
+    "PHASER DRIVE GUITAR": "guitar_dist",
+    "VINTAGE OD GUITAR": "guitar_drive",
+    "AMP GUITAR 1": "guitar_drive",
+    "AMP GUITAR 2": "guitar_drive",
+    "METAL AMBIENT GUITAR": "guitar_dist",
+    "FRONT DRIVE GUITAR": "guitar_dist",
+    "UPPER OCT GUITAR": "guitar_drive",
+    "C+R CRUNCH GUITAR": "guitar_drive",
+    "OCT METAL GUITAR": "guitar_dist",
+    "TALK GUITAR UUH-WAH": "guitar_talk",
+    "TALK GUITAR DOO-CHU": "guitar_talk",
+    "FEEDBACK GUITAR": "guitar_dist",
+    "GUITAR SYNTH": "guitar_synth",
+    "VERSATILE SINGLE COIL E.GUITAR": "guitar_clean",
+    "ACOUSTIC BASS 1": "bass",
+    "ACOUSTIC BASS 2": "bass",
+    "RIDE BASS": "bass",
+    "FINGERED BASS 1": "bass",
+    "FINGERED BASS 2": "bass",
+    "FINGERED BASS VELO.SLAP 1": "bass",
+    "FINGERED BASS VELO.SLAP 2": "bass",
+    "SLAP BASS 1": "bass",
+    "FINGER SLAP BASS 1": "bass",
+    "CHORUS FINGERED BASS 1": "bass",
+    "PHASER FINGERED BASS": "bass",
+    "AMP FINGERED BASS": "bass",
+    "WAH FINGERED BASS 1": "bass",
+    "WAH SLAP BASS 1": "bass",
+    "FINGERED BASS 3": "bass",
+    "FINGERED BASS 4": "bass",
+    "FINGERED BASS 5": "bass",
+    "FINGERED BASS 6": "bass",
+    "FINGERED BASS 7": "bass",
+    "CHORUS FINGERED BASS 2": "bass",
+    "WAH FINGERED BASS 2": "bass",
+    "PICKED BASS 1": "bass",
+    "PICKED BASS 2": "bass",
+    "MUTE PICKED BASS": "bass",
+    "SLAP BASS 2": "bass",
+    "SLAP BASS 3": "bass",
+    "CHORUS SLAP BASS": "bass",
+    "AMP SLAP BASS": "bass",
+    "WAH SLAP BASS 2": "bass",
+    "FRETLESS BASS": "bass",
+    "CHORUS FRETLESS BASS": "bass",
+    "AMP FRETLESS BASS": "bass",
+    "FINGER SLAP BASS 2": "bass",
+    "FINGER SLAP BASS 3": "bass",
+    "VERSATILE ELECTRIC BASS 1": "bass",
+    "VERSATILE ELECTRIC BASS 2": "bass",
+    "SYNTH-BASS 1": "bass_synth",
+    "SYNTH-BASS 2": "bass_synth",
+    "SYNTH-BASS 3": "bass_synth",
+    "SYNTH-BASS 4": "bass_synth",
+    "SYNTH-BASS 5": "bass_synth",
+    "SYNTH-BASS 6": "bass_synth",
+    "SYNTH-BASS 7": "bass_synth",
+    "SYNTH-BASS 8": "bass_synth",
+    "SYNTH-BASS 9": "bass_synth",
+    "SYNTH-BASS 10": "bass_synth",
+    "SYNTH-BASS 11": "bass_synth",
+    "SYNTH-BASS 12": "bass_synth",
+    "SYNTH-BASS 13": "bass_synth",
+    "ORGAN BASS": "bass",
+    "SOLO VIOLIN": "strings_solo",
+    "VIOLIN": "strings_solo",
+    "SLOW VIOLIN": "strings_solo",
+    "VIOLA": "strings_solo",
+    "CELLO": "strings_solo",
+    "SLOW CELLO": "strings_solo",
+    "CONTRABASS": "bass",
+    "HARP 1": "harp",
+    "HARP 2": "harp",
+    "STEREO STRINGS": "strings_ens",
+    "MELLOW STRINGS 1": "piano",
+    "MELLOW STRINGS 2": "piano",
+    "BRIGHT STRINGS 1": "piano",
+    "BRIGHT STRINGS 2": "piano",
+    "STRINGS": "strings_ens",
+    "SLOW STEREO STRINGS": "strings_ens",
+    "SLOW STRINGS 1": "strings_ens",
+    "SLOW STRINGS 2": "strings_ens",
+    "STRING ENSEMBLE": "strings_ens",
+    "WARM STRINGS": "strings_ens",
+    "PIZZICATO STRINGS": "pizz",
+    "CHAMBER": "strings_ens",
+    "OCTAVE STRINGS": "strings_ens",
+    "ORCHESTRA HIT 1": "hit",
+    "ORCHESTRA HIT 2": "hit",
+    "ORCHESTRA HIT 3": "hit",
+    "BRASS & STRINGS": "strings_ens",
+    "VIOLIN SECTION": "strings_solo",
+    "STRING QUARTET": "strings_ens",
+    "HARP & STRINGS": "harp",
+    "SOLO TRUMPET": "brass_solo",
+    "TRUMPET 1": "brass_solo",
+    "TRUMPET 2": "brass_solo",
+    "TRUMPET 3": "brass_solo",
+    "MELLOW TRUMPET": "piano",
+    "MUTE TRUMPET": "brass_solo",
+    "AMBIENT TRUMPET": "brass_solo",
+    "FLUGELHORN": "brass_solo",
+    "TROMBONE": "brass_solo",
+    "JAZZ TROMBONE": "brass_solo",
+    "FRENCH HORN": "brass_solo",
+    "FRENCH HORN SECTION": "brass_solo",
+    "TUBA": "brass_solo",
+    "SYMPHONIC BRASS": "brass_ens",
+    "STEREO BRASS": "brass_ens",
+    "BRASS": "brass_ens",
+    "BRASS SECTION 1": "brass_ens",
+    "BRASS SECTION 2": "brass_ens",
+    "BRASS SECTION 3": "brass_ens",
+    "AMBIENT BRASS": "brass_ens",
+    "BIG BAND BRASS": "brass_ens",
+    "HARD BRASS": "brass_hard",
+    "BRASS SFZ": "brass_ens",
+    "TRUMPET & TROMBONE & SAX": "brass_solo",
+    "BRASS VELO.FALL": "brass_ens",
+    "BRASS VELO.SHAKE": "brass_ens",
+    "BRASS VELO.GLISSANDO": "brass_ens",
+    "VERSATILE BRASS 1": "brass_ens",
+    "VERSATILE BRASS 2": "brass_ens",
+    "SYNTH-BRASS 1": "synth_brass",
+    "SYNTH-BRASS STAB": "synth_brass",
+    "SYNTH-BRASS 2": "synth_brass",
+    "SYNTH-BRASS 3": "synth_brass",
+    "SYNTH-BRASS 4": "synth_brass",
+    "SYNTH-BRASS 5": "synth_brass",
+    "WARM SYNTH-BRASS 1": "synth_brass",
+    "WARM SYNTH-BRASS 2": "synth_brass",
+    "ANALOG SYNTH-BRASS": "synth_brass",
+    "80'S SYNTH-BRASS": "synth_brass",
+    "TRANCE BRASS": "edm",
+    "SOLO TENOR SAX 1": "sax",
+    "SOLO TENOR SAX 2": "sax",
+    "SOLO ALTO SAX": "sax",
+    "VELO.ALTO SAX": "sax",
+    "BREATHY ALTO SAX": "sax",
+    "SOLO SOPRANO SAX 1": "sax",
+    "SOLO SOPRANO SAX 2": "sax",
+    "VELO.SOPRANO SAX": "sax",
+    "BREATHY S.SAX": "sax",
+    "ALTO SAX GROWL": "sax",
+    "ALTO SAX 1": "sax",
+    "ALTO SAX 2": "sax",
+    "TENOR SAX": "sax",
+    "BREATHY TENOR SAX": "sax",
+    "SOPRANO SAX 1": "sax",
+    "SOPRANO SAX 2": "sax",
+    "BARITONE SAX": "sax",
+    "AMBIENT SAX 1": "sax",
+    "AMBIENT SAX 2": "sax",
+    "HARD ALTO SAX": "sax",
+    "TENOR SAXYS": "sax",
+    "SAX SECTION 1": "sax",
+    "SAX SECTION 2": "sax",
+    "SOLO OBOE": "reed",
+    "SOLO BASSOON": "reed",
+    "CLARINET": "reed",
+    "VELO.CLARINET": "reed",
+    "OBOE": "reed",
+    "ENGLISH HORN": "reed",
+    "BASSOON": "reed",
+    "SOLO FLUTE 1": "flute",
+    "SOLO FLUTE 2": "flute",
+    "FLUTE 1": "flute",
+    "FLUTE 2": "flute",
+    "JAZZ FLUTE 1": "flute",
+    "JAZZ FLUTE 2": "flute",
+    "PICCOLO": "flute",
+    "RECORDER": "flute",
+    "PAN FLUTE 1": "flute",
+    "PAN FLUTE 2": "flute",
+    "BOTTLE BLOW": "flute",
+    "WHISTLE": "flute",
+    "OCARINA": "flute",
+    "SHAKUHACHI": "flute",
+    "PIPE SECTION": "flute",
+    "FLUTE & OBOE": "reed",
+    "TAPE FLUTE 1": "flute",
+    "TAPE FLUTE 2": "flute",
+    "SAW LEAD 1": "synth_lead",
+    "AMP SAW LEAD": "synth_lead",
+    "DRIVE SAW LEAD": "synth_lead",
+    "SUPER SAW LEAD 1": "synth_lead",
+    "SUPER SAW LEAD 2": "synth_lead",
+    "TRANCE POLY LEAD": "edm",
+    "TRANCE PLUCK": "pluck",
+    "PROGRESSIVE PLUCK": "pluck",
+    "SAW PLUCK": "pluck",
+    "DIRTY PLUCK": "pluck",
+    "POP LEAD": "synth_lead",
+    "HOUSE CHORD SYNTH": "synth_lead",
+    "POPULAR PLUCK 1": "pluck",
+    "POPULAR PLUCK 2": "pluck",
+    "VOCAL CHOP SYNTH 1": "synth_lead",
+    "VOCAL CHOP SYNTH 2": "synth_lead",
+    "DSP MODULATED SYNTH 1": "piano_pad",
+    "DSP MODULATED SYNTH 2": "piano_pad",
+    "DSP MODULATED SYNTH 3": "piano_pad",
+    "X SYNTH LEAD 1": "synth_lead",
+    "X SYNTH LEAD 2": "synth_lead",
+    "X SYNTH LEAD 3": "synth_lead",
+    "X SYNTH LEAD 4": "synth_lead",
+    "X SYNTH LEAD 5": "synth_lead",
+    "X SYNTH LEAD 6": "synth_lead",
+    "VA SYNTH 1": "synth_lead",
+    "VA SYNTH 2": "synth_lead",
+    "VA SYNTH 3": "synth_lead",
+    "VA SYNTH SEQ-BASS 1": "seq_bass",
+    "VA SYNTH SEQ-BASS 2": "seq_bass",
+    "VA SYNTH SEQ-BASS 3": "seq_bass",
+    "VA SYNTH SEQUENCE 1": "synth_lead",
+    "VA SYNTH SEQUENCE 2": "synth_lead",
+    "SAW LEAD 2": "synth_lead",
+    "SAW LEAD 3": "synth_lead",
+    "SAW LEAD 4": "synth_lead",
+    "MELLOW SAW LEAD": "piano",
+    "PULSE SAW LEAD": "synth_lead",
+    "TRANCE LEAD": "edm",
+    "SS LEAD": "synth_lead",
+    "SQUARE LEAD 1": "synth_lead",
+    "SQUARE LEAD 2": "synth_lead",
+    "SLOW SQUARE LEAD": "synth_lead",
+    "PHASER SQUARE LEAD": "synth_lead",
+    "PULSE LEAD 1": "synth_lead",
+    "PULSE LEAD 2": "synth_lead",
+    "SQUARE PULSE LEAD": "synth_lead",
+    "SINE LEAD": "lead_soft",
+    "VELO.SINE LEAD": "lead_soft",
+    "SYNTH SEQUENCE": "synth_lead",
+    "SEQUENCE SAW": "arp",
+    "SEQUENCE SINE": "arp",
+    "8BIT ARPEGGIO 1": "arp",
+    "8BIT ARPEGGIO 2": "arp",
+    "8BIT WAVE": "arp",
+    "SAW ARPEGGIO 1": "arp",
+    "SAW ARPEGGIO 2": "arp",
+    "DSP MODULATED LEAD 1": "piano_pad",
+    "DSP MODULATED LEAD 2": "piano_pad",
+    "DSP MODULATED LEAD 3": "piano_pad",
+    "VENT LEAD": "synth_lead",
+    "CHURCH LEAD": "voice",
+    "DOUBLE VOICE LEAD": "voice",
+    "SYNTH-VOICE LEAD": "voice",
+    "FIFTH LEAD": "synth_lead",
+    "FIFTH SAW LEAD": "synth_lead",
+    "FIFTH SQUARE LEAD": "synth_lead",
+    "FOURTH LEAD": "synth_lead",
+    "SEVENTH SEQUENCE": "arp",
+    "BASS+LEAD": "synth_lead",
+    "SYNTH-BASS+LEAD": "synth_lead",
+    "REED LEAD": "synth_lead",
+    "G FUNK LEAD": "synth_lead",
+    "HOP LEAD": "synth_lead",
+    "HIP LEAD": "synth_lead",
+    "WIRE LEAD": "synth_lead",
+    "FIRE WIRE": "synth_lead",
+    "SYNTH-STRINGS 1": "pad_strings",
+    "SYNTH-STRINGS 2": "pad_strings",
+    "SYNTH-STRINGS 3": "pad_strings",
+    "PROGRESSIVE VOICE": "voice",
+    "SUPER SAW PAD": "pad_saw",
+    "OLD TAPE PAD": "synth_pad",
+    "SOUND TRACK 1": "synth_pad",
+    "FANTASIA": "synth_pad",
+    "XENON PAD": "synth_pad",
+    "HOUSE CHORD PAD": "synth_pad",
+    "MAGNI SYNTH PAD": "synth_pad",
+    "ADVANCED PAD 1": "synth_pad",
+    "ADVANCED PAD 2": "synth_pad",
+    "DSP MODULATED PAD 1": "synth_pad",
+    "DSP MODULATED PAD 2": "synth_pad",
+    "DSP MODULATED PAD 3": "synth_pad",
+    "X SYNTH PAD 1": "synth_pad",
+    "X SYNTH PAD 2": "synth_pad",
+    "X SYNTH PAD 3": "synth_pad",
+    "SYNTH-STRINGS 4": "pad_strings",
+    "SYNTH-STRINGS 5": "pad_strings",
+    "SYNTH-STRINGS 6": "pad_strings",
+    "70'S SYNTH-STR.1": "pad_strings",
+    "70'S SYNTH-STR.2": "pad_strings",
+    "80'S SYNTH-STR.1": "pad_strings",
+    "80'S SYNTH-STR.2": "pad_strings",
+    "DIGITAL SYNTH-STR.1": "pad_strings",
+    "DIGITAL SYNTH-STR.2": "pad_strings",
+    "FAST SYNTH-STRINGS": "pad_strings",
+    "SLOW SYNTH-STRINGS": "pad_strings",
+    "OCTAVE SYNTH-STRINGS": "pad_strings",
+    "FANTASY": "synth_pad",
+    "NEW AGE": "synth_pad",
+    "WARM PAD": "synth_pad",
+    "FAT SAW PAD": "pad_saw",
+    "SOFT PAD": "synth_pad",
+    "POLYSYNTH PAD": "synth_pad",
+    "SYNTH-PAD": "synth_lead",
+    "VA SYNTH-PAD": "synth_pad",
+    "POLY SAW": "pad_saw",
+    "BRIGHT SAW PAD 1": "pad_saw",
+    "BRIGHT SAW PAD 2": "pad_saw",
+    "GLASS PAD": "synth_pad",
+    "BOTTLE PAD": "flute",
+    "ETHNIC PAD": "synth_pad",
+    "SWEEP PAD": "synth_pad",
+    "WOOD PAD": "synth_pad",
+    "SOUND TRACK 2": "synth_pad",
+    "VIBRAPHONE BELL": "mallet",
+    "ATMOSPHERE PAD": "synth_pad",
+    "STEEL PAD": "synth_pad",
+    "BRIGHTNESS": "piano",
+    "BRIGHT BELL PAD": "piano",
+    "SPACE PAD": "synth_pad",
+    "EDM PAD": "edm",
+    "VOCODER": "vocoder",
+    "SYNTH CHOIR": "voice",
+    "DSP MODULATED VOICE 1": "piano_pad",
+    "DSP MODULATED VOICE 2": "piano_pad",
+    "DSP MODULATED VOICE 3": "piano_pad",
+    "CHOIR AAHS": "voice",
+    "STRINGS VOICE": "strings_ens",
+    "SLOW CHOIR": "voice",
+    "VOICE DOO": "voice",
+    "VOICE UUH": "voice",
+    "SYNTH-VOICE 1": "voice",
+    "SYNTH-VOICE 2": "voice",
+    "VOICE ENSEMBLE": "voice",
+    "SYNTH-VOICE PAD": "voice",
+    "WARM VOX": "voice",
+    "SPACE CHOIR": "voice",
+    "STAR VOICE": "voice",
+    "ECHO VOICE": "voice",
+    "EDM KICK & BASS": "edm",
+    "EDM LEAD SYNTH": "edm",
+    "EDM PER SYNTH": "edm",
+    "EDM LAZER 1": "edm",
+    "EDM LAZER 2": "edm",
+    "EDM THEME SYNTH 1": "edm",
+    "EDM THEME SYNTH 2": "edm",
+    "EDM THEME HIT": "edm",
+    "EDM BRASS HIT": "edm",
+    "EDM BASS": "edm",
+    "EDM SE BEND": "edm",
+    "EDM SE VOX SYNTH": "edm",
+    "EDM SE WHITE": "edm",
+    "EDM SE": "edm",
+    "VL-TONE": "generic",
+    "CT E.PIANO": "ep",
+    "CT HARP": "harp",
+    "CZ BASS": "bass_synth",
+    "CZ TRUMPET": "synth_brass",
+    "CZ VIOLIN": "synth_strings",
+    "CZ PIANO": "ep",
+    "CZ GUITAR": "guitar_clean",
+    "CZ LEAD 1": "synth_lead",
+    "CZ LEAD 2": "synth_lead",
+    "VZ SEEGOD": "synth_lead",
+    "VZ BRASS": "synth_brass",
+    "VZ BASS": "bass_synth",
+    "VZ HARP": "synth_strings",
+    "VZ LEAD 1": "synth_lead",
+    "VZ LEAD 2": "synth_lead",
+    "SITAR 1": "ethnic_pluck",
+    "SITAR 2": "ethnic_pluck",
+    "SITAR 3": "ethnic_pluck",
+    "SITAR PAD": "ethnic_pluck",
+    "TANPURA 1": "ethnic_pluck",
+    "TANPURA 2": "ethnic_pluck",
+    "HARMONIUM 1": "harmonium",
+    "HARMONIUM 2": "harmonium",
+    "SANTUR 1": "dulcimer",
+    "SANTUR 2": "dulcimer",
+    "SAROD 1": "ethnic_string",
+    "SAROD 2": "ethnic_string",
+    "SARANGI 1": "ethnic_string",
+    "SARANGI 2": "ethnic_string",
+    "VEENA 1": "ethnic_string",
+    "VEENA 2": "ethnic_string",
+    "SHANAI": "ethnic_reed",
+    "BANSURI": "ethnic_flute",
+    "PUNGI": "ethnic_reed",
+    "TABLA": "ethnic_perc",
+    "ANGKLUNG TREM.": "ethnic_perc",
+    "GENDER": "ethnic_perc",
+    "CAK": "ethnic_perc",
+    "CUK": "ethnic_perc",
+    "CELLO FINGERED": "strings_solo",
+    "SASANDO": "ethnic_perc",
+    "SHORT SULING": "ethnic_flute",
+    "SULING BAMBOO 1": "ethnic_flute",
+    "SALUANG": "ethnic_flute",
+    "SULING BAMBOO 2": "ethnic_flute",
+    "OUD 1": "ethnic_string",
+    "OUD 2": "ethnic_string",
+    "SAZ": "ethnic_string",
+    "KANUN 1": "ethnic_string",
+    "KANUN 2": "ethnic_string",
+    "BOUZOUKI": "ethnic_pluck",
+    "RABAB": "ethnic_string",
+    "KEMENCHE": "ethnic_string",
+    "NEY 1": "ethnic_flute",
+    "NEY 2": "ethnic_flute",
+    "ZURNA": "ethnic_reed",
+    "ARABIC ORGAN": "organ",
+    "ARABIC STRINGS": "strings_ens",
+    "ER HU 1": "ethnic_string",
+    "ER HU 2": "ethnic_string",
+    "ER HU 3": "ethnic_string",
+    "ER HU 4": "ethnic_string",
+    "YANG QIN 1": "dulcimer",
+    "YANG QIN 2": "dulcimer",
+    "YANG QIN 3": "dulcimer",
+    "ZHENG 1": "ethnic_pluck",
+    "ZHENG 2": "ethnic_pluck",
+    "PI PA 1": "ethnic_pluck",
+    "PI PA 2": "ethnic_pluck",
+    "PI PA 3": "ethnic_pluck",
+    "CHINESE HARP": "ethnic_pluck",
+    "DI ZI 1": "ethnic_flute",
+    "DI ZI 2": "ethnic_flute",
+    "XIAO": "ethnic_flute",
+    "SHENG 1": "ethnic_reed",
+    "SHENG 2": "ethnic_reed",
+    "SUO NA 1": "ethnic_reed",
+    "SUO NA 2": "ethnic_reed",
+    "CAVAQUINHO": "ethnic_pluck",
+    "VIOLA CAIPIRA": "ethnic_string",
+    "BERIMBAU": "ethnic_perc",
+    "PANDEIRO": "ethnic_perc",
+    "BANJO": "folk_pluck",
+    "MUTE BANJO": "folk_pluck",
+    "STEEL DRUMS": "mallet",
+    "FIDDLE 1": "strings_solo",
+    "SHAMISEN": "folk_pluck",
+    "KOTO": "folk_pluck",
+    "THUMB PIANO": "mallet",
+    "BAGPIPE": "bagpipe",
+    "FIDDLE 2": "strings_solo",
+    "CAJON": "ethnic_perc",
+    "GM PIANO 1": "piano",
+    "GM PIANO 2": "piano",
+    "GM ELEC.GRAND PIANO": "piano",
+    "GM HONKY-TONK": "piano",
+    "GM E.PIANO 1": "ep",
+    "GM E.PIANO 2": "ep",
+    "GM HARPSICHORD": "harpsi",
+    "GM CLAVI": "clav",
+    "GM CELESTA": "mallet",
+    "GM GLOCKENSPIEL": "mallet",
+    "GM MUSIC BOX": "mallet",
+    "GM VIBRAPHONE": "mallet",
+    "GM MARIMBA": "mallet",
+    "GM XYLOPHONE": "mallet",
+    "GM TUBULAR BELL": "bell",
+    "GM DULCIMER": "dulcimer",
+    "GM ORGAN 1": "organ",
+    "GM ORGAN 2": "organ",
+    "GM ORGAN 3": "organ",
+    "GM PIPE ORGAN": "organ_pipe",
+    "GM REED ORGAN": "harmonium",
+    "GM ACCORDION": "accordion",
+    "GM HARMONICA": "harmonica",
+    "GM BANDONEON": "harmonica",
+    "GM NYLON STR.GUITAR": "guitar_acoustic",
+    "GM STEEL STR.GUITAR": "guitar_12str",
+    "GM JAZZ GUITAR": "guitar_jazz",
+    "GM CLEAN GUITAR": "guitar_clean",
+    "GM MUTE GUITAR": "guitar_mute",
+    "GM OVERDRIVE GT": "guitar_drive",
+    "GM DISTORTION GT": "guitar_dist",
+    "GM GT HARMONICS": "guitar_drive",
+    "GM ACOUSTIC BASS": "bass",
+    "GM FINGERED BASS": "bass",
+    "GM PICKED BASS": "bass",
+    "GM FRETLESS BASS": "bass_slap",
+    "GM SLAP BASS 1": "bass_slap",
+    "GM SLAP BASS 2": "bass_slap",
+    "GM SYNTH-BASS 1": "bass_synth",
+    "GM SYNTH-BASS 2": "bass_synth",
+    "GM VIOLIN": "strings_solo",
+    "GM VIOLA": "strings_solo",
+    "GM CELLO": "strings_solo",
+    "GM CONTRABASS": "strings_solo",
+    "GM TREMOLO STRINGS": "strings_solo",
+    "GM PIZZICATO": "pizz",
+    "GM HARP": "harp",
+    "GM TIMPANI": "ethnic_perc",
+    "GM STRINGS 1": "strings_ens",
+    "GM STRINGS 2": "strings_ens",
+    "GM SYNTH-STRINGS 1": "synth_strings",
+    "GM SYNTH-STRINGS 2": "synth_strings",
+    "GM CHOIR AAHS": "voice",
+    "GM VOICE DOO": "voice",
+    "GM SYNTH-VOICE": "voice",
+    "GM ORCHESTRA HIT": "hit",
+    "GM TRUMPET": "brass_solo",
+    "GM TROMBONE": "brass_solo",
+    "GM TUBA": "brass_solo",
+    "GM MUTE TRUMPET": "brass_solo",
+    "GM FRENCH HORN": "brass_solo",
+    "GM BRASS": "brass_ens",
+    "GM SYNTH-BRASS 1": "synth_brass",
+    "GM SYNTH-BRASS 2": "synth_brass",
+    "GM SOPRANO SAX": "sax",
+    "GM ALTO SAX": "sax",
+    "GM TENOR SAX": "sax",
+    "GM BARITONE SAX": "sax",
+    "GM OBOE": "reed",
+    "GM ENGLISH HORN": "reed",
+    "GM BASSOON": "reed",
+    "GM CLARINET": "reed",
+    "GM PICCOLO": "flute",
+    "GM FLUTE": "flute",
+    "GM RECORDER": "flute",
+    "GM PAN FLUTE": "flute",
+    "GM BOTTLE BLOW": "flute",
+    "GM SHAKUHACHI": "flute",
+    "GM WHISTLE": "flute",
+    "GM OCARINA": "flute",
+    "GM SQUARE LEAD": "synth_lead",
+    "GM SAW LEAD": "synth_lead",
+    "GM CALLIOPE": "lead_soft",
+    "GM CHIFF LEAD": "lead_soft",
+    "GM CHARANG": "synth_lead",
+    "GM VOICE LEAD": "synth_lead",
+    "GM FIFTH LEAD": "synth_lead",
+    "GM BASS+LEAD": "synth_lead",
+    "GM FANTASY": "synth_pad",
+    "GM WARM PAD": "synth_pad",
+    "GM POLYSYNTH": "synth_pad",
+    "GM SPACE CHOIR": "voice",
+    "GM BOWED GLASS": "pad_glass",
+    "GM METAL PAD": "pad_glass",
+    "GM HALO PAD": "synth_pad",
+    "GM SWEEP PAD": "synth_pad",
+    "GM RAIN DROP": "pad_glass",
+    "GM SOUND TRACK": "synth_pad",
+    "GM CRYSTAL": "pad_glass",
+    "GM ATMOSPHERE": "synth_pad",
+    "GM BRIGHTNESS": "synth_pad",
+    "GM GOBLINS": "synth_pad",
+    "GM ECHOES": "synth_pad",
+    "GM SF": "sfx",
+    "GM SITAR": "folk_pluck",
+    "GM BANJO": "folk_pluck",
+    "GM SHAMISEN": "folk_pluck",
+    "GM KOTO": "folk_pluck",
+    "GM THUMB PIANO": "mallet",
+    "GM BAGPIPE": "bagpipe",
+    "GM FIDDLE": "strings_solo",
+    "GM SHANAI": "ethnic_reed",
+    "GM TINKLE BELL": "pad_glass",
+    "GM AGOGO": "ethnic_perc",
+    "GM STEEL DRUMS": "guitar_12str",
+    "GM WOOD BLOCK": "ethnic_perc",
+    "GM TAIKO": "ethnic_perc",
+    "GM MELODIC TOM": "ethnic_perc",
+    "GM SYNTH-DRUM": "ethnic_perc",
+    "GM REVERSE CYMBAL": "ethnic_perc",
+    "GM GT FRET NOISE": "ethnic_perc",
+    "GM BREATH NOISE": "ethnic_perc",
+    "GM SEASHORE": "sfx",
+    "GM BIRD": "sfx",
+    "GM TELEPHONE": "sfx",
+    "GM HELICOPTER": "sfx",
+    "GM APPLAUSE": "sfx",
+    "GM GUNSHOT": "sfx",
+};
+
+const clampCC = (v, a, b) => Math.max(a, Math.min(b, v));
+// Studio = the role base; the other rooms reshape it with fixed rules.
+function derive(env, S) {
+    if (env === 'Live') return {
+        74: clampCC(S[74] + 10, 0, 127), 71: clampCC(S[71] + 2, 0, 127), 73: clampCC(S[73] - 5, 0, 127),
+        76: S[76], 77: S[77], 78: S[78],
+        91: clampCC(S[91] - 8, 5, 127), 93: clampCC(S[93] + 8, 0, 127), 94: clampCC(S[94] + 6, 0, 127)
+    };
+    if (env === 'Hall') return {
+        74: clampCC(S[74] - 2, 0, 127), 71: S[71], 73: clampCC(S[73] + 3, 0, 127),
+        76: S[76], 77: S[77], 78: clampCC(S[78] + 4, 0, 127),
+        91: clampCC(S[91] + 40, 32, 96), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] + 12, 0, 127)
+    };
+    if (env === 'Jazz') return {
+        74: clampCC(S[74] - 8, 0, 127), 71: clampCC(S[71] + 2, 0, 127), 73: clampCC(S[73] + 2, 0, 127),
+        76: S[76], 77: S[77], 78: S[78],
+        91: clampCC(S[91] + 4, 12, 60), 93: clampCC(S[93] - 4, 0, 127), 94: clampCC(S[94] - 6, 0, 127)
+    };
+    return { ...S };
+}
 
 // ======================================================================
 //  TONE + ENVIRONMENT PRESET RESOLVER
-//  Resolves signature tone models first, then falls back to category matrix.
 // ======================================================================
 function getToneEnvPreset(tone, cat, env) {
-    const name = (tone?.name || tone?.text || '').toUpperCase();
-    const c = (cat || tone?.category || 'PIANO').toUpperCase().trim();
-    const e = env || 'Studio';
-
-    // 1. Signature Tone Specific Models
-    if (name.includes('BRIGHT') || name.includes('ROCK PIANO') || name.includes('POP PIANO')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    if (name.includes('MELLOW') || name.includes('BALLAD') || name.includes('AMBIENT PIANO')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    if (name.includes('HONKY') || name.includes('TACK')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    if (name.includes('DYNO') || name.includes('GALAXIA') || name.includes('LUCENT')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    if (name.includes('NYLON') || name.includes('SPANISH')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':58, '76':64, '77':64, '78':64, '91':22, '93':16, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':53, '76':64, '77':64, '78':64, '91':14, '93':24, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':61, '76':64, '77':64, '78':68, '91':62, '93':14, '94':12 };
-        return { '74':68, '71':68, '73':60, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 };
-    }
-    // Stage/Grand piano: warm, clean, professional -- natural acoustic body
-    if (name.includes('STAGE PIANO') || name.includes('GRAND PIANO') || name.includes('CLASSIC GRAND') || name.includes('CONCERT')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    // Wide stereo / strings-hybrid piano: lush, padded, wide reverb
-    if (name.includes('WIDE GRAND') || name.includes('STRINGS PIANO') || name.includes('PIANO PAD')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':70, '76':66, '77':66, '78':70, '91':44, '93':24, '94':14 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':65, '76':66, '77':66, '78':70, '91':36, '93':32, '94':20 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':73, '76':66, '77':66, '78':74, '91':84, '93':22, '94':26 };
-        return { '74':62, '71':66, '73':72, '76':66, '77':66, '78':70, '91':48, '93':20, '94':8 };
-    }
-    // New Age / ambient / modulated piano: dreamy, spatial, long tail
-    if (name.includes('NEW AGE') || name.includes('VOICE PIANO') || name.includes('MODULATED') || name.includes('AMBIENT GRAND')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':70, '76':66, '77':66, '78':70, '91':44, '93':24, '94':14 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':65, '76':66, '77':66, '78':70, '91':36, '93':32, '94':20 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':73, '76':66, '77':66, '78':74, '91':84, '93':22, '94':26 };
-        return { '74':62, '71':66, '73':72, '76':66, '77':66, '78':70, '91':48, '93':20, '94':8 };
-    }
-    // Dance / pop / electronic piano: bright attack, chorus, contemporary
-    if (name.includes('DANCE PIANO') || name.includes('LA PIANO')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    // Layered / padded piano with synth element
-    if (name.includes('ADV PIANO') || name.includes('OCTAVE PIANO') || name.includes('BASS/PIANO')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':70, '76':66, '77':66, '78':70, '91':44, '93':24, '94':14 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':65, '76':66, '77':66, '78':70, '91':36, '93':32, '94':20 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':73, '76':66, '77':66, '78':74, '91':84, '93':22, '94':26 };
-        return { '74':62, '71':66, '73':72, '76':66, '77':66, '78':70, '91':48, '93':20, '94':8 };
-    }
-    // Solo violin/cello/viola: bowing articulation, expressive vibrato
-    if (name.includes('VIOLIN') || name.includes('CELLO') || name.includes('VIOLA') || name.includes('FIDDLE')) {
-        if (e === 'Studio') return { '74':74, '71':66, '73':70, '76':72, '77':76, '78':64, '91':32, '93':12, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':68, '73':65, '76':72, '77':76, '78':64, '91':24, '93':20, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':66, '73':73, '76':72, '77':76, '78':68, '91':72, '93':10, '94':12 };
-        return { '74':66, '71':68, '73':72, '76':72, '77':76, '78':64, '91':36, '93':8, '94':0 };
-    }
-    // Trumpet/trombone: bright metallic attack, directional projection
-    if (name.includes('TRUMPET') || name.includes('TROMBONE') || name.includes('FLUGELHORN') || name.includes('CORNET')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':60, '76':70, '77':68, '78':66, '91':24, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':55, '76':70, '77':68, '78':66, '91':16, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':63, '76':70, '77':68, '78':70, '91':64, '93':0, '94':12 };
-        return { '74':68, '71':68, '73':62, '76':70, '77':68, '78':66, '91':28, '93':0, '94':0 };
-    }
-    // Saxophone specific models by register
-    if (name.includes('ALTO SAX') || name.includes('SOPRANO SAX')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':60, '76':72, '77':72, '78':66, '91':26, '93':10, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':55, '76':72, '77':72, '78':66, '91':18, '93':18, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':63, '76':72, '77':72, '78':70, '91':66, '93':8, '94':12 };
-        return { '74':68, '71':68, '73':62, '76':72, '77':72, '78':66, '91':30, '93':6, '94':0 };
-    }
-    if (name.includes('TENOR SAX') || name.includes('BARITONE SAX')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':60, '76':72, '77':72, '78':66, '91':26, '93':10, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':55, '76':72, '77':72, '78':66, '91':18, '93':18, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':63, '76':72, '77':72, '78':70, '91':66, '93':8, '94':12 };
-        return { '74':68, '71':68, '73':62, '76':72, '77':72, '78':66, '91':30, '93':6, '94':0 };
-    }
-    // â"€â"€ HARPSICHORD: percussive pluck, very bright, no natural sustain
-    if (name.includes('HARPSICHORD') || name.includes('COUPLED HARPSI')) {
-        if (e === 'Studio') return { '74':80, '71':70, '73':52, '76':64, '77':64, '78':64, '91':16, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':72, '73':47, '76':64, '77':64, '78':64, '91':8, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':70, '73':55, '76':64, '77':64, '78':68, '91':56, '93':0, '94':12 };
-        return { '74':72, '71':72, '73':54, '76':64, '77':64, '78':64, '91':20, '93':0, '94':0 };
-    }
-    // â"€â"€ STAGE E.PIANO / AMP E.PIANO / 60'S: electromechanical warmth with bark
-    if (name.includes('STAGE E.PIANO') || name.includes('AMP E.') || name.includes('AMP 60') || name.includes('TREM 60') || name.includes("60'S E.PIANO")) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // â"€â"€ PHASER / CRUNCH / WAH / DIZZY E.PIANO: modulated or driven EP
-    if (name.includes('PHASER E.') || name.includes('CRUNCH E.') || name.includes('WAH E.') || name.includes('DIZZY E.')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // â"€â"€ DIGITAL / WIDE / MELLOW / PAN E.PIANO: clean modern electric piano
-    if (name.includes('DIGITAL E.PIANO') || name.includes('WIDE E.PIANO') || name.includes('MELLOW E.PIANO') || name.includes('PAN E.PIANO')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // â"€â"€ E.PIANO PAD / ADV E.PIANO PAD: ambient layered electric piano
-    if (name.includes('E.PIANO PAD') || name.includes('ADV E.PIANO PAD')) {
-        if (e === 'Studio') return { '74':72, '71':66, '73':78, '76':64, '77':64, '78':80, '91':48, '93':30, '94':20 };
-        if (e === 'Live')    return { '74':82, '71':68, '73':73, '76':64, '77':64, '78':80, '91':40, '93':38, '94':26 };
-        if (e === 'Hall')    return { '74':70, '71':66, '73':81, '76':64, '77':64, '78':84, '91':88, '93':28, '94':32 };
-        return { '74':64, '71':68, '73':80, '76':64, '77':64, '78':80, '91':52, '93':26, '94':14 };
-    }
-    // â"€â"€ CLAVI / WAH CLAV: percussive, clicky funk character
-    if (name.includes('CLAVI') || name.includes('CLAV')) {
-        if (e === 'Studio') return { '74':82, '71':76, '73':52, '76':66, '77':68, '78':64, '91':14, '93':22, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':78, '73':47, '76':66, '77':68, '78':64, '91':6, '93':30, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':76, '73':55, '76':66, '77':68, '78':68, '91':54, '93':20, '94':12 };
-        return { '74':74, '71':78, '73':54, '76':66, '77':68, '78':64, '91':18, '93':18, '94':0 };
-    }
-    // â"€â"€ VIBRAPHONE: metallic bell sustain, motor vibrato
-    if (name.includes('VIBRAPHONE')) {
-        if (e === 'Studio') return { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 };
-        return { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 };
-    }
-    // â"€â"€ MARIMBA: warm, wooden, natural resonance decay
-    if (name.includes('MARIMBA')) {
-        if (e === 'Studio') return { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 };
-        return { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 };
-    }
-    // â"€â"€ XYLOPHONE: very bright, staccato percussive
-    if (name.includes('XYLOPHONE')) {
-        if (e === 'Studio') return { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 };
-        return { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 };
-    }
-    // â"€â"€ GLOCKENSPIEL / MUSIC BOX / ORGEL / CELESTA: tinkling bell tone
-    if (name.includes('GLOCKEN') || name.includes('MUSIC BOX') || name.includes('ORGEL') || name.includes('CELESTA')) {
-        if (e === 'Studio') return { '74':88, '71':64, '73':54, '76':64, '77':64, '78':64, '91':34, '93':10, '94':10 };
-        if (e === 'Live')    return { '74':98, '71':66, '73':49, '76':64, '77':64, '78':64, '91':26, '93':18, '94':16 };
-        if (e === 'Hall')    return { '74':86, '71':64, '73':57, '76':64, '77':64, '78':68, '91':74, '93':8, '94':22 };
-        return { '74':80, '71':66, '73':56, '76':64, '77':64, '78':64, '91':38, '93':6, '94':4 };
-    }
-    // â"€â"€ TUBULAR BELL / CHURCH BELL: deep resonant metallic bell
-    if (name.includes('TUBULAR') || name.includes('CHURCH BELL')) {
-        if (e === 'Studio') return { '74':88, '71':64, '73':54, '76':64, '77':64, '78':64, '91':34, '93':10, '94':10 };
-        if (e === 'Live')    return { '74':98, '71':66, '73':49, '76':64, '77':64, '78':64, '91':26, '93':18, '94':16 };
-        if (e === 'Hall')    return { '74':86, '71':64, '73':57, '76':64, '77':64, '78':68, '91':74, '93':8, '94':22 };
-        return { '74':80, '71':66, '73':56, '76':64, '77':64, '78':64, '91':38, '93':6, '94':4 };
-    }
-    // â"€â"€ ROCK ORGAN / HARD ROCK ORGAN / JS ORGAN / AMP ORGAN: Hammond bite, full mids
-    if (name.includes('ROCK ORGAN') || name.includes('HARD ROCK ORGAN') || name.includes('JS ORGAN') || name.includes('AMP ORGAN')) {
-        if (e === 'Studio') return { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 };
-        return { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 };
-    }
-    // â"€â"€ JAZZ ORGAN / PERC.ORGAN / GOSPEL ORGAN / 70'S ORGAN: smooth Hammond
-    if (name.includes('JAZZ ORGAN') || name.includes('PERC.ORGAN') || name.includes("70'S ORGAN") || name.includes('GOSPEL ORGAN')) {
-        if (e === 'Studio') return { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 };
-        return { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 };
-    }
-    // â"€â"€ ROTARY / TREMOLO / F-ORGAN / V-ORGAN / DP ORGAN: tonewheel with rotation
-    if (name.includes('ROTARY') || name.includes('TREMOLO ORGAN') || name.includes('F-ORGAN') || name.includes('V-ORGAN') || name.includes('DP ORGAN')) {
-        if (e === 'Studio') return { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 };
-        return { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 };
-    }
-    // â"€â"€ ORGAN PAD / ORGAN FLUTE / PUFF ORGAN / REED ORGAN / THEATER ORGAN: pipe-like sustained
-    if (name.includes('ORGAN PAD') || name.includes('ORGAN FLUTE') || name.includes('PUFF ORGAN') || name.includes('REED ORGAN') || name.includes('THEATER ORGAN')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':62, '76':64, '77':64, '78':64, '91':50, '93':0, '94':18 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':57, '76':64, '77':64, '78':64, '91':42, '93':8, '94':24 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':65, '76':64, '77':64, '78':68, '91':90, '93':0, '94':30 };
-        return { '74':64, '71':66, '73':64, '76':64, '77':64, '78':64, '91':54, '93':0, '94':12 };
-    }
-    // â"€â"€ BANDONEON / HARMONICA: expressive bellows/mouth reed
-    if (name.includes('BANDONEON') || name.includes('HARMONICA')) {
-        if (e === 'Studio') return { '74':74, '71':68, '73':56, '76':72, '77':70, '78':64, '91':20, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':70, '73':51, '76':72, '77':70, '78':64, '91':12, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':68, '73':59, '76':72, '77':70, '78':68, '91':60, '93':12, '94':12 };
-        return { '74':66, '71':70, '73':58, '76':72, '77':70, '78':64, '91':24, '93':10, '94':0 };
-    }
-    // â"€â"€ STEEL GUITAR variants: bright chimey, slightly twangy
-    if (name.includes('STEEL') && (name.includes('GUITAR') || name.includes('STR.GUITAR'))) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':58, '76':64, '77':64, '78':64, '91':22, '93':16, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':53, '76':64, '77':64, '78':64, '91':14, '93':24, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':61, '76':64, '77':64, '78':68, '91':62, '93':14, '94':12 };
-        return { '74':68, '71':68, '73':60, '76':64, '77':64, '78':64, '91':26, '93':12, '94':0 };
-    }
-    // â"€â"€ MANDOLIN / UKULELE: bright pluck, short sustain
-    if (name.includes('MANDOLIN') || name.includes('UKULELE')) {
-        if (e === 'Studio') return { '74':82, '71':66, '73':54, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':68, '73':49, '76':64, '77':64, '78':64, '91':10, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':66, '73':57, '76':64, '77':64, '78':68, '91':58, '93':12, '94':12 };
-        return { '74':74, '71':68, '73':56, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-    }
-    // â"€â"€ JAZZ GUITAR: dark, warm, hollow-body tone
-    if (name.includes('JAZZ GUITAR')) {
-        if (e === 'Studio') return { '74':60, '71':64, '73':60, '76':64, '77':64, '78':64, '91':24, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':70, '71':66, '73':55, '76':64, '77':64, '78':64, '91':16, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':58, '71':64, '73':63, '76':64, '77':64, '78':68, '91':64, '93':12, '94':12 };
-        return { '74':52, '71':66, '73':62, '76':64, '77':64, '78':64, '91':28, '93':10, '94':0 };
-    }
-    // â"€â"€ CLEAN GUITAR / CHORUS CLEAN: bright, glassy, bell-like
-    if (name.includes('CLEAN') && name.includes('GUITAR')) {
-        if (e === 'Studio') return { '74':80, '71':66, '73':58, '76':66, '77':64, '78':64, '91':22, '93':24, '94':8 };
-        if (e === 'Live')    return { '74':90, '71':68, '73':53, '76':66, '77':64, '78':64, '91':14, '93':32, '94':14 };
-        if (e === 'Hall')    return { '74':78, '71':66, '73':61, '76':66, '77':64, '78':68, '91':62, '93':22, '94':20 };
-        return { '74':72, '71':68, '73':60, '76':66, '77':64, '78':64, '91':26, '93':20, '94':2 };
-    }
-    // â"€â"€ CRUNCH / OD GUITAR: pushed amp, mid-heavy
-    if (name.includes('CRUNCH') || (name.includes('OD ') && name.includes('GUITAR')) || name.includes('OD OCT')) {
-        if (e === 'Studio') return { '74':76, '71':70, '73':56, '76':68, '77':64, '78':64, '91':22, '93':18, '94':14 };
-        if (e === 'Live')    return { '74':86, '71':72, '73':51, '76':68, '77':64, '78':64, '91':14, '93':26, '94':20 };
-        if (e === 'Hall')    return { '74':74, '71':70, '73':59, '76':68, '77':64, '78':68, '91':62, '93':16, '94':26 };
-        return { '74':68, '71':72, '73':58, '76':68, '77':64, '78':64, '91':26, '93':14, '94':8 };
-    }
-    // â"€â"€ DISTORTION / METAL / FEEDBACK / FRONT DRIVE GUITAR: high gain, compressed
-    if (name.includes('DISTORTION') || (name.includes('METAL') && name.includes('GUITAR')) || name.includes('FEEDBACK') || name.includes('FRONT DRIVE')) {
-        if (e === 'Studio') return { '74':74, '71':72, '73':54, '76':66, '77':64, '78':64, '91':20, '93':14, '94':16 };
-        if (e === 'Live')    return { '74':84, '71':74, '73':49, '76':66, '77':64, '78':64, '91':12, '93':22, '94':22 };
-        if (e === 'Hall')    return { '74':72, '71':72, '73':57, '76':66, '77':64, '78':68, '91':60, '93':12, '94':28 };
-        return { '74':66, '71':74, '73':56, '76':66, '77':64, '78':64, '91':24, '93':10, '94':10 };
-    }
-    // â"€â"€ MUTE GUITAR: percussive palm-muted attack
-    if (name.includes('MUTE GUITAR') || name.includes('AMBIENT MUTE')) {
-        if (e === 'Studio') return { '74':72, '71':66, '73':52, '76':64, '77':64, '78':64, '91':16, '93':16, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':68, '73':47, '76':64, '77':64, '78':64, '91':8, '93':24, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':66, '73':55, '76':64, '77':64, '78':68, '91':56, '93':14, '94':12 };
-        return { '74':64, '71':68, '73':54, '76':64, '77':64, '78':64, '91':20, '93':12, '94':0 };
-    }
-    // â"€â"€ ACOUSTIC BASS: upright double bass, round woody thump
-    if (name.includes('ACOUSTIC BASS') || name.includes('RIDE BASS')) {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ SLAP BASS: bright percussive pop-and-slap
-    if (name.includes('SLAP BASS') || name.includes('FINGER SLAP') || name.includes('WAH SLAP')) {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ FRETLESS BASS: smooth, singing tone with portamento feel
-    if (name.includes('FRETLESS')) {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ PICKED BASS / VERSATILE BASS: mid-bright articulation
-    if (name.includes('PICKED BASS') || name.includes('MUTE PICKED') || (name.includes('VERSATILE') && name.includes('BASS'))) {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ HARP: clear pluck, natural resonance, blooming sustain
-    if (name.includes('HARP')) {
-        if (e === 'Studio') return { '74':80, '71':64, '73':58, '76':64, '77':64, '78':64, '91':30, '93':12, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':66, '73':53, '76':64, '77':64, '78':64, '91':22, '93':20, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':64, '73':61, '76':64, '77':64, '78':68, '91':70, '93':10, '94':12 };
-        return { '74':72, '71':66, '73':60, '76':64, '77':64, '78':64, '91':34, '93':8, '94':0 };
-    }
-    // â"€â"€ PIZZICATO STRINGS: short, plucked string section
-    if (name.includes('PIZZICATO')) {
-        if (e === 'Studio') return { '74':68, '71':64, '73':56, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':51, '76':64, '77':64, '78':64, '91':14, '93':18, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':59, '76':64, '77':64, '78':68, '91':62, '93':8, '94':12 };
-        return { '74':60, '71':66, '73':58, '76':64, '77':64, '78':64, '91':26, '93':6, '94':0 };
-    }
-    // â"€â"€ FRENCH HORN: warm, round, mellower than trumpet
-    if (name.includes('FRENCH HORN')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':60, '76':70, '77':68, '78':66, '91':24, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':55, '76':70, '77':68, '78':66, '91':16, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':63, '76':70, '77':68, '78':70, '91':64, '93':0, '94':12 };
-        return { '74':68, '71':68, '73':62, '76':70, '77':68, '78':66, '91':28, '93':0, '94':0 };
-    }
-    // â"€â"€ TUBA: deep, dark, very low brass
-    if (name.includes('TUBA')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':60, '76':70, '77':68, '78':66, '91':24, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':55, '76':70, '77':68, '78':66, '91':16, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':63, '76':70, '77':68, '78':70, '91':64, '93':0, '94':12 };
-        return { '74':68, '71':68, '73':62, '76':70, '77':68, '78':66, '91':28, '93':0, '94':0 };
-    }
-    // â"€â"€ MUTE TRUMPET: nasal muted brass buzz
-    if (name.includes('MUTE TRUMPET')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':60, '76':70, '77':68, '78':66, '91':24, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':55, '76':70, '77':68, '78':66, '91':16, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':63, '76':70, '77':68, '78':70, '91':64, '93':0, '94':12 };
-        return { '74':68, '71':68, '73':62, '76':70, '77':68, '78':66, '91':28, '93':0, '94':0 };
-    }
-    // â"€â"€ PAN FLUTE: breathy, smooth, woody
-    if (name.includes('PAN FLUTE')) {
-        if (e === 'Studio') return { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 };
-        return { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 };
-    }
-    // â"€â"€ PICCOLO: very bright, high piercing flute
-    if (name.includes('PICCOLO')) {
-        if (e === 'Studio') return { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 };
-        return { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 };
-    }
-    // â"€â"€ SHAKUHACHI: Japanese bamboo flute, very breathy, unstable vibrato
-    if (name.includes('SHAKUHACHI')) {
-        if (e === 'Studio') return { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 };
-        return { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 };
-    }
-    // â"€â"€ RECORDER / WHISTLE / OCARINA / BOTTLE: ethnic/folk winds, earthy
-    if (name.includes('RECORDER') || name.includes('WHISTLE') || name.includes('OCARINA') || name.includes('BOTTLE')) {
-        if (e === 'Studio') return { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 };
-        return { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 };
-    }
-    // â"€â"€ OBOE / ENGLISH HORN: double reed, nasal, singing
-    if (name.includes('OBOE') || name.includes('ENGLISH HORN')) {
-        if (e === 'Studio') return { '74':78, '71':70, '73':62, '76':70, '77':68, '78':66, '91':26, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':88, '71':72, '73':57, '76':70, '77':68, '78':66, '91':18, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':76, '71':70, '73':65, '76':70, '77':68, '78':70, '91':66, '93':0, '94':12 };
-        return { '74':70, '71':72, '73':64, '76':70, '77':68, '78':66, '91':30, '93':0, '94':0 };
-    }
-    // â"€â"€ CLARINET / VELO.CLARINET: single reed, woody-to-bright, wide range
-    if (name.includes('CLARINET')) {
-        if (e === 'Studio') return { '74':78, '71':70, '73':62, '76':70, '77':68, '78':66, '91':26, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':88, '71':72, '73':57, '76':70, '77':68, '78':66, '91':18, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':76, '71':70, '73':65, '76':70, '77':68, '78':70, '91':66, '93':0, '94':12 };
-        return { '74':70, '71':72, '73':64, '76':70, '77':68, '78':66, '91':30, '93':0, '94':0 };
-    }
-    // â"€â"€ BASSOON: dark, reedy, deep register
-    if (name.includes('BASSOON')) {
-        if (e === 'Studio') return { '74':78, '71':70, '73':62, '76':70, '77':68, '78':66, '91':26, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':88, '71':72, '73':57, '76':70, '77':68, '78':66, '91':18, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':76, '71':70, '73':65, '76':70, '77':68, '78':70, '91':66, '93':0, '94':12 };
-        return { '74':70, '71':72, '73':64, '76':70, '77':68, '78':66, '91':30, '93':0, '94':0 };
-    }
-    // â"€â"€ SYNTH VOICE / CHURCH LEAD / DOUBLE VOICE: synthetic vocal ethereal
-    if (name.includes('SYNTH-VOICE') || name.includes('CHURCH LEAD') || name.includes('DOUBLE VOICE') || name.includes('VOCAL CHOP')) {
-        if (e === 'Studio') return { '74':68, '71':62, '73':80, '76':66, '77':68, '78':74, '91':50, '93':18, '94':16 };
-        if (e === 'Live')    return { '74':78, '71':64, '73':75, '76':66, '77':68, '78':74, '91':42, '93':26, '94':22 };
-        if (e === 'Hall')    return { '74':66, '71':62, '73':83, '76':66, '77':68, '78':78, '91':90, '93':16, '94':28 };
-        return { '74':60, '71':64, '73':82, '76':66, '77':68, '78':74, '91':54, '93':14, '94':10 };
-    }
-
-    // â"€â"€ STRING ENSEMBLE / SLOW STRINGS / TREMOLO STRINGS: lush, slow bow attack
-    if (name.includes('SLOW STRING') || name.includes('LUSH STRING') || name.includes('TREMOLO STRING') || name.includes('STRING ENSEMBLE') || name.includes('WARM STRING') || (name.includes('STRINGS') && !name.includes('PIANO') && !name.includes('BASS') && !name.includes('SOLO'))) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':78, '76':70, '77':72, '78':72, '91':40, '93':16, '94':12 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':73, '76':70, '77':72, '78':72, '91':32, '93':24, '94':18 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':81, '76':70, '77':72, '78':76, '91':80, '93':14, '94':24 };
-        return { '74':64, '71':66, '73':80, '76':70, '77':72, '78':72, '91':44, '93':12, '94':6 };
-    }
-    // â"€â"€ SYNTH STRINGS: bright, aggressive synth-bowed texture
-    if (name.includes('SYNTH STRINGS') || name.includes('SYNTH STR')) {
-        if (e === 'Studio') return { '74':78, '71':68, '73':78, '76':70, '77':70, '78':68, '91':36, '93':22, '94':14 };
-        if (e === 'Live')    return { '74':88, '71':70, '73':73, '76':70, '77':70, '78':68, '91':28, '93':30, '94':20 };
-        if (e === 'Hall')    return { '74':76, '71':68, '73':81, '76':70, '77':70, '78':72, '91':76, '93':20, '94':26 };
-        return { '74':70, '71':70, '73':80, '76':70, '77':70, '78':68, '91':40, '93':18, '94':8 };
-    }
-    // â"€â"€ CHOIR AAHS / VOICE OOHS / MM VOICES / GOSPEL CHOIR: real choral blend, slow
-    if (name.includes('CHOIR') || name.includes('VOICE OOHS') || name.includes('MM VOICE') || name.includes('GOSPEL CHOIR') || name.includes('CHORAL') || name.includes('VOICES')) {
-        if (e === 'Studio') return { '74':68, '71':62, '73':80, '76':66, '77':68, '78':74, '91':50, '93':18, '94':16 };
-        if (e === 'Live')    return { '74':78, '71':64, '73':75, '76':66, '77':68, '78':74, '91':42, '93':26, '94':22 };
-        if (e === 'Hall')    return { '74':66, '71':62, '73':83, '76':66, '77':68, '78':78, '91':90, '93':16, '94':28 };
-        return { '74':60, '71':64, '73':82, '76':66, '77':68, '78':74, '91':54, '93':14, '94':10 };
-    }
-    // â"€â"€ BRASS SECTION / ENSEMBLE: full punchy section brass
-    if (name.includes('BRASS SECTION') || name.includes('BRASS ENSEMBLE') || name.includes('SECTION BRASS') || name.includes('FULL BRASS')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':58, '76':64, '77':64, '78':64, '91':26, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':53, '76':64, '77':64, '78':64, '91':18, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':61, '76':64, '77':64, '78':68, '91':66, '93':6, '94':12 };
-        return { '74':68, '71':68, '73':60, '76':64, '77':64, '78':64, '91':30, '93':4, '94':0 };
-    }
-    // â"€â"€ SYNTH BRASS: compressed, aggressive, punchy synth brass
-    if (name.includes('SYNTH BRASS') || name.includes('SYNTH-BRASS') || name.includes('BRASS PAD')) {
-        if (e === 'Studio') return { '74':80, '71':70, '73':56, '76':64, '77':64, '78':64, '91':22, '93':18, '94':12 };
-        if (e === 'Live')    return { '74':90, '71':72, '73':51, '76':64, '77':64, '78':64, '91':14, '93':26, '94':18 };
-        if (e === 'Hall')    return { '74':78, '71':70, '73':59, '76':64, '77':64, '78':68, '91':62, '93':16, '94':24 };
-        return { '74':72, '71':72, '73':58, '76':64, '77':64, '78':64, '91':26, '93':14, '94':6 };
-    }
-    // â"€â"€ SAW LEAD / SQUARE LEAD: classic synth lead, cutting, bright
-    if (name.includes('SAW LEAD') || name.includes('SQUARE LEAD') || name.includes('RAVE LEAD') || name.includes('DANCE LEAD') || name.includes('SUPER LEAD') || name.includes('FAT LEAD')) {
-        if (e === 'Studio') return { '74':80, '71':68, '73':58, '76':66, '77':66, '78':68, '91':22, '93':24, '94':10 };
-        if (e === 'Live')    return { '74':90, '71':70, '73':53, '76':66, '77':66, '78':68, '91':14, '93':32, '94':16 };
-        if (e === 'Hall')    return { '74':78, '71':68, '73':61, '76':66, '77':66, '78':72, '91':62, '93':22, '94':22 };
-        return { '74':72, '71':70, '73':60, '76':66, '77':66, '78':68, '91':26, '93':20, '94':4 };
-    }
-    // â"€â"€ SOFT LEAD / WHISTLE LEAD / CALLIOPE: gentle, rounded lead
-    if (name.includes('SOFT LEAD') || name.includes('WHISTLE LEAD') || name.includes('CALLIOPE') || name.includes('CHIFF')) {
-        if (e === 'Studio') return { '74':80, '71':68, '73':58, '76':66, '77':66, '78':68, '91':22, '93':24, '94':10 };
-        if (e === 'Live')    return { '74':90, '71':70, '73':53, '76':66, '77':66, '78':68, '91':14, '93':32, '94':16 };
-        if (e === 'Hall')    return { '74':78, '71':68, '73':61, '76':66, '77':66, '78':72, '91':62, '93':22, '94':22 };
-        return { '74':72, '71':70, '73':60, '76':66, '77':66, '78':68, '91':26, '93':20, '94':4 };
-    }
-    // â"€â"€ WARM PAD / ANALOG PAD / SLOW PAD: classic warm analog pad
-    if (name.includes('WARM PAD') || name.includes('ANALOG PAD') || name.includes('SLOW PAD') || name.includes('POLYSYNTH')) {
-        if (e === 'Studio') return { '74':72, '71':66, '73':78, '76':64, '77':64, '78':80, '91':48, '93':30, '94':20 };
-        if (e === 'Live')    return { '74':82, '71':68, '73':73, '76':64, '77':64, '78':80, '91':40, '93':38, '94':26 };
-        if (e === 'Hall')    return { '74':70, '71':66, '73':81, '76':64, '77':64, '78':84, '91':88, '93':28, '94':32 };
-        return { '74':64, '71':68, '73':80, '76':64, '77':64, '78':80, '91':52, '93':26, '94':14 };
-    }
-    // â"€â"€ ICE PAD / CRYSTAL PAD / GLASS PAD: bright, glittery, ethereal
-    if (name.includes('ICE PAD') || name.includes('CRYSTAL') || name.includes('GLASS PAD') || name.includes('BOWED PAD') || name.includes('METALLIC PAD')) {
-        if (e === 'Studio') return { '74':72, '71':66, '73':78, '76':64, '77':64, '78':80, '91':48, '93':30, '94':20 };
-        if (e === 'Live')    return { '74':82, '71':68, '73':73, '76':64, '77':64, '78':80, '91':40, '93':38, '94':26 };
-        if (e === 'Hall')    return { '74':70, '71':66, '73':81, '76':64, '77':64, '78':84, '91':88, '93':28, '94':32 };
-        return { '74':64, '71':68, '73':80, '76':64, '77':64, '78':80, '91':52, '93':26, '94':14 };
-    }
-    // â"€â"€ CHOIR PAD / VOICE PAD / HALO PAD: ethereal choral-textured pad
-    if (name.includes('CHOIR PAD') || name.includes('VOICE PAD') || name.includes('HALO PAD') || name.includes('SPACE PAD')) {
-        if (e === 'Studio') return { '74':72, '71':66, '73':78, '76':64, '77':64, '78':80, '91':48, '93':30, '94':20 };
-        if (e === 'Live')    return { '74':82, '71':68, '73':73, '76':64, '77':64, '78':80, '91':40, '93':38, '94':26 };
-        if (e === 'Hall')    return { '74':70, '71':66, '73':81, '76':64, '77':64, '78':84, '91':88, '93':28, '94':32 };
-        return { '74':64, '71':68, '73':80, '76':64, '77':64, '78':80, '91':52, '93':26, '94':14 };
-    }
-    // â"€â"€ ATMOSPHERE / SWEEP PAD / NEW AGE PAD: evolving, textural
-    if (name.includes('ATMOSPHERE') || name.includes('SWEEP PAD') || name.includes('RAIN') || name.includes('AURORA') || name.includes('STAR PAD')) {
-        if (e === 'Studio') return { '74':72, '71':66, '73':78, '76':64, '77':64, '78':80, '91':48, '93':30, '94':20 };
-        if (e === 'Live')    return { '74':82, '71':68, '73':73, '76':64, '77':64, '78':80, '91':40, '93':38, '94':26 };
-        if (e === 'Hall')    return { '74':70, '71':66, '73':81, '76':64, '77':64, '78':84, '91':88, '93':28, '94':32 };
-        return { '74':64, '71':68, '73':80, '76':64, '77':64, '78':80, '91':52, '93':26, '94':14 };
-    }
-    // â"€â"€ EDM SYNTH / TRANCE / HOUSE: modern dance synth textures
-    if (name.includes('EDM') || name.includes('TRANCE') || name.includes('HOUSE') || name.includes('TECHNO') || name.includes('DANCE SYN')) {
-        if (e === 'Studio') return { '74':84, '71':70, '73':54, '76':64, '77':64, '78':64, '91':20, '93':30, '94':14 };
-        if (e === 'Live')    return { '74':94, '71':72, '73':49, '76':64, '77':64, '78':64, '91':12, '93':38, '94':20 };
-        if (e === 'Hall')    return { '74':82, '71':70, '73':57, '76':64, '77':64, '78':68, '91':60, '93':28, '94':26 };
-        return { '74':76, '71':72, '73':56, '76':64, '77':64, '78':64, '91':24, '93':26, '94':8 };
-    }
-    // â"€â"€ CONCERT / SOLO / JAZZ FLUTE: clear, focused, classical wind
-    if ((name.includes('FLUTE') || name.includes('SOLO FLUTE') || name.includes('JAZZ FLUTE') || name.includes('TAPE FLUTE') || name.includes('FLUTE &')) && !name.includes('PAN') && !name.includes('PICCOLO') && !name.includes('SHAKUHACHI') && !name.includes('ORGAN')) {
-        if (e === 'Studio') return { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 };
-        return { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 };
-    }
-    // â"€â"€ CONTRABASS: very deep woody upright bass, much lower than violin/cello
-    if (name.includes('CONTRABASS') || name.includes('CONTRA BASS') || name === 'BASS STRINGS') {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ ORCHESTRA HIT / BRASS HIT: sharp dramatic stab, full spectrum punch
-    if (name.includes('ORCHESTRA HIT') || name.includes('BRASS HIT') || (name.includes('HIT') && name.includes('ORCH'))) {
-        if (e === 'Studio') return { '74':74, '71':66, '73':50, '76':64, '77':64, '78':64, '91':28, '93':0, '94':14 };
-        if (e === 'Live')    return { '74':84, '71':68, '73':45, '76':64, '77':64, '78':64, '91':20, '93':8, '94':20 };
-        if (e === 'Hall')    return { '74':72, '71':66, '73':53, '76':64, '77':64, '78':68, '91':68, '93':0, '94':26 };
-        return { '74':66, '71':68, '73':52, '76':64, '77':64, '78':64, '91':32, '93':0, '94':8 };
-    }
-    // â"€â"€ DYNAMIC PIANO: expressive, wide velocity, balanced grand character
-    if (name === 'DYNAMIC PIANO' || name.includes('DYNAMIC PIANO')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    // â"€â"€ BREEZING PIANO: light, airy, open, slightly brighter tone
-    if (name.includes('BREEZING PIANO') || name.includes('BREEZE PIANO')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    // â"€â"€ MONO PIANO: centered, focused, punchy — no wide stereo spread
-    if (name.includes('MONO PIANO')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':58, '76':64, '77':64, '78':64, '91':22, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':53, '76':64, '77':64, '78':64, '91':14, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':61, '76':64, '77':64, '78':68, '91':62, '93':0, '94':12 };
-        return { '74':64, '71':66, '73':60, '76':64, '77':64, '78':64, '91':26, '93':0, '94':0 };
-    }
-    // â"€â"€ MODERN E.G.PIANO: contemporary electric grand, clean digital character
-    if (name.includes('MODERN E.G.PIANO') || name.includes('E.G.PIANO') || name.includes('ELEC.GRAND')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // â"€â"€ DYNAMIC EP: velocity-sensitive electric piano, wide expression range
-    if (name === 'DYNAMIC EP' || name.includes('DYNAMIC EP')) {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // â"€â"€ GENERIC ELEC.PIANO 1–8: classic Fender Rhodes character
-    if (name.match(/^ELEC\.PIANO\s*\d/) || name === 'ELEC.PIANO') {
-        if (e === 'Studio') return { '74':70, '71':64, '73':60, '76':66, '77':64, '78':64, '91':22, '93':20, '94':0 };
-        if (e === 'Live')    return { '74':80, '71':66, '73':55, '76':66, '77':64, '78':64, '91':14, '93':28, '94':6 };
-        if (e === 'Hall')    return { '74':68, '71':64, '73':63, '76':66, '77':64, '78':68, '91':62, '93':18, '94':12 };
-        return { '74':62, '71':66, '73':62, '76':66, '77':64, '78':64, '91':26, '93':16, '94':0 };
-    }
-    // â"€â"€ FRENCH ACCORDION: nasal, bright, Parisian character
-    if (name.includes('ACCORDION FRENCH') || name.includes('FRENCH ACCORDION')) {
-        if (e === 'Studio') return { '74':74, '71':68, '73':56, '76':72, '77':70, '78':64, '91':20, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':70, '73':51, '76':72, '77':70, '78':64, '91':12, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':68, '73':59, '76':72, '77':70, '78':68, '91':60, '93':12, '94':12 };
-        return { '74':66, '71':70, '73':58, '76':72, '77':70, '78':64, '91':24, '93':10, '94':0 };
-    }
-    // â"€â"€ ITALIAN ACCORDION: warmer, rounder, fuller bellows
-    if (name.includes('ACCORDION ITALY') || name.includes('ACCORDION ITALIAN') || name.includes('ITALY ACCORDION')) {
-        if (e === 'Studio') return { '74':74, '71':68, '73':56, '76':72, '77':70, '78':64, '91':20, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':70, '73':51, '76':72, '77':70, '78':64, '91':12, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':68, '73':59, '76':72, '77':70, '78':68, '91':60, '93':12, '94':12 };
-        return { '74':66, '71':70, '73':58, '76':72, '77':70, '78':64, '91':24, '93':10, '94':0 };
-    }
-    // â"€â"€ GENERIC ACCORDION: traditional bellows-driven reed, balanced
-    if (name === 'ACCORDION' || (name.includes('ACCORDION') && !name.includes('BANDONEON') && !name.includes('HARMONICA') && !name.includes('FRENCH') && !name.includes('ITALY') && !name.includes('ITALIAN'))) {
-        if (e === 'Studio') return { '74':74, '71':68, '73':56, '76':72, '77':70, '78':64, '91':20, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':70, '73':51, '76':72, '77':70, '78':64, '91':12, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':68, '73':59, '76':72, '77':70, '78':68, '91':60, '93':12, '94':12 };
-        return { '74':66, '71':70, '73':58, '76':72, '77':70, '78':64, '91':24, '93':10, '94':0 };
-    }
-    // â"€â"€ FULL DRAWBAR: maximum harmonic richness, all drawbars fully open
-    if (name.includes('FULL DRAWBAR') || name.includes('FULL DRAW')) {
-        if (e === 'Studio') return { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 };
-        return { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 };
-    }
-    // â"€â"€ CLICK ORGAN: punchy percussive tonewheel attack emphasis
-    if (name.includes('CLICK ORGAN') || name.includes('CLICK ORG')) {
-        if (e === 'Studio') return { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 };
-        return { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 };
-    }
-    // â"€â"€ CHAPEL / CATHEDRAL ORGAN: majestic pipe organ, sustained legato
-    if (name.includes('CHAPEL ORGAN') || name.includes('CATHEDRAL') || name.includes('CHURCH ORGAN') || name.includes('MAJESTIC ORGAN')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':62, '76':64, '77':64, '78':64, '91':50, '93':0, '94':18 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':57, '76':64, '77':64, '78':64, '91':42, '93':8, '94':24 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':65, '76':64, '77':64, '78':68, '91':90, '93':0, '94':30 };
-        return { '74':64, '71':66, '73':64, '76':64, '77':64, '78':64, '91':54, '93':0, '94':12 };
-    }
-    // â"€â"€ VELO.ORGAN: velocity-sensitive organ, dynamic like a real drawbar
-    if (name.includes('VELO.ORGAN') || name.includes('VELOCITY ORGAN')) {
-        if (e === 'Studio') return { '74':74, '71':64, '73':58, '76':78, '77':74, '78':64, '91':24, '93':26, '94':0 };
-        if (e === 'Live')    return { '74':84, '71':66, '73':53, '76':78, '77':74, '78':64, '91':16, '93':34, '94':6 };
-        if (e === 'Hall')    return { '74':72, '71':64, '73':61, '76':78, '77':74, '78':68, '91':64, '93':24, '94':12 };
-        return { '74':66, '71':66, '73':60, '76':78, '77':74, '78':64, '91':28, '93':22, '94':0 };
-    }
-    // â"€â"€ PIPE SECTION / WIND SECTION: mixed woodwind ensemble
-    if (name.includes('PIPE SECTION') || name.includes('WIND SECTION') || name.includes('FLUTE & OBOE') || name.includes('WOOD WINDS')) {
-        if (e === 'Studio') return { '74':82, '71':60, '73':68, '76':72, '77':70, '78':68, '91':34, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':62, '73':63, '76':72, '77':70, '78':68, '91':26, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':60, '73':71, '76':72, '77':70, '78':72, '91':74, '93':6, '94':12 };
-        return { '74':74, '71':62, '73':70, '76':72, '77':70, '78':68, '91':38, '93':4, '94':0 };
-    }
-    // â"€â"€ ORGAN BASS: drawbar bass pedal, organ fundamental, not synth
-    if (name.includes('ORGAN BASS') || name.includes('ORG BASS')) {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ FINGERED BASS 1–7: standard round-wound electric bass, warm and punchy
-    if (name.includes('FINGERED BASS') || name === 'FINGERED BS') {
-        if (e === 'Studio') return { '74':68, '71':64, '73':58, '76':64, '77':64, '78':64, '91':10, '93':0, '94':0 };
-        if (e === 'Live')    return { '74':78, '71':66, '73':53, '76':64, '77':64, '78':64, '91':5, '93':8, '94':6 };
-        if (e === 'Hall')    return { '74':66, '71':64, '73':61, '76':64, '77':64, '78':68, '91':50, '93':0, '94':12 };
-        return { '74':60, '71':66, '73':60, '76':64, '77':64, '78':64, '91':14, '93':0, '94':0 };
-    }
-    // â"€â"€ SYNTH BASS 1–13: analog-style sub-bass with filter sweep character
-    if (name.match(/^SYNTH[\s-]?BASS\s*\d/) || name === 'SYNTH BASS' || name === 'SYNTH-BASS') {
-        if (e === 'Studio') return { '74':72, '71':68, '73':54, '76':64, '77':64, '78':64, '91':10, '93':10, '94':0 };
-        if (e === 'Live')    return { '74':82, '71':70, '73':49, '76':64, '77':64, '78':64, '91':5, '93':18, '94':6 };
-        if (e === 'Hall')    return { '74':70, '71':68, '73':57, '76':64, '77':64, '78':68, '91':50, '93':8, '94':12 };
-        return { '74':64, '71':70, '73':56, '76':64, '77':64, '78':64, '91':14, '93':6, '94':0 };
-    }
-    // â"€â"€ CHAMBER STRINGS: intimate quartet/quintet, transparent, warm
-    if (name.includes('CHAMBER') || name.includes('QUARTET') || name.includes('QUINTET') || name.includes('CHAMBER STR')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':78, '76':70, '77':72, '78':72, '91':40, '93':16, '94':12 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':73, '76':70, '77':72, '78':72, '91':32, '93':24, '94':18 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':81, '76':70, '77':72, '78':76, '91':80, '93':14, '94':24 };
-        return { '74':64, '71':66, '73':80, '76':70, '77':72, '78':72, '91':44, '93':12, '94':6 };
-    }
-    // â"€â"€ BRASS & STRINGS: hybrid texture, medium attack, balanced warmth
-    if ((name.includes('BRASS') && name.includes('STRINGS')) || (name.includes('BRASS') && name.includes('STRING')) || name.includes('BRASS & STR')) {
-        if (e === 'Studio') return { '74':76, '71':66, '73':58, '76':64, '77':64, '78':64, '91':26, '93':8, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':68, '73':53, '76':64, '77':64, '78':64, '91':18, '93':16, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':66, '73':61, '76':64, '77':64, '78':68, '91':66, '93':6, '94':12 };
-        return { '74':68, '71':68, '73':60, '76':64, '77':64, '78':64, '91':30, '93':4, '94':0 };
-    }
-    // â"€â"€ ORCHESTRA / FULL ORCHESTRA: tutti, complex acoustic blend
-    if (name.includes('ORCHESTRA') && !name.includes('HIT') && !name.includes('STRINGS')) {
-        if (e === 'Studio') return { '74':72, '71':64, '73':78, '76':70, '77':72, '78':72, '91':40, '93':16, '94':12 };
-        if (e === 'Live')    return { '74':82, '71':66, '73':73, '76':70, '77':72, '78':72, '91':32, '93':24, '94':18 };
-        if (e === 'Hall')    return { '74':70, '71':64, '73':81, '76':70, '77':72, '78':76, '91':80, '93':14, '94':24 };
-        return { '74':64, '71':66, '73':80, '76':70, '77':72, '78':72, '91':44, '93':12, '94':6 };
-    }
-    // â"€â"€ GUITAR PAD: sustained, pad-like guitar texture, blended with reverb
-    if (name.includes('GUITAR PAD') || (name.includes('GUITAR') && name.includes('PAD'))) {
-        if (e === 'Studio') return { '74':66, '71':62, '73':78, '76':66, '77':66, '78':72, '91':44, '93':22, '94':16 };
-        if (e === 'Live')    return { '74':76, '71':64, '73':73, '76':66, '77':66, '78':72, '91':36, '93':30, '94':22 };
-        if (e === 'Hall')    return { '74':64, '71':62, '73':81, '76':66, '77':66, '78':76, '91':84, '93':20, '94':28 };
-        return { '74':58, '71':64, '73':80, '76':66, '77':66, '78':72, '91':48, '93':18, '94':10 };
-    }
-    // â"€â"€ GUITAR SYNTH / SYNTH GUITAR: hybrid electric guitar + synth layers
-    if (name.includes('GUITAR SYNTH') || name.includes('SYNTH GUITAR') || (name.includes('GUITAR') && name.includes('SYNTH'))) {
-        if (e === 'Studio') return { '74':80, '71':68, '73':60, '76':68, '77':68, '78':68, '91':26, '93':26, '94':16 };
-        if (e === 'Live')    return { '74':90, '71':70, '73':55, '76':68, '77':68, '78':68, '91':18, '93':34, '94':22 };
-        if (e === 'Hall')    return { '74':78, '71':68, '73':63, '76':68, '77':68, '78':72, '91':66, '93':24, '94':28 };
-        return { '74':72, '71':70, '73':62, '76':68, '77':68, '78':68, '91':30, '93':22, '94':10 };
-    }
-    // â"€â"€ SITAR: Indian plucked instrument, buzzing sympathetic strings (jawari)
-    if (name.includes('SITAR')) {
-        if (e === 'Studio') return { '74':82, '71':66, '73':54, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':68, '73':49, '76':64, '77':64, '78':64, '91':10, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':66, '73':57, '76':64, '77':64, '78':68, '91':58, '93':12, '94':12 };
-        return { '74':74, '71':68, '73':56, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-    }
-    // â"€â"€ SHAMISEN: Japanese plucked lute, sharp attack, buzzing sawari
-    if (name.includes('SHAMISEN')) {
-        if (e === 'Studio') return { '74':82, '71':66, '73':54, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':68, '73':49, '76':64, '77':64, '78':64, '91':10, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':66, '73':57, '76':64, '77':64, '78':68, '91':58, '93':12, '94':12 };
-        return { '74':74, '71':68, '73':56, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-    }
-    // â"€â"€ KOTO: Japanese zither, delicate pluck with lingering overtones
-    if (name.includes('KOTO')) {
-        if (e === 'Studio') return { '74':82, '71':66, '73':54, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':68, '73':49, '76':64, '77':64, '78':64, '91':10, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':66, '73':57, '76':64, '77':64, '78':68, '91':58, '93':12, '94':12 };
-        return { '74':74, '71':68, '73':56, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-    }
-    // â"€â"€ BANJO: very bright twangy resonator, short metallic sustain
-    if (name.includes('BANJO')) {
-        if (e === 'Studio') return { '74':82, '71':66, '73':54, '76':64, '77':64, '78':64, '91':18, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':92, '71':68, '73':49, '76':64, '77':64, '78':64, '91':10, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':80, '71':66, '73':57, '76':64, '77':64, '78':68, '91':58, '93':12, '94':12 };
-        return { '74':74, '71':68, '73':56, '76':64, '77':64, '78':64, '91':22, '93':10, '94':0 };
-    }
-    // â"€â"€ STEEL DRUMS (Steelpan): Caribbean metallic bell-like pan
-    if (name.includes('STEEL DRUMS') || name.includes('STEEL DRUM') || name.includes('STEELPAN')) {
-        if (e === 'Studio') return { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 };
-        return { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 };
-    }
-    // â"€â"€ GAMELAN / BONANG: Indonesian metallic bell percussion
-    if (name.includes('GAMELAN') || name.includes('BONANG') || name.includes('GONG') || name.includes('SARON')) {
-        if (e === 'Studio') return { '74':80, '71':66, '73':58, '76':76, '77':72, '78':62, '91':26, '93':14, '94':0 };
-        if (e === 'Live')    return { '74':90, '71':68, '73':53, '76':76, '77':72, '78':62, '91':18, '93':22, '94':6 };
-        if (e === 'Hall')    return { '74':78, '71':66, '73':61, '76':76, '77':72, '78':66, '91':66, '93':12, '94':12 };
-        return { '74':72, '71':68, '73':60, '76':76, '77':72, '78':62, '91':30, '93':10, '94':0 };
-    }
-    // â"€â"€ INDIAN STRINGS / SARANGI: bowed Indian strings, buzzing drone
-    if (name.includes('SARANGI') || (name.includes('INDIAN') && (name.includes('STRING') || name.includes('VINA') || name.includes('VEENA')))) {
-        if (e === 'Studio') return { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 };
-        if (e === 'Live')    return { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 };
-        if (e === 'Hall')    return { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 };
-        return { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 };
-    }
-    // â"€â"€ ERHU / CHINESE FIDDLE: bowed two-string Chinese instrument
-    if (name.includes('ERHU') || name.includes('CHINESE FIDDLE') || (name.includes('CHINESE') && name.includes('STRING'))) {
-        if (e === 'Studio') return { '74':78, '71':70, '73':58, '76':72, '77':70, '78':66, '91':24, '93':14, '94':10 };
-        if (e === 'Live')    return { '74':88, '71':72, '73':53, '76':72, '77':70, '78':66, '91':16, '93':22, '94':16 };
-        if (e === 'Hall')    return { '74':76, '71':70, '73':61, '76':72, '77':70, '78':70, '91':64, '93':12, '94':22 };
-        return { '74':70, '71':72, '73':60, '76':72, '77':70, '78':66, '91':28, '93':10, '94':4 };
-    }
-    // â"€â"€ BAGPIPE: droning reeds with chanter melody
-    if (name.includes('BAGPIPE') || name.includes('BAG PIPE')) {
-        if (e === 'Studio') return { '74':76, '71':72, '73':60, '76':68, '77':70, '78':66, '91':18, '93':12, '94':0 };
-        if (e === 'Live')    return { '74':86, '71':74, '73':55, '76':68, '77':70, '78':66, '91':10, '93':20, '94':6 };
-        if (e === 'Hall')    return { '74':74, '71':72, '73':63, '76':68, '77':70, '78':70, '91':58, '93':10, '94':12 };
-        return { '74':68, '71':74, '73':62, '76':68, '77':70, '78':66, '91':22, '93':8, '94':0 };
-    }
-    // â"€â"€ SYNTHESIZER / SYNTH LEAD generic: bright modern synth, versatile
-    if (name.includes('SYNTH LEAD') || name.includes('SYNTH PAD') || (name.startsWith('SYNTH') && !name.includes('BASS') && !name.includes('BRASS') && !name.includes('STRINGS') && !name.includes('VOICE') && !name.includes('CHOIR'))) {
-        if (e === 'Studio') return { '74':80, '71':68, '73':58, '76':66, '77':66, '78':68, '91':22, '93':24, '94':10 };
-        if (e === 'Live')    return { '74':90, '71':70, '73':53, '76':66, '77':66, '78':68, '91':14, '93':32, '94':16 };
-        if (e === 'Hall')    return { '74':78, '71':68, '73':61, '76':66, '77':66, '78':72, '91':62, '93':22, '94':22 };
-        return { '74':72, '71':70, '73':60, '76':66, '77':66, '78':68, '91':26, '93':20, '94':4 };
-    }
-
-    // 2. Exact Category Lookup
-    if (TONE_ENV_MATRIX[c] && TONE_ENV_MATRIX[c][e]) {
-        return { ...TONE_ENV_MATRIX[c][e] };
-    }
-
-    // 3. Normalized Category Lookup
-    for (const [key, envMap] of Object.entries(TONE_ENV_MATRIX)) {
-        if (c.includes(key) || key.includes(c)) {
-            if (envMap[e]) return { ...envMap[e] };
-        }
-    }
-
-    // 4. Acoustic Fallback (Never flat 64s!)
-    if (e === 'Studio') return { '74':72, '71':66, '73':62, '76':66, '77':64, '78':64, '91':22, '93':15, '94':0 };
-    if (e === 'Live')    return { '74':82, '71':68, '73':57, '76':66, '77':64, '78':64, '91':14, '93':23, '94':6 };
-    if (e === 'Hall')    return { '74':70, '71':66, '73':65, '76':66, '77':64, '78':68, '91':62, '93':13, '94':12 };
-    return { '74':64, '71':68, '73':64, '76':66, '77':64, '78':64, '91':26, '93':11, '94':0 };
+    const name = (tone && (tone.name || tone.text) || '').toUpperCase().trim();
+    const c = (cat || (tone && tone.category) || 'PIANO').toUpperCase().trim();
+    const role = TONE_ROLE[name] || CAT_ROLE[c] || 'generic';
+    return derive(env || 'Studio', ROLES[role] || ROLES.generic);
 }
 
 function applySmartProfile(part, category) {
