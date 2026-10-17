@@ -1091,10 +1091,14 @@ function applySmartProfile(part, category) {
         }
     });
 
-    // 5. Sustain: ONLY assert if sustain is ON in app.
-    // When OFF, do NOT send CC 72 -- preserve tone's native envelope and keyboard state!
+    // 5. CC72: assert sustain release value or per-category neutral.
+    // Casio hardware resets CC72 on Program Change (its own envelope wins), so this only
+    // matters for the PC synth — but sending it to both is harmless and keeps them in sync.
     if (tuning[part].sus) {
         sendCC(part, 72, susRelease(part));
+    } else {
+        const neutral = releaseNeutral(part);
+        if (neutral !== RELEASE_NEUTRAL) sendCC(part, 72, neutral);
     }
 }
 
