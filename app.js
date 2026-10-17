@@ -27,6 +27,14 @@ const CAT_RELEASE_NEUTRAL = {
     'CHOIR':            78,
     'STRING ENSEMBLE':  75,
     'SOLO STRINGS':     72,
+    'SYNTH-BRASS':      76,
+    'BRASS ENSEMBLE':   76,
+    'SOLO BRASS':       78,
+    'SYNTH-LEAD':       74,
+    'REED':             76,
+    'SAX':              74,
+    'PIPE':             76,
+    'EDM SYNTH':        74,
 };
 function releaseNeutral(part) {
     return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;

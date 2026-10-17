@@ -12,7 +12,7 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 - `index.html`: La estructura visual, construida semánticamente. Carga iconos Material UI y la tipografía Montserrat.
 - `style.css`: Motor de diseño. Utiliza CSS Variables (`--panel-bg`, `--accent`, etc.) para gestionar dinámicamente un Tema Claro / Tema Oscuro. Usa una arquitectura puramente basada en Flexbox para lograr un diseño "Responsive" extremo (funciona igual de bien en monitores 4K que en smartphones verticales).
 - `app.js`: El cerebro de la aplicación. Gestiona la conexión MIDI, el "State Management" global, los listeners de la interfaz y la inyección en el DOM.
-- `eq.js`: Motor EQ, `TONE_ENV_MATRIX` (33 categorías × 4 ambientes), `getToneEnvPreset`, `applySmartProfile`. Los CCs 102/103/104 operan sobre el PC Synth; el Active DSP real del CT-S500 requiere SysEx.
+- `eq.js`: Motor EQ, `TONE_ENV_MATRIX` (33 categorías × 4 ambientes) y `getToneEnvPreset` (perfiles por rol). Usa **solo los CCs que el CT-S500 honra** (71,73,74,76,77,78,91,93,94); los CC102/103/104 fueron eliminados (el hardware los ignora). El Active DSP real del CT-S500 requiere SysEx.
 - `midi.js`: Conexión y routing MIDI (Web MIDI API).
 - `presets.js`: Persistencia local y sincronización GitHub de presets de usuario.
 - `harmony.js`: Motor de armonía y acordes.
@@ -202,6 +202,11 @@ Genera `tools/validation-report.json`.
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v283 · sáb 17 oct 2026 · COT
+- **fix(eq):** Eliminada la sección **EQ Casio** (CC104/103/102) — verificado que el CT-S500 **ignora** esos CCs. Reescritos todos los presets (33 categorías + 101 modelos de firma por tono = **540 objetos**) usando **solo los CCs soportados** (71,73,74,76,77,78,91,93,94), con perfiles por rol (piano, cuerdas, vientos, órganos, pads, guitarras, bajos, percusión melódica, etc.) para Studio/Live/Hall/Jazz. Se conserva `64` cuando es el neutro de diseño (p. ej. sin vibrato en piano).
+- **fix(sustain):** `CAT_SUS_RELEASE` refinado (órganos, acordeón, cañas, metales y bajos con más release) y `CAT_RELEASE_NEUTRAL` extendido a instrumentos de decaimiento largo (synth-brass, metales, sax, reed, flute, synth-lead, EDM).
+- **cache-bust:** `index.html` → v283.
 
 ### v267 · mar 14 oct 2026 · COT
 - **fix(parser):** Soporte para calificadores compuestos: `7sus4`, `9sus4`, `13sus4`, `6/9`. Añadido `(?:sus[24])?` y `(?:/\d+)?` al final de `ES_QUAL` y `EN_QUAL`. Soluciona líneas como `RE7sus4 SOL9sus4` que fallaban detección.
