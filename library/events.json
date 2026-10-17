@@ -11,9 +11,9 @@
     ]
   },
   {
-    "id": "evt_sabado_20261018",
-    "name": "Sábado 18 oct",
-    "date": "2026-10-18",
+    "id": "evt_sabado_20261017",
+    "name": "Sábado 17 oct",
+    "date": "2026-10-17",
     "songs": [
       { "id": "bethel_music_santo_por_siempre",    "versionFile": null, "transpose": 0 },
       { "id": "chris_tomlin_santo_por_siempre",    "versionFile": null, "transpose": 0 },
