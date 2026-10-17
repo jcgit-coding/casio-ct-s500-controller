@@ -741,8 +741,8 @@ const RepertoireSync = {
                 const linkHtml = v.source
                     ? ` <a href="${v.source}" target="_blank" rel="noopener"
                            title="Ver en lacuerda.net"
-                           style="font-size:9px;color:var(--text-muted);opacity:0.6;text-decoration:none;vertical-align:middle;"
-                           onclick="event.stopPropagation()">↗</a>`
+                           style="display:inline-flex;align-items:center;color:var(--text-muted);opacity:0.5;text-decoration:none;"
+                           onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px;">open_in_new</span></a>`
                     : '';
                 return `<span style="display:inline-flex;align-items:center;gap:2px;">
                     <button onclick="RepertoireSync.openSong('${id}','${v.file}')"
@@ -785,9 +785,13 @@ const EventsMgr = {
         try {
             const res = await fetch('library/events.json?v=' + Date.now());
             if (res.ok) {
-                const events = await res.json();
-                if (Array.isArray(events) && events.length) {
-                    localStorage.setItem('casio_events', JSON.stringify(events));
+                const cloud = await res.json();
+                if (Array.isArray(cloud)) {
+                    // Mezclar: cloud gana sobre localStorage para eventos con el mismo id
+                    const local = this.getAll();
+                    const merged = [...cloud];
+                    local.forEach(le => { if (!merged.find(ce => ce.id === le.id)) merged.push(le); });
+                    localStorage.setItem('casio_events', JSON.stringify(merged));
                     this.render();
                 }
             }
