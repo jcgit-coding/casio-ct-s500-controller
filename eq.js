@@ -18,7 +18,6 @@ const EQ_SECTIONS = [
         title: 'Envelope',
         controls: [
             { label: 'ATTACK',  cc: 73, def: 64, tip: 'Attack Time (hammer strike / bow)' },
-            { label: 'DECAY',   cc: 75, def: 64, tip: 'Decay Time' },
         ]
     },
     {
@@ -69,8 +68,9 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 
 
 let currentEnv = 'Studio';
-// Verified CT-S500 CCs: 74=Cutoff 71=Resonance 73=Attack 91=Reverb 93=Chorus 76=VibRate 77=VibDepth 78=VibDelay 94=Echo
+// Verified CT-S500 CCs: 71=Resonance 73=Attack 74=Cutoff 76=VibRate 77=VibDepth 78=VibDelay 91=Reverb 93=Chorus 94=Echo 102=EQ-Bass 103=EQ-Mid 104=EQ-Treble
 // CC72 (Release) excluded from EQ state — managed separately via the SUSTAIN button
+// CC75 (Decay) excluded — unverified on CT-S500, caused tone distortion at non-neutral values
 // Casio Categories (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
 //   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
 //   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES

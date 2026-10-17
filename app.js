@@ -32,8 +32,8 @@ function releaseNeutral(part) {
     return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
 }
 // CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
-// CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal
-const PERFORMANCE_CCS = new Set([1, 65, 66, 67]);
+// CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal, CC126=Mono Mode
+const PERFORMANCE_CCS = new Set([1, 65, 66, 67, 126]);
 
 function pcNoteOff(ch, note) {
     const info = pcActiveNotes[ch + ':' + note];
