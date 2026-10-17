@@ -853,29 +853,12 @@ const EventsMgr = {
                 const artist = meta ? meta.artist : '';
                 const verLabel = entry.versionFile
                     ? ` · <span style="color:var(--accent);font-size:9px;">${entry.versionFile.replace(/chords_|\.txt/g,'')}</span>` : '';
-                const tr = entry.transpose || 0;
-                const trLabel = tr !== 0 ? `<span style="font-size:9px;font-weight:800;color:var(--accent);background:rgba(var(--accent-rgb,0,255,204),0.12);padding:1px 5px;border-radius:4px;margin-left:4px;">${tr > 0 ? '+' : ''}${tr}st</span>` : '';
-                const notes = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-                const noteLabels = ["C","C#/Db","D","D#/Eb","E","F","F#/Gb","G","G#/Ab","A","A#/Bb","B"];
-                const origKey = meta?.original_key || 'C';
-                const origIdx = notes.indexOf(origKey.replace('b', '#').replace(/m.*/,'')) ?? 0;
-                const selectOpts = noteLabels.map((n, idx) => {
-                    const st = (idx - (origIdx < 0 ? 0 : origIdx) + 12) % 12;
-                    const sel = st === ((tr % 12 + 12) % 12) ? 'selected' : '';
-                    return `<option value="${st}" ${sel}>${n}${st===0?' ★':''}</option>`;
-                }).join('');
                 return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,0.04);margin-bottom:2px;">
                     <span style="color:var(--text-muted);font-size:10px;min-width:16px;text-align:right;">${i+1}.</span>
                     <div style="flex:1;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}','${entry.versionFile||''}')">
-                        <div style="font-size:12px;font-weight:600;color:var(--text);">${title}${verLabel}${trLabel}</div>
+                        <div style="font-size:12px;font-weight:600;color:var(--text);">${title}${verLabel}</div>
                         <div style="font-size:10px;color:var(--text-muted);">${artist}</div>
                     </div>
-                    <select title="Tono para este evento"
-                            onchange="EventsMgr.setSongTranspose('${evt.id}','${sid}',parseInt(this.value))"
-                            onclick="event.stopPropagation()"
-                            style="font-size:10px;font-weight:700;padding:3px 4px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:var(--text);cursor:pointer;max-width:72px;">
-                        ${selectOpts}
-                    </select>
                     <span style="cursor:pointer;padding:2px 6px;border-radius:4px;color:rgba(255,100,100,0.8);font-size:12px;font-weight:700;"
                           onclick="EventsMgr.removeSong('${evt.id}','${sid}')" title="Quitar">✕</span>
                 </div>`;
