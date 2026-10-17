@@ -9,5 +9,28 @@
       { "id": "new_wine_el_movimiento_de_gloria",  "versionFile": null, "transpose": 0 },
       { "id": "ebenezer_me_gozare",                "versionFile": null, "transpose": 0 }
     ]
+  },
+  {
+    "id": "evt_sabado_20261018",
+    "name": "Sábado 18 oct",
+    "date": "2026-10-18",
+    "songs": [
+      { "id": "bethel_music_santo_por_siempre",    "versionFile": null, "transpose": 0 },
+      { "id": "chris_tomlin_santo_por_siempre",    "versionFile": null, "transpose": 0 },
+      { "id": "ibi_santo_por_siempre",             "versionFile": null, "transpose": 0 },
+      { "id": "miel_san_marcos_santo_por_siempre", "versionFile": null, "transpose": 0 },
+      { "id": "marco_barrientos_a_el_sea_la_gloria", "versionFile": null, "transpose": 0 },
+      { "id": "jesus_adrian_romero_el_poderoso_de_israel",  "versionFile": null, "transpose": 0 },
+      { "id": "juan_carlos_alvarado_el_poderoso_de_israel", "versionFile": null, "transpose": 0 },
+      { "id": "marco_barrientos_el_poderoso_de_israel",     "versionFile": null, "transpose": 0 },
+      { "id": "marcos_witt_el_poderoso_de_israel",          "versionFile": null, "transpose": 0 },
+      { "id": "miel_san_marcos_poderoso_de_israel",         "versionFile": null, "transpose": 0 },
+      { "id": "fernel_monroy_remolineando",   "versionFile": null, "transpose": 0 },
+      { "id": "miel_san_marcos_remolineando", "versionFile": null, "transpose": 0 },
+      { "id": "misioneros_remolineando",      "versionFile": null, "transpose": 0 },
+      { "id": "jaime_murrell_oh_moradora_de_sion",              "versionFile": null, "transpose": 0 },
+      { "id": "marcos_witt_oh_moradora_de_sion",                "versionFile": null, "transpose": 0 },
+      { "id": "miel_san_marcos_regocijate_oh_moradora_de_sion", "versionFile": null, "transpose": 0 }
+    ]
   }
 ]
