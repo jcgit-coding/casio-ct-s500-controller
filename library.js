@@ -953,6 +953,7 @@ const EventsMgr = {
     },
 
     removeSong(eventId, songId) {
+        if (!confirm('¿Quitar esta canción del evento?')) return;
         const events = this.getAll();
         const evt = events.find(e => e.id === eventId);
         if (!evt) return;
