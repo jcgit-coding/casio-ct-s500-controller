@@ -360,7 +360,7 @@ function loadAppState() {
             Object.assign(eqState, saved.eqState);
             // Purge obsolete phantom CCs and CC72 (governed exclusively by SUSTAIN button)
             ['U1','U2','L'].forEach(p => {
-                [72, 75, 95, 102, 103, 104].forEach(cc => {
+                [72, 95].forEach(cc => {
                     delete eqState[p][cc]; delete eqState[p][String(cc)];
                 });
             });
