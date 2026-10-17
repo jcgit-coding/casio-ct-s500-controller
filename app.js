@@ -1278,6 +1278,7 @@ window.swapPartState = function(partA, partB) {
         const btn = document.getElementById('sus-' + p);
         if (btn) { btn.innerText = tuning[p].sus ? 'ON' : 'OFF'; btn.classList.toggle('sus-on', tuning[p].sus); }
         if (tuning[p].sus) sendCC(p, 72, susRelease(p));
+        else sendCC(p, 72, releaseNeutral(p));
         sendCoarseTuning(p);
     });
 };
@@ -1299,6 +1300,7 @@ function pushAllToKeyboard(skipTones = false) {
             });
             sendCoarseTuning(part);
             if (tuning[part].sus) sendCC(part, 72, susRelease(part));
+            else sendCC(part, 72, releaseNeutral(part));
             if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         });
     }, skipTones ? 0 : 150);
