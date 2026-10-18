@@ -538,7 +538,39 @@
 
 
         
-        <!-- VIEW: MIDI CTRL -->
+        
+              <!-- Consola PA -->
+              <div class="panel">
+                  <div class="panel-title" style="font-size:13px; margin-bottom:14px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">speaker</span> Consola PA &mdash; Casio CT-S500</div>
+                  <div style="background:rgba(255,80,80,.08); border:1px solid rgba(255,80,80,.3); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:12.5px; line-height:1.6; color:#ff6b6b;">
+                      <b>&#9888; Saturaci&oacute;n:</b> la causa #1 es el GAIN demasiado alto. Con entrada LINE el Casio ya llega fuerte &mdash; b&aacute;jalo primero.
+                  </div>
+                  <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                      <colgroup><col style="width:110px"><col style="width:130px"><col></colgroup>
+                      <thead>
+                          <tr style="color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid var(--border);">
+                              <th style="text-align:left; padding:4px 8px 6px 0;">Control</th>
+                              <th style="text-align:left; padding:4px 8px 6px;">Valor</th>
+                              <th style="text-align:left; padding:4px 0 6px;">Nota</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">Entrada</td><td style="padding:7px 8px; color:var(--accent);">LINE (jack)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">No XLR mic &mdash; nivel de l&iacute;nea (~-10 dBV)</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">GAIN</td><td style="padding:7px 8px; color:#ff6b6b; font-weight:700;">7&ndash;9 o'clock &#9888;</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">M&iacute;nimo funcional. LED CLIP nunca debe encenderse</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">LOW CUT</td><td style="padding:7px 8px; color:#ff6b6b; font-weight:700;">OFF &#9888;</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">No cortar graves al teclado</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">HIGH 12K</td><td style="padding:7px 8px; color:var(--accent);">0 (plano)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Punto de partida</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">MID</td><td style="padding:7px 8px; color:#ffa726;">-2 a -3 dB</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Reduce digital/nasal en 1&ndash;2 kHz (FREQ a 9&ndash;10 o'clock)</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">LOW 80</td><td style="padding:7px 8px; color:var(--accent);">0 o +2 dB</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Leve boost si el sonido se siente delgado</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">EFX</td><td style="padding:7px 8px; color:#ffa726;">0 (off)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Casio ya env&iacute;a efectos por MIDI &mdash; no duplicar</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">PAN</td><td style="padding:7px 8px; color:var(--accent);">Centro</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">O L/R si conectas est&eacute;reo (2 canales)</td></tr>
+                          <tr><td style="padding:7px 8px 7px 0; font-weight:700;">Fader</td><td style="padding:7px 8px; color:var(--accent);">Unity (0 dB)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">L&iacute;nea marcada "0" en el canal</td></tr>
+                      </tbody>
+                  </table>
+                  <div style="margin-top:12px; padding:9px 13px; background:rgba(79,195,247,.07); border:1px solid rgba(79,195,247,.25); border-radius:7px; font-size:11.5px; color:var(--accent); line-height:1.6;">
+                      &#128161; <b>Flujo correcto:</b> sube GAIN (canal en mute) hasta ~0 dB en pasajes fuertes &rarr; fader a unity &rarr; master fader para volumen en sala.
+                  </div>
+              </div>
+<!-- VIEW: MIDI CTRL -->
         <div class="app-view" id="view-synth">
 
             <!-- PROFESSIONAL DAW ROUTING PANEL -->
