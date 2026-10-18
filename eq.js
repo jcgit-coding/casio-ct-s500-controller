@@ -3,7 +3,7 @@ const EQ_SECTIONS = [
         title: 'Volume & Panning',
         controls: [
             { label: 'Volume',  cc: 7,  def: 100, tip: 'Volume' },
-            { label: 'EXPRESSION',  cc: 11, def: 127, tip: 'EXPRESSION (dynamics)' },
+            { label: 'EXPRESSION',  cc: 11, def: 100, tip: 'EXPRESSION (dynamics)' },
             { label: 'PAN',  cc: 10, def: 64,  tip: 'Pan (left/right)' },
         ]
     },
@@ -30,7 +30,7 @@ const EQ_SECTIONS = [
         title: 'Vibrato (LFO)',
         controls: [
             { label: 'RATE',  cc: 76, def: 64, tip: 'Vibrato Rate' },
-            { label: 'DEPTH', cc: 77, def: 64, tip: 'Vibrato Depth' },
+            { label: 'DEPTH', cc: 77, def: 0,  tip: 'Vibrato Depth' },
             { label: 'DELAY', cc: 78, def: 64, tip: 'Vibrato Delay' },
         ]
     },
@@ -47,7 +47,7 @@ const EQ_SECTIONS = [
         controls: [
             { label: 'MODULATION', cc: 1,   def: 0, tip: 'Modulation Wheel' },
             { label: 'PORTAMENTO', cc: 65,  def: 0, tip: 'Portamento On/Off', type: 'switch' },
-            { label: 'PORT. TIME', cc: 5,   def: 0, tip: 'Portamento Time (glide)' },
+            { label: 'PORT. TIME', cc: 5,   def: 30, tip: 'Portamento Time (glide)' },
             { label: 'MONO',       cc: 126, def: 0, tip: 'Mono Mode (Legato solos/vientos)', type: 'switch' },
             { label: 'SOSTENUTO',  cc: 66,  def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
             { label: 'SOFT',       cc: 67,  def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
