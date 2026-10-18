@@ -4,11 +4,21 @@
     "name": "Sábado 17 oct",
     "date": "2026-10-17",
     "songs": [
-      { "id": "ibi_santo_por_siempre",                              "versionFile": null, "transpose": 0  },
-      { "id": "juan_carlos_alvarado_el_poderoso_de_israel",         "versionFile": null, "transpose": 5  },
-      { "id": "fernel_monroy_remolineando",                         "versionFile": null, "transpose": 7  },
-      { "id": "marcos_witt_oh_moradora_de_sion",                    "versionFile": null, "transpose": 8  },
-      { "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre", "versionFile": null, "transpose": 3  }
+      { "id": "ibi_santo_por_siempre",                              "versionFile": null, "transpose": 0 },
+      { "id": "juan_carlos_alvarado_el_poderoso_de_israel",         "versionFile": null, "transpose": 5 },
+      { "id": "fernel_monroy_remolineando",                         "versionFile": null, "transpose": 7 },
+      { "id": "marcos_witt_oh_moradora_de_sion",                    "versionFile": null, "transpose": 8 },
+      { "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre", "versionFile": null, "transpose": 3 }
+    ]
+  },
+  {
+    "id": "evt_domingo_20261018",
+    "name": "Domingo 18 oct",
+    "date": "2026-10-18",
+    "songs": [
+      { "id": "new_wine_incomprensible_amor",          "versionFile": null, "transpose": 0 },
+      { "id": "christine_dclario_ya_no_soy_esclavo",  "versionFile": null, "transpose": 0 },
+      { "id": "new_wine_libre_para_adorar",            "versionFile": null, "transpose": 0 }
     ]
   }
 ]
