@@ -364,7 +364,7 @@ function onMIDIMessage(e) {
         if (d1 === 0) { pendingBank[part] = d2; }
         if (d1 === 32) { pendingLSB[part] = d2; }
         if (d1 === 64) { physCC64[part] = d2; }
-        if (d1 !== 64 && d1 !== 72 && d1 !== 0 && d1 !== 32) eqState[part][d1] = d2;
+        if (d1 !== 64 && d1 !== 72 && d1 !== 0 && d1 !== 32 && d1 !== 11) eqState[part][d1] = d2;
         if (part === activePart) {
             const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
             if (ctrl) {
