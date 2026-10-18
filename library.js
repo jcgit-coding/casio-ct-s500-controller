@@ -838,13 +838,13 @@ const EventsMgr = {
                 const artist = meta ? meta.artist : '';
                 const verLabel = entry.versionFile
                     ? ` · <span style="color:var(--accent);font-size:9px;">${entry.versionFile.replace(/chords_|\.txt/g,'')}</span>` : '';
-                return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,0.04);margin-bottom:2px;">
-                    <span style="color:var(--text-muted);font-size:10px;min-width:16px;text-align:right;">${i+1}.</span>
-                    <div style="flex:1;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}','${entry.versionFile||''}')">
-                        <div style="font-size:12px;font-weight:600;color:var(--text);">${title}${verLabel}</div>
-                        <div style="font-size:10px;color:var(--text-muted);">${artist}</div>
+                return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,0.04);margin-bottom:2px;min-width:0;">
+                    <span style="color:var(--text-muted);font-size:10px;min-width:16px;text-align:right;flex-shrink:0;">${i+1}.</span>
+                    <div style="flex:1;min-width:0;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}','${entry.versionFile||''}')">
+                        <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${title}${verLabel}</div>
+                        <div style="font-size:10px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${artist}</div>
                     </div>
-                    <span style="cursor:pointer;padding:2px 6px;border-radius:4px;color:rgba(255,100,100,0.8);font-size:12px;font-weight:700;"
+                    <span style="cursor:pointer;padding:2px 6px;border-radius:4px;color:rgba(255,100,100,0.8);font-size:12px;font-weight:700;flex-shrink:0;"
                           onclick="EventsMgr.removeSong('${evt.id}','${sid}')" title="Quitar">✕</span>
                 </div>`;
             }).join('') : `<div style="padding:8px;text-align:center;font-size:11px;color:var(--text-muted);">Sin canciones aún.</div>`) : '';
