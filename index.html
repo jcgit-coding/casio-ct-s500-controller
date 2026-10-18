@@ -95,10 +95,9 @@
                             var iso=data&&data.commit&&data.commit.committer&&data.commit.committer.date;
                             if(!iso)return;
                             var d=new Date(iso);
-                            var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-                            var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                            var pad=function(n){return n<10?'0'+n:n;};
-                            el.textContent=V+' '+days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+                            var ds=d.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short'});
+                            var ts=d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:false});
+                            el.textContent=V+' '+ds+' '+ts;
                         }).catch(function(){});
                 })();
                 </script>
