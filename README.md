@@ -203,6 +203,16 @@ Genera `tools/validation-report.json`.
 
 ## 9. Historial de Versiones (reciente)
 
+### v286 · sáb 17 oct 2026 · COT
+- **fix(eq) · PÉRDIDA DE POTENCIA/CUERPO EN PA (causa raíz):** el control **EXPRESSION (CC11)** tenía `def: 80`, por lo que `applySmartProfile` / `pushAllToKeyboard` enviaban **CC11=80 a todas las pistas en los 4 ambientes**, atenuando el tono un **~37 %** de forma permanente (80/127 ≈ 0,63 ≈ −4 dB) *antes* incluso del CC7. En los altavoces internos (cerca, con limitador/coloración propia) apenas se notaba; en un PA plano y a mayor ganancia se percibía como pérdida de **cuerpo, potencia, bajos y sustain** (Efecto Fletcher‑Munson: a menor SPL, menos graves y menos cuerpo percibido). Corrección: `def: 80 → 127` (neutro = señal completa). Además, CC11 ya **no se persiste** en `toneEQ` (`saveToneEQForPart`) y se **purga** de los overrides guardados al cargar (`loadToneEQ`), igual que CC7/CC72, para que ningún `80` antiguo pueda volver a aplicarse.
+- **fix(roles) · 19 asignaciones tone→rol corregidas** (patrón de bug: nombres con prefijos `MELLOW`/`BRIGHT` o por coincidencia de palabra clave caían a `piano`, y otros a un rol incoherente con su categoría):
+  - `MELLOW E.PIANO` (ELEC.PIANO) `piano → ep`; `MELLOW STRINGS 1/2` y `BRIGHT STRINGS 1/2` (STRING ENSEMBLE) `piano → strings_ens`; `MELLOW TRUMPET` (SOLO BRASS) `piano → brass_solo`; `MELLOW SAW LEAD` (SYNTH‑LEAD) `piano → synth_lead`.
+  - `BRIGHTNESS` (SYNTH‑PAD) `piano → synth_pad`; `BRIGHT BELL PAD` `piano → pad_glass`; `SYNTH-PAD` `synth_lead → synth_pad`; `BOTTLE PAD` `flute → synth_pad`.
+  - Secciones que no son solistas: `VIOLIN SECTION` `strings_solo → strings_ens`; `FRENCH HORN SECTION` y `TRUMPET & TROMBONE & SAX` `brass_solo → brass_ens`.
+  - GM incoherentes: `GM BANDONEON` `harmonica → accordion`; `GM STEEL STR.GUITAR` `guitar_12str → guitar_acoustic`; `GM FRETLESS BASS` `bass_slap → bass`; `GM STEEL DRUMS` `guitar_12str → mallet`; `CELLO FINGERED` `strings_solo → pizz`.
+- **auditoría:** verificado `derive()` en los 4 ambientes para los 60 roles: sin valores 0/127, cutoffs 55–94, resonancia 60–77, ataque 34–83, reverb 8–82, chorus 0–34, eco 0–32 (los 0 de chorus/eco son deliberados: instrumentos sin ese efecto). Los clamps de Sala (30–90) y Jazz (14–58) nunca se activan (inertes pero inocuos). `CAT_SUS_RELEASE` (88–118 con sustain ON) y `CAT_RELEASE_NEUTRAL` (72–82 con sustain OFF) evaluados y correctos. Verificado 764/764 tonos, 0 fallback, 0 fuera de rango, 60/60 roles coherentes.
+- **cache-bust:** `index.html` → v286.
+
 ### v285 · sáb 17 oct 2026 · COT
 - **tune(eq) · `derive()`:** Deltas de ambiente recalibrados para no saturar perfiles extremos.
   - **Vivo:** Cutoff +10 → **+6** (el +10 sobreexcitaba roles ya brillantes: pluck 84→94, arp 86→96, bell 88→98); Resonance +2 → **+1** (el +2 volvía ásperas cañas con resonancia ya alta); Attack −5 → **−4**; Reverb −8 → **−6** con suelo 5 → **8** (no secar tanto el sustain percibido en PA); Chorus +8 → **+4** y Eco +6 → **+3** (menos emborronado en directo).

@@ -183,6 +183,9 @@ function loadToneEQ() {
             for (const env of Object.keys(toneEQ[id])) {
                 delete toneEQ[id][env][7];  delete toneEQ[id][env]['7'];
                 delete toneEQ[id][env][72]; delete toneEQ[id][env]['72'];
+                // CC11 (Expression) is a global dynamics trim, not per-tone timbre.
+                // Purge stale saved values so an old 80 (attenuated) can never persist.
+                delete toneEQ[id][env][11]; delete toneEQ[id][env]['11'];
             }
         }
     } catch(e) { toneEQ = {}; }
@@ -199,6 +202,8 @@ function saveToneEQForPart(part) {
     delete profile[7]; delete profile['7'];
     // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button -- never persist
     delete profile[72]; delete profile['72'];
+    // CC11 (Expression) is a global dynamics trim (default 127 = full) -- never persist
+    delete profile[11]; delete profile['11'];
     // Performance CCs (modulation, pedal switches) are live state -- never persist
     PERFORMANCE_CCS.forEach(cc => { delete profile[cc]; delete profile[String(cc)]; });
     toneEQ[id][currentEnv] = profile;
