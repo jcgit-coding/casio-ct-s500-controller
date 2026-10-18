@@ -768,10 +768,10 @@ const EventsMgr = {
             if (res.ok) {
                 const cloud = await res.json();
                 if (Array.isArray(cloud)) {
-                    // Cloud es la fuente de verdad; eventos locales sin ID en cloud se agregan al final
+                    // Cloud es fuente de verdad; solo agregar locales que no existen en cloud
                     const local = this.getAll();
                     const merged = [...cloud];
-                    local.forEach(le => { if (!merged.find(ce => ce.id === le.id)) merged.push(le); });
+                    local.forEach(le => { if (le.id && !merged.find(ce => ce.id === le.id)) merged.push(le); });
                     localStorage.setItem('casio_events', JSON.stringify(merged));
                     this.render();
                 } else {
@@ -792,7 +792,10 @@ const EventsMgr = {
         document.getElementById('lib-date-picker')?.addEventListener('change', () => this.render());
         // Set today's date as default
         const dp = document.getElementById('lib-date-picker');
-        if (dp && !dp.value) dp.value = new Date().toISOString().slice(0, 10);
+        if (dp && !dp.value) {
+            const t = new Date();
+            dp.value = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+        }
         this.loadFromCloud();
         this.render();
     },
