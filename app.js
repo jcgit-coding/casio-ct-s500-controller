@@ -41,7 +41,7 @@ function releaseNeutral(part) {
 }
 // CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
 // CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal, CC126=Mono Mode
-const PERFORMANCE_CCS = new Set([1, 65, 66, 67, 126]);
+const PERFORMANCE_CCS = new Set([1, 5, 65, 66, 67, 126]);
 
 function pcNoteOff(ch, note) {
     const info = pcActiveNotes[ch + ':' + note];
@@ -341,7 +341,9 @@ function onMIDIMessage(e) {
         const noteCh = status & 0x0F;
         if (cmd === 0x90) {
             if (d2 > 0) {
-                const shift = globalTranspose + globalOctave * 12;
+                const inPart = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
+                const perPartOct = inPart ? (tuning[inPart].oct || 0) : 0;
+                const shift = globalTranspose + globalOctave * 12 + perPartOct;
                 const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
                 pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
@@ -514,16 +516,22 @@ function initApp() {
     // View Navigation Logic
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.addEventListener('click', (e) => {
+            if (e.currentTarget.id === 'btnOpenGraphs') return; // handled separately
             // Update active tab
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             e.currentTarget.classList.add('active');
-            
+
             // Show corresponding view
             const targetId = e.currentTarget.dataset.target;
             document.querySelectorAll('.app-view').forEach(v => {
                 v.classList.toggle('active', v.id === targetId);
             });
         });
+    });
+
+    // Graphs button — opens in a new browser window
+    document.getElementById('btnOpenGraphs')?.addEventListener('click', () => {
+        window.open('http://localhost:7979', '_blank', 'width=1400,height=900');
     });
 
     // Theme Toggle Logic
@@ -1244,7 +1252,7 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
     // Octave contributes +/-12 semitones, global transpose is additional offset.
-    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose));
+    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose + (tuning[part].oct || 0)));
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
     midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
@@ -1637,7 +1645,8 @@ function vkNoteOn(midiNote, ch) {
     ch = ch ?? CHANNEL[vkActivePart];
     const vel = parseInt(document.getElementById('vk-velocity')?.value || 90);
     // Apply the same shift the Casio gets via RPN Coarse Tuning so PC synth stays in tune
-    const shift = globalTranspose + globalOctave * 12;
+    const perPartOct = tuning[vkActivePart]?.oct || 0;
+    const shift = globalTranspose + globalOctave * 12 + perPartOct;
     const shiftedNote = Math.max(0, Math.min(127, midiNote + shift));
     vkActiveKeys[midiNote] = { ch, shiftedNote };
     // Send to MIDI output (Casio) -- only when EXT MIDI is ON

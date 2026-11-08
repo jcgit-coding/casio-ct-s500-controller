@@ -12,6 +12,21 @@
     ]
   },
   {
+    "id": "evt_domingo_20261108",
+    "name": "Domingo 8 nov",
+    "date": "2026-11-08",
+    "songs": [
+      { "id": "christine_dclario_como_dijiste",                       "versionFile": null, "transpose": 0 },
+      { "id": "israel_houghton_tu_presencia_es_el_cielo",            "versionFile": null, "transpose": 0 },
+      { "id": "juan_carlos_alvarado_el_poderoso_de_israel",           "versionFile": null, "transpose": 5  },
+      { "id": "doris_machin_vamos_escalando_peldanios",               "versionFile": null, "transpose": 0  },
+      { "id": "ebenezer_en_el_principio_el_espiritu_de_dios",         "versionFile": null, "transpose": 3  },
+      { "id": "catolicas_oh_jerusalen_que_bonita_eres",               "versionFile": null, "transpose": -4 },
+      { "id": "marcos_witt_oh_moradora_de_sion",                      "versionFile": null, "transpose": 0  },
+      { "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre",   "versionFile": null, "transpose": 0  }
+    ]
+  },
+  {
     "id": "evt_domingo_20261018",
     "name": "Domingo 18 oct",
     "date": "2026-10-18",

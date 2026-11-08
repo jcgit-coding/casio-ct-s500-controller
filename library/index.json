@@ -1,5 +1,11 @@
 [
   {
+    "id": "catolicas_oh_jerusalen_que_bonita_eres",
+    "title": "Oh Jerusalén qué bonita eres",
+    "artist": "Católicas",
+    "original_key": "Am"
+  },
+  {
     "id": "abel_zavala_a_ti_sea_la_gloria",
     "title": "A tí sea la gloria",
     "artist": "Abel Zavala",
@@ -27543,5 +27549,12 @@
     "artist": "Upperroom",
     "genre": "Worship",
     "original_key": "C"
+  },
+  {
+    "id": "doris_machin_vamos_escalando_peldanios",
+    "title": "Vamos escalando peldaños",
+    "artist": "Doris Machin",
+    "genre": "Worship",
+    "original_key": "Dm"
   }
 ]

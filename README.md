@@ -1,4 +1,4 @@
-# Casio CT-S500 Pro Controller — v267
+# Casio CT-S500 Pro Controller — v288
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -202,6 +202,19 @@ Genera `tools/validation-report.json`.
 - **English Only**: All codebase references, variables, folder names, and UI elements must strictly be in English (e.g. Trainer instead of Entrenador, Library instead of Repertorio).
 
 ## 9. Historial de Versiones (reciente)
+
+### v288 · dom 08 nov 2026 · COT
+- **fix(eq) · ORGEL → `organ_pipe`:** `TONE_ROLE["ORGEL"]` corregido de `"bell"` a `"organ_pipe"` — ORGEL es alemán de órgano, no campana.
+- **fix(app) · CC5 en `PERFORMANCE_CCS`:** Portamento Time (CC5) agregado al Set para que `applySmartProfile` no lo resetee a def:30 durante performance.
+- **cache-bust:** `index.html` → v288.
+
+### v287 · dom 08 nov 2026 · COT
+- **fix(eq) · Expression def 110→127:** `EXPRESSION (CC11)` subido de 110 a 127 — elimina ~14% de atenuación permanente en todas las partes y ambientes. U1/L: 68%→79% del volumen máximo; U2: 51%→59%.
+- **fix(eq) · `derive('Live')` CC93/CC94:** Chorus y delay en ambiente Live cambian de `+4/+3` a `−2/−2`. El propósito de Live es "cortar en mezcla" (CC74+6, CC91−6), que chorus/delay adicional contradecía.
+- **fix(eq) · `derive('Hall')` CC94:** Delay en Sala cambia de `+10` a `−2`. La reverb hall ya aporta espacialidad temporal; apilar delay explícito encima emborronaba la mezcla.
+- **fix(eq) · `resetEQ` resync CC72:** Ahora re-sincroniza el sustain al resetear el EQ, igual que `scheduleProfile` y el selector de ambiente.
+- **fix(app) · per-part octave propagado:** `sendCoarseTuning`, `onMIDIMessage` (PC Synth) y `vkNoteOn` ahora suman `tuning[part].oct` al shift — el octave por parte llega al hardware y al PC Synth de forma coherente.
+- **cache-bust:** `index.html` → v287.
 
 ### v286 · sáb 17 oct 2026 · COT
 - **fix(eq) · PÉRDIDA DE POTENCIA/CUERPO EN PA (causa raíz):** el control **EXPRESSION (CC11)** tenía `def: 80`, por lo que `applySmartProfile` / `pushAllToKeyboard` enviaban **CC11=80 a todas las pistas en los 4 ambientes**, atenuando el tono un **~37 %** de forma permanente (80/127 ≈ 0,63 ≈ −4 dB) *antes* incluso del CC7. En los altavoces internos (cerca, con limitador/coloración propia) apenas se notaba; en un PA plano y a mayor ganancia se percibía como pérdida de **cuerpo, potencia, bajos y sustain** (Efecto Fletcher‑Munson: a menor SPL, menos graves y menos cuerpo percibido). Corrección: `def: 80 → 127` (neutro = señal completa). Además, CC11 ya **no se persiste** en `toneEQ` (`saveToneEQForPart`) y se **purga** de los overrides guardados al cargar (`loadToneEQ`), igual que CC7/CC72, para que ningún `80` antiguo pueda volver a aplicarse.

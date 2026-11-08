@@ -3,7 +3,7 @@ const EQ_SECTIONS = [
         title: 'Volume & Panning',
         controls: [
             { label: 'Volume',  cc: 7,  def: 100, tip: 'Volume' },
-            { label: 'EXPRESSION',  cc: 11, def: 110, tip: 'EXPRESSION (dynamics)' },
+            { label: 'EXPRESSION',  cc: 11, def: 127, tip: 'EXPRESSION (dynamics)' },
             { label: 'PAN',  cc: 10, def: 64,  tip: 'Pan (left/right)' },
         ]
     },
@@ -260,7 +260,7 @@ const TONE_ROLE = {
     "CELESTA": "bell",
     "GLOCKENSPIEL": "bell",
     "MUSIC BOX": "bell",
-    "ORGEL": "bell",
+    "ORGEL": "organ_pipe",
     "TUBULAR BELL": "bell",
     "CHURCH BELLS": "bell",
     "JS ORGAN": "organ",
@@ -948,12 +948,12 @@ function derive(env, S) {
     if (env === 'Live') return {
         74: clampCC(S[74] + 6, 0, 127), 71: clampCC(S[71] + 1, 0, 127), 73: clampCC(S[73] - 4, 0, 127),
         76: S[76], 77: S[77], 78: S[78],
-        91: clampCC(S[91] - 6, 8, 127), 93: clampCC(S[93] + 4, 0, 127), 94: clampCC(S[94] + 3, 0, 127)
+        91: clampCC(S[91] - 6, 8, 127), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] - 2, 0, 127)
     };
     if (env === 'Hall') return {
         74: clampCC(S[74] - 2, 0, 127), 71: S[71], 73: clampCC(S[73] + 3, 0, 127),
         76: S[76], 77: S[77], 78: clampCC(S[78] + 4, 0, 127),
-        91: clampCC(S[91] + 30, 30, 90), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] + 10, 0, 127)
+        91: clampCC(S[91] + 30, 30, 90), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] - 2, 0, 127)
     };
     if (env === 'Jazz') return {
         74: clampCC(S[74] - 5, 0, 127), 71: clampCC(S[71] + 1, 0, 127), 73: clampCC(S[73] + 2, 0, 127),
@@ -1238,6 +1238,9 @@ function resetEQ() {
     const part = activePart;
     resetToneEQForPart(part); // Clear user override in localStorage for this tone+env
     applySmartProfile(part);  // Re-apply authentic tone+env preset (does not touch sustain)
+    if (tuning[part].sus && typeof scheduleSustainResync === 'function') {
+        scheduleSustainResync(part, SUSTAIN_TAPS);
+    }
 }
 
 function formatVal(label, val) {

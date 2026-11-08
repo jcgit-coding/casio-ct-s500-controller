@@ -316,6 +316,17 @@ header h1 {
     background: var(--accent-dim);
     box-shadow: inset 0 0 0 1px rgba(0,255,204,0.3);
 }
+.nav-tab-external {
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent) !important;
+    opacity: 0.75;
+}
+.nav-tab-external:hover {
+    opacity: 1;
+    border-color: rgba(0,229,255,0.5);
+    background: var(--accent-dim) !important;
+    color: var(--accent) !important;
+}
 
 .app-view {
     display: none;
@@ -1937,6 +1948,29 @@ input[type="range"].rc-fader::-moz-range-thumb {
     overflow-y: auto !important;
 }
 .fullscreen-song .chord { font-size: 1em; }
+
+/* Prev / Next buttons — visible only in fullscreen */
+.fs-nav-btn {
+    display: none;
+    position: fixed;
+    bottom: 28px;
+    z-index: 10000;
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(20,20,30,0.75);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    letter-spacing: 0.03em;
+    transition: background 0.15s;
+}
+.fs-nav-btn:hover { background: rgba(60,60,80,0.9); }
+.fs-nav-prev { left: 32px; }
+.fs-nav-next { right: 32px; }
+.fullscreen-song .fs-nav-btn { display: block; }
 
 /* Permitir selección de texto en el lienzo de acordes */
 .chords-canvas { user-select: text; }

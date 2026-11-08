@@ -14,6 +14,7 @@ const RepertorioApp = {
         this.bindEvents();
         this.initSubTabs();
         this.populateTransposeDropdown(null);
+        this._injectFSNavButtons();
         console.log("Library Module Initialized.");
     },
 
@@ -59,20 +60,12 @@ const RepertorioApp = {
         document.getElementById('lib-transpose-reset')?.addEventListener('click', () => this._resetTranspose());
         document.getElementById('lib-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
 
-        // ← → para navegar entre canciones del evento activo
+        // ← → to navigate between songs in the active event
         document.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
             if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-            const evt = EventsMgr?.getAll?.()?.find?.(ev => ev.id === EventsMgr.activeEventId);
-            if (!evt?.songs?.length) return;
-            const songs = evt.songs.map(s => (typeof s === 'string' ? { id: s, versionFile: null } : s));
-            const curId = RepertorioApp.currentSong?._id;
-            const idx = songs.findIndex(s => s.id === curId);
-            if (idx === -1) return;
-            const next = e.key === 'ArrowRight' ? songs[idx + 1] : songs[idx - 1];
-            if (!next) return;
             e.preventDefault();
-            RepertoireSync.openSong(next.id, next.versionFile || '');
+            this._navSong(e.key === 'ArrowRight' ? 1 : -1);
         });
     },
 
@@ -196,14 +189,14 @@ const RepertorioApp = {
         // Notación inglesa: C D E F G A B
         const EN_ROOT = '[CDEFGAB]';
         // Sufijo inglés: accidental, calificador, extensión base, paréntesis numérico (9), (9/13), (add2), (maj7), etc.
-        const EN_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
+        const EN_PAREN = '(?:\\((?:add|aug|maj|sus|dim|no)?\\d*(?:[/,](?:add|aug|maj|sus|dim|no)?\\d*)*\\))?';
         const EN_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${EN_PAREN}(?:\\/\\d+)?`;
         const EN_BASS  = '(?:\\/[CDEFGAB](?:#|b)?(?:[A-G][#b]?)?)?';
 
         // Notación española/solfège: DO RE MI FA SOL LA SI (y mayúsculas mixtas como Sol, Sim, Fa#)
         const ES_ROOT = '(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)';
         // Sufijo español: igual de completo, con paréntesis numérico adicional
-        const ES_PAREN = '(?:\\((?:add|maj|aug|\\d+)(?:[/,](?:add|maj|aug|\\d+))*\\))?';
+        const ES_PAREN = '(?:\\((?:add|aug|maj|sus|dim|no)?\\d*(?:[/,](?:add|aug|maj|sus|dim|no)?\\d*)*\\))?';
         const ES_QUAL  = `(?:#|b)?(?:m(?:aj7?)?|M(?:aj7?)?|dim|aug|\\+(?:\\(aug\\))?|sus[24]?|(?:\\((?:add|aug)\\d*\\))|add\\d?|[79]|11|13)?(?:\\d+)?(?:sus[24])?${ES_PAREN}(?:\\/\\d+)?`;
         const ES_BASS  = '(?:\\/(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)(?:[#b])?(?:[A-G][#b]?)?)?';
 
@@ -230,7 +223,7 @@ const RepertorioApp = {
                 .replace(/\(x\s*\d+\)/gi, '')  // "(x3)", "(x 2)"
                 .trim();
             if (!noLabel) return false;
-            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-|./\\()\[\]]+/gi, '').replace(/\d+/g, '').trim();
+            const leftover = noLabel.replace(CHORD_STRIP_RE, '').replace(/[\s\-–—|./\\()\[\]]+/gi, '').replace(/\d+/g, '').trim();
             return leftover.length === 0;
         };
 
@@ -370,6 +363,38 @@ const RepertorioApp = {
         wrap.appendChild(toc);
         // restore if it wasn't set
         if (!prevPos) wrap.style.position = 'relative';
+    },
+
+    _navSong(dir) {
+        const evt = EventsMgr?.getAll?.()?.find?.(ev => ev.id === EventsMgr.activeEventId);
+        if (!evt?.songs?.length) return;
+        const songs = evt.songs.map(s => (typeof s === 'string' ? { id: s, versionFile: null } : s));
+        const curId = RepertorioApp.currentSong?._id;
+        const idx = songs.findIndex(s => s.id === curId);
+        if (idx === -1) return;
+        const target = songs[idx + dir];
+        if (!target) return;
+        RepertoireSync.openSong(target.id, target.versionFile || '');
+    },
+
+    _injectFSNavButtons() {
+        const viewer = document.getElementById('lib-chords-view');
+        if (!viewer || document.getElementById('_fs-prev')) return;
+
+        const prev = document.createElement('button');
+        prev.id = '_fs-prev';
+        prev.className = 'fs-nav-btn fs-nav-prev';
+        prev.textContent = '← Prev';
+        prev.addEventListener('click', () => this._navSong(-1));
+
+        const next = document.createElement('button');
+        next.id = '_fs-next';
+        next.className = 'fs-nav-btn fs-nav-next';
+        next.textContent = 'Next →';
+        next.addEventListener('click', () => this._navSong(+1));
+
+        viewer.appendChild(prev);
+        viewer.appendChild(next);
     },
 
     toggleFullscreen() {

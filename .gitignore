@@ -18,3 +18,16 @@ fix_scroll.js
 fix_sf2_slider.js
 ,
 .OBSIDIANTEST
+# Session temp/debug files
+tools/_*.js
+tools/_*.json
+tools/_*.txt
+tools/_scrape_debug/
+tools/package-lock.json
+temp/
+graphs/
+scripts/
+open-app.bat
+start-all.bat
+start-graphs.bat
+graphs-server.js
