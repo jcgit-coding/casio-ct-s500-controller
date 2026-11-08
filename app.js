@@ -1242,6 +1242,8 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xB0 | ch, 0x00, msb]);
     midiOutput.send([0xB0 | ch, 0x20, lsb || 0]);
     midiOutput.send([0xC0 | ch, pc]);
+    // PC resets the channel's RPN tuning on the Casio — re-send after a short delay
+    setTimeout(() => sendCoarseTuning(part), 80);
     // If sustain is active on this part, immediately re-assert it so tone changes never drop sustain
     if (tuning[part].sus) {
         scheduleSustainResync(part, [30, 120, 300, 700]);

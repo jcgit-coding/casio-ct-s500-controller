@@ -88,10 +88,6 @@ const RepertorioApp = {
             const st = this._semitoneShift;
             lbl.textContent = st === 0 ? '0' : (st > 0 ? `+${st}` : `${st}`);
         }
-        // Sync keyboard hardware tuning with chord display transpose
-        if (typeof window.setGlobalTranspose === 'function') {
-            window.setGlobalTranspose(this._semitoneShift);
-        }
     },
 
     populateTransposeDropdown(originalKey) {
