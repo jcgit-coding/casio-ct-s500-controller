@@ -1261,7 +1261,7 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
     // Octave contributes +/-12 semitones, global transpose is additional offset.
-    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose + (tuning[part].oct || 0)));
+    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose + (tuning[part].oct || 0) * 12));
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
     midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)

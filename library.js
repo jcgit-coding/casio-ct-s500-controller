@@ -71,7 +71,7 @@ const RepertorioApp = {
 
     _shiftTranspose(delta) {
         if (!this.currentSong) return;
-        this._semitoneShift = ((this._semitoneShift + delta) % 12 + 12) % 12;
+        this._semitoneShift = Math.max(-12, Math.min(12, this._semitoneShift + delta));
         this._applyTransposeShift();
     },
 
