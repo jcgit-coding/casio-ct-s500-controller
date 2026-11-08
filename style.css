@@ -740,6 +740,7 @@ header h1 {
     display: flex;
     gap: 14px;
     flex-shrink: 0;
+    align-items: stretch;
 }
 
 .track-card {
@@ -753,6 +754,8 @@ header h1 {
     gap: 10px;
     transition: border-color .25s, background .25s;
     cursor: default;
+    position: relative;
+    overflow: hidden;
 }
 .track-card.active-track {
     background: var(--card-active);

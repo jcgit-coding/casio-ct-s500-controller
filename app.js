@@ -1248,6 +1248,13 @@ function changeTone(part, msb, lsb, pc) {
     }
 }
 
+window.setGlobalTranspose = function setGlobalTranspose(semitones) {
+    globalTranspose = Math.max(-12, Math.min(12, semitones));
+    const valEl = document.getElementById('gTrnVal');
+    if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
+    ['U1','U2','L'].forEach(part => window.sendCoarseTuning(part));
+};
+
 window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
