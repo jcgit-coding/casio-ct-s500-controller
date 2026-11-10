@@ -1237,7 +1237,7 @@ function resetEQ() {
     const part = activePart;
     resetToneEQForPart(part); // Clear user override in localStorage for this tone+env
     applySmartProfile(part);  // Re-apply authentic tone+env preset (does not touch sustain)
-    if (tuning[part].sus && typeof scheduleSustainResync === 'function') {
+    if ((tuning[part].sus || physCC64[part] > 0) && typeof scheduleSustainResync === 'function') {
         scheduleSustainResync(part, SUSTAIN_TAPS);
     }
 }

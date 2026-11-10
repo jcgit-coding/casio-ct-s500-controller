@@ -17,7 +17,7 @@ const RELEASE_NEUTRAL = 64;
 // controllers (on every channel) after a large burst, and over Bluetooth the
 // outgoing queue can still be draining hundreds of ms after the app finished
 // writing -- hence the deliberately late last tap.
-const SUSTAIN_TAPS = [150, 400, 700, 1300];
+const SUSTAIN_TAPS = [100, 200, 350, 550, 850, 1300];
 // Note: CAT_SUS_RELEASE and susRelease(part) are defined in eq.js (loaded before app.js)
 
 // Per-category CC72 neutral: these instruments have long natural decay;
@@ -365,7 +365,7 @@ function onMIDIMessage(e) {
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
         if (d1 === 0) { pendingBank[part] = d2; }
         if (d1 === 32) { pendingLSB[part] = d2; }
-        if (d1 === 64) { physCC64[part] = d2; }
+        if (d1 === 64) { ['U1','U2','L'].forEach(p => { physCC64[p] = d2; }); }
         if (d1 !== 64 && d1 !== 72 && d1 !== 0 && d1 !== 32 && d1 !== 11) eqState[part][d1] = d2;
         if (part === activePart) {
             const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
@@ -1245,7 +1245,7 @@ function changeTone(part, msb, lsb, pc) {
     // PC resets the channel's RPN tuning on the Casio — re-send after a short delay
     setTimeout(() => sendCoarseTuning(part), 80);
     // If sustain is active on this part, immediately re-assert it so tone changes never drop sustain
-    if (tuning[part].sus) {
+    if (tuning[part].sus || physCC64[part] > 0) {
         scheduleSustainResync(part, [30, 120, 300, 700]);
     }
 }
