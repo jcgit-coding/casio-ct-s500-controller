@@ -870,7 +870,7 @@ function initQuickControls() {
 
             if (action === 'oct+' && tuning[part].oct < 3)  tuning[part].oct++;
             if (action === 'oct-' && tuning[part].oct > -3) tuning[part].oct--;
-            if (action === 'oct-reset') tuning[part].oct = (part === 'U1') ? -1 : 0;
+            if (action === 'oct-reset') tuning[part].oct = 0;
 
             const octEl = document.getElementById('oct-' + part);
             if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;

@@ -100,7 +100,7 @@ const ROLES = {
     piano_pad:      { 74:70, 71:64, 73:70, 76:66, 77:66, 78:70, 91:44, 93:24, 94:14 },
     ep:             { 74:70, 71:64, 73:60, 76:66, 77:64, 78:64, 91:22, 93:20, 94:0 },
     harpsi:         { 74:80, 71:70, 73:52, 76:64, 77:64, 78:64, 91:16, 93:0,  94:0 },
-    clav:           { 74:82, 71:76, 73:52, 76:64, 77:64, 78:64, 91:14, 93:22, 94:0 },
+    clav:           { 74:82, 71:70, 73:52, 76:64, 77:64, 78:64, 91:14, 93:22, 94:0 },
     mallet:         { 74:80, 71:66, 73:58, 76:64, 77:64, 78:64, 91:26, 93:8,  94:0 },
     bell:           { 74:88, 71:64, 73:54, 76:64, 77:64, 78:64, 91:34, 93:10, 94:10 },
     dulcimer:       { 74:84, 71:64, 73:50, 76:64, 77:64, 78:64, 91:28, 93:8,  94:4 },
@@ -953,7 +953,7 @@ function derive(env, S) {
     if (env === 'Hall') return {
         74: clampCC(S[74] - 2, 0, 127), 71: S[71], 73: clampCC(S[73] + 3, 0, 127),
         76: S[76], 77: S[77], 78: clampCC(S[78] + 4, 0, 127),
-        91: clampCC(S[91] + 30, 30, 90), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] - 2, 0, 127)
+        91: clampCC(S[91] + 30, 30, 72), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] - 2, 0, 127)
     };
     if (env === 'Jazz') return {
         74: clampCC(S[74] - 5, 0, 127), 71: clampCC(S[71] + 1, 0, 127), 73: clampCC(S[73] + 2, 0, 127),
@@ -1035,8 +1035,7 @@ function applySmartProfile(part, category) {
     if (tuning[part].sus) {
         sendCC(part, 72, susRelease(part));
     } else {
-        const neutral = releaseNeutral(part);
-        if (neutral !== RELEASE_NEUTRAL) sendCC(part, 72, neutral);
+        sendCC(part, 72, releaseNeutral(part));
     }
 }
 
