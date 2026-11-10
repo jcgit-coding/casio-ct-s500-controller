@@ -133,7 +133,7 @@ function buildGMSelectors() {
 
 // Global transpose: -12 to +12 semitones, sent to all 3 channels
 let globalTranspose = 0;
-let globalOctave = -1;
+let globalOctave = 0;
 const pendingBank = { U1: 1, U2: 28, L: 34 };
 const pendingLSB  = { U1: 0, U2: 0, L: 0 };
 
@@ -852,8 +852,8 @@ function initGlobalTuning() {
     if (om) om.addEventListener('click', () => updateGlobalOctave(-1));
     const or = document.getElementById('gOctReset');
     if (or) or.addEventListener('click', () => {
-        globalOctave = -1;
-        if (valElOct) valElOct.innerText = '-1';
+        globalOctave = 0;
+        if (valElOct) valElOct.innerText = '0';
         ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
     });
 }
