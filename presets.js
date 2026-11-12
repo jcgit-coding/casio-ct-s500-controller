@@ -232,13 +232,8 @@ function loadPreset(data) {
     // CC7 (Volume) comes from the saved eqState -- no longer forced here.
     ['U1','U2','L'].forEach(part => {
         if (data.tuning?.[part]) {
-            let oct = data.tuning[part].oct || 0;
-            if (legacyOct && oct === -1) oct = 0;
-            tuning[part].oct = oct;
+            // OCTAVE is global (globalOctave) -- per-part octave no longer exists.
             tuning[part].sus = data.tuning[part].sus || false;
-
-            const octEl = document.getElementById('oct-' + part);
-            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
 
             const susBtn = document.getElementById('sus-' + part);
             if (susBtn) {
@@ -372,11 +367,14 @@ function loadAppState() {
         // persistido seguía trayendo -1: loadAppState lo restauraba en cada arranque
         // y el auto-guardado (1 s) lo volvía a escribir. El default del código no
         // basta; hay que migrar el valor guardado una sola vez.
+        // Per-part octave no longer exists: OCTAVE is global (globalOctave)
+        // and drives U1+U2+L together. Strip the stale key from old snapshots.
+        if (saved.tuning) ['U1','U2','L'].forEach(p => {
+            if (saved.tuning[p]) delete saved.tuning[p].oct;
+        });
+
         if ((Number(saved.v) || 0) < APP_STATE_VERSION) {
             if (saved.globalOctave === -1) saved.globalOctave = 0;
-            if (saved.tuning) ['U1', 'U2', 'L'].forEach(p => {
-                if (saved.tuning[p]?.oct === -1) saved.tuning[p].oct = 0;
-            });
             saved.v = APP_STATE_VERSION;
             try { localStorage.setItem('casioAppState', JSON.stringify(saved)); } catch(e) {}
         }
@@ -396,10 +394,6 @@ function loadAppState() {
         // tones (or an old/absent appState) -- otherwise the SUSTAIN button can
         // show OFF while tuning.sus is ON and the hardware gets CC72=100.
         ['U1','U2','L'].forEach(part => {
-            const octEl = document.getElementById('oct-' + part);
-            const octVal = tuning[part].oct || 0;
-            if (octEl) octEl.innerText = octVal > 0 ? '+' + octVal : octVal;
-
             const susBtn = document.getElementById('sus-' + part);
             if (susBtn) {
                 susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';

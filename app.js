@@ -137,11 +137,13 @@ let globalOctave = 0;
 const pendingBank = { U1: 1, U2: 28, L: 34 };
 const pendingLSB  = { U1: 0, U2: 0, L: 0 };
 
-// Per-part state (octave and sustain are independent per channel)
+// Per-part state: only sustain is per channel. OCTAVE is GLOBAL (U1+U2+L at
+// once, via globalOctave) -- a per-part octave would make the three sounds
+// diverge in pitch, which is exactly what the old tuning[part].oct did.
 const tuning = {
-    U1: { sus: false, oct: 0 },
-    U2: { sus: false, oct: 0 },
-    L:  { sus: false, oct: 0 }
+    U1: { sus: false },
+    U2: { sus: false },
+    L:  { sus: false }
 };
 
 // MIDI channel per part
@@ -341,9 +343,7 @@ function onMIDIMessage(e) {
         const noteCh = status & 0x0F;
         if (cmd === 0x90) {
             if (d2 > 0) {
-                const inPart = Object.keys(CHANNEL).find(k => CHANNEL[k] === noteCh);
-                const perPartOct = inPart ? (tuning[inPart].oct || 0) : 0;
-                const shift = globalTranspose + globalOctave * 12 + perPartOct;
+                const shift = globalTranspose + globalOctave * 12;
                 const shiftedNote = Math.max(0, Math.min(127, d1 + shift));
                 pcActiveNotes[noteCh + ':' + d1] = { ch: noteCh, shiftedNote: shiftedNote };
                 if (window.pcSynth.synth?.ctx?.state === 'suspended') window.pcSynth.synth.ctx.resume();
@@ -613,7 +613,14 @@ function scheduleProfile(part, catName) {
             // not racing with it. Calling before the burst had the first tap (150ms)
             // compete with applySmartProfile -- undefined ordering, unreliable.
             resyncAllSustain();
+            // A Program Change (from the keyboard or the app) resets the Casio's
+            // per-channel Coarse Tuning. OCTAVE/TRANSPOSE are global, so this part
+            // must get the same RPN value as U1/L or it drifts in pitch.
+            sendCoarseTuning(part);
         }, 150),
+        // Late re-assert: the profile burst above can still be draining into the
+        // Casio's buffer when the first RPN arrives.
+        setTimeout(() => sendCoarseTuning(part), 400),
     ];
 }
 
@@ -862,22 +869,10 @@ function initGlobalTuning() {
 //  PER-PART QUICK CONTROLS
 // ======================================================================
 function initQuickControls() {
-    document.querySelectorAll('.step-btn, .btn-reset-small[data-action]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const part   = btn.dataset.part;
-            const action = btn.dataset.action;
-            if (!part) return; // skip global buttons handled elsewhere
-
-            if (action === 'oct+' && tuning[part].oct < 3)  tuning[part].oct++;
-            if (action === 'oct-' && tuning[part].oct > -3) tuning[part].oct--;
-            if (action === 'oct-reset') tuning[part].oct = 0;
-
-            const octEl = document.getElementById('oct-' + part);
-            if (octEl) octEl.innerText = tuning[part].oct > 0 ? '+' + tuning[part].oct : tuning[part].oct;
-
-            sendCoarseTuning(part);
-        });
-    });
+    // NOTE: no per-part OCTAVE controls. OCTAVE is global (globalOctave) and
+    // drives U1+U2+L together through sendCoarseTuning(). The old per-part
+    // oct buttons were removed from the HTML and their handlers here were dead
+    // code that still restored a stale tuning[part].oct = -1 on some parts.
 
     document.querySelectorAll('button[id^="sus-"]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1261,7 +1256,7 @@ window.sendCoarseTuning = function sendCoarseTuning(part) {
     if (!midiOutput) return;
     // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
     // Octave contributes +/-12 semitones, global transpose is additional offset.
-    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose + (tuning[part].oct || 0) * 12));
+    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose));
     const ch = CHANNEL[part];
     midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
     midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
@@ -1654,8 +1649,7 @@ function vkNoteOn(midiNote, ch) {
     ch = ch ?? CHANNEL[vkActivePart];
     const vel = parseInt(document.getElementById('vk-velocity')?.value || 90);
     // Apply the same shift the Casio gets via RPN Coarse Tuning so PC synth stays in tune
-    const perPartOct = tuning[vkActivePart]?.oct || 0;
-    const shift = globalTranspose + globalOctave * 12 + perPartOct;
+    const shift = globalTranspose + globalOctave * 12;
     const shiftedNote = Math.max(0, Math.min(127, midiNote + shift));
     vkActiveKeys[midiNote] = { ch, shiftedNote };
     // Send to MIDI output (Casio) -- only when EXT MIDI is ON
