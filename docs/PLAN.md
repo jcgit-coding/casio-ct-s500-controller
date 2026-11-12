@@ -1,69 +1,205 @@
-# CasioController — Plan de desarrollo pendiente
+# CasioController — Plan único de desarrollo
 
-Última actualización: dom 11 oct 2026
-
----
-
-## Item A — Presets tono+ambiente por instrumento individual
-
-**Qué es:** `getToneEnvPreset()` en `app.js` resuelve los parámetros de EQ+ambiente para cada combinación tono × ambiente (4 ambientes: Room, Hall, Stage, Outdoor). Hoy tiene dos niveles:
-1. Modelos por nombre de tono (ej. "STAGE PIANO", "VIOLIN") — solo ~9 grupos cubiertos.
-2. Fallback de categoría (33 categorías del TONE_ENV_MATRIX) — valores poco diferenciados.
-
-**Qué falta:** ir tono por tono (instrumento por instrumento) en el CT-S500 y definir un perfil acústico fiel para cada uno × sus 4 ambientes. El objetivo es que al cambiar de instrumento el EQ suene lo más realista posible, no solo por categoría amplia.
-
-**Cómo se hace:**
-- Listar todos los tonos del CT-S500 por familia (Piano, Strings, Brass, Wind, etc.).
-- Para cada tono importante, definir en `getToneEnvPreset()` un bloque `if (name.includes('...'))` con sus CCs específicos.
-- Parámetros clave: cutoff (74), resonance (71), attack (73), release (72), reverb (91), chorus (93), vibrato depth (77), vibrato rate (76), vibrato delay (78), brightness (75).
-- Por cada ambiente: ajustar principalmente reverb (91) y chorus (93); el resto varía menos entre ambientes y más entre timbres.
-
-**Prioridad de tonos a cubrir:** los más usados primero — Grand Piano, Electric Piano, Strings, Pad, Choir, Organ, Flute, Violin, Trumpet, Guitar, Bass.
-
-**Tamaño estimado del trabajo:** sesión larga. Hacer por familias en múltiples conversaciones.
+> **Versión de referencia:** v296 · **Actualizado:** 11 nov 2026
+> **Este es el ÚNICO plan vigente.** Sustituye y absorbe a `PLAN_v218.md`, `PLAN_PRO_DSP_PARAMETERS.md`, `PLAN_PRO_ACOUSTIC_MIXER.md` y `casio_task.md` (eliminados, ver §8).
+> Los documentos de auditoría (`AUDITORIA_*.md`, `MIXER_AUDIT.md`, `AUDIT_*.md`, `RESUMEN_SESION_*.md`) se conservan como **histórico**, no como plan: contienen hallazgos ya cerrados y no deben usarse como lista de tareas.
 
 ---
 
-## Item B — Trainer: funcionalidad real de práctica
+## 0. Reglas del proyecto
 
-**Qué falta:** los controles de Play/Stop/Wait son decorativos — no reproducen nada, el piano roll está vacío.
+1. **Nada se da por hecho sin verificación.** Un cambio se cierra cuando se ve el mensaje MIDI real (o el comportamiento en el CT-S500), no cuando "debería" funcionar. Los últimos tres falsos positivos (`globalOctave`, octava por pista, transpose) salieron exactamente de cambiar el *default* del código y no el **estado persistido**.
+2. **Un solo dueño por responsabilidad.** Pitch en un módulo, sustain en otro, EQ en `eq.js`. Si dos sitios envían lo mismo con timers distintos, es un bug esperando a ocurrir.
+3. **Persistencia versionada.** Todo snapshot en `localStorage` lleva versión y migración explícita. Nunca se restaura un valor sin validarlo.
+4. **Si no está verificado contra el CT-S500 o el MIDI Implementation oficial, se marca como no verificado** en la UI o en este plan. No se presenta como hardware real.
+5. **Cada cambio:** `node --check` de los JS tocados + prueba en navegador con `midiOutput` falso + bump de versión en `index.html` + commit descriptivo.
 
-**Decisión previa necesaria (del usuario):**
-- ¿Play reproduce audio de la pieza? (requiere archivos MIDI por canción en `trainer/{id}/`)
-- ¿O solo sirve como metrónomo visual con tempo configurable?
+### Cómo se verifica sin el teclado conectado
 
-**Si es metrónomo:** implementar click de tempo con Web Audio API, indicador de compás visual. Trabajo medio.
+En la consola del navegador, sustituyendo la salida MIDI por un espía:
 
-**Si es reproducción MIDI:** cada canción necesita un archivo `.mid` en `trainer/{id}/`. La app ya carga SpessaSynth — se puede conectar. Trabajo grande pero viable.
+```js
+const cap = [];
+midiOutput = { send: m => cap.push(m), open: () => Promise.resolve() };
+// …ejecutar la acción…
+cap.filter(m => (m[0] & 0xF0) === 0xB0 && m[1] === 6); // Data Entry por canal
+```
 
----
-
-## Item C — Partir app.js por módulos/tabs
-
-**Qué implica:** `app.js` tiene ~2200 líneas. Dividirlo en:
-- `midi.js` — conexión MIDI, handlers de PC/CC/Note
-- `mixer.js` — lógica de partes U1/U2/L, changeTone, scheduleProfile
-- `eq.js` — TONE_ENV_MATRIX, getToneEnvPreset, applySmartProfile, faders
-- `sustain.js` — lógica de sustain CC72, resyncAllSustain
-- `presets.js` — savePreset, loadPreset, loadAppState
-- `app.js` — orquestador: init, imports, estado global compartido
-
-**Riesgo:** refactor estructural. Si algo se rompe afecta toda la app.
-**Prerequisito:** todos los bugs críticos resueltos primero (Items A y B).
-**Recomendación:** dedicar una sesión solo a esto, con pruebas manuales al final.
+Con eso se comprueba qué se envió de verdad, en qué canal y con qué valor. Es la base del `SELFTEST` propuesto en §1.3.
 
 ---
 
-## Estado de items originales
+## 1. PITCH — OCTAVE + TRANSPOSE global (prioridad 1)
 
-| # | Item | Estado |
-|---|------|--------|
-| 1 | Presets tono+ambiente | ✅ Resuelto en v217–v218 — 50+ familias de instrumentos cubiertas con 4 ambientes cada una |
-| 2 | Trainer UI/UX | ✅ Resuelto en v218 — Reproducción MIDI via SpessaSynth MIDIFileSequencer, progress bar, import .mid |
-| 3 | Search chips — no auto-cambiar, guardar último, EQ desde Casio | ✅ Resuelto en v215 |
-| 4 | Sustain isolation | ✅ Confirmado sólido — CC72 excluido de eqState y re-asertado post-profile |
-| 5 | Partir app.js | ✅ Resuelto en v218 — 4 módulos: midi.js, eq.js, presets.js, app.js |
-| — | Category prioritization (nunca pedida) | ✅ Revertida en v214 |
-| — | Library transpose por nombre de nota | ✅ Resuelto en v216 |
-| — | Library Maximize/Transpose sin listeners | ✅ Resuelto en v216 |
-| — | Android localStorage crash en search presets | ✅ Resuelto en v216 |
+**Decisión tomada:** OCTAVE y TRANSPOSE son **globales para U1, U2 y L**. La octava por pista no vuelve. Se quedan en el Mixer porque son un control de ejecución que se usa en vivo.
+
+**Por qué RPN y no notas:** el teclado físico se toca a sí mismo; la app no puede transponer sus notas. La única palanca es `RPN 0x0002` (Coarse Tuning) por canal: `valor = 64 + octave*12 + transpose`.
+
+### 1.1 Módulo `pitch.js` — estado deseado + reconciliación
+
+Problema actual: el envío está repartido en ~10 llamadas a `sendCoarseTuning` y 3 temporizadores distintos (80 ms en `changeTone`, 150 y 400 ms en `scheduleProfile`), más llamadas sueltas desde los resets. Ningún sitio sabe si otro ya envió.
+
+Diseño:
+
+```
+Pitch.setOctave(n) / Pitch.setTranspose(n)
+        ↓  (debounce 40 ms, un solo envío aunque lleguen ráfagas)
+Pitch.apply(reason) → RPN 0:2 a U1/U2/L, espaciado ~10 ms entre canales
+        ↓
+Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
+```
+
+- **API pública:** `Pitch.get()`, `Pitch.setOctave(n)`, `Pitch.setTranspose(n)`, `Pitch.apply(reason)`, `Pitch.status()`, y compatibilidad con `window.sendCoarseTuning(part)`.
+- **Contador de generación:** si llega un cambio nuevo mientras se está enviando, se descarta el envío viejo (nunca dos valores distintos para el mismo canal).
+- **Disparadores de re-afirmación** (todos en un solo sitio): conectar/resync, Program Change (de la app o del teclado), `CC121`/`CC120` entrantes, carga de preset/estado, `visibilitychange`/`focus`, y botón manual.
+- **Sustituye:** los `setTimeout` de `changeTone` (80 ms) y `scheduleProfile` (150/400 ms) pasan a ser responsabilidad del módulo, con los mismos retardos pero centralizados.
+- **Orden de carga:** `pitch.js` entre `presets.js` y `app.js`.
+
+### 1.2 Controles en el header (velocidad de uso)
+
+- Mover los dos grupos `TRANSPOSE` / `OCTAVE` del `sub-header` del Mixer al **header fijo**, visibles desde LIBRARY, ARRANGER, TRAINER y HARMONY. **Mantener los IDs** (`gTrnVal`, `gOctVal`, `gTrnPlus`, …) para no tocar `loadPreset`/`loadAppState`.
+- Atajos: `Alt+↑/↓` = transpose ±1; `Shift+Alt+↑/↓` = octava ±1. Mantener pulsado para repetir.
+- Objetivos táctiles ≥ 44 px.
+- Mostrar semitono + tonalidad resultante cuando haya tonalidad de referencia: `+2 (D)`. Si no la hay, solo `+2` (no inventar la tonalidad).
+
+### 1.3 Diagnóstico y autotest (antídoto contra falsos positivos)
+
+- Panel de debug (el que ya existe): línea `PITCH · UI: Oct 0 Trn +2 → enviado 76 (ch 0,1,2) · hace 0.4 s` y `Último reset detectado: PC ch2 → re-afirmado`.
+- Botón `SELFTEST`: stubea `midiOutput` y corre la matriz de escenarios, mostrando ✅/❌ por caso. Escenarios:
+  1. Arranque con estado legacy `v241 / octave -1` → todo neutro (64).
+  2. Conectar (`pushAllToKeyboard`).
+  3. Cambio de tono desde la app.
+  4. Program Change desde el teclado.
+  5. Carga de preset con transpose/octave a 0.
+  6. Botones Reset.
+  7. `CC121` entrante → re-afirmación.
+  8. Octave +3 y transpose +12 (valores extremos).
+
+### 1.4 Límites y bordes
+
+- Rango: transpose −12..+12, octave −3..+3 → RPN 16..112.
+- Validar el estado persistido: `NaN`, `null`, strings, valores fuera de rango → 0 (no solo el −1 legacy).
+- Probar en hardware si el CT-S500 recorta el rango extremo (±48 semitonos).
+
+**Criterios de aceptación:** los 8 escenarios del `SELFTEST` en verde; ningún envío con valor ≠ 64 cuando octave=0 y transpose=0; U1/U2/L siempre con el mismo valor.
+
+---
+
+## 2. Mixer / EQ (prioridad 2)
+
+| ID | Tema | Evidencia / detalle |
+|---|---|---|
+| M1 | **CC77 `def: 0` vs ROLES `77: 64`** | `eq.js:33` define el fader con `def: 0`, pero todos los ROLES usan 64 como neutro. Verificar en hardware cuál es el neutro real (0 o 64) y alinear `def` con ROLES. |
+| M2 | **Recalibrar ROLES con `globalOctave = 0`** | Los ROLES se oyeron con la octava vieja (−1). Revisar cutoff/attack/reverb por rol. Prompt de trabajo en el anexo A. |
+| M3 | **Override permanente del tono** (`MED-07`) | `saveToneEQForPart` copia el perfil completo: mover un fader congela los ~18 CC de ese tono y las mejoras futuras de la matriz ya no le llegan. Guardar solo el **diff** contra el perfil base. |
+| M4 | **Ramas muertas / secuestros de perfil en `eq.js`** | `HIGH-14` (BRIGHT/MELLOW secuestran 12 tonos), `HIGH-15` (SYNTH STRINGS nunca entra), `MED-08` (E.PIANO PAD), `MED-09` (MUTE TRUMPET), `MED-10` (BRASS & STRINGS), `MED-31` (lookup por primera coincidencia). Son audibles. |
+| M5 | **`_faderPart` se refresca en cada `input`** (`MED-05`) | `eq.js`: cambiar de parte a mitad de un drag escribe MIDI en una parte y persiste en otra. |
+| M6 | **DETUNE** (RPN 0:1) | Verificar rango real en el CT-S500 y si 64 = 0 cents. Añadir doble clic para reset si no existe. Es el único control del EQ que no es CC: no debe quedar fuera del modelo de estado. |
+| M7 | **Rendimiento del EQ** (`MED-06`) | ~40 `querySelectorAll` globales por cambio de perfil y 2 por tick de drag. Precomputar un `Map` en `buildEQ`. |
+| M8 | **CC no verificados** | CC76/77/78/94 dependen del timbre. Donde no haya verificación, marcar el control como "no verificado" en el tooltip en vez de presentarlo como hardware seguro. |
+
+---
+
+## 3. SysEx — investigación (prioridad 3)
+
+Solo se implementa **después** de probarlo en el aparato. No se inventan estructuras.
+
+| ID | Tema | Nota |
+|---|---|---|
+| S1 | **GM2 Master Coarse Tuning** `F0 7F 7F 04 04 ll mm ff F7` | Un solo mensaje para todos los canales: atómico, sin ráfagas. Si el CT-S500 lo acepta, sustituye el RPN por canal para OCTAVE/TRANSPOSE. Contra: afecta también al canal 10 (ritmo). |
+| S2 | **Active DSP / Reverb real (Casio SysEx)** | Requiere el *MIDI Implementation* oficial del CT-S500, sección 13.3. El antiguo plan usaba `F0 44 19 01 ...` como placeholder: **no es una especificación**. |
+| S3 | **Habilitar `sysex: true` de forma opt-in** | Hoy se pide `sysex:false`. Si se habilita, solo en escritorio y con fallback claro si el usuario rechaza el permiso. |
+
+---
+
+## 4. Fuera del foco actual (prioridad 4)
+
+| ID | Tema | Estado real a v296 |
+|---|---|---|
+| T1 | **Trainer sin archivos MIDI** | 15 piezas, **0 archivos `.mid`**: `fetch('trainer/{id}/{id}.mid')` → 404 siempre. O se generan los 15, o el índice marca `available:false`. |
+| T2 | **Trainer: tempo / Pitch / Wait Mode** | `HIGH-03` (el tempo elegido antes de Play se ignora), `HIGH-04` (Pitch no aplica nada), `HIGH-05` (Wait Mode es estado muerto). |
+| T3 | **Seguridad de Library** | `library.js` sigue construyendo `innerHTML` con nombres de canción/artista/evento (`CRIT-03/04` de v235): verificar y escapar. Tokens en `localStorage` en texto claro (`HIGH-27`). |
+| T4 | **Partir `app.js`** | Sigue siendo el orquestador de ~1.600 líneas. Solo se hará si el pitch/sustain lo justifican; no es prioridad. |
+
+---
+
+## 5. Deuda técnica / limpieza (prioridad 5)
+
+| ID | Acción | Por qué |
+|---|---|---|
+| L1 | `git rm midi.js` | Código muerto desde v228, duplicado divergente de `app.js`. Ya provocó que un comentario falso ("sendCoarseTuning ignora tuning.oct") pareciera verdad. |
+| L2 | Borrar `window.setGlobalTranspose` | Sin llamadores; resto del experimento de sync transpose (v289). |
+| L3 | `mctrl-oct` (MIDI CTRL) | Es placebo: `mctrlOct` se muestra pero no entra en ningún cálculo. O se conecta a `Pitch`, o se elimina. |
+| L4 | `soundfont.sf2` trackeado (31 MB) | `git rm --cached` y servir por release/CDN. |
+| L5 | `presets.json` trackeado | Está en `.gitignore` pero ya trackeado: los presets del usuario quedan públicos. |
+| L6 | `package.json` + `npm run check` | `node --check` de todos los JS + `tools/validate_raw.js` + CI. Hoy la única validación es manual. |
+| L7 | `.editorconfig` UTF-8 sin BOM | Cerrar el mojibake de comentarios (~100 en `eq.js`). |
+| L8 | README y changelog | Sigue en v219 con 40 versiones perdidas. |
+
+---
+
+## 6. Verificación en hardware (checklist)
+
+- [ ] **CC77**: piano, enviar 0 y 64 → ¿hay vibrato en alguno? (define M1)
+- [ ] **OCTAVE ±3** y **TRANSPOSE ±12**: ¿el CT-S500 recorta? ¿suena igual en U1/U2/L?
+- [ ] **CC121** (Reset All Controllers) desde un dispositivo externo → ¿se pierde el pitch? (debe re-afirmarse)
+- [ ] **GM2 Master Coarse Tuning** por SysEx → ¿responde? (S1)
+- [ ] **DETUNE** ±50 cents → ¿cuánto desafina de verdad? (M6)
+- [ ] **CC94 (Echo)** de 0 a 127 → ¿efecto audible? (M8)
+- [ ] **Trainer** con un `.mid` importado → ¿el tempo elegido se respeta? (T2)
+
+---
+
+## 7. Descartado — no implementar
+
+| Idea | Origen | Por qué no |
+|---|---|---|
+| Master EQ por CC102/103/104 (LOWS/MIDS/HIGHS) | PLAN_v218 / PLAN_PRO_ACOUSTIC_MIXER | Verificado: el CT-S500 los ignora. Ya eliminados de `eq.js`. |
+| CC95 "DSP Drive" y CC94 "Echo" como EQ | PLAN_v218 | CC95 ya eliminado (nunca se enviaba, `HIGH-13`). CC94 sigue como fader, sin verificar contra el hardware. El efecto real es SysEx (§3). |
+| Nombres DSP reales (Rotary, Tremolo, Auto-Wah…) mapeados a **CC16/17/18** | PLAN_PRO_DSP_PARAMETERS | Mapeo inventado, sin fuente en el manual. El Active DSP real es SysEx. |
+| Octava por pista (`tuning[part].oct`) | código previo | Eliminada en v296: hacía que U1/U2/L divergieran de octava y no tenía UI para corregirla. |
+| Sync automático canción → Mixer transpose | v289 (revertido) | La tonalidad de una canción es independiente del transpose de ejecución. Solo botón explícito, nunca automático. |
+| Mostrar CC no verificados como si fueran hardware | — | Placebo silencioso. Se marcan como no verificados (§2 M8). |
+
+---
+
+## 8. Revisión de los planes anteriores
+
+| Documento | Veredicto | Qué se hizo |
+|---|---|---|
+| `docs/PLAN.md` (11 oct) | Autocontradictorio (`MED-37`: marca cosas como ✅ y en el cuerpo dice "qué falta"; cita `getToneEnvPreset` en `app.js` cuando está en `eq.js`; ambientes que no existen) | **Reescrito** como este documento. |
+| `docs/PLAN_v218.md` | Era una auditoría, no un plan; `MED-36`: 8 de sus 17 hallazgos ya eran falsos en v235 | **Eliminado.** Lo que seguía abierto se absorbe en §2/§4/§5. |
+| `docs/PLAN_PRO_DSP_PARAMETERS.md` | Especulativo: CC16/17/18 y `F0 44 19 01` sin fuente | **Eliminado.** Solo sobrevive la línea de investigación SysEx (§3 S2). |
+| `docs/PLAN_PRO_ACOUSTIC_MIXER.md` | Fases 1 y 2 ya implementadas (CC72/sustain, DETUNE RPN, MONO/POLY, Panic); el Master EQ por CC es falso | **Eliminado.** La Fase 3 (SysEx) se absorbe en §3. |
+| `casio_task.md` | Lista de tareas suelta | **Eliminado.** CC77 → §2 M1; recalibración de ROLES → §2 M2 + anexo A. |
+| `docs/AUDITORIA_*.md`, `MIXER_AUDIT.md`, `AUDIT_*.md` | Histórico | **Se conservan** como registro; no son tareas. |
+| `docs/RESUMEN_SESION_*.md` | Registro de sesión | **Se conserva** como histórico. |
+
+---
+
+## Anexo A — Prompt de recalibración de ROLES (§2 M2)
+
+```
+Contexto: app web para Casio CT-S500 vía Web MIDI. globalOctave ya es 0
+(registro MIDI estándar). Los ROLES de eq.js se calibraron oyendo el
+instrumento una octava más abajo.
+
+Para cada rol (piano, ep, clav, mallet, organ, organ_pipe, bass, synth_pad,
+sax, reed, …) escucha en el CT-S500 y propón ajustes solo si el timbre o el
+espacio suenan mal respecto al calibrado anterior:
+- CC74 Cutoff: a registro más alto suele sonar más brillante → bajar 2-4.
+- CC73 Attack: el ataque se percibe más rápido → subir 2-3.
+- CC91 Reverb: el reverb "mancha" menos → valorar subir levemente.
+- CC77 Vibrato Depth: verificar primero el neutro (§2 M1).
+Documenta el delta (ej. piano CC74: 72→70) y el ambiente afectado.
+```
+
+## Anexo B — Orden de ejecución sugerido
+
+1. §1.1 `pitch.js` (+ pruebas P1).
+2. §1.2 header + atajos.
+3. §1.3 `SELFTEST` y diagnóstico.
+4. §2 M3/M4/M5 (Mixer/EQ: overrides y ramas muertas).
+5. §2 M1/M2/M6 con el teclado conectado (verificación en hardware).
+6. §3 S1 (SysEx master tuning) → decidir si sustituye el RPN.
+7. §5 limpieza (L1-L3) y §4 T1/T3.
