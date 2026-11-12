@@ -131,9 +131,8 @@ function buildGMSelectors() {
     });
 }
 
-// Global transpose: -12 to +12 semitones, sent to all 3 channels
-let globalTranspose = 0;
-let globalOctave = 0;
+// Global pitch (OCTAVE + TRANSPOSE) lives in pitch.js -- single owner.
+// See Pitch.get() / Pitch.setOctave() / Pitch.setTranspose() / Pitch.reassert().
 const pendingBank = { U1: 1, U2: 28, L: 34 };
 const pendingLSB  = { U1: 0, U2: 0, L: 0 };
 
@@ -362,6 +361,9 @@ function onMIDIMessage(e) {
         const ch   = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
+        // Reset All Controllers (CC121) clears RPN coarse tuning on many devices.
+        // Re-assert the global pitch so U1/U2/L cannot drift apart.
+        if (d1 === 121 || d1 === 120) Pitch.reassert('cc' + d1, 120);
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
         if (d1 === 0) { pendingBank[part] = d2; }
         if (d1 === 32) { pendingLSB[part] = d2; }
@@ -614,13 +616,13 @@ function scheduleProfile(part, catName) {
             // compete with applySmartProfile -- undefined ordering, unreliable.
             resyncAllSustain();
             // A Program Change (from the keyboard or the app) resets the Casio's
-            // per-channel Coarse Tuning. OCTAVE/TRANSPOSE are global, so this part
-            // must get the same RPN value as U1/L or it drifts in pitch.
-            sendCoarseTuning(part);
+            // per-channel Coarse Tuning. OCTAVE/TRANSPOSE are global, so all three
+            // channels must get the same RPN value or one of them drifts in pitch.
+            Pitch.reassert('profile');
         }, 150),
         // Late re-assert: the profile burst above can still be draining into the
         // Casio's buffer when the first RPN arrives.
-        setTimeout(() => sendCoarseTuning(part), 400),
+        Pitch.reassert('profile-late', 250),
     ];
 }
 
@@ -827,42 +829,8 @@ function selectToneInList(part, match, keepFilter = false) {
 //  GLOBAL TRANSPOSE & OCTAVE
 // ======================================================================
 function initGlobalTuning() {
-    const valElTrn = document.getElementById('gTrnVal');
-    const valElOct = document.getElementById('gOctVal');
-
-    function updateGlobalTranspose(delta) {
-        globalTranspose = Math.max(-12, Math.min(12, globalTranspose + delta));
-        if (valElTrn) valElTrn.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
-        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
-    }
-
-    function updateGlobalOctave(delta) {
-        globalOctave = Math.max(-3, Math.min(3, globalOctave + delta));
-        if (valElOct) valElOct.innerText = globalOctave > 0 ? '+' + globalOctave : globalOctave;
-        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
-    }
-
-    const tp = document.getElementById('gTrnPlus');
-    if (tp) tp.addEventListener('click', () => updateGlobalTranspose(+1));
-    const tm = document.getElementById('gTrnMinus');
-    if (tm) tm.addEventListener('click', () => updateGlobalTranspose(-1));
-    const tr = document.getElementById('gTrnReset');
-    if (tr) tr.addEventListener('click', () => {
-        globalTranspose = 0;
-        if (valElTrn) valElTrn.innerText = '0';
-        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
-    });
-
-    const op = document.getElementById('gOctPlus');
-    if (op) op.addEventListener('click', () => updateGlobalOctave(+1));
-    const om = document.getElementById('gOctMinus');
-    if (om) om.addEventListener('click', () => updateGlobalOctave(-1));
-    const or = document.getElementById('gOctReset');
-    if (or) or.addEventListener('click', () => {
-        globalOctave = 0;
-        if (valElOct) valElOct.innerText = '0';
-        ['U1','U2','L'].forEach(part => sendCoarseTuning(part));
-    });
+    // The header UI, shortcuts and diagnostics live in pitch.js (single owner).
+    Pitch.init();
 }
 
 // ======================================================================
@@ -1237,33 +1205,14 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xB0 | ch, 0x00, msb]);
     midiOutput.send([0xB0 | ch, 0x20, lsb || 0]);
     midiOutput.send([0xC0 | ch, pc]);
-    // PC resets the channel's RPN tuning on the Casio — re-send after a short delay
-    setTimeout(() => sendCoarseTuning(part), 80);
+    // PC resets the channel's RPN tuning on the Casio — re-assert the global pitch
+    Pitch.reassert('tone-change');
     // If sustain is active on this part, immediately re-assert it so tone changes never drop sustain
     if (tuning[part].sus || physCC64[part] > 0) {
         scheduleSustainResync(part, [30, 120, 300, 700]);
     }
 }
 
-window.setGlobalTranspose = function setGlobalTranspose(semitones) {
-    globalTranspose = Math.max(-12, Math.min(12, semitones));
-    const valEl = document.getElementById('gTrnVal');
-    if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
-    ['U1','U2','L'].forEach(part => window.sendCoarseTuning(part));
-};
-
-window.sendCoarseTuning = function sendCoarseTuning(part) {
-    if (!midiOutput) return;
-    // RPN 0x0002 = Coarse Tuning. Value 64 = center (0 semitones).
-    // Octave contributes +/-12 semitones, global transpose is additional offset.
-    const total = Math.min(127, Math.max(0, 64 + globalOctave * 12 + globalTranspose));
-    const ch = CHANNEL[part];
-    midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
-    midiOutput.send([0xB0 | ch, 100, 0x02]); // RPN LSB (Coarse Tuning)
-    midiOutput.send([0xB0 | ch, 6,   total]); // Data Entry
-    midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN reset (best practice)
-    midiOutput.send([0xB0 | ch, 100, 0x7F]);
-}
 // Swap two track-card DOM elements and restore their instrument state.
 // Wired directly here — no separate fix_swap.js needed.
 document.addEventListener('DOMContentLoaded', () => {
@@ -1304,7 +1253,6 @@ window.swapPartState = function(partA, partB) {
         if (btn) { btn.innerText = tuning[p].sus ? 'ON' : 'OFF'; btn.classList.toggle('sus-on', tuning[p].sus); }
         if (tuning[p].sus) sendCC(p, 72, susRelease(p));
         else sendCC(p, 72, releaseNeutral(p));
-        sendCoarseTuning(p);
     });
 };
 
@@ -1323,11 +1271,12 @@ function pushAllToKeyboard(skipTones = false) {
                 if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state -- never force on reconnect
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
-            sendCoarseTuning(part);
             if (tuning[part].sus) sendCC(part, 72, susRelease(part));
             else sendCC(part, 72, releaseNeutral(part));
             if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         });
+        // OCTAVE/TRANSPOSE after the burst so they are not lost in the queue.
+        Pitch.reassert('connect');
     }, skipTones ? 0 : 150);
     resyncAllSustain();
 }

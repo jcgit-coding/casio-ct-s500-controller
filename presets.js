@@ -256,17 +256,12 @@ function loadPreset(data) {
         }
     });
 
-    // Restore global transpose
-    if (data.globalTranspose !== undefined) {
-        globalTranspose = data.globalTranspose;
-        const valEl = document.getElementById('gTrnVal');
-        if (valEl) valEl.innerText = globalTranspose > 0 ? '+' + globalTranspose : globalTranspose;
-    }
+    // Restore global pitch (validation, UI and debounced send live in pitch.js)
+    if (data.globalTranspose !== undefined) Pitch.setTranspose(data.globalTranspose, 'preset');
 
     if (data.globalOctave !== undefined) {
-        globalOctave = (legacyOct && data.globalOctave === -1) ? 0 : data.globalOctave;
-        const octEl = document.getElementById('gOctVal');
-        if (octEl) octEl.innerText = globalOctave > 0 ? '+' + globalOctave : globalOctave;
+        const oct = (legacyOct && data.globalOctave === -1) ? 0 : data.globalOctave;
+        Pitch.setOctave(oct, 'preset');
     }
 
     switchEQ(activePart);
@@ -400,17 +395,9 @@ function loadAppState() {
                 susBtn.classList.toggle('sus-on', tuning[part].sus);
             }
         });
-        if (saved.globalTranspose !== undefined) {
-            globalTranspose = saved.globalTranspose;
-            const trnEl = document.getElementById('gTrnVal');
-            if (trnEl) trnEl.innerText = (globalTranspose>0?'+':'')+globalTranspose;
-        }
+        if (saved.globalTranspose !== undefined) Pitch.setTranspose(saved.globalTranspose, 'state');
 
-        if (saved.globalOctave !== undefined) {
-            globalOctave = saved.globalOctave;
-            const octEl = document.getElementById('gOctVal');
-            if (octEl) octEl.innerText = (globalOctave>0?'+':'')+globalOctave;
-        }
+        if (saved.globalOctave !== undefined) Pitch.setOctave(saved.globalOctave, 'state');
 
         if (saved.activePart) {
             activePart = saved.activePart;

@@ -31,11 +31,13 @@ Con eso se comprueba qué se envió de verdad, en qué canal y con qué valor. E
 
 ## 1. PITCH — OCTAVE + TRANSPOSE global (prioridad 1)
 
+> **Estado: implementado en v297** (`pitch.js`, controles en el header, atajos, `SELFTEST` y diagnóstico). Pendiente: confirmación en el CT-S500 con hardware real (§6).
+
 **Decisión tomada:** OCTAVE y TRANSPOSE son **globales para U1, U2 y L**. La octava por pista no vuelve. Se quedan en el Mixer porque son un control de ejecución que se usa en vivo.
 
 **Por qué RPN y no notas:** el teclado físico se toca a sí mismo; la app no puede transponer sus notas. La única palanca es `RPN 0x0002` (Coarse Tuning) por canal: `valor = 64 + octave*12 + transpose`.
 
-### 1.1 Módulo `pitch.js` — estado deseado + reconciliación
+### 1.1 Módulo `pitch.js` — estado deseado + reconciliación ✅ v297
 
 Problema actual: el envío está repartido en ~10 llamadas a `sendCoarseTuning` y 3 temporizadores distintos (80 ms en `changeTone`, 150 y 400 ms en `scheduleProfile`), más llamadas sueltas desde los resets. Ningún sitio sabe si otro ya envió.
 
@@ -55,14 +57,14 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Sustituye:** los `setTimeout` de `changeTone` (80 ms) y `scheduleProfile` (150/400 ms) pasan a ser responsabilidad del módulo, con los mismos retardos pero centralizados.
 - **Orden de carga:** `pitch.js` entre `presets.js` y `app.js`.
 
-### 1.2 Controles en el header (velocidad de uso)
+### 1.2 Controles en el header (velocidad de uso) ✅ v297
 
 - Mover los dos grupos `TRANSPOSE` / `OCTAVE` del `sub-header` del Mixer al **header fijo**, visibles desde LIBRARY, ARRANGER, TRAINER y HARMONY. **Mantener los IDs** (`gTrnVal`, `gOctVal`, `gTrnPlus`, …) para no tocar `loadPreset`/`loadAppState`.
 - Atajos: `Alt+↑/↓` = transpose ±1; `Shift+Alt+↑/↓` = octava ±1. Mantener pulsado para repetir.
 - Objetivos táctiles ≥ 44 px.
 - Mostrar semitono + tonalidad resultante cuando haya tonalidad de referencia: `+2 (D)`. Si no la hay, solo `+2` (no inventar la tonalidad).
 
-### 1.3 Diagnóstico y autotest (antídoto contra falsos positivos)
+### 1.3 Diagnóstico y autotest (antídoto contra falsos positivos) ✅ v297
 
 - Panel de debug (el que ya existe): línea `PITCH · UI: Oct 0 Trn +2 → enviado 76 (ch 0,1,2) · hace 0.4 s` y `Último reset detectado: PC ch2 → re-afirmado`.
 - Botón `SELFTEST`: stubea `midiOutput` y corre la matriz de escenarios, mostrando ✅/❌ por caso. Escenarios:
@@ -128,7 +130,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | ID | Acción | Por qué |
 |---|---|---|
 | L1 | `git rm midi.js` | Código muerto desde v228, duplicado divergente de `app.js`. Ya provocó que un comentario falso ("sendCoarseTuning ignora tuning.oct") pareciera verdad. |
-| L2 | Borrar `window.setGlobalTranspose` | Sin llamadores; resto del experimento de sync transpose (v289). |
+| L2 | ~~Borrar `window.setGlobalTranspose`~~ ✅ v297 | Sin llamadores; resto del experimento de sync transpose (v289). Eliminado. |
 | L3 | `mctrl-oct` (MIDI CTRL) | Es placebo: `mctrlOct` se muestra pero no entra en ningún cálculo. O se conecta a `Pitch`, o se elimina. |
 | L4 | `soundfont.sf2` trackeado (31 MB) | `git rm --cached` y servir por release/CDN. |
 | L5 | `presets.json` trackeado | Está en `.gitignore` pero ya trackeado: los presets del usuario quedan públicos. |

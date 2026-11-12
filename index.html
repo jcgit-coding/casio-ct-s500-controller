@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v296';
+    var V='v297';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v296">
+    <link rel="stylesheet" href="style.css?v297">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -51,7 +51,7 @@
 
         <header style="justify-content: flex-start; padding-bottom: 12px; border-bottom: none;">
 
-        <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
             <h1>CT-S500 <span class="dim">PRO</span></h1>
             
             <!-- VIEW NAVIGATION -->
@@ -65,6 +65,26 @@
                 <button class="nav-tab" data-target="view-trainer"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">model_training</span> TRAINER</button>
                 <button class="nav-tab nav-tab-external" id="btnOpenGraphs" title="Architecture Graph — abre en ventana del navegador"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">hub</span> GRAPHS</button>
             </div>
+
+            <!-- GLOBAL PITCH — U1+U2+L a la vez (header, visible en todas las vistas) -->
+            <div class="pitch-bar" id="pitchBar" title="Global para U1, U2 y L">
+                <span class="pitch-heading">PITCH</span>
+                <div class="pitch-group">
+                    <span class="pitch-label">OCT</span>
+                    <button class="pitch-btn" id="gOctMinus" title="Octava -1 (Shift+Alt+Abajo)">&minus;</button>
+                    <span class="pitch-val" id="gOctVal">0</span>
+                    <button class="pitch-btn" id="gOctPlus" title="Octava +1 (Shift+Alt+Arriba)">+</button>
+                    <button class="pitch-reset" id="gOctReset" title="Octava a 0">&#8635;</button>
+                </div>
+                <span class="pitch-sep"></span>
+                <div class="pitch-group">
+                    <span class="pitch-label">TRN</span>
+                    <button class="pitch-btn" id="gTrnMinus" title="Transpose -1 (Alt+Abajo)">&minus;</button>
+                    <span class="pitch-val" id="gTrnVal">0</span>
+                    <button class="pitch-btn" id="gTrnPlus" title="Transpose +1 (Alt+Arriba)">+</button>
+                    <button class="pitch-reset" id="gTrnReset" title="Transpose a 0">&#8635;</button>
+                </div>
+            </div>
         </div>
 
             </header>
@@ -76,7 +96,6 @@
         <div class="app-view active" id="view-mixer">
 
         <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
-            <div style="display: flex; gap: 20px;">                <div class="global-bar">                    <span class="global-label">TRANSPOSE</span>                    <div class="step-btns">                        <button class="step-btn" id="gTrnMinus">-</button>                        <span class="step-val" id="gTrnVal">0</span>                        <button class="step-btn" id="gTrnPlus">+</button>                    </div>                    <button class="btn-reset-small" id="gTrnReset">Reset</button>                </div>                <div class="global-bar">                    <span class="global-label">OCTAVE</span>                    <div class="step-btns">                        <button class="step-btn" id="gOctMinus">-</button>                        <span class="step-val" id="gOctVal">0</span>                        <button class="step-btn" id="gOctPlus">+</button>                    </div>                    <button class="btn-reset-small" id="gOctReset">Reset</button>                </div>            </div>
 
             <div style="display: flex; align-items: center; gap: 10px;">
                 <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Toggle Theme"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
@@ -85,7 +104,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v296</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v297</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -497,6 +516,12 @@
                         3. If it does not appear, use <b>Reset permissions</b>, reload and accept the prompt.
                     </div>
                     <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconnect MIDI</button>
+                    <div style="flex-basis:100%; margin-top:14px; padding-top:12px; border-top:1px solid var(--panel-border); display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <span class="pitch-label" style="font-size:10px;">PITCH</span>
+                        <code id="pitchDiag" style="flex:1; min-width:240px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono); line-height:1.6; white-space:pre-line;">—</code>
+                        <button id="pitchResync" class="btn" style="padding:6px 12px; font-size:12px;">Re-sync</button>
+                        <button id="pitchSelftest" class="btn" style="padding:6px 12px; font-size:12px;">Selftest</button>
+                    </div>
                 </div>
             </div>
 
@@ -1044,12 +1069,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v296"></script>
-    <script src="presets.js?v296"></script>
-    <script src="app.js?v296"></script>
-    <script src="harmony.js?v296"></script>
-    <script src="library.js?v296"></script>
-    <script src="trainer.js?v296"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v297"></script>
+    <script src="pitch.js?v297"></script>
+    <script src="presets.js?v297"></script>
+    <script src="app.js?v297"></script>
+    <script src="harmony.js?v297"></script>
+    <script src="library.js?v297"></script>
+    <script src="trainer.js?v297"></script>
 </body>
 </html>
 
