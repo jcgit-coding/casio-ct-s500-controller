@@ -192,6 +192,7 @@ function captureAndSavePreset(name) {
     });
     const data = {
         _ts:              Date.now(),
+        _v:               APP_STATE_VERSION,
         eqState:          eqSnap,
         tuning:           JSON.parse(JSON.stringify(tuning)),
         globalTranspose:  globalTranspose,
@@ -217,6 +218,9 @@ function captureAndSavePreset(name) {
 
 function loadPreset(data) {
     if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
+    // Presets captured before the octave redesign (no _v) carry the legacy -1
+    // compensation. Loading them must not resurrect it on top of the new defaults.
+    const legacyOct = (Number(data._v) || 0) < APP_STATE_VERSION;
     ['U1','U2','L'].forEach(part => {
         if (data.eqState?.[part]) {
             // Start from defaults so CCs missing in older presets don't keep the previous values
@@ -228,7 +232,9 @@ function loadPreset(data) {
     // CC7 (Volume) comes from the saved eqState -- no longer forced here.
     ['U1','U2','L'].forEach(part => {
         if (data.tuning?.[part]) {
-            tuning[part].oct = data.tuning[part].oct || 0;
+            let oct = data.tuning[part].oct || 0;
+            if (legacyOct && oct === -1) oct = 0;
+            tuning[part].oct = oct;
             tuning[part].sus = data.tuning[part].sus || false;
 
             const octEl = document.getElementById('oct-' + part);
@@ -263,7 +269,7 @@ function loadPreset(data) {
     }
 
     if (data.globalOctave !== undefined) {
-        globalOctave = data.globalOctave;
+        globalOctave = (legacyOct && data.globalOctave === -1) ? 0 : data.globalOctave;
         const octEl = document.getElementById('gOctVal');
         if (octEl) octEl.innerText = globalOctave > 0 ? '+' + globalOctave : globalOctave;
     }
@@ -328,6 +334,10 @@ function renderPresets() {
     }
 }
 
+// Bump whenever the persisted shape/meaning changes. Older snapshots are
+// migrated in loadAppState() instead of being silently trusted.
+const APP_STATE_VERSION = 295;
+
 function saveAppState() {
     // Deep-copy eqState excluding PERFORMANCE_CCS (live-state -- must not be forced on reload)
     const eqSnap = {};
@@ -338,7 +348,7 @@ function saveAppState() {
         });
     });
     const appState = {
-        v: 241,
+        v: APP_STATE_VERSION,
         eqState: eqSnap,
         tuning,
         activeCategories,
@@ -355,7 +365,22 @@ function loadAppState() {
     try {
         const saved = JSON.parse(localStorage.getItem('casioAppState'));
         if (!saved) return false;
-        
+
+        // ── Migración de snapshots viejos ──────────────────────────────
+        // Hasta v291 el diseño compensaba una octava del Casio con globalOctave=-1
+        // (y U1.oct=-1). v292/v293 lo eliminaron de los defaults, pero el snapshot
+        // persistido seguía trayendo -1: loadAppState lo restauraba en cada arranque
+        // y el auto-guardado (1 s) lo volvía a escribir. El default del código no
+        // basta; hay que migrar el valor guardado una sola vez.
+        if ((Number(saved.v) || 0) < APP_STATE_VERSION) {
+            if (saved.globalOctave === -1) saved.globalOctave = 0;
+            if (saved.tuning) ['U1', 'U2', 'L'].forEach(p => {
+                if (saved.tuning[p]?.oct === -1) saved.tuning[p].oct = 0;
+            });
+            saved.v = APP_STATE_VERSION;
+            try { localStorage.setItem('casioAppState', JSON.stringify(saved)); } catch(e) {}
+        }
+
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
             // Purge obsolete phantom CCs and CC72 (governed exclusively by SUSTAIN button)
