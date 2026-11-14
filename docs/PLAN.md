@@ -86,6 +86,25 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 
 **Criterios de aceptación:** los 8 escenarios del `SELFTEST` en verde; ningún envío con valor ≠ 64 cuando octave=0 y transpose=0; U1/U2/L siempre con el mismo valor.
 
+### 1.5 Estilo visual del control PITCH (reportado 13 nov) ✅ v298
+
+- **Problema:** la primera versión usaba colores literales (`rgba(59,130,246,…)`, `#93c5fd`). En tema claro se ve como una caja azul pálida que no encaja con el Mixer, cuyo lenguaje es acento cian (`--accent`) sobre superficies `--card-bg` / `--panel-bg`.
+- **Regla del proyecto:** un componente nuevo no lleva colores literales. Usar `--accent`, `--card-bg`, `--panel-bg`, `--border-light`, `--text-muted`, `--input-bg`, `--surface-hover`.
+- **Criterio:** revisar en tema oscuro **y** claro; la barra debe leerse como una tarjeta más del Mixer.
+- **Estado:** CSS migrado a variables. Verificar en ambos temas al probar con el teclado.
+
+### 1.6 Al transponer, el timbre se degrada (reportado 13 nov)
+
+- **Síntoma:** al cambiar OCTAVE —y probablemente TRANSPOSE— los sonidos suenan "horribles".
+- **Causa probable:** `RPN Coarse Tuning` no cambia de muestra: **re-muestrea** el tono completo. ±12 semitonos desplaza los formantes (efecto *chipmunk* hacia arriba, embarrado hacia abajo). Si además hay un perfil de EQ activo calibrado en el registro original, el resultado empeora.
+- **Prueba que lo confirma:** comparar (a) RPN +12 sobre una tecla vs (b) tocar esa misma nota 12 semitonos más arriba en el teclado. Si (b) suena natural y (a) no, es re-muestreo.
+- **Opciones a evaluar:**
+  1. Limitar el rango por defecto (±1 octava / ±5 semitonos) y avisar fuera de ahí.
+  2. "EQ neutro al transponer": no apilar perfil + transposición.
+  3. Comprobar si los botones OCTAVE/TRANSPOSE del propio Casio cambian de muestra (no es detectable por MIDI estándar).
+  4. SysEx GM2 Master Coarse Tuning **no** evita el re-muestreo: misma limitación.
+- **Decisión pendiente:** ¿priorizamos calidad de timbre (transponer en el hardware) o comodidad (transponer desde la app)?
+
 ---
 
 ## 2. Mixer / EQ (prioridad 2)
@@ -101,6 +120,7 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 | M7 | **Rendimiento del EQ** (`MED-06`) | ~40 `querySelectorAll` globales por cambio de perfil y 2 por tick de drag. Precomputar un `Map` en `buildEQ`. |
 | M8 | **CC no verificados** | CC76/77/78/94 dependen del timbre. Donde no haya verificación, marcar el control como "no verificado" en el tooltip en vez de presentarlo como hardware seguro. |
 | M9 | **El preset no guarda el ambiente** (`A2`) | `captureAndSavePreset` no incluye `currentEnv` → un preset guardado en Hall se carga en Studio con los CC de Hall. Añadir `environment` al snapshot y restaurarlo. |
+| M10 | **Los perfiles tono+ambiente suenan artificiales** (reportado 13 nov) | Hipótesis: (a) los ROLES son por rol, no por tono, y 764 tonos comparten ~40 perfiles; (b) se calibraron con `globalOctave = -1`; (c) desviaciones grandes en CC74/71 que el CT-S500 interpreta como filtro; (d) `derive()` mueve ataque/cutoff por ambiente, no solo reverb; (e) no hay bypass para comparar. **Plan:** toggle `BYPASS EQ`, tope de desviación ±6 (reverb/chorus aparte), auditar familia por familia con hardware (Anexo A) y dejar los ambientes solo en reverb/chorus. |
 
 ---
 
@@ -209,6 +229,8 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | **R4** | **Dos claves para el token de GitHub** | `casioGhToken` (`presets.js:14`) y `github_pat` (`library.js:422`): el usuario pega el PAT dos veces (`HIGH-09`). | §5 L12 (nuevo) |
 | **R5** | **El PC Synth no carga** | `import('https://esm.sh/spessasynth_lib@4.3.14')` → `KeyModifier` ausente en `spessasynth_core` (`app.js:1336`). | §5 L10 |
 | **R6** | **Pitch y Wait Mode del Trainer sin lógica** | `this.pitch` solo pinta la UI (`trainer.js:90-100`); `waitMode` solo cambia CSS (`:111-114`). | §4 T2 |
+| **R7** | **Los perfiles tono+ambiente suenan artificiales** | Reportado en uso real: "horribles, poco profesionales ni reales". ROLES por rol (no por tono), calibrados a otra octava, desviaciones grandes en CC74/71 y sin bypass para comparar. | §2 M10 |
+| **R8** | **OCTAVE/TRANSPOSE degradan el timbre** | El RPN re-muestrea el tono: ±12 semitonos desplaza los formantes y, sumado al perfil de EQ, empeora. Es inherente al mecanismo, no un bug de envío. | §1.6 |
 
 ### 9.3 🟡 Bajo / ⚪ Nits
 
@@ -219,6 +241,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | B3 | `midi.js` muerto pero trackeado | No está en `index.html`; duplicado divergente de `app.js`. | §5 L1 |
 | B4 | `soundfont.sf2` (31 MB) y `presets.json` trackeados | `git ls-files` los lista pese a `.gitignore`. | §5 L4 / L5 |
 | B5 | README en v288 | 9 versiones de retraso. | §5 L8 |
+| B6 | **La barra PITCH no seguía el tema visual** | Colores literales (`rgba(59,130,246,…)`, `#93c5fd`) en vez de variables: en tema claro se ve como una caja azul pálida, ajena al Mixer. | §1.5 (corregido v298) |
 | N1 | `activeRhythmBadge` inexistente | `app.js:1110`, con guarda: código muerto. | limpieza |
 | N2 | Autosave cada 1 s sin dirty-flag | `saveAppState` → ~86 400 escrituras/día. | limpieza |
 | N3 | `sendCC` sin clamp defensivo | Confía en los llamadores. | limpieza |
@@ -260,7 +283,8 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 2. **A3 + A2** — features visibles rotas o inconsistentes.
 3. **R2 + R4** — uso en vivo y token duplicado.
 4. **R3** — para que las mejoras de perfiles sigan llegando a los tonos.
-5. **R1 / R6** — cuando existan los `.mid` del Trainer.
+5. **R7 + R8** — calidad sonora de los perfiles y de la transposición (lo más audible para el usuario).
+6. **R1 / R6** — cuando existan los `.mid` del Trainer.
 
 ---
 
@@ -290,6 +314,7 @@ Documenta el delta (ej. piano CC74: 72→70) y el ambiente afectado.
 5. **§9 A3 + A2** (Import roto, ambiente en presets).
 6. **§9 R2 + R4** (reconexión, token único).
 7. **§2 M3 / §9 R3** (overrides por diff) y **§2 M5** (`_faderPart`).
-8. **§2 M1/M2/M6** con el teclado conectado (verificación en hardware, §6).
-9. **§3 S1** (SysEx master tuning) → decidir si sustituye el RPN.
-10. **§5 limpieza** (L1-L4, L11, L12) y **§4 T1/T2**.
+8. **§9 R7 + R8 + §2 M10** (calidad sonora: perfiles y transposición).
+9. **§2 M1/M2/M6** con el teclado conectado (verificación en hardware, §6).
+10. **§3 S1** (SysEx master tuning) → decidir si sustituye el RPN.
+11. **§5 limpieza** (L1-L4, L11, L12) y **§4 T1/T2**.
