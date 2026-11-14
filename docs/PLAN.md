@@ -277,7 +277,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 
 | ID | Hallazgo | Evidencia | Se resuelve en |
 |---|---|---|---|
-| **R1** | **Tempo del Trainer ignorado antes de Play** | `_applySpeed()` (`trainer.js:318`) exige `isPlaying`, que se pone en `:321`. El tempo elegido antes de Play nunca se aplica. | §4 T2 |
+| **R1** | **Tempo del Trainer ignorado antes de Play** | `_applySpeed()` (`trainer.js:318`) exige `isPlaying`, que se pone en `:321`. El tempo elegido antes de Play nunca se aplica. | §4 T2 **✅ v305 (código): se quitó la guarda `isPlaying`. No verificado: el Trainer no tiene `.mid` (T1). Pendiente revisar JC.** |
 | **R2** | **La reconexión MIDI recarga los 3 tonos** | `_lastMidiOutputId` se escribe (`app.js:318`) y nunca se lee: cada reconexión manda Program Change a las 3 partes y corta notas (`HIGH-07`). | §5 L11 (nuevo) |
 | **R3** | **Un fader congela el perfil completo del tono** | Medido: mover solo CUTOFF guardó 11 CCs en `toneEQ` (`{10,71,73,74,76,77,78,91,93,94,999}`) en vez de `{74:101}` (`MED-07`). | §2 M3  **✅ v303 (ver M3).** |
 | **R4** | **Dos claves para el token de GitHub** | `casioGhToken` (`presets.js:14`) y `github_pat` (`library.js:422`): el usuario pega el PAT dos veces (`HIGH-09`). | §5 L12 (nuevo)  **✅ v303: `ghPat()`/`setGhPat()` en `library.js` y `ghToken()` leen `casioGhToken` con respaldo en `github_pat`; al guardar o borrar se sincronizan las dos claves.** |
@@ -341,6 +341,26 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 6. **R1 / R6** — cuando existan los `.mid` del Trainer.
 
 ---
+
+---
+
+## 10. Pendiente revisar JC (consolidado, 14 nov)
+
+Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hicieron a ciegas.
+
+| # | Tema | Qué hay que decidir / probar |
+|---|---|---|
+| 1 | Límites por familia (§1.10) | ¿Se oyen profesionales cuerdas, metales y pads? Ajustar `CLASS_LIMITS` en `eq.js`. Usar BYPASS EQ para comparar. |
+| 2 | Ambientes (§1.10) | Hall +14, Live ×0,7, Jazz +4 de reverb: ¿se notan lo suficiente o son demasiado tímidos? |
+| 3 | CC72 con tope +6 | Comparar cuerdas/pads/metales con y sin BYPASS (64). |
+| 4 | Neutro de CC71 | El spec no lo define; se asume 64. |
+| 5 | Reverb/Delay **tipo** por SysEx | El único modo de que "ambiente" cambie de verdad la sala. Requiere `sysex: true` (permiso de Chrome) y probar en hardware (§3 S1-S3). |
+| 6 | Overrides legacy (M3) | Los perfiles completos guardados antes de v303 no reciben las guardas. ¿Reset EQ por tono? |
+| 7 | Transpose/Octave por RPN (§1.6/§1.7) | Prueba A/B con el teclado: RPN +12 vs tocar 12 semitonos más arriba. |
+| 8 | VIRTUAL: faders RVB/CHO | Mandan CC directo, fuera de `eqState`: pueden desincronizarse del Mixer. ¿Quitarlos o enlazarlos? |
+| 9 | Bluetooth | Web Bluetooth (§1.8 pendiente) y cuál alternativa si se quiere inalámbrico en el PC. |
+| 10 | Trainer (R1/T1) | Tempo previo a Play corregido sin poder probarlo: faltan los `.mid`. |
+| 11 | Push | Los commits v301–v305 están **solo en local** (sin push). |
 
 ## Anexo A — Prompt de recalibración de ROLES (§2 M2)
 

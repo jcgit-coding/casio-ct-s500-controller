@@ -343,7 +343,8 @@ const TrainerApp = {
 
     _applySpeed() {
         // Adjust sequencer speed relative to UI tempo vs MIDI inherent tempo (120 BPM baseline)
-        if (this.midiSequencer && this.isPlaying) {
+        // No isPlaying guard: the tempo chosen BEFORE Play must apply too (R1; play() calls this before isPlaying is set).
+        if (this.midiSequencer) {
             try { this.midiSequencer.speed = this.tempo / 120; } catch(e) {}
         }
     },
