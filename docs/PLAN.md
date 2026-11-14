@@ -124,6 +124,14 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Pendiente (decidido 14 nov, no empezar sin orden):** probar **Web Bluetooth** como vía alternativa a Web MIDI, en PC y en Android. Paso 1: página de diagnóstico (~40 líneas) que pida el WU-BT10 y compruebe si expone el servicio BLE MIDI estándar `03B80E5A-EDE8-4B33-A751-6CE34EC4C700` y su característica. Si lo expone → implementar conexión directa (paquetes BLE MIDI con timestamp). Si no (hay un reporte de foro de que no cumple el estándar) → cerrar el tema y quedarse con cable USB. En Android, Chrome ya no lista el WU-BT10 por Web MIDI; Casio solo lo documenta con Chordana / Music Space.
 - **Cierra parcialmente R2 / L11** (el reenvío por reconexión); queda leer `_lastMidiOutputId` también al cargar.
 
+### 1.9 Sustain fuera de la app ✅ v300 (pedido 14 nov)
+
+- **Decisión:** el sustain lo maneja el usuario directamente (pedal / panel del Casio). La app ya no tiene control de sustain.
+- **Quitado:** botón SUSTAIN por pista (Mixer), `tuning[part].sus`, `susRelease`/`CAT_SUS_RELEASE`, el envío de CC72 "largo", y su persistencia (`tuning` ya no se guarda en presets ni en `casioAppState`; los estados viejos con `tuning.sus` se ignoran sin error).
+- **Se mantiene:** CC72 solo al neutro por categoría (`releaseNeutral`), y la re-afirmación del **pedal físico** (CC64 recibido del Casio) tras ráfagas de CC, para que un reset de controladores no suelte un sustain sostenido. Esto no es sustain de la app.
+- **Se mantienen en el EQ:** SOSTENUTO (CC66) y SOFT (CC67). Se quitaron por error y se restauraron: el usuario solo tiene pedal de sustain (CC64), así que los botones de la app son su única forma de usar esos dos pedales.
+- **Verificado en navegador:** 0 botones `sus-*`, sin texto SUSTAIN, `tuning` y `susRelease` ya no existen, estado legacy con `sus:true` carga sin errores, fader CUTOFF envía solo `74:70` y el perfil envía CC72=64 (neutro).
+
 ---
 
 ## 2. Mixer / EQ (prioridad 2)

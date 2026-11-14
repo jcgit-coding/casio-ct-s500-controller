@@ -185,7 +185,7 @@ function initPresets() {
 function captureAndSavePreset(name) {
     const eqSnap = JSON.parse(JSON.stringify(eqState));
     // CC7 (Volume) is governed by Part Mix Rules -- not per-preset character
-    // CC72 (Release/Sustain) is a live toggle -- not per-preset state
+    // CC72 (Release) is not per-preset state
     ['U1','U2','L'].forEach(p => {
         delete eqSnap[p][7];  delete eqSnap[p]['7'];
         delete eqSnap[p][72]; delete eqSnap[p]['72'];
@@ -194,7 +194,6 @@ function captureAndSavePreset(name) {
         _ts:              Date.now(),
         _v:               APP_STATE_VERSION,
         eqState:          eqSnap,
-        tuning:           JSON.parse(JSON.stringify(tuning)),
         globalTranspose:  globalTranspose,
         globalOctave:     globalOctave,
         activeCategories: JSON.parse(JSON.stringify(activeCategories)),
@@ -231,16 +230,6 @@ function loadPreset(data) {
     });
     // CC7 (Volume) comes from the saved eqState -- no longer forced here.
     ['U1','U2','L'].forEach(part => {
-        if (data.tuning?.[part]) {
-            // OCTAVE is global (globalOctave) -- per-part octave no longer exists.
-            tuning[part].sus = data.tuning[part].sus || false;
-
-            const susBtn = document.getElementById('sus-' + part);
-            if (susBtn) {
-                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-                susBtn.classList.toggle('sus-on', tuning[part].sus);
-            }
-        }
         // Restore tone selection -- new presets store numeric id, old ones stored text.
         // Restore filter first so the tone appears in context (and the chip highlights).
         if (data.tones?.[part] !== undefined && data.tones[part] !== '') {
@@ -340,7 +329,6 @@ function saveAppState() {
     const appState = {
         v: APP_STATE_VERSION,
         eqState: eqSnap,
-        tuning,
         activeCategories,
         globalTranspose,
         globalOctave,
@@ -362,12 +350,6 @@ function loadAppState() {
         // persistido seguía trayendo -1: loadAppState lo restauraba en cada arranque
         // y el auto-guardado (1 s) lo volvía a escribir. El default del código no
         // basta; hay que migrar el valor guardado una sola vez.
-        // Per-part octave no longer exists: OCTAVE is global (globalOctave)
-        // and drives U1+U2+L together. Strip the stale key from old snapshots.
-        if (saved.tuning) ['U1','U2','L'].forEach(p => {
-            if (saved.tuning[p]) delete saved.tuning[p].oct;
-        });
-
         if ((Number(saved.v) || 0) < APP_STATE_VERSION) {
             if (saved.globalOctave === -1) saved.globalOctave = 0;
             saved.v = APP_STATE_VERSION;
@@ -376,7 +358,7 @@ function loadAppState() {
 
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
-            // Purge obsolete phantom CCs and CC72 (governed exclusively by SUSTAIN button)
+            // Purge obsolete phantom CCs and CC72 (CC72 is never persisted)
             ['U1','U2','L'].forEach(p => {
                 [72, 95].forEach(cc => {
                     delete eqState[p][cc]; delete eqState[p][String(cc)];
@@ -384,17 +366,6 @@ function loadAppState() {
             });
         }
         if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
-        if (saved.tuning) Object.assign(tuning, saved.tuning);
-        // Tuning UI must follow the restored state even when the preset has no
-        // tones (or an old/absent appState) -- otherwise the SUSTAIN button can
-        // show OFF while tuning.sus is ON and the hardware gets CC72=100.
-        ['U1','U2','L'].forEach(part => {
-            const susBtn = document.getElementById('sus-' + part);
-            if (susBtn) {
-                susBtn.innerText = tuning[part].sus ? 'ON' : 'OFF';
-                susBtn.classList.toggle('sus-on', tuning[part].sus);
-            }
-        });
         if (saved.globalTranspose !== undefined) Pitch.setTranspose(saved.globalTranspose, 'state');
 
         if (saved.globalOctave !== undefined) Pitch.setOctave(saved.globalOctave, 'state');

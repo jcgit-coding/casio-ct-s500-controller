@@ -62,29 +62,13 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 let currentEnv = 'Studio';
 // Verified CT-S500 CCs: 71=Resonance 73=Attack 74=Cutoff 76=VibRate 77=VibDepth 78=VibDelay 91=Reverb 93=Chorus 94=Echo
 // CC102/103/104 (Casio "EQ" Low/Mid/High) removed — verified the CT-S500 ignores them.
-// CC72 (Release) excluded from EQ state — managed separately via the SUSTAIN button
+// CC72 (Release) excluded from EQ state — the app only sends releaseNeutral
 // CC75 (Decay) excluded — unverified on CT-S500, caused tone distortion at non-neutral values
 // Casio Categories (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
 //   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
 //   SAX REED PIPE CHOIR EDM SYNTH CASIO CLASSIC INDIAN INDONESIAN ARABIC CHINESE BRAZILIAN ETHNIC OTHERS GM TONES
 // SYNTH-BASS/LEAD/PAD/BRASS aplican al PC Synth GM (no existen como Casio categories)
 const activeCategories = { U1: 'PIANO', U2: 'PIANO', L: 'PIANO' };
-
-// Sustain CC72 per category (loaded here before app.js)
-const CAT_SUS_RELEASE = {
-    'PIANO': 100, 'HARPSICHORD': 100, 'ELEC.PIANO': 100, 'CLAVI': 100,
-    'VIB./CHROM.PERC.': 105, 'ELEC.ORGAN': 88, 'PIPE ORGAN': 92, 'ACCORDION': 90,
-    'ACOUS.GUITAR': 105, 'ELEC.GUITAR': 105, 'ACOUS.BASS': 98, 'ELEC.BASS': 98,
-    'SYNTH-BASS': 100, 'SOLO STRINGS': 112, 'STRING ENSEMBLE': 112, 'SYNTH-PAD': 118,
-    'CHOIR': 112, 'SOLO BRASS': 100, 'BRASS ENSEMBLE': 100, 'SAX': 100,
-    'REED': 100, 'PIPE': 100, 'EDM': 105, 'SYNTH': 105, 'EDM SYNTH': 105,
-    'SYNTH-LEAD': 105, 'SYNTH-BRASS': 105, 'CASIO CLASSIC': 105, 'INDIAN': 100,
-    'INDONESIAN': 100, 'ARABIC': 100, 'CHINESE': 100, 'BRAZILIAN': 100,
-    'ETHNIC': 100, 'OTHERS': 100, 'ETHNIC OTHERS': 100, 'GM TONES': 100, 'PERCUSSION': 100
-};
-function susRelease(part) {
-    return CAT_SUS_RELEASE[activeCategories[part]] ?? 110;
-}
 
 // ======================================================================
 //  TONE PROFILES  --  role-based Studio / Live / Hall / Jazz
@@ -1003,7 +987,7 @@ function applySmartProfile(part, category) {
     if (part === 'U2') eqState[part][7] = 75;
     if (part === 'L')  eqState[part][7] = 100;
 
-    // CC72 (Release/Sustain) is governed exclusively by the SUSTAIN button -- never an EQ fader
+    // CC72 (Release) is never an EQ fader
     delete eqState[part][72]; delete eqState[part]['72'];
 
     // 4. Send to keyboard and update UI -- skip performance CCs
@@ -1029,14 +1013,8 @@ function applySmartProfile(part, category) {
         }
     });
 
-    // 5. CC72: assert sustain release value or per-category neutral.
-    // Casio hardware resets CC72 on Program Change (its own envelope wins), so this only
-    // matters for the PC synth — but sending it to both is harmless and keeps them in sync.
-    if (tuning[part].sus) {
-        sendCC(part, 72, susRelease(part));
-    } else {
-        sendCC(part, 72, releaseNeutral(part));
-    }
+    // 5. CC72: per-category neutral release (Casio resets CC72 on Program Change; keeps the PC synth in sync).
+    sendCC(part, 72, releaseNeutral(part));
 }
 
 function buildEQ() {
@@ -1102,10 +1080,6 @@ function buildEQ() {
                     btn.innerText = newVal > 63 ? 'ON' : 'OFF';
                     btn.classList.toggle('sus-on', newVal > 63);
                     sendCC(activePart, ctrl.cc, newVal);
-                    if (tuning[activePart].sus) {
-                        sendCC(activePart, 72, susRelease(activePart));
-                        scheduleSustainResync(activePart, [40, 150]);
-                    }
                     saveToneEQForPart(activePart);
                     if (typeof saveAppState === 'function') saveAppState();
                 });
@@ -1153,10 +1127,6 @@ function buildEQ() {
                     if ((cur !== undefined ? cur : ctrl.def) === v) return;
                     eqState[_faderPart][ctrl.cc] = v;
                     sendCC(_faderPart, ctrl.cc, v);
-                    // Re-assert sustain if active so CT-S500 voice block does not drop release tail (except when dragging RELEASE itself)
-                    if (tuning[_faderPart].sus && ctrl.cc !== 72) {
-                        sendCC(_faderPart, 72, susRelease(_faderPart));
-                    }
                 });
                 fader.addEventListener('change', () => {
                     const v = parseInt(fader.value);
@@ -1170,10 +1140,6 @@ function buildEQ() {
                         document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
                             if (other !== fader) other.value = v;
                         });
-                    }
-                    if (tuning[_faderPart].sus && ctrl.cc !== 72) {
-                        sendCC(_faderPart, 72, susRelease(_faderPart));
-                        scheduleSustainResync(_faderPart, [30, 120, 300]);
                     }
                     saveToneEQForPart(_faderPart);
                     if (typeof saveAppState === 'function') saveAppState();
@@ -1230,14 +1196,14 @@ function switchEQ(part) {
             });
         }
     });
-    // Switching EQ view does NOT disrupt sustain or touch CC72!
+    // Switching EQ view does not touch CC72.
 }
 
 function resetEQ() {
     const part = activePart;
     resetToneEQForPart(part); // Clear user override in localStorage for this tone+env
-    applySmartProfile(part);  // Re-apply authentic tone+env preset (does not touch sustain)
-    if ((tuning[part].sus || physCC64[part] > 0) && typeof scheduleSustainResync === 'function') {
+    applySmartProfile(part);  // Re-apply authentic tone+env preset 
+    if (physCC64[part] > 0 && typeof scheduleSustainResync === 'function') {
         scheduleSustainResync(part, SUSTAIN_TAPS);
     }
 }

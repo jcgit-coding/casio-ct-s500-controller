@@ -10,15 +10,14 @@ const pcActiveNotes = {};     // "ch:note" -> { ch, shiftedNote }
 let pcSynthEnabled = false;  // OFF by default -- user must toggle on
 let mctrlEnabled = false;    // VIRTUAL keyboard ON/OFF -- off by default
 
-// App SUSTAIN button emulates the Casio panel SUSTAIN (long release, notes fade out
-// naturally) via CC72 Release Time -- NOT a damper hold (CC64 is left to the physical pedal).
+// The app has NO sustain control: sustain is handled directly by the player (pedal / Casio panel).
+// CC72 is only ever sent at the per-category neutral (releaseNeutral).
 const RELEASE_NEUTRAL = 64;
-// Taps used to re-send CC72 after ANY burst of CCs. The CT-S500 resets its
+// Taps used to re-assert the physical pedal (CC64) after ANY burst of CCs. The CT-S500 resets its
 // controllers (on every channel) after a large burst, and over Bluetooth the
 // outgoing queue can still be draining hundreds of ms after the app finished
 // writing -- hence the deliberately late last tap.
 const SUSTAIN_TAPS = [100, 200, 350, 550, 850, 1300];
-// Note: CAT_SUS_RELEASE and susRelease(part) are defined in eq.js (loaded before app.js)
 
 // Per-category CC72 neutral: these instruments have long natural decay;
 // sending 64 after a tone load would shorten it below the preset's intent.
@@ -40,7 +39,8 @@ function releaseNeutral(part) {
     return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
 }
 // CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
-// CC1=Modulation, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal, CC126=Mono Mode
+// CC1=Modulation, CC5=Portamento Time, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal, CC126=Mono Mode
+// (Sostenuto/Soft stay in the app: the player only owns a sustain pedal, CC64.)
 const PERFORMANCE_CCS = new Set([1, 5, 65, 66, 67, 126]);
 
 function pcNoteOff(ch, note) {
@@ -136,15 +136,6 @@ function buildGMSelectors() {
 const pendingBank = { U1: 1, U2: 28, L: 34 };
 const pendingLSB  = { U1: 0, U2: 0, L: 0 };
 
-// Per-part state: only sustain is per channel. OCTAVE is GLOBAL (U1+U2+L at
-// once, via globalOctave) -- a per-part octave would make the three sounds
-// diverge in pitch, which is exactly what the old tuning[part].oct did.
-const tuning = {
-    U1: { sus: false },
-    U2: { sus: false },
-    L:  { sus: false }
-};
-
 // MIDI channel per part
 const CHANNEL = { U1: 0, U2: 1, L: 2 };
 
@@ -201,7 +192,7 @@ function saveToneEQForPart(part) {
     const profile = Object.assign({}, eqState[part]);
     // CC7 (Volume) is per-part mix balance -- never persist in toneEQ
     delete profile[7]; delete profile['7'];
-    // CC72 (Release/Sustain) is controlled separately via the SUSTAIN button -- never persist
+    // CC72 (Release) is never an EQ value -- never persist
     delete profile[72]; delete profile['72'];
     // CC11 (Expression) is a global dynamics trim (default 127 = full) -- never persist
     delete profile[11]; delete profile['11'];
@@ -455,8 +446,6 @@ function onMIDIMessage(e) {
                 ? pcOpt.parentElement.label
                 : (activeCategories[part] || 'PIANO');
             scheduleProfile(part, pcCat);
-        } else if (tuning[part].sus) {
-            scheduleSustainResync(part, SUSTAIN_TAPS);
         }
     }
 }
@@ -625,7 +614,6 @@ function scheduleSustainResync(part, delays) {
     delays.forEach(d => {
         const id = setTimeout(() => {
             _pendingSustain[part] = _pendingSustain[part].filter(t => t !== id);
-            if (tuning[part].sus) sendCC(part, 72, susRelease(part));
             // Re-assert physical CC64 so a CT-S500 controller reset doesn't clear it
             if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         }, d);
@@ -635,7 +623,7 @@ function scheduleSustainResync(part, delays) {
 
 function resyncAllSustain() {
     ['U1', 'U2', 'L'].forEach(p => {
-        const needsResync = tuning[p].sus || physCC64[p] > 0;
+        const needsResync = physCC64[p] > 0;
         if (needsResync) scheduleSustainResync(p, SUSTAIN_TAPS);
     });
 }
@@ -877,24 +865,6 @@ function initQuickControls() {
     // oct buttons were removed from the HTML and their handlers here were dead
     // code that still restored a stale tuning[part].oct = -1 on some parts.
 
-    document.querySelectorAll('button[id^="sus-"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const part = btn.dataset.part;
-            tuning[part].sus = !tuning[part].sus;
-            const isOn = tuning[part].sus;
-            btn.innerText = isOn ? 'ON' : 'OFF';
-            btn.classList.toggle('sus-on', isOn);
-
-            if (isOn) {
-                sendCC(part, 72, susRelease(part));
-                scheduleSustainResync(part, [40, 150, 400]);
-            } else {
-                sendCC(part, 72, releaseNeutral(part));
-                // Only clear CC64 if the physical sustain is not active
-                if (physCC64[part] === 0) sendCC(part, 64, 0);
-            }
-        });
-    });
 }
 
 // ======================================================================
@@ -1242,8 +1212,8 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xC0 | ch, pc]);
     // PC resets the channel's RPN tuning on the Casio — re-assert the global pitch
     Pitch.reassert('tone-change');
-    // If sustain is active on this part, immediately re-assert it so tone changes never drop sustain
-    if (tuning[part].sus || physCC64[part] > 0) {
+    // Re-assert the physical pedal so tone changes never drop a held sustain
+    if (physCC64[part] > 0) {
         scheduleSustainResync(part, [30, 120, 300, 700]);
     }
 }
@@ -1281,15 +1251,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-window.swapPartState = function(partA, partB) {
-    [tuning[partA].sus, tuning[partB].sus] = [tuning[partB].sus, tuning[partA].sus];
-    [partA, partB].forEach(p => {
-        const btn = document.getElementById('sus-' + p);
-        if (btn) { btn.innerText = tuning[p].sus ? 'ON' : 'OFF'; btn.classList.toggle('sus-on', tuning[p].sus); }
-        if (tuning[p].sus) sendCC(p, 72, susRelease(p));
-        else sendCC(p, 72, releaseNeutral(p));
-    });
-};
+// Parts swap tones only; there is no per-part sustain state any more.
+window.swapPartState = function() {};
 
 function pushAllToKeyboard(skipTones = false) {
     // Tones first, CCs after a delay: a burst of CCs before/around the Program Change
@@ -1306,8 +1269,7 @@ function pushAllToKeyboard(skipTones = false) {
                 if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state -- never force on reconnect
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
-            if (tuning[part].sus) sendCC(part, 72, susRelease(part));
-            else sendCC(part, 72, releaseNeutral(part));
+            sendCC(part, 72, releaseNeutral(part));
             if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         });
         // OCTAVE/TRANSPOSE after the burst so they are not lost in the queue.
@@ -1420,13 +1382,13 @@ async function sf2Init(source, name) {
                 spessaSynth.controllerChange(ch, cc, val);
             }
         };
-        // Sync current mixer state (EQ + sustain release) to the freshly created synth
+        // Sync current mixer state (EQ + neutral release) to the freshly created synth
         ['U1','U2','L'].forEach(part => {
             EQ_CONTROLS.forEach(ctrl => {
                 const v = eqState[part][ctrl.cc];
                 window.pcSynth.applyCC(ctrl.cc, v !== undefined ? v : ctrl.def, CHANNEL[part]);
             });
-            window.pcSynth.applyCC(72, tuning[part].sus ? susRelease(part) : releaseNeutral(part), CHANNEL[part]);
+            window.pcSynth.applyCC(72, releaseNeutral(part), CHANNEL[part]);
         });
         window.sf2Ready = true;
         if (statusEl) {

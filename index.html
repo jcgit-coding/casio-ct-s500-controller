@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v299';
+    var V='v300';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v299">
+    <link rel="stylesheet" href="style.css?v300">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -107,7 +107,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v299</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v300</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -129,14 +129,14 @@
 
 
 
-            <!-- PISTAS (U1, U2, L) ï¿½ Octave y Sustain POR PISTA -->
+            <!-- PISTAS (U1, U2, L) ï¿½ Pistas -->
             <div class="tracks-row">
 
                 <!-- UPPER 1 -->
                 <div class="track-card active-track" id="card-U1" data-part="U1" style="order: 1;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                         <span class="inst-title">INSTRUMENT 1</span>
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.5px;line-height:1">SUSTAIN</span><button class="sus-btn" id="sus-U1" data-part="U1" style="font-size:11px;padding:3px 12px;">OFF</button></div>
+                        
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap active" data-part="U1" data-target="U1">U1</button>
                             <button class="btn-swap" data-part="U1" data-target="U2">U2</button>
@@ -189,7 +189,7 @@
                 <div class="track-card" id="card-U2" data-part="U2" style="order: 2;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                         <span class="inst-title">INSTRUMENT 2</span>
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.5px;line-height:1">SUSTAIN</span><button class="sus-btn" id="sus-U2" data-part="U2" style="font-size:11px;padding:3px 12px;">OFF</button></div>
+                        
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap" data-part="U2" data-target="U1">U1</button>
                             <button class="btn-swap active" data-part="U2" data-target="U2">U2</button>
@@ -242,7 +242,7 @@
                 <div class="track-card" id="card-L" data-part="L" style="order: 3;">
                     <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                         <span class="inst-title">INSTRUMENT 3</span>
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:8px;font-weight:700;color:var(--text-muted);letter-spacing:.5px;line-height:1">SUSTAIN</span><button class="sus-btn" id="sus-L" data-part="L" style="font-size:11px;padding:3px 12px;">OFF</button></div>
+                        
                         <div class="part-swap-btns" style="display: flex; gap: 4px;">
                             <button class="btn-swap" data-part="L" data-target="U1">U1</button>
                             <button class="btn-swap" data-part="L" data-target="U2">U2</button>
@@ -1084,13 +1084,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v299"></script>
-    <script src="pitch.js?v299"></script>
-    <script src="presets.js?v299"></script>
-    <script src="app.js?v299"></script>
-    <script src="harmony.js?v299"></script>
-    <script src="library.js?v299"></script>
-    <script src="trainer.js?v299"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v300"></script>
+    <script src="pitch.js?v300"></script>
+    <script src="presets.js?v300"></script>
+    <script src="app.js?v300"></script>
+    <script src="harmony.js?v300"></script>
+    <script src="library.js?v300"></script>
+    <script src="trainer.js?v300"></script>
 </body>
 </html>
 
