@@ -1481,8 +1481,8 @@ document.getElementById('sf2-file')?.addEventListener('change', async e => {
 //  MIDI CONTROLLER -- Virtual Keyboard + Per-part controls
 // ======================================================================
 
-// Per-part octave offset for the MIDI controller (separate from mixer octave)
-const mctrlOct = { U1: 0, U2: 0, L: 0 };
+// (v304) The per-part OCT of this view was a placebo (never fed any calculation): removed.
+// Pitch is global: see pitch.js.
 let vkActivePart = 'U1';   // which part the virtual keyboard plays
 let vkOctave = 4;           // base octave for virtual keyboard (C4 = MIDI 60)
 const vkActiveKeys = {};    // note -> channel number while held (captured at press time)
@@ -1518,20 +1518,6 @@ function initMidiController() {
             });
         }
 
-        // Per-part octave (controller octave, separate from mixer)
-        document.querySelectorAll(`[data-part="${part}"][data-mctrl-oct]`).forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.dataset.mctrlOct;
-                if (action === 'reset') {
-                    mctrlOct[part] = 0;
-                } else {
-                    const dir = parseInt(action);
-                    mctrlOct[part] = Math.max(-3, Math.min(3, mctrlOct[part] + dir));
-                }
-                const el = document.getElementById('mctrl-oct-' + part);
-                if (el) el.innerText = mctrlOct[part] > 0 ? '+' + mctrlOct[part] : mctrlOct[part];
-            });
-        });
 
         // Card click -> select active card highlight
         const card = document.getElementById('mctrl-card-' + part);

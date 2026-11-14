@@ -1,0 +1,8 @@
+{
+  "name": "casio-ct-s500-controller",
+  "private": true,
+  "description": "Controlador web del Casio CT-S500 (Web MIDI)",
+  "scripts": {
+    "check": "node tools/check.js"
+  }
+}

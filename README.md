@@ -1,4 +1,6 @@
-# Casio CT-S500 Pro Controller — v288
+# Casio CT-S500 Pro Controller — v304
+
+> **Cambios recientes (v297–v304):** `pitch.js` (OCTAVE/TRANSPOSE global en el header), selección cable/Bluetooth, SUSTAIN de la app eliminado, tonos+ambientes con guardas de realismo y `BYPASS EQ`, correcciones de seguridad en Library, overrides por tono como diff. El plan vigente está en [docs/PLAN.md](docs/PLAN.md).
 
 Una aplicación web (Web MIDI API) diseñada para transformar el teclado **Casio CT-S500** (y la serie compatible CT-S y WU-BT10) en un instrumento de diseño sonoro completo. Esta app expone parámetros ocultos del motor AiX de Casio, permitiendo usar el teclado con la fluidez y profundidad de un DAW (Digital Audio Workstation) o un sintetizador profesional.
 
@@ -13,7 +15,6 @@ La aplicación está construida sin frameworks de terceros (Vanilla HTML/CSS/JS)
 - `style.css`: Motor de diseño. Utiliza CSS Variables (`--panel-bg`, `--accent`, etc.) para gestionar dinámicamente un Tema Claro / Tema Oscuro. Usa una arquitectura puramente basada en Flexbox para lograr un diseño "Responsive" extremo (funciona igual de bien en monitores 4K que en smartphones verticales).
 - `app.js`: El cerebro de la aplicación. Gestiona la conexión MIDI, el "State Management" global, los listeners de la interfaz y la inyección en el DOM.
 - `eq.js`: Motor EQ y perfiles por rol (`ROLES`, `TONE_ROLE` nombre→rol de los 764 tonos, `CAT_ROLE` por categoría, `derive()`, `getToneEnvPreset`). Usa **solo los CCs que el CT-S500 honra** (71,73,74,76,77,78,91,93,94); los CC102/103/104 fueron eliminados (el hardware los ignora). El Active DSP real del CT-S500 requiere SysEx.
-- `midi.js`: Conexión y routing MIDI (Web MIDI API).
 - `presets.js`: Persistencia local y sincronización GitHub de presets de usuario.
 - `harmony.js`: Motor de armonía y acordes.
 - `library.js`: Panel de biblioteca de canciones con acordes. Incluye parser de acordes (cifrado inglés A–G y solfège español DO–SI), transpositon por tonalidad, y gestor de eventos en vivo (setlists).
