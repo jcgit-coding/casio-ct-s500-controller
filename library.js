@@ -1,3 +1,9 @@
+// ── HTML/JS escaping for everything interpolated into innerHTML / inline handlers (v301, fixes A1 stored XSS)
+const escHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+// For a string argument inside an inline onclick="fn('...')": JS-escape first, HTML-escape after (the browser decodes entities before running the JS).
+const jsArg = v => escHtml(String(v ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/[\n\r]/g, ' '));
+const safeUrl = u => /^https?:\/\//i.test(String(u || '')) ? escHtml(u) : '#';
+
 /**
  * CasioController Pro - Módulo de Repertorio
  * Maneja la lógica de extracción de canciones, transposición de acordes y calendario de eventos.
@@ -54,7 +60,8 @@ const RepertorioApp = {
     _semitoneShift: 0,
 
     bindEvents() {
-        document.getElementById('lib-btn-import')?.addEventListener('click', () => this.importFromText());
+        // lib-btn-import opens LacuerdaImport via its inline onclick; a second listener calling the
+        // text-import path threw a TypeError (its inputs do not exist) -- removed in v301.
         document.getElementById('lib-transpose-down')?.addEventListener('click', () => this._shiftTranspose(-1));
         document.getElementById('lib-transpose-up')?.addEventListener('click', () => this._shiftTranspose(+1));
         document.getElementById('lib-transpose-reset')?.addEventListener('click', () => this._resetTranspose());
@@ -148,7 +155,7 @@ const RepertorioApp = {
                 }
                 banner.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-radius:8px;background:rgba(var(--accent-rgb,0,255,204),0.1);border:1px solid var(--accent);margin-bottom:10px;gap:10px;';
                 const songId = this.currentSong?._id || '';
-                banner.innerHTML = `<span style="font-size:12px;font-weight:600;color:var(--accent);">Evento activo: ${evt.name}</span>
+                banner.innerHTML = `<span style="font-size:12px;font-weight:600;color:var(--accent);">Evento activo: ${escHtml(evt.name)}</span>
                     <button style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;background:var(--accent);color:#000;border:none;cursor:pointer;"
                             onclick="EventsMgr.addSong(RepertorioApp.currentSong?._id)">+ Agregar</button>`;
             }
@@ -258,12 +265,14 @@ const RepertorioApp = {
             // Etiqueta de sección → resaltar con estilo propio
             const secMatch = SECTION_LABEL_RE.exec(trimmed);
             if (secMatch) {
-                const label = (secMatch[1] || trimmed).trim().replace(/^[\s:.#\-–]+|[\s:.#\-–]+$/g, '');
+                const label = escHtml((secMatch[1] || trimmed).trim().replace(/^[\s:.#\-–]+|[\s:.#\-–]+$/g, ''));
                 return `<span style="display:inline-block;margin-top:10px;margin-bottom:2px;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);opacity:0.75;">${label}</span>`;
             }
-            let parsedLine = line;
+            // Escape the raw line before it becomes HTML: song text is untrusted (A1).
+            const safeLine = escHtml(line);
+            let parsedLine = safeLine;
             if (isChordLine(line)) {
-                parsedLine = splitConcatChords(line).replace(CHORD_RE, chord =>
+                parsedLine = splitConcatChords(safeLine).replace(CHORD_RE, chord =>
                     `<span class='chord' style='color:var(--accent); font-weight:bold;'>${chord}</span>`
                 );
             }
@@ -512,11 +521,11 @@ const RepertoireSync = {
                     <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);opacity:0.7;padding:2px 0 5px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:6px;">Recientes</div>
                     ${recents.map(s => `
                         <div style="display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;margin-bottom:3px;"
-                             onclick="RepertoireSync.openSong('${s.id}')"
+                             onclick="RepertoireSync.openSong('${jsArg(s.id)}')"
                              onmouseover="this.style.background='rgba(255,255,255,0.08)'"
                              onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-                            <span style="font-size:12px;font-weight:600;color:var(--text);flex:1;">${s.title}</span>
-                            <span style="font-size:10px;color:var(--text-muted);">${s.artist}</span>
+                            <span style="font-size:12px;font-weight:600;color:var(--text);flex:1;">${escHtml(s.title)}</span>
+                            <span style="font-size:10px;color:var(--text-muted);">${escHtml(s.artist)}</span>
                         </div>`).join('')}
                 </div>`;
             }
@@ -533,10 +542,10 @@ const RepertoireSync = {
         wrap.style.paddingRight = '28px';
         wrap.innerHTML = recentsHtml + sorted.map(artist => {
             const count = byArtist[artist].length;
-            const initial = artist[0].toUpperCase();
+            const initial = escHtml(artist[0].toUpperCase());
             const aid = 'art-' + artist.replace(/[^a-z0-9]/gi, '_');
             return `<div id="${aid}" style="margin-bottom:4px;">
-                <div onclick="RepertoireSync._openArtist('${artist.replace(/'/g,"\\'")}',event)"
+                <div onclick="RepertoireSync._openArtist('${jsArg(artist)}',event)"
                      style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;
                             background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
                             cursor:pointer;transition:background .12s;user-select:none;"
@@ -545,7 +554,7 @@ const RepertoireSync = {
                     <span style="width:28px;height:28px;border-radius:50%;background:rgba(var(--accent-rgb,0,255,204),0.15);
                                  display:flex;align-items:center;justify-content:center;flex-shrink:0;
                                  font-size:12px;font-weight:800;color:var(--accent);">${initial}</span>
-                    <span style="flex:1;font-size:13px;font-weight:700;color:var(--text);">${artist}</span>
+                    <span style="flex:1;font-size:13px;font-weight:700;color:var(--text);">${escHtml(artist)}</span>
                     <span style="font-size:11px;font-weight:600;color:var(--text-muted);background:rgba(255,255,255,0.06);
                                  padding:2px 7px;border-radius:10px;">${count}</span>
                     <span style="font-size:14px;color:var(--text-muted);opacity:0.5;">›</span>
@@ -584,7 +593,7 @@ const RepertoireSync = {
                         onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='none'">
                     ‹ ARTISTAS
                 </button>
-                <span style="font-size:13px;font-weight:800;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${artist}</span>
+                <span style="font-size:13px;font-weight:800;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(artist)}</span>
                 <span style="font-size:10px;color:var(--text-muted);">${songs.length} canciones</span>
             </div>
             ${songs.length === 0
@@ -595,12 +604,12 @@ const RepertoireSync = {
                                     border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .12s;"
                              onmouseover="this.style.background='rgba(255,255,255,0.08)'"
                              onmouseout="this.style.background='rgba(255,255,255,0.03)'"
-                             onclick="RepertoireSync.openSong('${s.id}')">
-                            <span style="font-weight:600;font-size:13px;color:var(--text);">${s.title}</span>
+                             onclick="RepertoireSync.openSong('${jsArg(s.id)}')">
+                            <span style="font-weight:600;font-size:13px;color:var(--text);">${escHtml(s.title)}</span>
                         </div>
                         ${hasActive ? `<div style="cursor:pointer;padding:6px 9px;border-radius:7px;background:rgba(255,255,255,0.05);
                                            border:1px solid rgba(255,255,255,0.1);font-size:13px;line-height:1;color:var(--accent);"
-                                      title="Agregar al evento" onclick="EventsMgr.addSong('${s.id}')">+</div>` : ''}
+                                      title="Agregar al evento" onclick="EventsMgr.addSong('${jsArg(s.id)}')">+</div>` : ''}
                     </div>`).join('')}`;
     },
 
@@ -623,8 +632,9 @@ const RepertoireSync = {
         }
 
         const hl = txt => {
-            const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-            return (txt||'').replace(re, `<mark style="background:rgba(var(--accent-rgb,0,255,204),0.25);color:var(--text);border-radius:2px;">$1</mark>`);
+            // Escape text AND query: the <mark> is the only HTML that survives (A1).
+            const re = new RegExp(`(${escHtml(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+            return escHtml(txt).replace(re, `<mark style="background:rgba(var(--accent-rgb,0,255,204),0.25);color:var(--text);border-radius:2px;">$1</mark>`);
         };
 
         const byArtist = {};
@@ -646,7 +656,7 @@ const RepertoireSync = {
                                 border:1px solid rgba(255,255,255,0.06);cursor:pointer;margin-bottom:3px;transition:background .12s;"
                          onmouseover="this.style.background='rgba(255,255,255,0.08)'"
                          onmouseout="this.style.background='rgba(255,255,255,0.03)'"
-                         onclick="RepertoireSync.openSong('${s.id}')">
+                         onclick="RepertoireSync.openSong('${jsArg(s.id)}')">
                         <span style="font-weight:600;font-size:13px;color:var(--text);">${hl(s.title)}</span>
                     </div>`).join('')}
             </div>`).join('');
@@ -746,16 +756,16 @@ const RepertoireSync = {
                 const isActive = v.file === activeFile;
                 const ratingStr = (v.lcd != null && v.lcd > 0) ? ` · ${v.lcd}★` : '';
                 const linkHtml = v.source
-                    ? ` <a href="${v.source}" target="_blank" rel="noopener"
+                    ? ` <a href="${safeUrl(v.source)}" target="_blank" rel="noopener"
                            title="Ver en lacuerda.net"
                            style="display:inline-flex;align-items:center;color:var(--text-muted);opacity:0.5;text-decoration:none;"
                            onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px;">open_in_new</span></a>`
                     : '';
                 return `<span style="display:inline-flex;align-items:center;gap:2px;">
-                    <button onclick="RepertoireSync.openSong('${id}','${v.file}')"
+                    <button onclick="RepertoireSync.openSong('${jsArg(id)}','${jsArg(v.file)}')"
                         style="font-size:12px;font-weight:700;padding:7px 14px;border-radius:7px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.2)'};
                         background:${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.05)'};color:${isActive ? '#000' : 'var(--text)'};cursor:pointer;min-height:34px;">
-                        ${site(v.file)} v${i+1}${ratingStr}
+                        ${site(v.file)} v${i+1}${escHtml(ratingStr)}
                     </button>${linkHtml}</span>`;
             }).join('');
     }
@@ -862,28 +872,28 @@ const EventsMgr = {
                 const title = meta ? meta.title : sid;
                 const artist = meta ? meta.artist : '';
                 const verLabel = entry.versionFile
-                    ? ` · <span style="color:var(--accent);font-size:9px;">${entry.versionFile.replace(/chords_|\.txt/g,'')}</span>` : '';
+                    ? ` · <span style="color:var(--accent);font-size:9px;">${escHtml(entry.versionFile.replace(/chords_|\.txt/g,''))}</span>` : '';
                 return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,0.04);margin-bottom:2px;min-width:0;">
                     <span style="color:var(--text-muted);font-size:10px;min-width:16px;text-align:right;flex-shrink:0;">${i+1}.</span>
-                    <div style="flex:1;min-width:0;cursor:pointer;" onclick="RepertoireSync.openSong('${sid}','${entry.versionFile||''}')">
-                        <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${title}${verLabel}</div>
-                        <div style="font-size:10px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${artist}</div>
+                    <div style="flex:1;min-width:0;cursor:pointer;" onclick="RepertoireSync.openSong('${jsArg(sid)}','${jsArg(entry.versionFile||'')}')">
+                        <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(title)}${verLabel}</div>
+                        <div style="font-size:10px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(artist)}</div>
                     </div>
                     <span style="cursor:pointer;padding:2px 6px;border-radius:4px;color:rgba(255,100,100,0.8);font-size:12px;font-weight:700;flex-shrink:0;"
-                          onclick="EventsMgr.removeSong('${evt.id}','${sid}')" title="Quitar">✕</span>
+                          onclick="EventsMgr.removeSong('${jsArg(evt.id)}','${jsArg(sid)}')" title="Quitar">✕</span>
                 </div>`;
             }).join('') : `<div style="padding:8px;text-align:center;font-size:11px;color:var(--text-muted);">Sin canciones aún.</div>`) : '';
 
             return `<div style="border-radius:10px;border:1px solid ${isActive ? 'var(--accent)' : 'rgba(255,255,255,0.08)'};overflow:hidden;margin-bottom:6px;">
                 <div style="display:flex;align-items:center;padding:10px 12px;cursor:pointer;background:rgba(255,255,255,0.04);gap:8px;"
-                     onclick="EventsMgr.toggleActive('${evt.id}')">
+                     onclick="EventsMgr.toggleActive('${jsArg(evt.id)}')">
                     <div style="flex:1;">
-                        <div style="font-weight:700;font-size:13px;color:${isActive ? 'var(--accent)' : 'var(--text)'};">${evt.name}</div>
-                        <div style="font-size:10px;color:var(--text-muted);">${evt.date} · ${evt.songs.length} canción${evt.songs.length !== 1 ? 'es' : ''}</div>
+                        <div style="font-weight:700;font-size:13px;color:${isActive ? 'var(--accent)' : 'var(--text)'};">${escHtml(evt.name)}</div>
+                        <div style="font-size:10px;color:var(--text-muted);">${escHtml(evt.date)} · ${evt.songs.length} canción${evt.songs.length !== 1 ? 'es' : ''}</div>
                     </div>
                     <span style="font-size:10px;color:var(--text-muted);">${isActive ? '▲' : '▼'}</span>
                     <span style="cursor:pointer;padding:3px 7px;border-radius:5px;background:rgba(255,60,60,0.12);color:rgba(255,100,100,0.8);font-size:11px;font-weight:700;"
-                          onclick="event.stopPropagation();EventsMgr.deleteEvent('${evt.id}')" title="Eliminar evento">✕</span>
+                          onclick="event.stopPropagation();EventsMgr.deleteEvent('${jsArg(evt.id)}')" title="Eliminar evento">✕</span>
                 </div>
                 ${isActive ? `<div style="padding:8px;">${songsHTML}
                     <div style="margin-top:6px;padding:6px;text-align:center;font-size:10px;color:var(--text-muted);border:1px dashed rgba(255,255,255,0.12);border-radius:6px;">

@@ -194,6 +194,7 @@ function captureAndSavePreset(name) {
         _ts:              Date.now(),
         _v:               APP_STATE_VERSION,
         eqState:          eqSnap,
+        environment:      currentEnv,
         globalTranspose:  globalTranspose,
         globalOctave:     globalOctave,
         activeCategories: JSON.parse(JSON.stringify(activeCategories)),
@@ -216,6 +217,14 @@ function captureAndSavePreset(name) {
 }
 
 function loadPreset(data) {
+    // Acoustic profile the CCs were captured under: restore the selector too, so a preset made
+    // in Hall does not load into a Studio selector (a later tone change would re-derive in Studio).
+    if (typeof data.environment === 'string' && ['Studio','Live','Hall','Jazz'].includes(data.environment)) {
+        currentEnv = data.environment;
+        try { localStorage.setItem('casioEnv', currentEnv); } catch (e) {}
+        const envSel = document.getElementById('envSelector');
+        if (envSel) envSel.value = currentEnv;
+    }
     if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
     // Presets captured before the octave redesign (no _v) carry the legacy -1
     // compensation. Loading them must not resurrect it on top of the new defaults.
