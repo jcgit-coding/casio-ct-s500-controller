@@ -35,8 +35,15 @@ const CAT_RELEASE_NEUTRAL = {
     'PIPE':             76,
     'EDM SYNTH':        74,
 };
+// CC72 is RELATIVE (64 = the tone's own release, tabla 14.4), so a "longer than neutral"
+// value is an app-added tail on top of what Casio designed. v301 caps it at +6
+// (it was up to +18) so strings/brass/pads do not smear, and BYPASS EQ sends 64.
+// Pendiente revisar JC: oir strings/pads/brass con +6 vs 64 (BYPASS) en el teclado.
+const RELEASE_MAX_DEV = 6;
 function releaseNeutral(part) {
-    return CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
+    if (typeof eqBypass !== 'undefined' && eqBypass) return RELEASE_NEUTRAL;
+    const v = CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
+    return Math.min(v, RELEASE_NEUTRAL + RELEASE_MAX_DEV);
 }
 // CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
 // CC1=Modulation, CC5=Portamento Time, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal, CC126=Mono Mode
@@ -581,6 +588,26 @@ function initApp() {
             });
             // Re-send CC72 on every part -- a ~57-CC burst from 3xapplySmartProfile
             // triggers the CT-S500 hardware controller reset multiple times.
+            resyncAllSustain();
+            switchEQ(activePart);
+        });
+    }
+
+    // BYPASS EQ: A/B a tone with and without any profile (neutral CCs, GM default sends).
+    const btnBypass = document.getElementById('btnEqBypass');
+    if (btnBypass) {
+        const paintBypass = () => {
+            btnBypass.classList.toggle('btn-primary', eqBypass);
+            btnBypass.textContent = eqBypass ? 'BYPASS: ON' : 'BYPASS EQ';
+        };
+        paintBypass();
+        btnBypass.addEventListener('click', () => {
+            eqBypass = !eqBypass;
+            try { localStorage.setItem('casioEqBypass', eqBypass ? '1' : '0'); } catch (e) {}
+            paintBypass();
+            ['U1', 'U2', 'L'].forEach(part => {
+                if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
+            });
             resyncAllSustain();
             switchEQ(activePart);
         });

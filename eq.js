@@ -30,7 +30,7 @@ const EQ_SECTIONS = [
         title: 'Vibrato (LFO)',
         controls: [
             { label: 'RATE',  cc: 76, def: 64, tip: 'Vibrato Rate' },
-            { label: 'DEPTH', cc: 77, def: 0,  tip: 'Vibrato Depth' },
+            { label: 'DEPTH', cc: 77, def: 64, tip: 'Vibrato Depth' },
             { label: 'DELAY', cc: 78, def: 64, tip: 'Vibrato Delay' },
         ]
     },
@@ -927,34 +927,74 @@ const TONE_ROLE = {
 };
 
 const clampCC = (v, a, b) => Math.max(a, Math.min(b, v));
-// Studio = the role base; the other rooms reshape it with fixed rules.
-function derive(env, S) {
-    if (env === 'Live') return {
-        74: clampCC(S[74] + 6, 0, 127), 71: clampCC(S[71] + 1, 0, 127), 73: clampCC(S[73] - 4, 0, 127),
-        76: S[76], 77: S[77], 78: S[78],
-        91: clampCC(S[91] - 6, 8, 127), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] - 2, 0, 127)
+
+// ----------------------------------------------------------------------
+//  REALISM GUARDS (v301)
+//  CC71/73/74/76/77/78 are RELATIVE on the CT-S500 (64 = the tone's own design,
+//  MIDI Implementation tabla 14.4), so every deviation is added on top of what
+//  Casio already tuned. Sends 91/93/94 are absolute. Each role belongs to a
+//  family with hard limits, so no profile (and no environment) can push a
+//  family outside what is musically believable:
+//   - acoustic samples (piano, guitar, bass...): almost no filter/attack change
+//   - sustained (strings, brass, winds, choir): no delay, almost no chorus,
+//     moderate reverb -- echoes and chorus smear sustained notes
+//   - pads: wide envelope/filter, some chorus, still no delay
+//   - synth / lead: filter and short delay allowed
+// ----------------------------------------------------------------------
+const ROLE_CLASS = {};
+[ ['natural',   'piano ep harpsi clav mallet bell dulcimer harp pizz guitar_acoustic guitar_12str guitar_jazz guitar_mute folk_pluck bass bass_slap ethnic_string ethnic_pluck ethnic_perc'],
+  ['sustained', 'strings_solo strings_ens brass_solo brass_ens brass_hard synth_brass sax reed flute organ_pipe accordion harmonica harmonium bagpipe voice ethnic_flute ethnic_reed'],
+  ['organ',     'organ'],
+  ['pad',       'piano_pad synth_strings pad_strings pad_saw pad_glass synth_pad guitar_pad'],
+  ['synth',     'bass_synth seq_bass guitar_clean guitar_drive guitar_dist guitar_synth guitar_talk edm hit sfx generic vocoder'],
+  ['lead',      'synth_lead lead_soft pluck arp']
+].forEach(([cls, names]) => names.split(' ').forEach(n => { ROLE_CLASS[n] = cls; }));
+
+// d74/d71/d73/dv: max deviation from 64 (cutoff, resonance, attack, vibrato).
+// r/ch/dl: [min,max] for reverb / chorus / delay sends.
+const CLASS_LIMITS = {
+    natural:   { d74: 4,  d71: 2, d73: 6,  dv: 4,  r: [8, 34],  ch: [0, 6],  dl: [0, 0] },
+    sustained: { d74: 6,  d71: 2, d73: 10, dv: 6,  r: [14, 40], ch: [0, 4],  dl: [0, 0] },
+    organ:     { d74: 6,  d71: 2, d73: 6,  dv: 12, r: [14, 40], ch: [0, 24], dl: [0, 0] },
+    pad:       { d74: 12, d71: 6, d73: 14, dv: 8,  r: [20, 52], ch: [0, 14], dl: [0, 0] },
+    synth:     { d74: 12, d71: 6, d73: 12, dv: 6,  r: [8, 32],  ch: [0, 20], dl: [0, 8] },
+    lead:      { d74: 12, d71: 6, d73: 12, dv: 6,  r: [10, 34], ch: [0, 20], dl: [0, 12] }
+};
+
+// Environments only move the room (reverb / chorus). Cutoff, attack, vibrato and
+// delay are never touched by the environment. Hall may exceed the family reverb
+// ceiling by 12 -- that is the whole point of a hall.
+function shapeProfile(role, S, env) {
+    const L = CLASS_LIMITS[ROLE_CLASS[role] || 'natural'];
+    const dev = (v, d) => 64 + clampCC((v === undefined ? 64 : v) - 64, -d, d);
+    let rev = S[91], cho = S[93], revMax = L.r[1];
+    if (env === 'Live')      { rev = Math.round(rev * 0.7); }
+    else if (env === 'Hall') { rev = rev + 14; revMax += 12; }
+    else if (env === 'Jazz') { rev = rev + 4; cho = Math.round(cho * 0.5); }
+    return {
+        74: dev(S[74], L.d74), 71: dev(S[71], L.d71), 73: dev(S[73], L.d73),
+        76: dev(S[76], L.dv),  77: dev(S[77], L.dv),  78: dev(S[78], L.dv),
+        91: clampCC(rev, L.r[0], revMax),
+        93: clampCC(cho, L.ch[0], L.ch[1]),
+        94: clampCC(S[94], L.dl[0], L.dl[1])
     };
-    if (env === 'Hall') return {
-        74: clampCC(S[74] - 2, 0, 127), 71: S[71], 73: clampCC(S[73] + 3, 0, 127),
-        76: S[76], 77: S[77], 78: clampCC(S[78] + 4, 0, 127),
-        91: clampCC(S[91] + 30, 30, 72), 93: clampCC(S[93] - 2, 0, 127), 94: clampCC(S[94] - 2, 0, 127)
-    };
-    if (env === 'Jazz') return {
-        74: clampCC(S[74] - 5, 0, 127), 71: clampCC(S[71] + 1, 0, 127), 73: clampCC(S[73] + 2, 0, 127),
-        76: S[76], 77: S[77], 78: S[78],
-        91: clampCC(S[91] + 6, 14, 58), 93: clampCC(S[93] - 4, 0, 127), 94: clampCC(S[94] - 4, 0, 127)
-    };
-    return { ...S };
 }
+
+// BYPASS EQ: every relative CC at its neutral (64), sends at the GM defaults
+// (reverb 40, chorus 0, delay 0) -- to A/B a tone with and without any profile.
+let eqBypass = false;
+try { eqBypass = localStorage.getItem('casioEqBypass') === '1'; } catch (e) {}
+const BYPASS_PROFILE = { 74: 64, 71: 64, 73: 64, 76: 64, 77: 64, 78: 64, 91: 40, 93: 0, 94: 0 };
 
 // ======================================================================
 //  TONE + ENVIRONMENT PRESET RESOLVER
 // ======================================================================
 function getToneEnvPreset(tone, cat, env) {
+    if (eqBypass) return { ...BYPASS_PROFILE };
     const name = (tone && (tone.name || tone.text) || '').toUpperCase().trim();
     const c = (cat || (tone && tone.category) || 'PIANO').toUpperCase().trim();
     const role = TONE_ROLE[name] || CAT_ROLE[c] || 'generic';
-    return derive(env || 'Studio', ROLES[role] || ROLES.generic);
+    return shapeProfile(role, ROLES[role] || ROLES.generic, env || 'Studio');
 }
 
 function applySmartProfile(part, category) {
@@ -970,7 +1010,7 @@ function applySmartProfile(part, category) {
     // 2. Resolve Tone + Environment Profile
     const tone = currentTone[part];
     const toneId = tone?.id;
-    const userOverride = toneId != null && toneEQ[toneId]?.[currentEnv];
+    const userOverride = !eqBypass && toneId != null && toneEQ[toneId]?.[currentEnv];
     
     // Fallback to rich Tone + Environment Preset Engine
     const profile = userOverride || getToneEnvPreset(tone, cat, currentEnv);

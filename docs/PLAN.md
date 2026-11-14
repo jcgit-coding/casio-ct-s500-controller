@@ -132,13 +132,40 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Se mantienen en el EQ:** SOSTENUTO (CC66) y SOFT (CC67). Se quitaron por error y se restauraron: el usuario solo tiene pedal de sustain (CC64), así que los botones de la app son su única forma de usar esos dos pedales.
 - **Verificado en navegador:** 0 botones `sus-*`, sin texto SUSTAIN, `tuning` y `susRelease` ya no existen, estado legacy con `sus:true` carga sin errores, fader CUTOFF envía solo `74:70` y el perfil envía CC72=64 (neutro).
 
+### 1.10 Tonos + ambientes: reglas de realismo ✅ v301 (prioridad máxima, pedido 14 nov)
+
+- **Diagnóstico medido** (comparando el código v300 con el spec): cuerdas, pads y voces llevaban **delay 10-20**, **chorus 16-30**, y en Hall **reverb 70-72** (+30 sobre la base). Los CC71/73/74/76/77/78 son **relativos** (64 = diseño del tono), así que cada desviación se sumaba a lo que Casio ya había afinado (piano con cutoff +8, harpsi +16, bell +24, flauta +18...). Además el ambiente movía ataque y cutoff, no solo la sala.
+- **Qué cambió** (`eq.js`): cada rol pertenece a una familia con **límites duros** (`CLASS_LIMITS`); el ambiente ya no toca filtro, ataque, vibrato ni delay.
+
+| Familia | Roles (ej.) | Cutoff / Res. / Ataque / Vibrato (±) | Reverb | Chorus | Delay |
+|---|---|---|---|---|---|
+| natural | piano, ep, guitarra acústica, bajo, mallet | 4 / 2 / 6 / 4 | 8-34 | 0-6 | **0** |
+| sustained | cuerdas, metales, vientos, voz, synth_brass | 6 / 2 / 10 / 6 | 14-40 | 0-4 | **0** |
+| organ | organ | 6 / 2 / 6 / 12 | 14-40 | 0-24 | **0** |
+| pad | pad_*, synth_pad, synth_strings | 12 / 6 / 14 / 8 | 20-52 | 0-14 | **0** |
+| synth | bajos sint., guitarras eléctricas, edm, sfx | 12 / 6 / 12 / 6 | 8-32 | 0-20 | 0-8 |
+| lead | lead, pluck, arp | 12 / 6 / 12 / 6 | 10-34 | 0-20 | 0-12 |
+
+- **Ambientes (solo sala):** Studio = base; Live = reverb ×0,7; Hall = reverb +14 (techo de la familia +12); Jazz = reverb +4 y chorus ×0,5.
+- **Resultado medido:** strings_ens Hall reverb 70 → 52, delay 12 → 0, chorus 16 → 4; pad_strings Hall 70 → 54, delay 16 → 0; synth_pad Hall 72 → 62, delay 20 → 0. Los 60 roles × 4 ambientes cumplen los límites (0 violaciones) y los 764 tonos resuelven a un rol válido.
+- **BYPASS EQ** (Mixer → Acoustic Profile): manda todos los CC relativos a 64 y los sends a los valores GM (reverb 40, chorus 0, delay 0), ignorando perfiles y overrides, para comparar el mismo tono con y sin perfil.
+- **CC72** (release): el "neutro" por categoría llegaba a +18 (pads 82). Ahora tope **+6**; BYPASS manda 64.
+- **Verificado:** CC capturados en el navegador con STRING ENSEMBLE (Studio, Hall, bypass on/off).
+- **Pendiente revisar JC (requiere oído, no se puede verificar sin el teclado):**
+  1. Los límites de `CLASS_LIMITS` y los deltas de ambiente (Hall +14, Live ×0,7, Jazz +4): ¿Hall se nota lo bastante? ¿Pads en Hall (62) siguen "lavados"?
+  2. El tope +6 de CC72 en cuerdas/pads/metales: comparar con BYPASS (64).
+  3. El neutro real de CC71 (resonancia): el spec no tiene tabla; se asume 64.
+  4. Defaults de BYPASS: 91=40/93=0/94=0 son los GM; el default real de cada tono del Casio no se puede leer por MIDI.
+  5. Los overrides del usuario (`toneEQ`, al mover un fader) **no** se limitan a propósito.
+  6. **Cambio real de ambiente** (tipo de reverb y de delay) solo es posible por SysEx: Reverb Type `F0 7F 7F 04 05 01 01 01 01 01 00 vv F7` (§13.1.4) y Casio §13.3.1 / §13.3.3; requiere `sysex: true` (§3 S3). Hoy el "ambiente" solo cambia el nivel de envío.
+
 ---
 
 ## 2. Mixer / EQ (prioridad 2)
 
 | ID | Tema | Evidencia / detalle |
 |---|---|---|
-| M1 | **CC77 `def: 0` es un bug (confirmado por el spec, 14 nov)** | MIDI Implementation §7.17 + tabla 14.4: Vibrato Depth usa −64…0…+63, con **40H (64) = neutro**. `eq.js:33` define `def: 0` = **−64**, el extremo negativo, y los ROLES usan 64. Cambiar `def` a 64. Efecto probable en el sonido de todos los tonos que reseteen el fader. |
+| M1 | ✅ **CC77 `def` 0 → 64** (v301) | El fader nacía en −64 (vibrato depth negativo máximo). Corregido, y `loadAppState` migra a 64 los `eqState[*][77] === 0` guardados. |
 | M2 | **Recalibrar ROLES con `globalOctave = 0`** | Los ROLES se oyeron con la octava vieja (−1). Revisar cutoff/attack/reverb por rol. Prompt de trabajo en el anexo A. |
 | M3 | **Override permanente del tono** (`MED-07`) | `saveToneEQForPart` copia el perfil completo: mover un fader congela los ~18 CC de ese tono y las mejoras futuras de la matriz ya no le llegan. **Medido en v297:** mover solo CUTOFF guardó 11 CCs. Guardar solo el **diff** contra el perfil base. |
 | M4 | ~~Ramas muertas / secuestros de perfil en `eq.js`~~ ✅ **Obsoleto (v297)** | El resolver es exacto: `TONE_ROLE[nombre] \|\| CAT_ROLE[cat]`. Verificado con `MELLOW E.PIANO`→`ep`, `MELLOW/BRIGHT STRINGS`→`strings_ens`, `SYNTH STRINGS`→pad, `BRIGHTNESS`→pad. Ya no hay secuestros por substring. |
@@ -147,7 +174,7 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 | M7 | **Rendimiento del EQ** (`MED-06`) | ~40 `querySelectorAll` globales por cambio de perfil y 2 por tick de drag. Precomputar un `Map` en `buildEQ`. |
 | M8 | **CC verificados contra el spec (14 nov)** | Documentados por Casio: CC71 resonancia (47H, valor 0-127 sin tabla de neutro), CC72 release (48H), CC73 attack (49H), CC74 cutoff (4AH), CC76/77/78 vibrato rate/depth/delay (4CH/4DH/4EH), CC91/93/94 sends de reverb/chorus/delay (5BH/5DH/5EH). **CC72/73/74/76/77/78 son relativos −64…+63 con 64 = neutro**: un ROLE que ponga 90 en CC74 son +26, no "brillo": mover cutoff/attack con tanta amplitud explica sonidos artificiales (M10). Ya no hay CC "no verificados"; quitar esa marca. Falta verificar en hardware el neutro de CC71 (sin tabla). |
 | M9 | **El preset no guarda el ambiente** (`A2`) | `captureAndSavePreset` no incluye `currentEnv` → un preset guardado en Hall se carga en Studio con los CC de Hall. Añadir `environment` al snapshot y restaurarlo. |
-| M10 | **Los perfiles tono+ambiente suenan artificiales** (reportado 13 nov) | Hipótesis: (a) los ROLES son por rol, no por tono, y 764 tonos comparten ~40 perfiles; (b) se calibraron con `globalOctave = -1`; (c) desviaciones grandes en CC74/71 que el CT-S500 interpreta como filtro; (d) `derive()` mueve ataque/cutoff por ambiente, no solo reverb; (e) no hay bypass para comparar. **Plan:** toggle `BYPASS EQ`, tope de desviación ±6 (reverb/chorus aparte), auditar familia por familia con hardware (Anexo A) y dejar los ambientes solo en reverb/chorus. **Spec (14 nov):** los CC 72-78 son *relativos* (64 = 0), no absolutos: las desviaciones de ROLES/`derive()` se suman al ajuste interno de cada tono, por eso 764 tonos con ~40 perfiles se oyen planos o exagerados. Además M1 (CC77 en −64) afecta a todos. Prioridad: corregir M1 → BYPASS EQ → tope ±6. |
+| M10 | **Los perfiles tono+ambiente suenan artificiales** (reportado 13 nov) | Hipótesis: (a) los ROLES son por rol, no por tono, y 764 tonos comparten ~40 perfiles; (b) se calibraron con `globalOctave = -1`; (c) desviaciones grandes en CC74/71 que el CT-S500 interpreta como filtro; (d) `derive()` mueve ataque/cutoff por ambiente, no solo reverb; (e) no hay bypass para comparar. **Plan:** toggle `BYPASS EQ`, tope de desviación ±6 (reverb/chorus aparte), auditar familia por familia con hardware (Anexo A) y dejar los ambientes solo en reverb/chorus. **Spec (14 nov):** los CC 72-78 son *relativos* (64 = 0), no absolutos: las desviaciones de ROLES/`derive()` se suman al ajuste interno de cada tono, por eso 764 tonos con ~40 perfiles se oyen planos o exagerados. Además M1 (CC77 en −64) afecta a todos. Prioridad: corregir M1 → BYPASS EQ → tope ±6. **v301: implementado en §1.10 (guardas por familia, ambientes solo sala, BYPASS EQ); falta validar de oído.** |
 
 ---
 

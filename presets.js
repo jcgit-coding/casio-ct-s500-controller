@@ -358,6 +358,9 @@ function loadAppState() {
 
         if (saved.eqState) {
             Object.assign(eqState, saved.eqState);
+            // CC77 (Vibrato Depth) is relative, 64 = neutral. Older builds defaulted the
+            // fader to 0 (= -64, max negative depth) and persisted it: migrate to neutral.
+            ['U1','U2','L'].forEach(p => { if (eqState[p] && Number(eqState[p][77]) === 0) eqState[p][77] = 64; });
             // Purge obsolete phantom CCs and CC72 (CC72 is never persisted)
             ['U1','U2','L'].forEach(p => {
                 [72, 95].forEach(cc => {
