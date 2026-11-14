@@ -205,7 +205,23 @@ function saveToneEQForPart(part) {
     delete profile[11]; delete profile['11'];
     // Performance CCs (modulation, pedal switches) are live state -- never persist
     PERFORMANCE_CCS.forEach(cc => { delete profile[cc]; delete profile[String(cc)]; });
-    toneEQ[id][currentEnv] = profile;
+    // Persist only what the user actually moved (diff vs the base profile). Copying the whole
+    // profile froze ~11 CCs per tone+environment and later profile improvements never reached it.
+    // BYPASS EQ is a diagnostic mode and never persists.
+    if (typeof eqBypass !== 'undefined' && eqBypass) return;
+    const base = getToneEnvPreset(tone, activeCategories[part], currentEnv);
+    const diff = {};
+    for (const [cc, val] of Object.entries(profile)) {
+        let ref = base[cc];
+        if (ref === undefined) ref = EQ_CONTROLS.find(c => String(c.cc) === String(cc))?.def;
+        if (ref === undefined || Number(ref) !== Number(val)) diff[cc] = val;
+    }
+    if (Object.keys(diff).length) {
+        toneEQ[id][currentEnv] = diff;
+    } else {
+        delete toneEQ[id][currentEnv];
+        if (!Object.keys(toneEQ[id]).length) delete toneEQ[id];
+    }
     saveToneEQ();
 }
 

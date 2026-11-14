@@ -1013,7 +1013,10 @@ function applySmartProfile(part, category) {
     const userOverride = !eqBypass && toneId != null && toneEQ[toneId]?.[currentEnv];
     
     // Fallback to rich Tone + Environment Preset Engine
-    const profile = userOverride || getToneEnvPreset(tone, cat, currentEnv);
+    // A user override is a sparse diff on top of the base profile (legacy overrides are full
+    // profiles and simply replace every CC, as before).
+    const baseProfile = getToneEnvPreset(tone, cat, currentEnv);
+    const profile = userOverride ? { ...baseProfile, ...userOverride } : baseProfile;
 
     if (profile) {
         for (const [cc, val] of Object.entries(profile)) {
@@ -1152,9 +1155,15 @@ function buildEQ() {
                 // Capture the active part when the drag starts so both 'input' and 'change'
                 // use the same part even if the user switches EQ target mid-drag.
                 let _faderPart = activePart;
+                let _dragging = false;
+                fader.addEventListener('pointerdown', () => { _dragging = true; _faderPart = activePart; });
+                const _endDrag = () => { _dragging = false; };
+                fader.addEventListener('pointerup', _endDrag);
+                fader.addEventListener('pointercancel', _endDrag);
                 fader.addEventListener('input', e => {
                     const v = parseInt(e.target.value);
-                    _faderPart = activePart; // refresh on every real user move
+                    // Pointer drag: keep the part captured at pointerdown. Keyboard/wheel (no pointer): follow the active part.
+                    if (!_dragging) _faderPart = activePart;
                     document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
                         sp.innerText = formatVal(ctrl.label, v);
                     });

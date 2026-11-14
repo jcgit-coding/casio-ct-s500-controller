@@ -11,7 +11,7 @@ function updateSyncStatus(msg) {
     if (el) el.innerText = msg;
 }
 
-function ghToken() { return localStorage.getItem('casioGhToken') || ''; }
+function ghToken() { return localStorage.getItem('casioGhToken') || localStorage.getItem('github_pat') || ''; }
 
 // Merge two preset stores by timestamp -- most recent entry wins.
 // Tombstones ({_deleted,_ts}) are kept so deletions propagate across devices.
@@ -160,11 +160,13 @@ function initPresets() {
         const trimmed = t.trim();
         if (trimmed) {
             localStorage.setItem('casioGhToken', trimmed);
+            localStorage.setItem('github_pat', trimmed); // legacy key used by library.js, kept in sync (R4)
             const tokenEl = document.getElementById('syncTokenDisplay');
             if (tokenEl) tokenEl.innerText = '✔ Token configurado';
             await syncPush();
         } else {
             localStorage.removeItem('casioGhToken');
+            localStorage.removeItem('github_pat');
             const tokenEl = document.getElementById('syncTokenDisplay');
             if (tokenEl) tokenEl.innerText = 'No token (read only)';
             updateSyncStatus('Token eliminado');

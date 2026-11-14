@@ -2,6 +2,9 @@
 const escHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 // For a string argument inside an inline onclick="fn('...')": JS-escape first, HTML-escape after (the browser decodes entities before running the JS).
 const jsArg = v => escHtml(String(v ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/[\n\r]/g, ' '));
+// One GitHub token: 'casioGhToken' (presets) is the source of truth; 'github_pat' is the legacy key (v301 R4).
+const ghPat = () => { try { return localStorage.getItem('casioGhToken') || localStorage.getItem('github_pat') || ''; } catch (e) { return ''; } };
+const setGhPat = t => { try { if (t) { localStorage.setItem('casioGhToken', t); localStorage.setItem('github_pat', t); } else { localStorage.removeItem('casioGhToken'); localStorage.removeItem('github_pat'); } } catch (e) {} };
 const safeUrl = u => /^https?:\/\//i.test(String(u || '')) ? escHtml(u) : '#';
 
 /**
@@ -428,10 +431,10 @@ const RepertorioApp = {
 function initCloudSync() {
     const btnSaveKeys = document.getElementById('btnSaveApiKeys');
     if(btnSaveKeys) {
-        document.getElementById('api-key-github').value = localStorage.getItem('github_pat') || '';
+        document.getElementById('api-key-github').value = ghPat() || '';
 
         btnSaveKeys.addEventListener('click', () => {
-            localStorage.setItem('github_pat', document.getElementById('api-key-github').value.trim());
+            setGhPat(document.getElementById('api-key-github').value.trim());
             btnSaveKeys.innerText = 'Guardado!';
             btnSaveKeys.style.background = '#00ffcc';
             btnSaveKeys.style.color = '#000';
@@ -786,7 +789,7 @@ const EventsMgr = {
     },
 
     async _pushToCloud(events) {
-        const pat = localStorage.getItem('github_pat');
+        const pat = ghPat();
         if (!pat) return;
         const path = `https://api.github.com/repos/${RepertoireSync.repoPath}/contents/library/events.json`;
         const body = { message: 'chore(events): sync events', content: btoa(unescape(encodeURIComponent(JSON.stringify(events, null, 2)))) };
@@ -796,7 +799,7 @@ const EventsMgr = {
     },
 
     async loadFromCloud() {
-        const pat = localStorage.getItem('github_pat');
+        const pat = ghPat();
         // Siempre cargar el archivo público (funciona sin PAT desde GitHub Pages)
         try {
             const res = await fetch('library/events.json?v=' + Date.now());
@@ -990,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const btnSaveCloud = document.getElementById('lib-btn-save-cloud');
 if (btnSaveCloud) {
     btnSaveCloud.addEventListener('click', async () => {
-        const pat = localStorage.getItem('github_pat');
+        const pat = ghPat();
         if (!pat) {
             alert("Please go to PRESETS and configure your GitHub PAT to save to the cloud.");
             document.querySelector('[data-target="view-settings"]')?.click();
@@ -1165,7 +1168,7 @@ const LacuerdaImport = (() => {
     }
 
     async function runRemote(artist, displayName, artistId) {
-        const pat = localStorage.getItem('github_pat');
+        const pat = ghPat();
         if (!pat) {
             setStatus('⚠ Falta token de GitHub. Guárdalo en Configuración.', 'li-err');
             return;
