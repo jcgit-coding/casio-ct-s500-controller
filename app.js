@@ -8,7 +8,7 @@ let midiOutput  = null;
 // PC Synth active notes. Sustain pedal (CC64) is handled natively by SpessaSynth per channel.
 const pcActiveNotes = {};     // "ch:note" -> { ch, shiftedNote }
 let pcSynthEnabled = false;  // OFF by default -- user must toggle on
-let mctrlEnabled = false;    // MIDI Ctrl ON/OFF -- off by default
+let mctrlEnabled = false;    // VIRTUAL keyboard ON/OFF -- off by default
 
 // App SUSTAIN button emulates the Casio panel SUSTAIN (long release, notes fade out
 // naturally) via CC72 Release Time -- NOT a damper hold (CC64 is left to the physical pedal).
@@ -226,6 +226,7 @@ let activePart = 'U1';
 let midiInitAttempted = false;
 let _midiConnectTimer = null;
 let _lastMidiOutputId = null;
+let _forceMidiResync = false;
 // Guard: until this timestamp, the EQ fader 'input' events are ignored.
 // Some mobile browsers (Android Chrome) fire 'input' on programmatic .value
 // changes -- and those events can arrive on a later task, after the synchronous
@@ -281,21 +282,41 @@ function reconnectMIDI() {
     console.log('[MIDI] outputs:', allOuts.map(o => o.name + ' state=' + o.state + ' conn=' + o.connection));
     console.log('[MIDI] inputs:', allIns.map(i => i.name + ' state=' + i.state + ' conn=' + i.connection));
 
-    // Pick the best port by priority: CASIO/CT-S > Bluetooth adapter > USB > generic MIDI > any.
+    // Transport: Bluetooth (WU-BT10 / BLE MIDI) vs wired (USB cable). Name-based, since
+    // Web MIDI exposes no transport field. Virtual cables are never the keyboard.
+    const isBle = p => /WU-BT|BLE|BLUETOOTH/i.test(p.name);
+    const isVirtual = p => /LOOPMIDI|RTPMIDI|VIRTUAL|THROUGH/i.test(p.name);
+    const isCasio = p => /CASIO|CT-S/i.test(p.name);
+    // Score within a transport: CASIO/CT-S > USB > generic MIDI > any.
     const portScore = p => {
         const n = p.name.toUpperCase();
-        if (n.includes("CASIO") || n.includes("CT-S")) return 5;
-        if (n.includes("WU-BT") || n.includes("BLE") || n.includes("BLUETOOTH")) return 4;
-        if (n.includes("LOOPMIDI") || n.includes("RTPMIDI") || n.includes("VIRTUAL")) return 1;
+        if (isVirtual(p)) return 1;
+        if (isCasio(p)) return 5;
         if (n.includes("USB")) return 3;
         if (n.includes("MIDI")) return 2;
         return 1;
     };
-    const pickPort = ports => ports
-        .filter(p => p.state === 'connected' && !p.name.toUpperCase().includes("THROUGH"))
-        .reduce((best, p) => (!best || portScore(p) > portScore(best)) ? p : best, null);
-    midiOutput = pickPort(allOuts);
-    midiInput  = pickPort(allIns);
+    const usable = ports => ports.filter(p => p.state === 'connected' && !/THROUGH/i.test(p.name));
+    const best = ports => ports.reduce((b, p) => (!b || portScore(p) > portScore(b)) ? p : b, null);
+
+    // Preference: auto (cable first, Bluetooth as fallback) | wired | ble. Persisted.
+    let pref = 'auto';
+    try { pref = localStorage.getItem('casioMidiTransport') || 'auto'; } catch (e) {}
+    const outs = usable(allOuts), ins = usable(allIns);
+    const pick = (list, want) => {
+        const wired = list.filter(p => !isBle(p)), ble = list.filter(isBle);
+        if (want === 'ble')   return best(ble);
+        if (want === 'wired') return best(wired);
+        return best(wired.filter(p => !isVirtual(p))) || best(ble) || best(wired);
+    };
+    midiOutput = pick(outs, pref);
+    // Input follows the output's transport so a cable output never pairs with a BT input.
+    const inWant = midiOutput ? (isBle(midiOutput) ? 'ble' : 'wired') : pref;
+    midiInput  = pick(ins, inWant) || pick(ins, pref);
+    const _tp = document.getElementById('midiTransportInfo');
+    if (_tp) _tp.textContent =
+        'Out: ' + (outs.map(o => o.name + (isBle(o) ? ' [BT]' : '')).join(', ') || '—') +
+        ' | In: ' + (ins.map(i => i.name + (isBle(i) ? ' [BT]' : '')).join(', ') || '—');
     console.log('[MIDI] selected output:', midiOutput?.name, '| selected input:', midiInput?.name);
 
     if (midiOutput) {
@@ -315,8 +336,12 @@ function reconnectMIDI() {
         const warn = document.getElementById('midiPermissionWarn');
         if (warn) warn.style.display = 'none';
         if (midiOutput) {
+            // Resync only when the output actually changed (or on manual Reconnect):
+            // Bluetooth ports flap, and every statechange must not reset the 3 tones.
+            const changed = _lastMidiOutputId !== midiOutput.id;
             _lastMidiOutputId = midiOutput.id;
-            pushAllToKeyboard(false);
+            if (changed || _forceMidiResync) pushAllToKeyboard(false);
+            _forceMidiResync = false;
         }
     } else {
         const outs = [...midiAccess.outputs.values()].filter(o => o.state === 'connected').length;
@@ -467,8 +492,18 @@ function initApp() {
         if (window.pcSynth && typeof window.pcSynth._audio === 'function') window.pcSynth._audio();
     }, { once: true });
 
+    const _tsel = document.getElementById('midiTransport');
+    if (_tsel) {
+        try { _tsel.value = localStorage.getItem('casioMidiTransport') || 'auto'; } catch (e) {}
+        _tsel.addEventListener('change', () => {
+            try { localStorage.setItem('casioMidiTransport', _tsel.value); } catch (e) {}
+            _forceMidiResync = true;
+            if (midiAccess) reconnectMIDI();
+        });
+    }
     const handleConnectClick = () => {
         midiInitAttempted = true;
+        _forceMidiResync = true;
         if (midiAccess) reconnectMIDI(); else initMIDI();
     };
     document.getElementById("connectBtn")?.addEventListener("click", handleConnectClick);
@@ -1665,7 +1700,7 @@ document.getElementById('pcSynthToggle')?.addEventListener('change', e => {
     }
 });
 
-// MIDI Ctrl ON/OFF toggle
+// VIRTUAL ON/OFF toggle
 document.getElementById('mctrlToggle')?.addEventListener('change', e => {
     mctrlEnabled = e.target.checked;
     const rack = document.getElementById('mctrl-rack-content');
@@ -1696,7 +1731,7 @@ buildGMSelectors();
         }
     }, { once: false, passive: true });
 });
-// Sync MIDI Ctrl toggle UI with initial state
+// Sync VIRTUAL toggle UI with initial state
 (function syncMctrlUI() {
     const t = document.getElementById('mctrlToggle');
     if (t) t.checked = mctrlEnabled;

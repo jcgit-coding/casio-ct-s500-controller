@@ -105,22 +105,41 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
   4. SysEx GM2 Master Coarse Tuning **no** evita el re-muestreo: misma limitación.
 - **Decisión pendiente:** ¿priorizamos calidad de timbre (transponer en el hardware) o comodidad (transponer desde la app)?
 
+### 1.7 El Casio NO tiene mensaje MIDI para su Transpose/Octave (verificado 14 nov)
+
+- **Fuente:** *CT-S500/CT-S1000V MIDI Implementation* oficial de Casio (firmware 1.06+). Líneas del texto extraído: Note On/Off (357, 370), RPN (709-750), SysEx universal (923-1015), SysEx Casio §13.3 (1049-1280).
+- **Transpose y Octave Shift:** solo aparecen como efecto de **salida** (el teclado transmite otro número de nota). No hay mensaje de **entrada** que los active.
+- **§14.15 "Octave Shift"** (ID 12H) es del *vocalist* de la CT-S1000V; no existe en el CT-S500.
+- **Lo único aceptado para afinar:** Channel Coarse Tune (RPN 0:2, MSB 28H-58H) y Master Coarse Tuning (`F0 7F 7F 04 04 ll mm F7`). Ambos afinan el generador y se ignoran en tonos Drum.
+- **Consecuencia:** no se puede "activar el Transpose del Casio" por MIDI. §1.6 sigue abierta: que RPN **re-muestree** es hipótesis, no está confirmado; la prueba A/B lo decide.
+- **Nota:** no hay emulador oficial del CT-S500. Para pruebas sin teclado: puerto virtual (loopMIDI) + sintetizador GM + monitor de bytes; el timbre real solo se valida en hardware.
+
+### 1.8 Conexión Bluetooth (WU-BT10) sin romper el cable ✅ v299
+
+- **Antes:** el puerto se elegía por nombre; con cable y BT a la vez ambos puntuaban 5 y ganaba el primero de la lista (no determinista). Cada `statechange` (los puertos BLE parpadean) reenviaba el estado completo a las 3 partes (R2).
+- **Ahora:** transporte BT/cable por nombre; **Auto = cable primero**, Bluetooth como alternativa; selector manual (Auto / Solo cable / Solo Bluetooth) persistido en `casioMidiTransport`; la entrada sigue al transporte de la salida; el estado completo solo se reenvía si **cambió el puerto** o se pulsa Reconnect.
+- **Con solo cable conectado el comportamiento es el mismo que antes.**
+- **Windows (14 nov, verificado):** el WU-BT10 **solo empareja como audio** (`WU-BT10 AUDIO`); no se crea ningún puerto MIDI. Foro Casio 2021-2023: nadie logró BLE MIDI en Windows; el controlador de Korg no lo reconoce; según soporte (de segunda mano) el MIDI Bluetooth es solo Android/iOS con Chordana. **No hay ruta documentada.** Alternativas: cable USB (funciona), adaptador BLE MIDI estándar por USB (no probado con el CT-S500), o puente rtpMIDI por Wi-Fi. El selector de §1.8 se queda por si Windows llega a exponer un puerto.
+- **Pendiente en hardware:** nombre real del puerto BT (si no contiene WU-BT/BLE/BLUETOOTH se tratará como cable), latencia, y si las ráfagas de CC necesitan más espaciado por BLE.
+- **Pendiente (decidido 14 nov, no empezar sin orden):** probar **Web Bluetooth** como vía alternativa a Web MIDI, en PC y en Android. Paso 1: página de diagnóstico (~40 líneas) que pida el WU-BT10 y compruebe si expone el servicio BLE MIDI estándar `03B80E5A-EDE8-4B33-A751-6CE34EC4C700` y su característica. Si lo expone → implementar conexión directa (paquetes BLE MIDI con timestamp). Si no (hay un reporte de foro de que no cumple el estándar) → cerrar el tema y quedarse con cable USB. En Android, Chrome ya no lista el WU-BT10 por Web MIDI; Casio solo lo documenta con Chordana / Music Space.
+- **Cierra parcialmente R2 / L11** (el reenvío por reconexión); queda leer `_lastMidiOutputId` también al cargar.
+
 ---
 
 ## 2. Mixer / EQ (prioridad 2)
 
 | ID | Tema | Evidencia / detalle |
 |---|---|---|
-| M1 | **CC77 `def: 0` vs ROLES `77: 64`** | `eq.js:33` define el fader con `def: 0`, pero todos los ROLES usan 64 como neutro. Verificar en hardware cuál es el neutro real (0 o 64) y alinear `def` con ROLES. |
+| M1 | **CC77 `def: 0` es un bug (confirmado por el spec, 14 nov)** | MIDI Implementation §7.17 + tabla 14.4: Vibrato Depth usa −64…0…+63, con **40H (64) = neutro**. `eq.js:33` define `def: 0` = **−64**, el extremo negativo, y los ROLES usan 64. Cambiar `def` a 64. Efecto probable en el sonido de todos los tonos que reseteen el fader. |
 | M2 | **Recalibrar ROLES con `globalOctave = 0`** | Los ROLES se oyeron con la octava vieja (−1). Revisar cutoff/attack/reverb por rol. Prompt de trabajo en el anexo A. |
 | M3 | **Override permanente del tono** (`MED-07`) | `saveToneEQForPart` copia el perfil completo: mover un fader congela los ~18 CC de ese tono y las mejoras futuras de la matriz ya no le llegan. **Medido en v297:** mover solo CUTOFF guardó 11 CCs. Guardar solo el **diff** contra el perfil base. |
 | M4 | ~~Ramas muertas / secuestros de perfil en `eq.js`~~ ✅ **Obsoleto (v297)** | El resolver es exacto: `TONE_ROLE[nombre] \|\| CAT_ROLE[cat]`. Verificado con `MELLOW E.PIANO`→`ep`, `MELLOW/BRIGHT STRINGS`→`strings_ens`, `SYNTH STRINGS`→pad, `BRIGHTNESS`→pad. Ya no hay secuestros por substring. |
 | M5 | **`_faderPart` se refresca en cada `input`** (`MED-05`) | `eq.js`: cambiar de parte a mitad de un drag escribe MIDI en una parte y persiste en otra. |
 | M6 | **DETUNE** (RPN 0:1) | Verificar rango real en el CT-S500 y si 64 = 0 cents. Añadir doble clic para reset si no existe. Es el único control del EQ que no es CC: no debe quedar fuera del modelo de estado. |
 | M7 | **Rendimiento del EQ** (`MED-06`) | ~40 `querySelectorAll` globales por cambio de perfil y 2 por tick de drag. Precomputar un `Map` en `buildEQ`. |
-| M8 | **CC no verificados** | CC76/77/78/94 dependen del timbre. Donde no haya verificación, marcar el control como "no verificado" en el tooltip en vez de presentarlo como hardware seguro. |
+| M8 | **CC verificados contra el spec (14 nov)** | Documentados por Casio: CC71 resonancia (47H, valor 0-127 sin tabla de neutro), CC72 release (48H), CC73 attack (49H), CC74 cutoff (4AH), CC76/77/78 vibrato rate/depth/delay (4CH/4DH/4EH), CC91/93/94 sends de reverb/chorus/delay (5BH/5DH/5EH). **CC72/73/74/76/77/78 son relativos −64…+63 con 64 = neutro**: un ROLE que ponga 90 en CC74 son +26, no "brillo": mover cutoff/attack con tanta amplitud explica sonidos artificiales (M10). Ya no hay CC "no verificados"; quitar esa marca. Falta verificar en hardware el neutro de CC71 (sin tabla). |
 | M9 | **El preset no guarda el ambiente** (`A2`) | `captureAndSavePreset` no incluye `currentEnv` → un preset guardado en Hall se carga en Studio con los CC de Hall. Añadir `environment` al snapshot y restaurarlo. |
-| M10 | **Los perfiles tono+ambiente suenan artificiales** (reportado 13 nov) | Hipótesis: (a) los ROLES son por rol, no por tono, y 764 tonos comparten ~40 perfiles; (b) se calibraron con `globalOctave = -1`; (c) desviaciones grandes en CC74/71 que el CT-S500 interpreta como filtro; (d) `derive()` mueve ataque/cutoff por ambiente, no solo reverb; (e) no hay bypass para comparar. **Plan:** toggle `BYPASS EQ`, tope de desviación ±6 (reverb/chorus aparte), auditar familia por familia con hardware (Anexo A) y dejar los ambientes solo en reverb/chorus. |
+| M10 | **Los perfiles tono+ambiente suenan artificiales** (reportado 13 nov) | Hipótesis: (a) los ROLES son por rol, no por tono, y 764 tonos comparten ~40 perfiles; (b) se calibraron con `globalOctave = -1`; (c) desviaciones grandes en CC74/71 que el CT-S500 interpreta como filtro; (d) `derive()` mueve ataque/cutoff por ambiente, no solo reverb; (e) no hay bypass para comparar. **Plan:** toggle `BYPASS EQ`, tope de desviación ±6 (reverb/chorus aparte), auditar familia por familia con hardware (Anexo A) y dejar los ambientes solo en reverb/chorus. **Spec (14 nov):** los CC 72-78 son *relativos* (64 = 0), no absolutos: las desviaciones de ROLES/`derive()` se suman al ajuste interno de cada tono, por eso 764 tonos con ~40 perfiles se oyen planos o exagerados. Además M1 (CC77 en −64) afecta a todos. Prioridad: corregir M1 → BYPASS EQ → tope ±6. |
 
 ---
 
@@ -130,7 +149,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 
 | ID | Tema | Nota |
 |---|---|---|
-| S1 | **GM2 Master Coarse Tuning** `F0 7F 7F 04 04 ll mm ff F7` | Un solo mensaje para todos los canales: atómico, sin ráfagas. Si el CT-S500 lo acepta, sustituye el RPN por canal para OCTAVE/TRANSPOSE. Contra: afecta también al canal 10 (ritmo). |
+| S1 | **GM2 Master Coarse Tuning** `F0 7F 7F 04 04 ll mm ff F7` | Un solo mensaje para todos los canales: atómico, sin ráfagas. Si el CT-S500 lo acepta, sustituye el RPN por canal para OCTAVE/TRANSPOSE (el spec §13.1.3 lo documenta como Receive; no cambia el re-muestreo, solo elimina ráfagas). Contra: afecta también al canal 10 (ritmo). |
 | S2 | **Active DSP / Reverb real (Casio SysEx)** | Requiere el *MIDI Implementation* oficial del CT-S500, sección 13.3. El antiguo plan usaba `F0 44 19 01 ...` como placeholder: **no es una especificación**. |
 | S3 | **Habilitar `sysex: true` de forma opt-in** | Hoy se pide `sysex:false`. Si se habilita, solo en escritorio y con fallback claro si el usuario rechaza el permiso. |
 
@@ -154,7 +173,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 |---|---|---|
 | L1 | `git rm midi.js` | Código muerto desde v228, duplicado divergente de `app.js`. Ya provocó que un comentario falso ("sendCoarseTuning ignora tuning.oct") pareciera verdad. |
 | L2 | ~~Borrar `window.setGlobalTranspose`~~ ✅ v297 | Sin llamadores; resto del experimento de sync transpose (v289). Eliminado. |
-| L3 | `mctrl-oct` (MIDI CTRL) | Es placebo: `mctrlOct` se muestra pero no entra en ningún cálculo. O se conecta a `Pitch`, o se elimina. |
+| L3 | `mctrl-oct` (pestaña VIRTUAL, antes MIDI CTRL) | Es placebo: `mctrlOct` se muestra pero no entra en ningún cálculo. O se conecta a `Pitch`, o se elimina. |
 | L4 | `soundfont.sf2` trackeado (31 MB) | `git rm --cached` y servir por release/CDN. |
 | L5 | `presets.json` trackeado | Está en `.gitignore` pero ya trackeado: los presets del usuario quedan públicos. |
 | L6 | `package.json` + `npm run check` | `node --check` de todos los JS + `tools/validate_raw.js` + CI. Hoy la única validación es manual. |

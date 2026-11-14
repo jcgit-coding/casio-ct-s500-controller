@@ -72,7 +72,7 @@ const Pitch = (() => {
         const out = hasOutput() ? 'ch 0,1,2' : 'sin salida MIDI';
         const when = last ? Math.round((Date.now() - last.at) / 100) / 10 + 's' : '—';
         el.textContent =
-            `OCT ${globalOctave} · TRN ${globalTranspose >= 0 ? '+' + globalTranspose : globalTranspose}` +
+            `OCTAVE ${globalOctave} · TRANSPOSE ${globalTranspose >= 0 ? '+' + globalTranspose : globalTranspose}` +
             ` → RPN ${rpnValue()} (${out})` +
             (last ? ` · ${last.reason} hace ${when}` : '');
     }
