@@ -2,7 +2,7 @@
 
 > **Versión de referencia:** v296 · **Actualizado:** 11 nov 2026
 > **Este es el ÚNICO plan vigente.** Sustituye y absorbe a `PLAN_v218.md`, `PLAN_PRO_DSP_PARAMETERS.md`, `PLAN_PRO_ACOUSTIC_MIXER.md` y `casio_task.md` (eliminados, ver §8).
-> **Revisión vigente:** [`AUDITORIA_v297.md`](AUDITORIA_v297.md) — hallazgos abiertos con evidencia y PoC (13 nov 2026).
+> **Revisión vigente:** §9 — hallazgos de la revisión v297 con evidencia y PoC (13 nov 2026). El histórico de auditorías vive en `docs/archive/` y no es una lista de tareas.
 > Los documentos de auditoría (`AUDITORIA_*.md`, `MIXER_AUDIT.md`, `AUDIT_*.md`, `RESUMEN_SESION_*.md`) se conservan como **histórico**, no como plan: contienen hallazgos ya cerrados y no deben usarse como lista de tareas.
 
 ---
@@ -142,6 +142,8 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | L8 | README y changelog | Sigue en **v288** con ~9 versiones de retraso. |
 | L9 | **Rate limit de GitHub en el badge** | Cada carga pide `api.github.com/.../commits/main`; sin caché, un 403 deja el badge sin fecha. Usar `raw.githubusercontent` o cachear. |
 | L10 | **PC Synth no carga** | `import('esm.sh/spessasynth_lib@4.3.14')` falla con `KeyModifier` ausente en `spessasynth_core`. Fijar también la versión del core. (Fuera del foco, pero roto.) |
+| L11 | **Reconexión MIDI recarga los tonos** (`R2` de §9) | `_lastMidiOutputId` se escribe y nunca se lee: `pushAllToKeyboard(!same)` restauraría el comportamiento documentado (mismo puerto → solo CCs). |
+| L12 | **Unificar el token de GitHub** (`R4` de §9) | `casioGhToken` y `github_pat` conviven; migrar a una sola clave. |
 
 ---
 
@@ -179,8 +181,86 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | `docs/PLAN_PRO_DSP_PARAMETERS.md` | Especulativo: CC16/17/18 y `F0 44 19 01` sin fuente | **Eliminado.** Solo sobrevive la línea de investigación SysEx (§3 S2). |
 | `docs/PLAN_PRO_ACOUSTIC_MIXER.md` | Fases 1 y 2 ya implementadas (CC72/sustain, DETUNE RPN, MONO/POLY, Panic); el Master EQ por CC es falso | **Eliminado.** La Fase 3 (SysEx) se absorbe en §3. |
 | `casio_task.md` | Lista de tareas suelta | **Eliminado.** CC77 → §2 M1; recalibración de ROLES → §2 M2 + anexo A. |
-| `docs/AUDITORIA_*.md`, `MIXER_AUDIT.md`, `AUDIT_*.md` | Histórico | **Se conservan** como registro; no son tareas. |
+| `docs/AUDITORIA_*.md`, `MIXER_AUDIT.md`, `AUDIT_*.md` | Histórico | **Movidos a `docs/archive/`**: son registro, no tareas. |
 | `docs/RESUMEN_SESION_*.md` | Registro de sesión | **Se conserva** como histórico. |
+
+---
+
+## 9. Hallazgos abiertos — revisión v297 (evidencia)
+
+> Método: análisis estático (IDs, globales, `localStorage`, `fetch`, sintaxis) + navegador real con `midiOutput` interceptado. **No probado contra el CT-S500**: lo que depende del hardware está en §6.
+> Cada hallazgo indica dónde se resuelve en este plan. El detalle de método está al final de la sección.
+
+### 9.1 🔴 Alto
+
+| ID | Hallazgo | Evidencia | Se resuelve en |
+|---|---|---|---|
+| **A1** | **XSS almacenado en Library** | `hl()` (`library.js:625`) no escapa el texto y los títulos/artistas se interpolan en `innerHTML` (`:642`, `:650`); los `id` van dentro de `onclick` (`:515/598/649`). **PoC ejecutado:** un `title` con `<img src=x onerror="window.__xss=1">` ejecutó JS (`window.__xss === 1`). Con el PAT en `localStorage`, permite robar el token. | §4 T3 |
+| **A2** | **El preset no guarda el ambiente** | `captureAndSavePreset` (`presets.js:193-210`) no incluye `currentEnv`; `loadPreset` tampoco lo restaura. Guardar en Hall y cargar en Studio deja los CC de Hall con el selector en Studio. | §2 M9 |
+| **A3** | **El botón Import de Library lanza excepción** | `importFromText()` (`library.js:57, 160-163`) lee `lib-song-title-input`, `lib-song-artist-input` y `lib-raw-text-input`, que no existen en `index.html`. Probado: `TypeError: Cannot read properties of null (reading 'value')`. | §4 T5 |
+
+### 9.2 🟠 Medio
+
+| ID | Hallazgo | Evidencia | Se resuelve en |
+|---|---|---|---|
+| **R1** | **Tempo del Trainer ignorado antes de Play** | `_applySpeed()` (`trainer.js:318`) exige `isPlaying`, que se pone en `:321`. El tempo elegido antes de Play nunca se aplica. | §4 T2 |
+| **R2** | **La reconexión MIDI recarga los 3 tonos** | `_lastMidiOutputId` se escribe (`app.js:318`) y nunca se lee: cada reconexión manda Program Change a las 3 partes y corta notas (`HIGH-07`). | §5 L11 (nuevo) |
+| **R3** | **Un fader congela el perfil completo del tono** | Medido: mover solo CUTOFF guardó 11 CCs en `toneEQ` (`{10,71,73,74,76,77,78,91,93,94,999}`) en vez de `{74:101}` (`MED-07`). | §2 M3 |
+| **R4** | **Dos claves para el token de GitHub** | `casioGhToken` (`presets.js:14`) y `github_pat` (`library.js:422`): el usuario pega el PAT dos veces (`HIGH-09`). | §5 L12 (nuevo) |
+| **R5** | **El PC Synth no carga** | `import('https://esm.sh/spessasynth_lib@4.3.14')` → `KeyModifier` ausente en `spessasynth_core` (`app.js:1336`). | §5 L10 |
+| **R6** | **Pitch y Wait Mode del Trainer sin lógica** | `this.pitch` solo pinta la UI (`trainer.js:90-100`); `waitMode` solo cambia CSS (`:111-114`). | §4 T2 |
+
+### 9.3 🟡 Bajo / ⚪ Nits
+
+| ID | Hallazgo | Evidencia | Se resuelve en |
+|---|---|---|---|
+| B1 | Rate limit de GitHub en el badge | Cada carga pide `api.github.com/.../commits/main`; un 403 deja el badge sin fecha. | §5 L9 |
+| B2 | `mctrl-oct` es placebo | `mctrlOct` se pinta pero no entra en ningún cálculo (`app.js:1445-1490`). | §5 L3 |
+| B3 | `midi.js` muerto pero trackeado | No está en `index.html`; duplicado divergente de `app.js`. | §5 L1 |
+| B4 | `soundfont.sf2` (31 MB) y `presets.json` trackeados | `git ls-files` los lista pese a `.gitignore`. | §5 L4 / L5 |
+| B5 | README en v288 | 9 versiones de retraso. | §5 L8 |
+| N1 | `activeRhythmBadge` inexistente | `app.js:1110`, con guarda: código muerto. | limpieza |
+| N2 | Autosave cada 1 s sin dirty-flag | `saveAppState` → ~86 400 escrituras/día. | limpieza |
+| N3 | `sendCC` sin clamp defensivo | Confía en los llamadores. | limpieza |
+| N4 | Reloj MIDI por `setInterval` | Medido 50 `F8`/s a 121 BPM (±3 %); en segundo plano colapsa a ~1 s. | §6 / limpieza |
+
+### 9.4 ✅ Verificado correcto (navegador real)
+
+| Área | Resultado |
+|---|---|
+| Carga de la app | 7 vistas renderizan; sin errores JS propios (solo `AudioWorklet` y permiso MIDI del entorno) |
+| Sintaxis | `node --check` OK en los 9 JS de raíz |
+| DOM / globales | 186 IDs, 0 duplicados; 0 globales duplicados entre scripts |
+| **Pitch (v297)** | `SELFTEST 8/8`; connect, cambio de tono, PC del teclado, `CC121`, preset y estado legacy → mismo valor en canales 0,1,2 |
+| Persistencia | `oct -1 / trn +3 / sustain U2 ON` sobrevive recarga; UI = valor RPN |
+| Cambio de tono | PC + 55 CC + RPN correctos; `currentTone` y UI sincronizados |
+| Faders EQ | Escriben `eqState` de la parte activa y envían al canal correcto; Reset re-aplica 18 CC |
+| Sustain | ON → CC72=100; OFF → CC72=64 + CC64=0; CC72 entrante no contamina `eqState`; CC64 físico se espeja a las 3 partes |
+| Teclado virtual | Note-off usa canal y nota originales (`HIGH-01` corregido) |
+| Reloj MIDI | 50 `F8`/s a 121 BPM |
+| Library | 3937 canciones; abre con acentos UTF-8 correctos; transpose de canción no toca el del Mixer |
+| `ROLES` | `MELLOW E.PIANO`→`ep`, `MELLOW/BRIGHT STRINGS`→`strings_ens`, `SYNTH STRINGS`→pad, `BRIGHTNESS`→pad |
+| Datos | `trainer/index.json` 15/15 meta; muestra de 25 canciones con sus `versions[].file` existentes |
+| Ambientes | Studio/Live/Hall/Jazz distintos (reverb 22/16/52/28) |
+
+### 9.5 Hallazgos anteriores ya obsoletos
+
+| Hallazgo viejo | Estado en v297 |
+|---|---|
+| `HIGH-14`, `HIGH-15`, `MED-08`, `MED-09`, `MED-10`, `MED-31`, `V7` (cascada de substrings) | **Obsoleto**: resolver exacto `TONE_ROLE[nombre] \|\| CAT_ROLE[cat]` (verificado con 8 tonos) |
+| `CRIT-04` (doble `initMIDI`) | Corregido: `midiInitAttempted` cubre badge y botón |
+| `HIGH-01` (`noteOff` del VK) | Corregido: guarda `{ch, shiftedNote}` |
+| CC102/103/104 y CC95 | Eliminados de `eq.js` |
+| `.gitignore`, `fix_*.js`, `repertorio.js`, `.OBSIDIANTEST` | Resueltos |
+| `V3`/`V4` (sustain tras ráfagas) | Mitigado en v294 |
+
+### 9.6 Orden recomendado dentro de la revisión
+
+1. **A1 (XSS)** — único hallazgo de seguridad explotable.
+2. **A3 + A2** — features visibles rotas o inconsistentes.
+3. **R2 + R4** — uso en vivo y token duplicado.
+4. **R3** — para que las mejoras de perfiles sigan llegando a los tonos.
+5. **R1 / R6** — cuando existan los `.mid` del Trainer.
 
 ---
 
@@ -203,10 +283,13 @@ Documenta el delta (ej. piano CC74: 72→70) y el ambiente afectado.
 
 ## Anexo B — Orden de ejecución sugerido
 
-1. §1.1 `pitch.js` (+ pruebas P1).
-2. §1.2 header + atajos.
-3. §1.3 `SELFTEST` y diagnóstico.
-4. §2 M3/M4/M5 (Mixer/EQ: overrides y ramas muertas).
-5. §2 M1/M2/M6 con el teclado conectado (verificación en hardware).
-6. §3 S1 (SysEx master tuning) → decidir si sustituye el RPN.
-7. §5 limpieza (L1-L3) y §4 T1/T3.
+1. ~~§1.1 `pitch.js`~~ ✅ v297
+2. ~~§1.2 header + atajos~~ ✅ v297
+3. ~~§1.3 `SELFTEST` y diagnóstico~~ ✅ v297
+4. **§9 A1** (XSS de Library) — seguridad.
+5. **§9 A3 + A2** (Import roto, ambiente en presets).
+6. **§9 R2 + R4** (reconexión, token único).
+7. **§2 M3 / §9 R3** (overrides por diff) y **§2 M5** (`_faderPart`).
+8. **§2 M1/M2/M6** con el teclado conectado (verificación en hardware, §6).
+9. **§3 S1** (SysEx master tuning) → decidir si sustituye el RPN.
+10. **§5 limpieza** (L1-L4, L11, L12) y **§4 T1/T2**.
