@@ -2,6 +2,7 @@
 
 > **Versión de referencia:** v296 · **Actualizado:** 11 nov 2026
 > **Este es el ÚNICO plan vigente.** Sustituye y absorbe a `PLAN_v218.md`, `PLAN_PRO_DSP_PARAMETERS.md`, `PLAN_PRO_ACOUSTIC_MIXER.md` y `casio_task.md` (eliminados, ver §8).
+> **Revisión vigente:** [`AUDITORIA_v297.md`](AUDITORIA_v297.md) — hallazgos abiertos con evidencia y PoC (13 nov 2026).
 > Los documentos de auditoría (`AUDITORIA_*.md`, `MIXER_AUDIT.md`, `AUDIT_*.md`, `RESUMEN_SESION_*.md`) se conservan como **histórico**, no como plan: contienen hallazgos ya cerrados y no deben usarse como lista de tareas.
 
 ---
@@ -31,7 +32,7 @@ Con eso se comprueba qué se envió de verdad, en qué canal y con qué valor. E
 
 ## 1. PITCH — OCTAVE + TRANSPOSE global (prioridad 1)
 
-> **Estado: implementado en v297** (`pitch.js`, controles en el header, atajos, `SELFTEST` y diagnóstico). Pendiente: confirmación en el CT-S500 con hardware real (§6).
+> **Estado: implementado en v297** (`pitch.js`, controles en el header, atajos, `SELFTEST` y diagnóstico) y **verificado en navegador** (8/8 escenarios, mismos valores en los 3 canales en connect/tono/perfil/CC121/preset/estado legacy). Pendiente: confirmación en el CT-S500 con hardware real (§6).
 
 **Decisión tomada:** OCTAVE y TRANSPOSE son **globales para U1, U2 y L**. La octava por pista no vuelve. Se quedan en el Mixer porque son un control de ejecución que se usa en vivo.
 
@@ -93,12 +94,13 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 |---|---|---|
 | M1 | **CC77 `def: 0` vs ROLES `77: 64`** | `eq.js:33` define el fader con `def: 0`, pero todos los ROLES usan 64 como neutro. Verificar en hardware cuál es el neutro real (0 o 64) y alinear `def` con ROLES. |
 | M2 | **Recalibrar ROLES con `globalOctave = 0`** | Los ROLES se oyeron con la octava vieja (−1). Revisar cutoff/attack/reverb por rol. Prompt de trabajo en el anexo A. |
-| M3 | **Override permanente del tono** (`MED-07`) | `saveToneEQForPart` copia el perfil completo: mover un fader congela los ~18 CC de ese tono y las mejoras futuras de la matriz ya no le llegan. Guardar solo el **diff** contra el perfil base. |
-| M4 | **Ramas muertas / secuestros de perfil en `eq.js`** | `HIGH-14` (BRIGHT/MELLOW secuestran 12 tonos), `HIGH-15` (SYNTH STRINGS nunca entra), `MED-08` (E.PIANO PAD), `MED-09` (MUTE TRUMPET), `MED-10` (BRASS & STRINGS), `MED-31` (lookup por primera coincidencia). Son audibles. |
+| M3 | **Override permanente del tono** (`MED-07`) | `saveToneEQForPart` copia el perfil completo: mover un fader congela los ~18 CC de ese tono y las mejoras futuras de la matriz ya no le llegan. **Medido en v297:** mover solo CUTOFF guardó 11 CCs. Guardar solo el **diff** contra el perfil base. |
+| M4 | ~~Ramas muertas / secuestros de perfil en `eq.js`~~ ✅ **Obsoleto (v297)** | El resolver es exacto: `TONE_ROLE[nombre] \|\| CAT_ROLE[cat]`. Verificado con `MELLOW E.PIANO`→`ep`, `MELLOW/BRIGHT STRINGS`→`strings_ens`, `SYNTH STRINGS`→pad, `BRIGHTNESS`→pad. Ya no hay secuestros por substring. |
 | M5 | **`_faderPart` se refresca en cada `input`** (`MED-05`) | `eq.js`: cambiar de parte a mitad de un drag escribe MIDI en una parte y persiste en otra. |
 | M6 | **DETUNE** (RPN 0:1) | Verificar rango real en el CT-S500 y si 64 = 0 cents. Añadir doble clic para reset si no existe. Es el único control del EQ que no es CC: no debe quedar fuera del modelo de estado. |
 | M7 | **Rendimiento del EQ** (`MED-06`) | ~40 `querySelectorAll` globales por cambio de perfil y 2 por tick de drag. Precomputar un `Map` en `buildEQ`. |
 | M8 | **CC no verificados** | CC76/77/78/94 dependen del timbre. Donde no haya verificación, marcar el control como "no verificado" en el tooltip en vez de presentarlo como hardware seguro. |
+| M9 | **El preset no guarda el ambiente** (`A2`) | `captureAndSavePreset` no incluye `currentEnv` → un preset guardado en Hall se carga en Studio con los CC de Hall. Añadir `environment` al snapshot y restaurarlo. |
 
 ---
 
@@ -119,9 +121,10 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | ID | Tema | Estado real a v296 |
 |---|---|---|
 | T1 | **Trainer sin archivos MIDI** | 15 piezas, **0 archivos `.mid`**: `fetch('trainer/{id}/{id}.mid')` → 404 siempre. O se generan los 15, o el índice marca `available:false`. |
-| T2 | **Trainer: tempo / Pitch / Wait Mode** | `HIGH-03` (el tempo elegido antes de Play se ignora), `HIGH-04` (Pitch no aplica nada), `HIGH-05` (Wait Mode es estado muerto). |
-| T3 | **Seguridad de Library** | `library.js` sigue construyendo `innerHTML` con nombres de canción/artista/evento (`CRIT-03/04` de v235): verificar y escapar. Tokens en `localStorage` en texto claro (`HIGH-27`). |
+| T2 | **Trainer: tempo / Pitch / Wait Mode** | `HIGH-03` (el tempo elegido antes de Play se ignora: `_applySpeed()` se llama antes de `isPlaying = true`), `HIGH-04` (Pitch no aplica nada), `HIGH-05` (Wait Mode es estado muerto). **Confirmado en v297.** |
+| T3 | **Seguridad de Library** | `library.js` sigue construyendo `innerHTML` con nombres de canción/artista/evento. **PoC en v297:** un `title` con `<img onerror>` ejecuta JS (`window.__xss=1`). Tokens en `localStorage` en texto claro (`HIGH-27`). Es el hallazgo A1 de la auditoría. |
 | T4 | **Partir `app.js`** | Sigue siendo el orquestador de ~1.600 líneas. Solo se hará si el pitch/sustain lo justifican; no es prioridad. |
+| T5 | **Botón Import de Library roto** (`A3`) | `importFromText()` lee 3 IDs que no existen (`lib-song-title-input`, `lib-song-artist-input`, `lib-raw-text-input`) → `TypeError` al pulsar Import. Añadir los campos o quitar el botón. |
 
 ---
 
@@ -136,7 +139,9 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 | L5 | `presets.json` trackeado | Está en `.gitignore` pero ya trackeado: los presets del usuario quedan públicos. |
 | L6 | `package.json` + `npm run check` | `node --check` de todos los JS + `tools/validate_raw.js` + CI. Hoy la única validación es manual. |
 | L7 | `.editorconfig` UTF-8 sin BOM | Cerrar el mojibake de comentarios (~100 en `eq.js`). |
-| L8 | README y changelog | Sigue en v219 con 40 versiones perdidas. |
+| L8 | README y changelog | Sigue en **v288** con ~9 versiones de retraso. |
+| L9 | **Rate limit de GitHub en el badge** | Cada carga pide `api.github.com/.../commits/main`; sin caché, un 403 deja el badge sin fecha. Usar `raw.githubusercontent` o cachear. |
+| L10 | **PC Synth no carga** | `import('esm.sh/spessasynth_lib@4.3.14')` falla con `KeyModifier` ausente en `spessasynth_core`. Fijar también la versión del core. (Fuera del foco, pero roto.) |
 
 ---
 
