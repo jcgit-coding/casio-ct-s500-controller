@@ -1,20 +1,23 @@
 [Intro]
-Cm7 Bb/D Eb Fm7 Cm7/Eb Bb/D
+Cm7  Bb/D  Eb  Fm7 Cm7/Eb  Bb/D
 
 [Verse]
- Cm7 Bb/D Eb Fm7 Cm/Eb Bb/D
+   Cm7  Bb/D  Eb         Fm7  Cm/Eb  Bb/D
 ||:Sal   va     nos, res tau  ra      nos
 
- Cm7 Bb/D Eb Eb/G Ab
+ Cm7  Bb/D    Eb    Eb/G  Ab
 Avi   va     nos,   OH     DIOS
 
-Cm7 Bb/D Eb Fm7 Cm/Eb Bb/D
+Cm7  Bb/D  Eb         Fm7  Cm/Eb  Bb/D
 Sal   va   nos, res tau      ra  nos
 
-Cm7 Bb/D Eb Eb/G Ab
+Cm7  Bb/D    Eb          Eb/G  Ab
 Avi      va     nos,   OH     DIOS: ||
 
 [Chorus]
- Eb Bb
+            Eb            Bb
 Que se llene tu casa
-Cm7 Ab
+Cm7      Ab
+Con tu gloria
+Eb              Bb          Ab
+Llena tu casa OH DIOS

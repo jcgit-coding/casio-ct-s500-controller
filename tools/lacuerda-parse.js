@@ -378,7 +378,10 @@ function normalizeSlashSpacing(line) {
 function normalizeChordLineSyntax(line) {
     let out = String(line || '').replace(/[–—]/g, '-');
 
-    out = out.split(/\s+/).map(tok => {
+    // Se conservan los espacios originales (split con grupo de captura): los acordes de lacuerda
+    // se alinean con espacios sobre la sílaba donde cambian, y colapsarlos los separa de la letra.
+    out = out.split(/(\s+)/).map(tok => {
+        if (/^\s*$/.test(tok)) return tok;
         const core = stripEdgePunct(tok);
         if (!core) return tok;
 
@@ -395,9 +398,11 @@ function normalizeChordLineSyntax(line) {
         t = t.replace(/^([A-G](?:#|b)?(?:m|M|maj|min|dim|aug|sus[24]?|\+)?\d*)(add\d+)$/,
             '$1($2)');
 
-        // Comas internas de una progresión se convierten en espacio
-        return t.replace(/,+$/, '');
-    }).join(' ');
+        // Comas internas de una progresión se convierten en espacio; se rellena para no mover
+        // los acordes siguientes de la línea.
+        t = t.replace(/,+$/, '');
+        return t.length < tok.length ? t + ' '.repeat(tok.length - t.length) : t;
+    }).join('');
 
     return out.replace(/[ \t]+$/, '');
 }
@@ -581,7 +586,19 @@ function parseSongPage(html) {
     return versions;
 }
 
+// La página BASE de una canción solo trae una VISTA PREVIA recortada de cada versión dentro de su <li>
+// (p. ej. 423 de 1684 caracteres). El texto completo está en la página propia de la versión
+// (`cancion.shtml`, `cancion-2.shtml`…), dentro de <div id=t_body><PRE>…</PRE>.
+function extractFullBody(html) {
+    const start = String(html || '').search(/<div id=['"]?t_body['"]?>/i);
+    if (start < 0) return '';
+    const rest = html.slice(start);
+    const m = rest.match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
+    return m ? m[1] : '';
+}
+
 module.exports = {
+    extractFullBody,
     LC_BASE,
     fetchHTML,
     sleep,

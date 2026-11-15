@@ -51,6 +51,7 @@ const {
     detectKey,
     parseArtistPage,
     parseSongPage,
+    extractFullBody,
 } = require('./lacuerda-parse');
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
@@ -268,6 +269,18 @@ function mergeVersions(existing, incoming) {
         const details = [];
 
         for (const v of selected) {
+            // La página base solo trae una vista previa recortada: pedir el texto completo a la
+            // página propia de la versión. Si falla, se guarda la vista previa pero se avisa.
+            let truncated = false;
+            if (v.href) {
+                try {
+                    await sleep(DELAY);
+                    const full = extractFullBody(await fetchHTML(`${LC_BASE}/${lcSlug}/${v.href.replace(/^\/+/, '')}`));
+                    if (full && full.length >= v.raw.length) v.raw = full;
+                    else truncated = true;
+                } catch (e) { truncated = true; }
+            } else { truncated = true; }
+            if (truncated) details.push(`v${v.num} SOLO VISTA PREVIA (posible recorte)`);
             const text = normalizeContent(v.raw, v.type);
             if (!text || text.length < 50) {
                 details.push(`v${v.num} ${v.type} vacía`);

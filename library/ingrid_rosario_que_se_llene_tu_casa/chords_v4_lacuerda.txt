@@ -1,19 +1,33 @@
+Transcripcion realizada por Joaquin Castro, Ig: @joaqocastroo
+
+Tono: D  (Original en Eb)
+
 [Intro]
-Bm - A/C# - D Em - D - A/C#
+Bm - A/C# - D    Em - D - A/C#
 
 [Verso]
- Bm - A/C# - D Em - D - A/C#
+ Bm - A/C# - D         Em - D - A/C#
 Sálvanos,           restáuranos
 
- Bm - A/C# - D D/F# G
+ Bm - A/C# - D      D/F#    G
 Avívanos,           OH     DIOS
 
- Bm - A/C# - D Em - D - A/C#
+ Bm - A/C# - D         Em - D - A/C#
 Sálvanos,           restáuranos
 
- Bm - A/C# - D D/F# G G
+ Bm - A/C# - D      D/F#    G        G
 Avívanos,           OH     DIOS, OH DIOS
 
 [Coro]
- D A
+       D         A
 Que se llene tu casa
+Bm        G
+Con tu gloria
+D          A         G
+Llena tu casa OH DIOS
+
+[Final]
+G - G - D
+
+Intro x1 - Verso - Coro x2 - Verso
+Coro x2 - Verso - Coro x3 - Final

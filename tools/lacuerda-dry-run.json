@@ -1,21 +1,27 @@
 [
   {
-    "id": "dahiara_yo_navegare",
-    "title": "Yo Navegaré",
-    "key": "G#m",
+    "id": "danilo_montero_la_casa_de_dios",
+    "title": "La casa de Dios",
+    "key": "D",
     "mode": "R",
     "files": [
       {
         "file": "chords_v1_lacuerda.txt",
         "lacuerda_version": 1,
         "type": "R",
-        "chars": 221
+        "chars": 1025
       },
       {
         "file": "chords_v2_lacuerda.txt",
         "lacuerda_version": 2,
         "type": "R",
-        "chars": 314
+        "chars": 1107
+      },
+      {
+        "file": "chords_v3_lacuerda.txt",
+        "lacuerda_version": 4,
+        "type": "R",
+        "chars": 1733
       }
     ]
   }

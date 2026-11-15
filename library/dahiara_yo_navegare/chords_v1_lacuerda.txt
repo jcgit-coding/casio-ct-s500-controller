@@ -3,19 +3,66 @@ G#m - F# -E - C#m - D#sus4
 
 [Verso]
 
- G#m
+      G#m
 Yo navegaré
- F#
+                  F#
 En el río de tu Espíritu
- E - E/C#
+             E - E/C#
 Y allí adoraré
- D#sus4
+            D#sus4
 Al Dios que me amo
 
- G#m
+       G#m
 Yo adorare
- F#
+                   F#
 Al Dios que me da vida
- E - E/C#
+               E - E/C#
 Que me comprende
- D#sus4
+                 D#sus4
+Sin ninguna explicación
+
+[Coro]
+
+             G#m
+//Espíritu, Espíritu
+                F#
+desciende como fuego
+                 E - E/C#
+como en Pentecostés
+           Dbsus4
+Y Lléname de nuevo//
+
+Verso X2
+
+[Coro 2]
+             G#m
+//Espíritu, Espíritu
+                F#
+desciende como fuego
+                 E - E/C#
+como en Pentecostés
+           D#sus4
+Y Lléname de nuevo//
+
+[Instrumental]
+G#m - F# - E - C#m - D#sus4
+
+Coro Final
+
+               E - F#
+//Espíritu, Espíritu
+                F#/D# - G#m D#(Opcional, iría en el último tiempo antes de mi)
+desciende como fuego
+               E - C#m
+como en Pentecostés
+          D#sus4 - D#
+Y Lléname de nuevo//
+
+       G#m
+Yo navegaré
+                   F#
+En el río de tu Espíritu
+         E - E/C#
+Y allí adoraré
+             D#sus4 - G#m
+Al Dios que me amo.
