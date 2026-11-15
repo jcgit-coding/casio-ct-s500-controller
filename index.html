@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v318';
+    var V='v319';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v318">
+    <link rel="stylesheet" href="style.css?v319">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -107,7 +107,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v318</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v319</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -558,7 +558,7 @@
                         <button class="btn" id="susT7" style="padding:6px 10px; font-size:12px;" title="Re-sends the current Reverb value on U1">Reverb same, U1</button>
                         <button class="btn" id="susT8" style="padding:6px 10px; font-size:12px;" title="Sends CC64 = 127 on U1 (sustain on over MIDI)">CC64 on U1</button>
                         <button class="btn" id="susT9" style="padding:6px 10px; font-size:12px;" title="Sends CC64 = 0 on U1 (sustain off over MIDI)">CC64 off U1</button>
-                        <button class="btn" id="susT10" style="padding:6px 10px; font-size:12px;" title="Sends only CC72 (Release) on U1, the one message the profile sends that the EQ burst does not">CC72 U1</button>
+                        <button class="btn" id="susT10" style="padding:6px 10px; font-size:12px;" title="Sends a raw CC72 (Release) on U1. The app no longer sends CC72 because it overwrites the Casio's own sustain; this button is only to confirm that">CC72 raw U1</button>
                         <button class="btn" id="susT11" style="padding:6px 10px; font-size:12px;" title="Re-applies the full profile on U1 only (12 msgs)">Profile U1 only</button>
                         <button class="btn" id="susT12" style="padding:6px 10px; font-size:12px;" title="Re-applies the full profile on U2 only (12 msgs)">Profile U2 only</button>
                         <button class="btn" id="susT13" style="padding:6px 10px; font-size:12px;" title="Re-applies the full profile on L only (12 msgs)">Profile L only</button>
@@ -1090,13 +1090,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v318"></script>
-    <script src="pitch.js?v318"></script>
-    <script src="presets.js?v318"></script>
-    <script src="app.js?v318"></script>
-    <script src="harmony.js?v318"></script>
-    <script src="library.js?v318"></script>
-    <script src="trainer.js?v318"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v319"></script>
+    <script src="pitch.js?v319"></script>
+    <script src="presets.js?v319"></script>
+    <script src="app.js?v319"></script>
+    <script src="harmony.js?v319"></script>
+    <script src="library.js?v319"></script>
+    <script src="trainer.js?v319"></script>
 </body>
 </html>
 

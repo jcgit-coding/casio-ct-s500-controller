@@ -1226,6 +1226,15 @@ function sendCC(part, cc, value) {
     if (!midiOutput && !window.pcSynth) return;
     const ch = CHANNEL[part];
 
+    // CC72 (Release Time) belongs to the Casio's own sustain: MIDI Implementation 7.13 says it
+    // "will be changed when sustain is used". Sending it overwrote the release the keyboard set
+    // for its sustain and cut it on every profile / environment / tone change. It is therefore
+    // never sent to the keyboard; only the PC synth mirror still receives it.
+    if (cc === 72) {
+        if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value, ch);
+        return;
+    }
+
 
     if (midiOutput) midiOutput.send([0xB0 | ch, cc, value]);
     // Mirror CCs al PC Synth en el canal de ese part
@@ -1778,7 +1787,7 @@ const SusTest = (() => {
         on('susT7', () => counted(() => sendCC('U1', 91, eqState.U1[91] ?? 40), 'reverb same value (U1)'));
         on('susT8', () => counted(() => sendCC('U1', 64, 127), 'CC64 = 127 (U1)'));
         on('susT9', () => counted(() => sendCC('U1', 64, 0), 'CC64 = 0 (U1)'));
-        on('susT10', () => counted(() => sendCC('U1', 72, releaseNeutral('U1')), 'CC72 release = ' + releaseNeutral('U1') + ' (U1)'));
+        on('susT10', () => counted(() => { if (midiOutput) midiOutput.send([0xB0 | CHANNEL.U1, 72, releaseNeutral('U1')]); }, 'RAW CC72 release = ' + releaseNeutral('U1') + ' (U1) -- the app no longer sends this'));
         [['susT11', 'U1'], ['susT12', 'U2'], ['susT13', 'L']].forEach(([id, p]) =>
             on(id, () => counted(() => { if (activeCategories[p]) applySmartProfile(p, activeCategories[p]); else log(p + ' has no category'); }, 'profile on ' + p + ' only')));
         log('ready');

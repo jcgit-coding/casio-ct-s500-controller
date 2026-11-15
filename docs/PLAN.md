@@ -170,6 +170,13 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Pendiente revisar JC:** confirmar en el CT-S500 que ±2 octavas y ±12 semitonos suenan como muestra la pantalla.
 - **v316, octava por defecto = −1** (`PITCH_DEFAULT_OCTAVE`, RPN 52): decisión del usuario. El botón Reset de OCTAVE vuelve a −1. Con −1 cualquier transpose −12…+12 cabe en el rango ±24 (con −2 el transpose negativo queda bloqueado). El estado guardado se migra una vez a −1 (versión 316). Los presets restauran el valor con que se guardaron. `Pitch.setBoth(oct, trn)` restaura ambos a la vez para que el valor actual de uno no recorte al otro. Verificado en navegador: 125 combinaciones octava×transpose sin anomalías; **no verificado en el teclado**. Pendiente revisar JC: confirmar que −1 suena a la altura que esperas.
 
+### 1.12 CC72 pisaba el sustain del Casio (v319)
+
+- **Causa (MIDI Implementation §7.13, Release Time CC72):** "It will be changed when sustain is used". El sustain propio del Casio se implementa cambiando su CC72. La app mandaba CC72 en cada perfil, ambiente, reconexión y cambio de tono, y pisaba ese valor: el sustain "se cortaba".
+- **Evidencia en el SUSTAIN TEST del usuario:** cortó *Profile, 3 parts* (manda CC72); no cortaron *1 CC* ni *EQ burst U1* (no mandan CC72). La variabilidad (a veces cortaba, a veces no) depende de si el valor enviado coincidía con el release que el Casio tenía en ese momento.
+- **Arreglo:** `sendCC` ya **no envía CC72 al teclado** (solo lo refleja al PC Synth). Verificado con MIDI simulado: 0 mensajes CC72 en perfil, reconexión y cambio de tono. **Pendiente revisar JC:** confirmar en el teclado que Profile, 3 parts y el cambio de ambiente ya no cortan el sustain.
+- **Consecuencia:** `releaseNeutral()` ya no afecta al Casio; el release de cada tono lo define el propio Casio.
+
 ## 2. Mixer / EQ (prioridad 2)
 
 | ID | Tema | Evidencia / detalle |
