@@ -1770,6 +1770,14 @@ const SusTest = (() => {
         on('susT3', () => counted(() => { const t = currentTone.U1; if (t) changeTone('U1', t.bank, t.lsb, t.program); else log('U1 has no tone selected'); }, 'same tone U1 (bank+PC)'));
         on('susT4', () => counted(() => Pitch.sendNow('sustain-test'), 'pitch RPN (first channel counted; the other two follow 10-20 ms later)'));
         on('susT5', () => counted(() => ['U1', 'U2', 'L'].forEach(p => { if (activeCategories[p]) applySmartProfile(p, activeCategories[p]); }), 'profile on U1+U2+L'));
+        on('susT6', () => {
+            const v = eqState.U1[74] ?? 64;
+            counted(() => sendCC('U1', 74, Math.min(127, v + 8)), 'cutoff ' + v + ' -> ' + Math.min(127, v + 8) + ' (U1)');
+            setTimeout(() => counted(() => sendCC('U1', 74, v), 'cutoff back to ' + v + ' (U1)'), 500);
+        });
+        on('susT7', () => counted(() => sendCC('U1', 91, eqState.U1[91] ?? 40), 'reverb same value (U1)'));
+        on('susT8', () => counted(() => sendCC('U1', 64, 127), 'CC64 = 127 (U1)'));
+        on('susT9', () => counted(() => sendCC('U1', 64, 0), 'CC64 = 0 (U1)'));
         log('ready');
     }
     return { init, incoming };

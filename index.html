@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v316';
+    var V='v317';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v316">
+    <link rel="stylesheet" href="style.css?v317">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -107,7 +107,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v316</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v317</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -554,6 +554,10 @@
                         <button class="btn" id="susT3" style="padding:6px 10px; font-size:12px;" title="Re-sends the current tone (Bank + Program Change) on U1">Same tone U1</button>
                         <button class="btn" id="susT4" style="padding:6px 10px; font-size:12px;" title="Re-sends OCTAVE/TRANSPOSE to the 3 channels">Pitch RPN</button>
                         <button class="btn" id="susT5" style="padding:6px 10px; font-size:12px;" title="Re-applies the profile (all EQ values) on U1, U2 and L">Profile, 3 parts</button>
+                        <button class="btn" id="susT6" style="padding:6px 10px; font-size:12px;" title="Cutoff on U1 +8 for half a second, then back to the current value">Cutoff +8, back</button>
+                        <button class="btn" id="susT7" style="padding:6px 10px; font-size:12px;" title="Re-sends the current Reverb value on U1">Reverb same, U1</button>
+                        <button class="btn" id="susT8" style="padding:6px 10px; font-size:12px;" title="Sends CC64 = 127 on U1 (sustain on over MIDI)">CC64 on U1</button>
+                        <button class="btn" id="susT9" style="padding:6px 10px; font-size:12px;" title="Sends CC64 = 0 on U1 (sustain off over MIDI)">CC64 off U1</button>
                         <code id="susLog" style="flex-basis:100%; font-size:11px; color:var(--text-muted); font-family:var(--font-mono); line-height:1.6; white-space:pre-line;">—</code>
                     </div>
                 </div>
@@ -1082,13 +1086,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v316"></script>
-    <script src="pitch.js?v316"></script>
-    <script src="presets.js?v316"></script>
-    <script src="app.js?v316"></script>
-    <script src="harmony.js?v316"></script>
-    <script src="library.js?v316"></script>
-    <script src="trainer.js?v316"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v317"></script>
+    <script src="pitch.js?v317"></script>
+    <script src="presets.js?v317"></script>
+    <script src="app.js?v317"></script>
+    <script src="harmony.js?v317"></script>
+    <script src="library.js?v317"></script>
+    <script src="trainer.js?v317"></script>
 </body>
 </html>
 
