@@ -1,0 +1,430 @@
+// ======================================================================
+const GH_OWNER = 'jcgit-coding';
+const GH_REPO  = 'casio-ct-s500-controller';
+const GH_FILE  = 'presets.json';
+const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+
+let ghFileSha = null; // current SHA of presets.json on GitHub (needed for PUT)
+
+function updateSyncStatus(msg) {
+    const el = document.getElementById('syncAutoStatus');
+    if (el) el.innerText = msg;
+}
+
+function ghToken() { return localStorage.getItem('casioGhToken') || localStorage.getItem('github_pat') || ''; }
+
+// Merge two preset stores by timestamp -- most recent entry wins.
+// Tombstones ({_deleted,_ts}) are kept so deletions propagate across devices.
+// Old presets without _ts lose to any timestamped version (_ts ?? 0 = epoch).
+function mergePresetStores(local, cloud) {
+    const merged = {};
+    const keys = new Set([...Object.keys(local), ...Object.keys(cloud)]);
+    for (const key of keys) {
+        const l = local[key], c = cloud[key];
+        if (!l) { merged[key] = c; continue; }
+        if (!c) { merged[key] = l; continue; }
+        merged[key] = (c._ts ?? 0) >= (l._ts ?? 0) ? c : l;
+    }
+    return merged;
+}
+
+async function syncPull() {
+    try {
+        // Public read -- no auth needed
+        const res = await fetch(GH_API + '?t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) return false;
+        const json = await res.json();
+        ghFileSha = json.sha;
+        const cloud = JSON.parse(decodeURIComponent(escape(atob(json.content.replace(/\n/g, '')))));
+        const local = readPresetsStore();
+        const merged = mergePresetStores(local, cloud);
+        localStorage.setItem('casioPresets', JSON.stringify(merged));
+        renderPresets();
+        return true;
+    } catch { return false; }
+}
+
+// Serialized push queue -- prevents concurrent PUTs racing on the same SHA
+let _syncQueue = Promise.resolve();
+function syncPush() {
+    _syncQueue = _syncQueue.catch(() => {}).then(() => _syncPushOnce());
+    return _syncQueue;
+}
+
+async function _syncPushOnce(retried = false) {
+    const token = ghToken();
+    if (!token) { updateSyncStatus('No GitHub token'); return; }
+    try {
+        updateSyncStatus('Saving...');
+        if (!ghFileSha) await syncPull();
+        const presets = readPresetsStore();
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(presets, null, 2))));
+        const body = { message: 'Update presets', content };
+        if (ghFileSha) body.sha = ghFileSha;
+        const res = await fetch(GH_API, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        if (res.status === 409 && !retried) {
+            // SHA conflict from a concurrent write -- re-fetch, merge, retry once
+            ghFileSha = null;
+            await syncPull();
+            return _syncPushOnce(true);
+        }
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || res.status);
+        }
+        const data = await res.json();
+        ghFileSha = data.content.sha;
+        updateSyncStatus('✔ Guardado en GitHub');
+    } catch(e) {
+        console.error('syncPush:', e);
+        updateSyncStatus('Error: ' + e.message);
+    }
+}
+
+async function autoSyncInit() {
+    updateSyncStatus('Loading presets...');
+    const ok = await syncPull();
+    if (ok) {
+        updateSyncStatus(ghToken() ? 'GitHub connected' : 'Presets loaded (read only)');
+    } else {
+        updateSyncStatus('Offline - using local presets');
+    }
+    // Show token status in UI
+    const tokenEl = document.getElementById('syncTokenDisplay');
+    if (tokenEl) tokenEl.innerText = ghToken() ? '✔ Token configurado' : 'No token (read only)';
+}
+
+function initPresets() {
+    document.getElementById("btnSavePreset").addEventListener("click", () => {
+        const input = document.getElementById("presetName");
+        const name  = input.value.trim();
+        if (!name) { alert("Enter a name for the preset."); return; }
+        const presets = readPresetsStore();
+        if (presets[name] && !confirm(`"${name}" already exists. Overwrite?`)) return;
+        captureAndSavePreset(name);
+        input.value = '';
+    });
+
+    // â"€â"€ Exportar a archivo JSON â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+    document.getElementById('btnExportPresets')?.addEventListener('click', () => {
+        const json = localStorage.getItem('casioPresets') || '{}';
+        const blob = new Blob([json], { type: 'application/json' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = 'casio-presets.json'; a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    // â"€â"€ Importar desde archivo JSON â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+    document.getElementById('btnImportPresets')?.addEventListener('click', () => {
+        document.getElementById('fileImportPresets')?.click();
+    });
+    document.getElementById('fileImportPresets')?.addEventListener('change', e => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            try {
+                const imported = JSON.parse(ev.target.result);
+                if (typeof imported !== 'object' || Array.isArray(imported)) throw new Error();
+                const existing = JSON.parse(localStorage.getItem('casioPresets') || '{}');
+                const collisions = Object.keys(imported).filter(k => k in existing);
+                if (collisions.length > 0) {
+                    if (!confirm(`Import will overwrite ${collisions.length} existing preset(s): ${collisions.join(',')} Continue?`)) return;
+                }
+                Object.assign(existing, imported);
+                localStorage.setItem('casioPresets', JSON.stringify(existing));
+                renderPresets();
+                // Do not call syncPush here: syncPull dentro de syncPush puede pisar los datos importados
+            } catch { alert('Invalid file.'); }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+    });
+
+    // â"€â"€ Configurar token GitHub â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+    document.getElementById('btnSyncCreate')?.addEventListener('click', async e => {
+        e.preventDefault();
+        const current = ghToken();
+        const t = prompt('GitHub Token (scope: contents):\n(Leave empty to clear)', current);
+        if (t === null) return;
+        const trimmed = t.trim();
+        if (trimmed) {
+            localStorage.setItem('casioGhToken', trimmed);
+            localStorage.setItem('github_pat', trimmed); // legacy key used by library.js, kept in sync (R4)
+            const tokenEl = document.getElementById('syncTokenDisplay');
+            if (tokenEl) tokenEl.innerText = '✔ Token configurado';
+            await syncPush();
+        } else {
+            localStorage.removeItem('casioGhToken');
+            localStorage.removeItem('github_pat');
+            const tokenEl = document.getElementById('syncTokenDisplay');
+            if (tokenEl) tokenEl.innerText = 'No token (read only)';
+            updateSyncStatus('Token eliminado');
+        }
+    });
+
+    // â"€â"€ Subir / Bajar manual â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+    document.getElementById('btnSyncPush')?.addEventListener('click', () => syncPush());
+    document.getElementById('btnSyncPull')?.addEventListener('click', async () => {
+        const ok = await syncPull();
+        updateSyncStatus(ok ? '✔ Presets updated' : 'Offline');
+    });
+
+    renderPresets();
+    autoSyncInit();
+}
+
+function captureAndSavePreset(name) {
+    const eqSnap = JSON.parse(JSON.stringify(eqState));
+    // CC7 (Volume) is governed by Part Mix Rules -- not per-preset character
+    // CC72 (Release) is not per-preset state
+    ['U1','U2','L'].forEach(p => {
+        delete eqSnap[p][7];  delete eqSnap[p]['7'];
+        delete eqSnap[p][72]; delete eqSnap[p]['72'];
+    });
+    const data = {
+        _ts:              Date.now(),
+        _v:               APP_STATE_VERSION,
+        eqState:          eqSnap,
+        environment:      currentEnv,
+        globalTranspose:  globalTranspose,
+        globalOctave:     globalOctave,
+        activeCategories: JSON.parse(JSON.stringify(activeCategories)),
+        tones: {
+            U1: currentTone.U1?.id ?? '',
+            U2: currentTone.U2?.id ?? '',
+            L:  currentTone.L?.id  ?? '',
+        },
+        searchFilters: {
+            U1: window.toneSearch?.U1?.searchEl?.value ?? 'Piano',
+            U2: window.toneSearch?.U2?.searchEl?.value ?? 'Pad',
+            L:  window.toneSearch?.L?.searchEl?.value  ?? 'String',
+        }
+    };
+    const presets = readPresetsStore();
+    presets[name] = data;
+    localStorage.setItem("casioPresets", JSON.stringify(presets));
+    renderPresets();
+    syncPush();
+}
+
+function loadPreset(data) {
+    // Acoustic profile the CCs were captured under: restore the selector too, so a preset made
+    // in Hall does not load into a Studio selector (a later tone change would re-derive in Studio).
+    if (typeof data.environment === 'string' && ['Studio','Live','Hall','Jazz'].includes(data.environment)) {
+        currentEnv = data.environment;
+        try { localStorage.setItem('casioEnv', currentEnv); } catch (e) {}
+        const envSel = document.getElementById('envSelector');
+        if (envSel) envSel.value = currentEnv;
+    }
+    if (data.activeCategories) Object.assign(activeCategories, data.activeCategories);
+    // Presets captured before the octave redesign (no _v) carry the legacy -1
+    // compensation. Loading them must not resurrect it on top of the new defaults.
+    ['U1','U2','L'].forEach(part => {
+        if (data.eqState?.[part]) {
+            // Start from defaults so CCs missing in older presets don't keep the previous values
+            EQ_CONTROLS.forEach(ctrl => { eqState[part][ctrl.cc] = ctrl.def; });
+            Object.assign(eqState[part], data.eqState[part]);
+            delete eqState[part][72]; delete eqState[part]['72'];
+        }
+    });
+    // CC7 (Volume) comes from the saved eqState -- no longer forced here.
+    ['U1','U2','L'].forEach(part => {
+        // Restore tone selection -- new presets store numeric id, old ones stored text.
+        // Restore filter first so the tone appears in context (and the chip highlights).
+        if (data.tones?.[part] !== undefined && data.tones[part] !== '') {
+            const ts = window.toneSearch?.[part];
+            if (ts && data.searchFilters?.[part] !== undefined) {
+                ts.searchEl.value = data.searchFilters[part];
+                ts.searchEl.dispatchEvent(new Event('input'));
+            }
+            const byId = typeof data.tones[part] === 'number';
+            selectToneInList(part, byId
+                ? (d)    => d.id === data.tones[part]
+                : (d, o) => o.text === data.tones[part]);
+        }
+    });
+
+    // Restore global pitch (validation, UI and debounced send live in pitch.js)
+    if (data.globalTranspose !== undefined || data.globalOctave !== undefined) {
+        Pitch.setBoth(data.globalOctave, data.globalTranspose, 'preset');
+    }
+
+    switchEQ(activePart);
+    pushAllToKeyboard();
+}
+
+function readPresetsStore() {
+    try { return JSON.parse(localStorage.getItem("casioPresets") || "{}") || {}; }
+    catch(e) {
+        console.error('[presets] corrupted storage, backing up:', e);
+        try { localStorage.setItem('casioPresets.corrupt.' + Date.now(), localStorage.getItem('casioPresets')); } catch(_) {}
+        return {};
+    }
+}
+
+function renderPresets() {
+    const list    = document.getElementById("presetsList");
+    const presets = readPresetsStore();
+    list.innerHTML = '';
+
+    for (const [name, data] of Object.entries(presets)) {
+        if (data?._deleted) continue; // tombstone -- deleted on another device
+        const item = document.createElement('div');
+        item.className = 'preset-item';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'preset-item-name';
+        nameSpan.title     = name;
+        nameSpan.innerText = name;
+
+        const actions = document.createElement('div');
+        actions.className = 'preset-actions';
+
+        const loadBtn = document.createElement('button');
+        loadBtn.innerText = 'Load'; loadBtn.title = 'Load preset';
+        loadBtn.onclick = () => loadPreset(data);
+
+        const overBtn = document.createElement('button');
+        overBtn.innerText = 'Save'; overBtn.title = 'Overwrite with current state';
+        overBtn.onclick = () => { if (confirm(`Overwrite "${name}"?`)) captureAndSavePreset(name); };
+
+        const delBtn = document.createElement('button');
+        delBtn.innerText = 'Delete'; delBtn.title = 'Delete preset';
+        delBtn.className   = 'del-btn';
+        delBtn.onclick = () => {
+            if (!confirm(`Delete "${name}"?`)) return;
+            const p = readPresetsStore();
+            p[name] = { _deleted: true, _ts: Date.now() }; // tombstone so deletion propagates to other devices
+            localStorage.setItem("casioPresets", JSON.stringify(p));
+            renderPresets();
+            syncPush();
+        };
+
+        actions.appendChild(loadBtn);
+        actions.appendChild(overBtn);
+        actions.appendChild(delBtn);
+        item.appendChild(nameSpan);
+        item.appendChild(actions);
+        list.appendChild(item);
+    }
+}
+
+// Bump whenever the persisted shape/meaning changes. Older snapshots are
+// migrated in loadAppState() instead of being silently trusted.
+const APP_STATE_VERSION = 322;
+
+function saveAppState() {
+    // Deep-copy eqState excluding PERFORMANCE_CCS (live-state -- must not be forced on reload)
+    const eqSnap = {};
+    ['U1','U2','L'].forEach(p => {
+        eqSnap[p] = {};
+        Object.entries(eqState[p]).forEach(([cc, v]) => {
+            if (!PERFORMANCE_CCS.has(Number(cc))) eqSnap[p][cc] = v;
+        });
+    });
+    const appState = {
+        v: APP_STATE_VERSION,
+        eqState: eqSnap,
+        activeCategories,
+        globalTranspose,
+        globalOctave,
+        activePart,
+        pcSynthEnabled
+    };
+    try { localStorage.setItem('casioAppState', JSON.stringify(appState)); }
+    catch(e) { console.warn('[state] save failed:', e); }
+}
+
+function loadAppState() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('casioAppState'));
+        if (!saved) return false;
+
+        // ── Migración de snapshots viejos ──────────────────────────────
+        // Hasta v291 el diseño compensaba una octava del Casio con globalOctave=-1
+        // (y U1.oct=-1). v292/v293 lo eliminaron de los defaults, pero el snapshot
+        // persistido seguía trayendo -1: loadAppState lo restauraba en cada arranque
+        // y el auto-guardado (1 s) lo volvía a escribir. El default del código no
+        // basta; hay que migrar el valor guardado una sola vez.
+        if ((Number(saved.v) || 0) < APP_STATE_VERSION) {
+            // v316: the default octave is -1 again (PITCH_DEFAULT_OCTAVE). Older snapshots may hold
+            // 0, -2 or -3 from the previous defaults/ranges: start from the default once.
+            saved.globalOctave = PITCH_DEFAULT_OCTAVE;
+            // v322: U2 volume is 100 like U1/L (it was 75). The saved snapshot kept the old 75 and
+            // re-sent it to the keyboard on every connect, so fix the stored value once.
+            if (saved.eqState && saved.eqState.U2 && Number(saved.eqState.U2[7]) === 75) saved.eqState.U2[7] = 100;
+            saved.v = APP_STATE_VERSION;
+            try { localStorage.setItem('casioAppState', JSON.stringify(saved)); } catch(e) {}
+        }
+
+        if (saved.eqState) {
+            Object.assign(eqState, saved.eqState);
+            // CC77 (Vibrato Depth) is relative, 64 = neutral. Older builds defaulted the
+            // fader to 0 (= -64, max negative depth) and persisted it: migrate to neutral.
+            ['U1','U2','L'].forEach(p => { if (eqState[p] && Number(eqState[p][77]) === 0) eqState[p][77] = 64; });
+            // Purge obsolete phantom CCs and CC72 (CC72 is never persisted)
+            ['U1','U2','L'].forEach(p => {
+                [72, 95].forEach(cc => {
+                    delete eqState[p][cc]; delete eqState[p][String(cc)];
+                });
+            });
+        }
+        if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
+        if (saved.globalTranspose !== undefined || saved.globalOctave !== undefined) {
+            Pitch.setBoth(saved.globalOctave, saved.globalTranspose, 'state');
+        }
+
+        if (saved.activePart) {
+            activePart = saved.activePart;
+            // Update UI buttons
+            document.querySelectorAll('.btn-eq').forEach(b => b.classList.toggle('active-eq', b.dataset.part === activePart));
+        }
+        
+        // Startup ALWAYS enforces default instruments and search filters (Option A):
+        // U1: Preset "Piano" -> Tone 1 "1. Stage Piano"
+        // U2: Preset "Pad" -> Tone 8 "8. ADV Piano PAD"
+        // L:  Preset "Strings" -> Tone 24 "24. Strings Piano"
+        const startupDefaults = {
+            U1: { filter: 'Piano', id: 1 },
+            U2: { filter: 'Pad', id: 8 },
+            L:  { filter: 'String', id: 24 }
+        };
+        ['U1', 'U2', 'L'].forEach(part => {
+            const def = startupDefaults[part];
+            const ts = window.toneSearch?.[part];
+            if (ts && ts.searchEl) {
+                ts.searchEl.value = def.filter;
+                ts.searchEl.dispatchEvent(new Event('input'));
+            }
+            selectToneInList(part, d => d.id === def.id, true);
+        });
+
+        if (saved.pcSynthEnabled !== undefined) {
+            pcSynthEnabled = saved.pcSynthEnabled;
+            const pcToggle = document.getElementById('pcSynthToggle');
+            if (pcToggle) pcToggle.checked = pcSynthEnabled;
+        }
+
+        switchEQ(activePart); // updates sliders on screen
+
+        // If MIDI is already connected (USB was not unplugged between reloads),
+        // send tones and CCs so the Casio accurately matches the instruments on screen.
+        if (midiOutput) pushAllToKeyboard(false);
+
+        return true;
+    } catch (e) {
+        console.error("Error loading app state:", e);
+        return false;
+    }
+}

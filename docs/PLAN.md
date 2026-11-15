@@ -17,6 +17,7 @@
 
 **Cómo usarla en una emergencia** (de más rápido a más completo):
 
+0. **Publicada en Pages (copia de respaldo, no toca la app actual):** `https://jcgit-coding.github.io/casio-ct-s500-controller/salvavidas-v325/` — el título dice *SALVAVIDAS v325*. Vive en la carpeta `salvavidas-v325/` del repo (solo los archivos de la app, 843 KB) y comparte con la app principal la biblioteca, los eventos y el soundfont de la raíz (`../library/`, `../trainer/`, `../soundfont.sf2`). **Ojo:** ambas páginas comparten el mismo `localStorage` (mismo sitio), así que el estado guardado (octava, perfiles, BYPASS) es común; si dejaste BYPASS EQ activado en la versión nueva, la copia v325 arrancará con el BYPASS antiguo. Es una copia congelada: no se actualiza con los commits nuevos.
 1. **Sin Git:** descargar `https://github.com/jcgit-coding/casio-ct-s500-controller/archive/refs/tags/salvavidas-v325.zip`, descomprimir y abrir `index.html` con `open-app.bat` (o servir la carpeta con cualquier servidor local: Web MIDI exige `localhost` o HTTPS, no `file://`).
 2. **Con Git, sin tocar `main`:** `git worktree add ../CasioController-v325 salvavidas-v325` y abrir esa carpeta. Así `main` sigue intacto.
 3. **Volver `main` a v325** (solo si hay que cortar por lo sano): `git revert` de los commits posteriores (`git log --oneline f284748..HEAD`), nunca `reset --hard` ni `push --force`.

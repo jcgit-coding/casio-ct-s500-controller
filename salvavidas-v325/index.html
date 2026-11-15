@@ -1,0 +1,1109 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+    var V='v325';
+    (function(){
+        if(localStorage.getItem('_cv_salvavidas')!==V){
+            localStorage.setItem('_cv_salvavidas',V);
+            var u=new URL(window.location.href);
+            u.searchParams.set('v',V);
+            u.searchParams.set('t',Date.now());
+            window.location.replace(u.toString());
+        }
+    })();
+    </script>
+    <title>SALVAVIDAS v325 - Casio CT-S500 Pro Controller</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="style.css?v325">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mctrlToggle = document.getElementById('mctrlToggle');
+            const synthToggle = document.getElementById('pcSynthToggle');
+            const mctrlLabel = document.getElementById('mctrlLabel');
+            const synthLabel = document.getElementById('synthLabel');
+
+            if (mctrlToggle && mctrlLabel) {
+                mctrlToggle.addEventListener('change', e => {
+                    mctrlLabel.innerText = e.target.checked ? 'EXT MIDI: ON' : 'EXT MIDI: OFF';
+                });
+                // Initialize
+                mctrlLabel.innerText = mctrlToggle.checked ? 'EXT MIDI: ON' : 'EXT MIDI: OFF';
+            }
+            if (synthToggle && synthLabel) {
+                synthToggle.addEventListener('change', e => {
+                    synthLabel.innerText = e.target.checked ? 'INTERNAL SF2: ON' : 'INTERNAL SF2: OFF';
+                });
+                // Initialize
+                synthLabel.innerText = synthToggle.checked ? 'INTERNAL SF2: ON' : 'INTERNAL SF2: OFF';
+            }
+        });
+    </script>
+</head>
+<body>
+
+        <header style="justify-content: flex-start; padding-bottom: 12px; border-bottom: none;">
+
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <h1>CT-S500 <span class="dim">PRO</span></h1>
+            
+            <!-- VIEW NAVIGATION -->
+            <div class="view-nav">
+                <button class="nav-tab active" data-target="view-mixer"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">tune</span> MIXER</button>
+                <button class="nav-tab" data-target="view-arranger"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">queue_music</span> ARRANGER</button>
+                <button class="nav-tab" data-target="view-settings"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">settings</span> PRESETS</button>
+                <button class="nav-tab" data-target="view-harmony"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">music_note</span> HARMONY</button>
+                <button class="nav-tab" data-target="view-synth"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">piano</span> VIRTUAL</button>
+                <button class="nav-tab" data-target="view-library"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">library_music</span> LIBRARY</button>
+                <button class="nav-tab" data-target="view-trainer"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">model_training</span> TRAINER</button>
+                <button class="nav-tab nav-tab-external" id="btnOpenGraphs" title="Architecture Graph — abre en ventana del navegador"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">hub</span> GRAPHS</button>
+            </div>
+
+        </div>
+
+            </header>
+
+    <div class="main-console">
+
+
+        <!-- =========== VIEW: MIXER (PISTAS & EQ) =========== -->
+        <div class="app-view active" id="view-mixer">
+
+        <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
+            <!-- GLOBAL PITCH — U1+U2+L a la vez, una sola fila en el sub-header del Mixer (como antes de pitch.js).
+                 Aspecto original del Mixer (.global-bar / .step-btn / "Reset"), IDs sin cambio. -->
+            <div class="pitch-wrap" id="pitchBar" title="Global for U1, U2 and L">
+                <div class="global-bar">
+                    <span class="global-label">TRANSPOSE</span>
+                    <div class="step-btns">
+                        <button class="step-btn" id="gTrnMinus" title="Transpose -1 (Alt+Down)">-</button>
+                        <span class="step-val" id="gTrnVal">0</span>
+                        <button class="step-btn" id="gTrnPlus" title="Transpose +1 (Alt+Up)">+</button>
+                    </div>
+                    <button class="btn-reset-small" id="gTrnReset" title="Reset transpose to 0">Reset</button>
+                </div>
+                <div class="global-bar">
+                    <span class="global-label">OCTAVE</span>
+                    <div class="step-btns">
+                        <button class="step-btn" id="gOctMinus" title="Octave -1 (Shift+Alt+Down)">-</button>
+                        <span class="step-val" id="gOctVal">-1</span>
+                        <button class="step-btn" id="gOctPlus" title="Octave +1 (Shift+Alt+Up)">+</button>
+                    </div>
+                    <button class="btn-reset-small" id="gOctReset" title="Reset octave to the default (-1)">Reset</button>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Toggle Theme"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
+                <button id="btnPanic" class="btn" style="padding: 6px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; color: #ff3366; border: 1px solid rgba(255,51,102,0.35); background: rgba(255,51,102,0.08);" title="MIDI Panic (All Sound Off / Stop Hanging Notes)">PANIC</button>
+                <div class="status-badge" id="btnConnectMidi">
+                    <div class="status-indicator" id="statusIndicator"></div>
+                    <span id="statusText">Searching MIDI...</span>
+                </div>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v325</span>
+                <script>
+                (function(){
+                    var el=document.getElementById('appVersionBadge');
+                    el.textContent=V;
+                    var KEY='casioBadgeDate', TTL=2*60*1000;
+                    function show(iso){
+                        var d=new Date(iso);
+                        el.textContent=V+' '+d.toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+                    }
+                    var cached=null;
+                    try{ cached=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+                    if(cached&&cached.iso) show(cached.iso);
+                    // Cached 2 min (so a fresh push shows soon): unauthenticated GitHub API is 60 req/h per IP, a 403 must not blank the badge
+                    if(cached&&Date.now()-cached.t<TTL) return;
+                    fetch('https://api.github.com/repos/jcgit-coding/casio-ct-s500-controller/commits/f284748')
+                        .then(function(r){return r.ok?r.json():null;})
+                        .then(function(data){
+                            var iso=data&&data.commit&&data.commit.committer&&data.commit.committer.date;
+                            if(!iso)return;
+                            show(iso);
+                            try{ localStorage.setItem(KEY,JSON.stringify({iso:iso,t:Date.now()})); }catch(e){}
+                        }).catch(function(){});
+                })();
+                </script>
+            </div>
+        </div>
+
+
+
+            <!-- PISTAS (U1, U2, L) ï¿½ Pistas -->
+            <div class="tracks-row">
+
+                <!-- UPPER 1 -->
+                <div class="track-card active-track" id="card-U1" data-part="U1" style="order: 1;">
+                    <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                        <span class="inst-title">INSTRUMENT 1</span>
+                        
+                        <div class="part-swap-btns" style="display: flex; gap: 4px;">
+                            <button class="btn-swap active" data-part="U1" data-target="U1">U1</button>
+                            <button class="btn-swap" data-part="U1" data-target="U2">U2</button>
+                            <button class="btn-swap" data-part="U1" data-target="L">L</button>
+                        </div>
+                    </div>
+                    <div class="search-presets" data-search-target="search-U1">
+                        <button class="search-preset-btn" data-q="Piano">Piano</button>
+                        <button class="search-preset-btn" data-q="Organ">Organ</button>
+                        <button class="search-preset-btn" data-q="Accordion">Accordion</button>
+                        <button class="search-preset-btn" data-q="Guitar">Guitar</button>
+                        <button class="search-preset-btn" data-q="String">Strings</button>
+                        <button class="search-preset-btn" data-q="Brass">Brass</button>
+                        <button class="search-preset-btn" data-q="Sax">Sax</button>
+                        <button class="search-preset-btn" data-q="Reed">Reed</button>
+                        <button class="search-preset-btn" data-q="Pipe">Pipe</button>
+                        <button class="search-preset-btn" data-q="Choir">Choir</button>
+                        <button class="search-preset-btn" data-q="Pad">Pad</button>
+                        <button class="search-preset-btn" data-q="Lead">Lead</button>
+                        <button class="search-preset-btn" data-q="Bass">Bass</button>
+                        <button class="search-preset-btn" data-q="Clavi">Clavi</button>
+                        <button class="search-preset-btn" data-q="vib|marimba|xylophone|celesta|glockenspiel|bell">Perc</button>
+                        <button class="search-preset-btn" data-q="Harp">Harp</button>
+                        <button class="search-preset-btn" data-q="EDM">EDM</button>
+                        <button class="search-preset-btn" data-q="indian|indonesian|arabic|chinese|brazilian|ethnic">World</button>
+                                                <button class="search-preset-btn" data-q="Pop">Pop</button>
+                        <button class="search-preset-btn" data-q="Rock">Rock</button>
+                        <button class="search-preset-btn" data-q="Solo">Solo</button>
+                        <button class="search-preset-btn" data-q="Adv">Adv</button>
+                        <button class="search-preset-btn" data-q="">All</button>
+                    </div>
+                    <div class="tone-display-row" style="margin-bottom:4px;">
+                        <button class="cat-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-cat" id="selectedCat-U1">PIANO</div>
+                        <button class="cat-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
+                    </div>
+                    <div class="tone-display-row">
+                        <button class="tone-nav-btn" data-part="U1" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-tone" id="selectedTone-U1">1. STAGE PIANO</div>
+                        <button class="tone-nav-btn" data-part="U1" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
+                    </div>
+                    <div class="tone-picker">
+                        <input type="text" class="search-input tone-search" id="search-U1" placeholder="Search instrument..." autocomplete="off">
+                        <select class="tone-list" id="list-U1" size="6"></select>
+                    </div>
+                    <button class="btn btn-eq" data-part="U1">EDIT EQ &darr;</button>
+                </div>
+
+                <!-- UPPER 2 -->
+                <div class="track-card" id="card-U2" data-part="U2" style="order: 2;">
+                    <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                        <span class="inst-title">INSTRUMENT 2</span>
+                        
+                        <div class="part-swap-btns" style="display: flex; gap: 4px;">
+                            <button class="btn-swap" data-part="U2" data-target="U1">U1</button>
+                            <button class="btn-swap active" data-part="U2" data-target="U2">U2</button>
+                            <button class="btn-swap" data-part="U2" data-target="L">L</button>
+                        </div>
+                    </div>
+                    <div class="search-presets" data-search-target="search-U2">
+                        <button class="search-preset-btn" data-q="Piano">Piano</button>
+                        <button class="search-preset-btn" data-q="Organ">Organ</button>
+                        <button class="search-preset-btn" data-q="Accordion">Accordion</button>
+                        <button class="search-preset-btn" data-q="Guitar">Guitar</button>
+                        <button class="search-preset-btn" data-q="String">Strings</button>
+                        <button class="search-preset-btn" data-q="Brass">Brass</button>
+                        <button class="search-preset-btn" data-q="Sax">Sax</button>
+                        <button class="search-preset-btn" data-q="Reed">Reed</button>
+                        <button class="search-preset-btn" data-q="Pipe">Pipe</button>
+                        <button class="search-preset-btn" data-q="Choir">Choir</button>
+                        <button class="search-preset-btn" data-q="Pad">Pad</button>
+                        <button class="search-preset-btn" data-q="Lead">Lead</button>
+                        <button class="search-preset-btn" data-q="Bass">Bass</button>
+                        <button class="search-preset-btn" data-q="Clavi">Clavi</button>
+                        <button class="search-preset-btn" data-q="vib|marimba|xylophone|celesta|glockenspiel|bell">Perc</button>
+                        <button class="search-preset-btn" data-q="Harp">Harp</button>
+                        <button class="search-preset-btn" data-q="EDM">EDM</button>
+                        <button class="search-preset-btn" data-q="indian|indonesian|arabic|chinese|brazilian|ethnic">World</button>
+                                                <button class="search-preset-btn" data-q="Pop">Pop</button>
+                        <button class="search-preset-btn" data-q="Rock">Rock</button>
+                        <button class="search-preset-btn" data-q="Solo">Solo</button>
+                        <button class="search-preset-btn" data-q="Adv">Adv</button>
+                        <button class="search-preset-btn" data-q="">All</button>
+                    </div>
+                    <div class="tone-display-row" style="margin-bottom:4px;">
+                        <button class="cat-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-cat" id="selectedCat-U2">PIANO</div>
+                        <button class="cat-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
+                    </div>
+                    <div class="tone-display-row">
+                        <button class="tone-nav-btn" data-part="U2" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-tone" id="selectedTone-U2">8. ADV PIANO PAD</div>
+                        <button class="tone-nav-btn" data-part="U2" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
+                    </div>
+                    <div class="tone-picker">
+                        <input type="text" class="search-input tone-search" id="search-U2" placeholder="Search instrument..." autocomplete="off">
+                        <select class="tone-list" id="list-U2" size="6"></select>
+                    </div>
+                    <button class="btn btn-eq" data-part="U2">EDIT EQ &darr;</button>
+                </div>
+
+                <!-- LOWER -->
+                <div class="track-card" id="card-L" data-part="L" style="order: 3;">
+                    <div class="track-label" style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                        <span class="inst-title">INSTRUMENT 3</span>
+                        
+                        <div class="part-swap-btns" style="display: flex; gap: 4px;">
+                            <button class="btn-swap" data-part="L" data-target="U1">U1</button>
+                            <button class="btn-swap" data-part="L" data-target="U2">U2</button>
+                            <button class="btn-swap active" data-part="L" data-target="L">L</button>
+                        </div>
+                    </div>
+                    <div class="search-presets" data-search-target="search-L">
+                        <button class="search-preset-btn" data-q="Piano">Piano</button>
+                        <button class="search-preset-btn" data-q="Organ">Organ</button>
+                        <button class="search-preset-btn" data-q="Accordion">Accordion</button>
+                        <button class="search-preset-btn" data-q="Guitar">Guitar</button>
+                        <button class="search-preset-btn" data-q="String">Strings</button>
+                        <button class="search-preset-btn" data-q="Brass">Brass</button>
+                        <button class="search-preset-btn" data-q="Sax">Sax</button>
+                        <button class="search-preset-btn" data-q="Reed">Reed</button>
+                        <button class="search-preset-btn" data-q="Pipe">Pipe</button>
+                        <button class="search-preset-btn" data-q="Choir">Choir</button>
+                        <button class="search-preset-btn" data-q="Pad">Pad</button>
+                        <button class="search-preset-btn" data-q="Lead">Lead</button>
+                        <button class="search-preset-btn" data-q="Bass">Bass</button>
+                        <button class="search-preset-btn" data-q="Clavi">Clavi</button>
+                        <button class="search-preset-btn" data-q="vib|marimba|xylophone|celesta|glockenspiel|bell">Perc</button>
+                        <button class="search-preset-btn" data-q="Harp">Harp</button>
+                        <button class="search-preset-btn" data-q="EDM">EDM</button>
+                        <button class="search-preset-btn" data-q="indian|indonesian|arabic|chinese|brazilian|ethnic">World</button>
+                                                <button class="search-preset-btn" data-q="Pop">Pop</button>
+                        <button class="search-preset-btn" data-q="Rock">Rock</button>
+                        <button class="search-preset-btn" data-q="Solo">Solo</button>
+                        <button class="search-preset-btn" data-q="Adv">Adv</button>
+                        <button class="search-preset-btn" data-q="">All</button>
+                    </div>
+                    <div class="tone-display-row" style="margin-bottom:4px;">
+                        <button class="cat-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-cat" id="selectedCat-L">PIANO</div>
+                        <button class="cat-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
+                    </div>
+                    <div class="tone-display-row">
+                        <button class="tone-nav-btn" data-part="L" data-dir="-1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_left</span></button>
+                        <div class="selected-tone" id="selectedTone-L">24. STRINGS PIANO</div>
+                        <button class="tone-nav-btn" data-part="L" data-dir="1"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">chevron_right</span></button>
+                    </div>
+                    <div class="tone-picker">
+                        <input type="text" class="search-input tone-search" id="search-L" placeholder="Search instrument..." autocomplete="off">
+                        <select class="tone-list" id="list-L" size="6"></select>
+                    </div>
+                    <button class="btn btn-eq" data-part="L">EDIT EQ &darr;</button>
+                </div>
+
+            </div><!-- /tracks-row -->
+
+            <!-- UNIQUE DYNAMIC EQUALIZER -->
+            <div class="panel eq-panel">
+                <div class="panel-title">
+                    <span>EQ &amp; Effects</span>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <button class="btn-reset-small" id="btnScrollEQ" title="Scroll EQ to top">&#8593; Top</button>
+                        <button class="btn-reset-small" id="btnResetEQ">&#8634; Reset</button>
+                        <span class="eq-target-badge" id="eqTargetBadge">UPPER 1</span>
+                    </div>
+                </div>
+                <div style="margin: 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size:12px; color:var(--muted); font-weight:bold;">Acoustic Profile:</span>
+                    <div class="env-selector-wrap" style="margin-right: 0; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent);">stadium</span>
+            <select id="envSelector" class="search-input" style="min-height: 30px; font-size: 11px; font-weight: bold; padding: 4px 10px; width: auto; cursor: pointer; text-transform: uppercase;">
+                <option value="Studio">Studio (Dry)</option>
+                <option value="Live">Live (Bright)</option>
+                <option value="Hall">Concert Hall</option>
+                <option value="Jazz">Jazz Club (Intimate)</option>
+            </select>
+            <button id="btnEqBypass" class="btn" style="padding:4px 10px; font-size:11px; font-weight:700;" title="Compare the tone with no profile: relative CCs at 64, reverb 40, chorus 0, delay 0">BYPASS EQ</button>
+        </div>
+                </div>
+                <div class="eq-faders" id="eqFaders"></div>
+            </div>
+
+        </div><!-- /view-mixer -->
+
+        <!-- =========== VIEW: ARRANGER =========== -->
+        <div class="app-view" id="view-arranger">
+
+            <!-- 1. Setup / Sync Guide -->
+            <div class="panel" style="padding: 12px 16px; border-left: 3px solid var(--accent);">
+                <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" id="arrangerHelpToggle">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="material-symbols-outlined" style="color:var(--accent); font-size:20px;">info</span>
+                        <span style="font-weight:700; font-size:12px; letter-spacing:0.5px; text-transform:uppercase;">Casio CT-S500 Setup Guide</span>
+                    </div>
+                    <span class="material-symbols-outlined" id="arrangerHelpIcon" style="font-size:20px; color:var(--text-muted); transition:transform 0.2s;">expand_more</span>
+                </div>
+                <div id="arrangerHelpContent" style="display:none; margin-top:10px; font-size:12px; line-height:1.5; color:var(--text-muted); border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
+                    <div style="margin-bottom:6px;"><strong style="color:var(--text);">Para controlar Transporte y Tempo desde la app:</strong></div>
+                    <div style="margin-left:8px; display:flex; flex-direction:column; gap:4px;">
+                        <span>1. En el Casio presiona <b>MENU</b> &rarr; <b>MIDI</b>.</span>
+                        <span>2. <b>MIDI In Clock:</b> ponlo en <code>ON</code> o <code>AUTO</code> (para obedecer el tempo BPM de la app).</span>
+                        <span>3. <b>MIDI In Start/Stop:</b> ponlo en <code>ON</code> (para iniciar/detener ritmos con el bot&oacute;n START/STOP).</span>
+                        <span>4. <i>(Firmware 1.06+)</i> Usa las <b>Registraciones (Bancos 1&ndash;16)</b> para cambiar ritmos, variaciones, splits y sonidos completos directamente desde la pantalla.</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 3. TRANSPORT, TEMPO & CLOCK -->
+            <div class="panel">
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle;">speed</span>
+                        <span>Transport &amp; Realtime Tempo</span>
+                    </div>
+                    <span id="clockStatusBadge" style="font-size:10px; font-weight:700; color:var(--text-muted);">CLOCK: STANDBY</span>
+                </div>
+
+                <!-- Tempo & Tap row -->
+                <div class="arranger-row" style="margin-bottom:16px; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <span class="arranger-label">TEMPO</span>
+                        <div class="step-btns">
+                            <button class="step-btn" id="bpmMinus5" style="width:38px;height:42px;font-size:14px;font-weight:700;" title="BPM -5">-5</button>
+                            <button class="step-btn" id="bpmMinus" style="width:38px;height:42px;font-size:20px;">-</button>
+                            <span class="step-val" id="bpmVal" style="min-width:64px;font-size:22px;font-weight:800;color:var(--accent);">120</span>
+                            <button class="step-btn" id="bpmPlus" style="width:38px;height:42px;font-size:20px;">+</button>
+                            <button class="step-btn" id="bpmPlus5" style="width:38px;height:42px;font-size:14px;font-weight:700;" title="BPM +5">+5</button>
+                        </div>
+                        <button class="btn" id="btnTapTempo" style="height:42px; padding:0 14px; font-weight:800; font-size:12px; letter-spacing:0.5px; border-color:var(--accent); color:var(--accent);" title="Tap repeatedly to set BPM">TAP TEMPO</button>
+                    </div>
+
+                    <label class="clock-toggle" title="Continuous MIDI Clock output">
+                        <input type="checkbox" id="chkMidiClock"> MIDI CLOCK
+                    </label>
+                </div>
+
+                <!-- Transport buttons -->
+                <div class="arranger-transport">
+                    <button class="btn-giant btn-start" id="btnStartStop" style="flex:2;">
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">play_arrow</span></div>
+                        <div class="text">START / STOP</div>
+                    </button>
+                    <button class="btn-giant" id="btnSyncStart" style="flex:1;">
+                        <div class="icon"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">hourglass_empty</span></div>
+                        <div class="text">SYNC START</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. ACCOMPANIMENT MULTI-CHANNEL MIXER -->
+            <div class="panel">
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle;">equalizer</span>
+                        <span>Accompaniment Mixer (CC7 Multi-Channel)</span>
+                    </div>
+                </div>
+
+                <!-- Faders Grid -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
+                    <!-- Master Accompaniment -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--accent);">ARRANGER MASTER</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompMaster" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="rhythmVol" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="rhythmVolVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channels 9&ndash;16 (All accompaniment)</span>
+                    </div>
+
+                    <!-- Drums & Perc -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text);">DRUMS &amp; PERC</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompDrums" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="volAccompDrums" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="volAccompDrumsVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channels 9 &amp; 10 (Rhythm / Drums)</span>
+                    </div>
+
+                    <!-- Bass -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text);">BASS</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompBass" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="volAccompBass" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="volAccompBassVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channel 11 (Accompaniment Bass)</span>
+                    </div>
+
+                    <!-- Chords & Pads -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text);">CHORDS &amp; PADS</span>
+                            <button class="btn-reset-small btn-mute" id="muteAccompChords" style="padding:2px 8px; font-size:10px;">MUTE</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="range" id="volAccompChords" min="0" max="127" value="100" style="flex:1;">
+                            <span class="step-val" id="volAccompChordsVal" style="min-width:36px; font-size:15px; font-weight:700;">100</span>
+                        </div>
+                        <span style="font-size:9px; color:var(--text-muted); margin-top:4px; display:block;">Channels 12&ndash;16 (Chord Harmony)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. RHYTHM BROWSER & QUICK DIAL HUD -->
+            <div class="panel">
+                <div class="panel-title">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="vertical-align:middle;">queue_music</span>
+                        <span>Factory Rhythm Catalog (243 Styles)</span>
+                    </div>
+                </div>
+
+                <!-- HUD Card for Selected Rhythm -->
+                <div id="activeRhythmHUD" style="background:linear-gradient(135deg, rgba(0,255,204,0.1), rgba(59,130,246,0.1)); border:1px solid var(--accent); border-radius:10px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div>
+                        <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">RITMO SELECCIONADO</div>
+                        <div id="activeRhythmTitle" style="font-size:16px; font-weight:800; color:var(--text); margin:2px 0;">[001] 8 Beat 1 <span style="font-size:12px; color:var(--accent); font-weight:600;">(8 Beat)</span></div>
+                        <div id="activeRhythmDialTip" style="font-size:12px; color:var(--accent); font-weight:700;">ðŸ‘‰ Pon en la rueda del Casio: <span style="font-size:15px; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--accent);">001</span></div>
+                    </div>
+                    <button class="btn btn-accent" id="btnApplySuggestedBpm" style="font-size:12px; padding:8px 14px;">APLICAR BPM SUGERIDO (<span id="suggestedBpmVal">120</span>)</button>
+                </div>
+
+                <div class="arranger-search-row">
+                    <select id="rhythmCatFilter" class="search-input" style="flex:0 0 auto;width:auto;min-height:44px;font-size:15px;"></select>
+                    <input type="text" id="rhythmSearch" class="search-input" placeholder="Search rhythm..." autocomplete="off">
+                </div>
+                <div class="rhythm-list-wrap">
+                    <div class="rhythm-list" id="rhythmList"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =========== VIEW: SETTINGS & PRESETS =========== -->
+                <div class="app-view" id="view-settings">
+
+            <!-- Cloud Integration row -->
+            <div class="panel">
+                <div class="panel-title">Cloud Sync</div>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <p style="font-size:14px; color:var(--text-muted); line-height:1.5;">
+                        Token de GitHub para sincronización de la biblioteca. Se guarda <b>localmente</b> en este dispositivo.
+                    </p>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px; color:var(--accent);">GitHub PAT (Cloud Sync)</label>
+                        <input type="password" id="api-key-github" class="search-input" placeholder="github_pat_..." style="width:100%;" />
+                    </div>
+                    <div style="display:flex; justify-content:flex-end;">
+                        <button id="btnSaveApiKeys" class="btn btn-primary" style="padding:10px 24px;">Guardar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MIDI Connection row -->
+            <div class="panel">
+                <div class="panel-title">MIDI Connection</div>
+                <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+                    <p style="flex:1; font-size:14px; color:var(--muted); line-height:1.5; min-width:200px;">
+                        If keyboard is not detected on Android:<br>
+                        1. Use a <b>USB-OTG cable</b> (the WU-BT10 Bluetooth adapter is not visible to Chrome Android).<br>
+                        2. Open the page via <b>HTTPS</b>.<br>
+                        3. If you denied permission before: tap the lock icon next to the URL &rarr; Permissions &rarr; <b>MIDI &rarr; Allow</b>.
+                    </p>
+                    <div id="midiPermissionWarn" style="display:none; margin-top:12px; padding:14px 16px; background:rgba(255,51,102,0.12); border:1px solid rgba(255,51,102,0.45); border-radius:10px; font-size:14px; line-height:1.6;">
+                        <b style="color:#ff3366;">MIDI Permission Blocked</b><br>
+                        Chrome saved your previous denial. To reset it:<br>
+                        1. Tap the <b>lock</b> icon next to the site URL.<br>
+                        2. Go to <b>Permissions</b> and enable <b>MIDI Devices &rarr; Allow</b>.<br>
+                        3. If it does not appear, use <b>Reset permissions</b>, reload and accept the prompt.
+                    </div>
+                    <button id="connectBtn" class="btn btn-primary" style="padding:16px 28px; font-size:16px; white-space:nowrap;">Reconnect MIDI</button>
+                    <div style="flex-basis:100%; display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:10px;">
+                        <span class="pitch-label" style="font-size:10px;">CONEXIÓN</span>
+                        <select id="midiTransport" class="search-input" style="min-height:auto; padding:6px 10px; font-size:12px;" title="Auto: cable USB primero, Bluetooth si no hay cable">
+                            <option value="auto">Auto (cable primero)</option>
+                            <option value="wired">Solo cable USB</option>
+                            <option value="ble">Solo Bluetooth (WU-BT10)</option>
+                        </select>
+                        <code id="midiTransportInfo" style="flex:1; min-width:240px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">—</code>
+                    </div>
+                    <p style="flex-basis:100%; font-size:12px; color:var(--text-muted); line-height:1.5; margin:6px 0 0;">
+                        <b>Bluetooth en Windows:</b> el WU-BT10 solo empareja como <i>audio</i>; su MIDI por Bluetooth no funciona en Windows (Casio lo limita a Android/iOS con Chordana). Para MIDI en el PC usa el <b>cable USB</b> o un adaptador BLE MIDI estándar. Esta opción solo sirve si Windows llega a exponer un puerto Bluetooth MIDI.
+                    </p>
+                    <div style="flex-basis:100%; margin-top:14px; padding-top:12px; border-top:1px solid var(--panel-border); display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <span class="pitch-label" style="font-size:10px;">PITCH</span>
+                        <code id="pitchDiag" style="flex:1; min-width:240px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono); line-height:1.6; white-space:pre-line;">—</code>
+                        <button id="pitchResync" class="btn" style="padding:6px 12px; font-size:12px;">Re-sync</button>
+                        <button id="pitchSelftest" class="btn" style="padding:6px 12px; font-size:12px;">Selftest</button>
+                    </div>
+                    <div style="flex-basis:100%; margin-top:14px; padding-top:12px; border-top:1px solid var(--panel-border); display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <span class="pitch-label" style="font-size:10px;">SUSTAIN TEST</span>
+                        <span style="flex-basis:100%; font-size:12px; color:var(--text-muted); line-height:1.5;">Turn on the Casio's own sustain (no pedal needed), play a chord, press ONE button, and note which one cuts the sound. Needs the Casio connected. The log also shows whether the Casio reports its sustain as CC64.</span>
+                        <button class="btn" id="susT1" style="padding:6px 10px; font-size:12px;" title="Re-sends the current Cutoff value on U1 (no audible change)">1 CC</button>
+                        <button class="btn" id="susT2" style="padding:6px 10px; font-size:12px;" title="Re-sends all current EQ values on U1 (no audible change)">EQ burst U1</button>
+                        <button class="btn" id="susT3" style="padding:6px 10px; font-size:12px;" title="Re-sends the current tone (Bank + Program Change) on U1">Same tone U1</button>
+                        <button class="btn" id="susT4" style="padding:6px 10px; font-size:12px;" title="Re-sends OCTAVE/TRANSPOSE to the 3 channels">Pitch RPN</button>
+                        <button class="btn" id="susT5" style="padding:6px 10px; font-size:12px;" title="Re-applies the profile (all EQ values) on U1, U2 and L">Profile, 3 parts</button>
+                        <button class="btn" id="susT6" style="padding:6px 10px; font-size:12px;" title="Cutoff on U1 +8 for half a second, then back to the current value">Cutoff +8, back</button>
+                        <button class="btn" id="susT7" style="padding:6px 10px; font-size:12px;" title="Re-sends the current Reverb value on U1">Reverb same, U1</button>
+                        <button class="btn" id="susT8" style="padding:6px 10px; font-size:12px;" title="Sends CC64 = 127 on U1 (sustain on over MIDI)">CC64 on U1</button>
+                        <button class="btn" id="susT9" style="padding:6px 10px; font-size:12px;" title="Sends CC64 = 0 on U1 (sustain off over MIDI)">CC64 off U1</button>
+                        <button class="btn" id="susT10" style="padding:6px 10px; font-size:12px;" title="Sends a raw CC72 (Release) on U1. The app no longer sends CC72 because it overwrites the Casio's own sustain; this button is only to confirm that">CC72 raw U1</button>
+                        <button class="btn" id="susT11" style="padding:6px 10px; font-size:12px;" title="Re-applies the full profile on U1 only (12 msgs)">Profile U1 only</button>
+                        <button class="btn" id="susT12" style="padding:6px 10px; font-size:12px;" title="Re-applies the full profile on U2 only (12 msgs)">Profile U2 only</button>
+                        <button class="btn" id="susT13" style="padding:6px 10px; font-size:12px;" title="Re-applies the full profile on L only (12 msgs)">Profile L only</button>
+                        <code id="susLog" style="flex-basis:100%; font-size:11px; color:var(--text-muted); font-family:var(--font-mono); line-height:1.6; white-space:pre-line;">—</code>
+                    </div>
+                </div>
+            </div>
+
+            
+              <!-- GitHub Presets -->
+              <div class="panel">
+                  <div class="panel-title" style="font-size:13px; margin-bottom:12px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">cloud_sync</span> Presets on GitHub</div>
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                          <span id="syncAutoStatus" style="font-size:12px; color:var(--muted);">Loading...</span>
+                          <span id="syncTokenDisplay" style="font-size:11px; color:var(--muted);">ï¿½</span>
+                          <a href="#" id="btnSyncCreate" style="font-size:11.5px; color:var(--cat-color); font-weight:bold; text-decoration:none; margin-left:auto;">Configure token</a>
+                      </div>
+                      <div style="display:flex; gap:8px;">
+                          <input type="text" id="syncToken" style="display:none;">
+                          <button class="btn btn-accent" id="btnSyncPull" style="font-size:11px; padding:4px 10px;">Refresh</button>
+                          <button class="btn" id="btnSyncPush" style="font-size:11px; padding:4px 10px;">Save now</button>
+                      </div>
+                      <p style="font-size:11px; color:var(--muted); line-height:1.4; margin:0;">Presets are automatically loaded from GitHub upon opening the app. To save changes you need a <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=CasioController" target="_blank" style="color:var(--cat-color);">GitHub token</a> (scope: <code>public_repo</code>) ï¿½ configure it once per device.</p>
+                  </div>
+              </div>
+
+              <!-- Presets library - full width, no grid constraint -->
+            <div class="panel presets-panel">
+                <div class="panel-title" style="font-size:13px; margin-bottom:16px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">folder</span> Presets Library</div>
+                <div class="preset-save-row">
+                    <input type="text" id="presetName" class="search-input" placeholder="New preset name...">
+                    <button class="btn btn-accent" id="btnSavePreset">Save</button>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn" id="btnExportPresets" style="flex:1; padding: 8px; font-size: 13px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px; font-size:16px;">download</span> Export Library (.json)</button>
+                    <button class="btn" id="btnImportPresets" style="flex:1; padding: 8px; font-size: 13px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px; font-size:16px;">upload</span> Import (.json)</button>
+                    <input type="file" id="fileImportPresets" accept=".json" style="display:none;">
+                </div>
+                <div class="presets-list" id="presetsList"></div>
+            </div>
+
+
+              <!-- Consola PA -->
+              <div class="panel">
+                  <div class="panel-title" style="font-size:13px; margin-bottom:14px;"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">speaker</span> Consola PA &mdash; Casio CT-S500</div>
+                  <div style="background:rgba(255,80,80,.08); border:1px solid rgba(255,80,80,.3); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:12.5px; line-height:1.6; color:#ff6b6b;">
+                      <b>&#9888; Saturaci&oacute;n:</b> la causa #1 es el GAIN demasiado alto. Con entrada LINE el Casio ya llega fuerte &mdash; b&aacute;jalo primero.
+                  </div>
+                  <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                      <colgroup><col style="width:110px"><col style="width:130px"><col></colgroup>
+                      <thead>
+                          <tr style="color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid var(--border);">
+                              <th style="text-align:left; padding:4px 8px 6px 0;">Control</th>
+                              <th style="text-align:left; padding:4px 8px 6px;">Valor</th>
+                              <th style="text-align:left; padding:4px 0 6px;">Nota</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">Entrada</td><td style="padding:7px 8px; color:var(--accent);">LINE (jack)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">No XLR mic &mdash; nivel de l&iacute;nea (~-10 dBV)</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">GAIN</td><td style="padding:7px 8px; color:#ff6b6b; font-weight:700;">7&ndash;9 o'clock &#9888;</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">M&iacute;nimo funcional. LED CLIP nunca debe encenderse</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">LOW CUT</td><td style="padding:7px 8px; color:#ff6b6b; font-weight:700;">OFF &#9888;</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">No cortar graves al teclado</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">HIGH 12K</td><td style="padding:7px 8px; color:var(--accent);">0 (plano)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Punto de partida</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">MID</td><td style="padding:7px 8px; color:#ffa726;">-2 a -3 dB</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Reduce digital/nasal en 1&ndash;2 kHz (FREQ a 9&ndash;10 o'clock)</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">LOW 80</td><td style="padding:7px 8px; color:var(--accent);">0 o +2 dB</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Leve boost si el sonido se siente delgado</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">EFX</td><td style="padding:7px 8px; color:#ffa726;">0 (off)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">Casio ya env&iacute;a efectos por MIDI &mdash; no duplicar</td></tr>
+                          <tr style="border-bottom:1px solid var(--border);"><td style="padding:7px 8px 7px 0; font-weight:700;">PAN</td><td style="padding:7px 8px; color:var(--accent);">Centro</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">O L/R si conectas est&eacute;reo (2 canales)</td></tr>
+                          <tr><td style="padding:7px 8px 7px 0; font-weight:700;">Fader</td><td style="padding:7px 8px; color:var(--accent);">Unity (0 dB)</td><td style="padding:7px 0; color:var(--muted); font-size:12px;">L&iacute;nea marcada "0" en el canal</td></tr>
+                      </tbody>
+                  </table>
+                  <div style="margin-top:12px; padding:9px 13px; background:rgba(79,195,247,.07); border:1px solid rgba(79,195,247,.25); border-radius:7px; font-size:11.5px; color:var(--accent); line-height:1.6;">
+                      &#128161; <b>Flujo correcto:</b> sube GAIN (canal en mute) hasta ~0 dB en pasajes fuertes &rarr; fader a unity &rarr; master fader para volumen en sala.
+                  </div>
+              </div>
+        </div>
+
+
+        
+        <!-- VIEW: VIRTUAL (teclado virtual; id view-synth) -->
+        <div class="app-view" id="view-synth">
+
+            <!-- PROFESSIONAL DAW ROUTING PANEL -->
+            <div class="pro-routing-panel" style="background: linear-gradient(135deg, rgba(30,34,42,0.9), rgba(20,22,28,0.9)); border: 1px solid var(--accent); border-radius: 8px; padding: 18px; margin: 20px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                <div style="display:flex; align-items:center; gap: 10px; margin-bottom: 10px;">
+                    <span class="material-symbols-outlined" style="color:var(--accent); font-size:24px;">audio_file</span>
+                    <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">High-Quality Audio & Video-Call Routing</h3>
+                </div>
+                <p style="font-size: 13px; line-height: 1.5; color: #aaa; margin-bottom: 12px; font-weight:400;">
+                    To play in Zoom/OBS with <b>ultra-realistic sounds</b> and <b>no lag</b>, you have two professional options depending on your setup:
+                </p>
+                <div style="display:flex; flex-direction:column; gap:15px;">
+                    <!-- Option 1 -->
+                    <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border-left:3px solid #ff5e99;">
+                        <b style="color:#ff5e99; font-size:13px;">Option A: Use Downloaded Sounds (Internal SF2)</b>
+                        <p style="margin:5px 0 0; font-size:12px; color:#ccc; line-height:1.5;">
+                            If you downloaded high-quality .sf2 sound files, you don't need external programs! 
+                            The app automatically downloads the <b>GeneralUser GS</b> sounds for you! Just turn <b>INTERNAL SF2: ON</b> and play directly. (You can also load your own .sf2 using the SF2 button). 
+                            Use a virtual patch like <b>Voicemeeter</b> to route the browser's audio into your video call.
+                        </p>
+                    </div>
+                    <!-- Option 2 -->
+                    <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border-left:3px solid #00d2ff;">
+                        <b style="color:#00d2ff; font-size:13px;">Option B: External Virtual Instruments (LoopMIDI/rtpMIDI)</b>
+                        <p style="margin:5px 0 0; font-size:12px; color:#ccc; line-height:1.5;">
+                            If you prefer to use external plugins (Kontakt, Keyscape): Turn <b>EXT MIDI: ON</b>. 
+                            Select <i>LoopMIDI</i> in the MIDI Output menu, receive it in your Standalone VST, and route the VST's audio to your video call.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="synth-rack">
+                <!-- RACK HEADER -->
+                <div class="rack-unit rack-header">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">piano</span>
+                        <div>
+                            <h2 style="margin:0; font-size:16px; letter-spacing:1px;">SYNTH MODULE</h2>
+                            <span id="sf2-status" style="font-size:10px; color:var(--text-muted); font-weight:bold;">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <label class="rack-btn-toggle">
+                            <input type="checkbox" id="mctrlToggle" style="display:none;" autocomplete="off">
+                            <span class="rack-btn-label" id="mctrlLabel" style="min-width:110px;">EXT MIDI: OFF</span>
+                        </label>
+                        <label class="rack-btn-toggle">
+                            <input type="checkbox" id="pcSynthToggle" style="display:none;" autocomplete="off">
+                            <span class="rack-btn-label" id="synthLabel" style="min-width:110px;">INTERNAL SF2: OFF</span>
+                        </label>
+                        <label for="sf2-file" class="rack-btn">
+                            <span class="material-symbols-outlined" style="font-size:16px;">upload</span> SF2
+                        </label>
+                        <input type="file" id="sf2-file" accept=".sf2" style="display:none;">
+                    </div>
+                </div>
+
+                <!-- RACK CHANNELS -->
+                <div id="mctrl-rack-content"><div class="rack-channels">
+                    
+                    <!-- U1 -->
+                    <div class="rack-channel" id="mctrl-card-U1" style="border-left-color: var(--color-u1);">
+                        <div class="rc-label" style="color: var(--color-u1);">UPPER 1</div>
+                        <div class="rc-lcd">
+                            <select id="sf2-prog-U1" class="lcd-select"></select>
+                        </div>
+                        <div class="rc-controls">
+                            <div class="rc-fader-group">
+                                <span>VOL</span>
+                                <input type="range" id="mctrl-vol-U1" class="rc-fader" min="0" max="127" value="100">
+                                <span id="mctrl-vol-U1-val" class="rc-val">100</span>
+                            </div>
+                            <div class="rc-fader-group">
+                                <span>RVB</span>
+                                <input type="range" id="mctrl-rvb-U1" class="rc-fader" min="0" max="127" value="20">
+                                <span id="mctrl-rvb-U1-val" class="rc-val">20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- U2 -->
+                    <div class="rack-channel" id="mctrl-card-U2" style="border-left-color: var(--color-u2);">
+                        <div class="rc-label" style="color: var(--color-u2);">UPPER 2</div>
+                        <div class="rc-lcd">
+                            <select id="sf2-prog-U2" class="lcd-select"></select>
+                        </div>
+                        <div class="rc-controls">
+                            <div class="rc-fader-group">
+                                <span>VOL</span>
+                                <input type="range" id="mctrl-vol-U2" class="rc-fader" min="0" max="127" value="80">
+                                <span id="mctrl-vol-U2-val" class="rc-val">80</span>
+                            </div>
+                            <div class="rc-fader-group">
+                                <span>RVB</span>
+                                <input type="range" id="mctrl-rvb-U2" class="rc-fader" min="0" max="127" value="20">
+                                <span id="mctrl-rvb-U2-val" class="rc-val">20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- L -->
+                    <div class="rack-channel" id="mctrl-card-L" style="border-left-color: var(--color-l);">
+                        <div class="rc-label" style="color: var(--color-l);">LOWER</div>
+                        <div class="rc-lcd">
+                            <select id="sf2-prog-L" class="lcd-select"></select>
+                        </div>
+                        <div class="rc-controls">
+                            <div class="rc-fader-group">
+                                <span>VOL</span>
+                                <input type="range" id="mctrl-vol-L" class="rc-fader" min="0" max="127" value="100">
+                                <span id="mctrl-vol-L-val" class="rc-val">100</span>
+                            </div>
+                            <div class="rc-fader-group">
+                                <span>RVB</span>
+                                <input type="range" id="mctrl-rvb-L" class="rc-fader" min="0" max="127" value="20">
+                                <span id="mctrl-rvb-L-val" class="rc-val">20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- KEYBOARD CONTROLLER -->
+                <div class="vk-module">
+                    <div class="vk-toolbar">
+                        <div class="vk-tool-group">
+                            <span class="vk-label">PART</span>
+                            <div class="vk-radio-group">
+                                <button class="vk-radio sus-btn sus-on" id="vk-part-U1" data-vk-part="U1">U1</button>
+                                <button class="vk-radio sus-btn" id="vk-part-U2" data-vk-part="U2">U2</button>
+                                <button class="vk-radio sus-btn" id="vk-part-L" data-vk-part="L">L</button>
+                            </div>
+                        </div>
+                        <div class="vk-tool-group">
+                            <span class="vk-label">OCTAVE</span>
+                            <div class="step-btns">
+                                <button class="step-btn" id="vk-oct-minus">-</button>
+                                <span class="step-val" id="vk-oct-val">4</span>
+                                <button class="step-btn" id="vk-oct-plus">+</button>
+                                <button class="btn-reset-small" id="vk-oct-reset">Reset</button>
+                            </div>
+                        </div>
+                        <div class="vk-tool-group">
+                            <span class="vk-label">VELOCITY</span>
+                            <div class="rc-lcd" style="min-width: 80px;">
+                                <select id="vk-velocity" class="lcd-select">
+                                    <option value="40">PP (40)</option>
+                                    <option value="64">MP (64)</option>
+                                    <option value="90" selected>MF (90)</option>
+                                    <option value="110">F (110)</option>
+                                    <option value="127">FF (127)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="virtualKeyboard" class="virtual-keyboard"></div>
+                </div>
+                </div><!-- /mctrl-rack-content -->
+
+            </div>
+        </div>
+
+        <!-- =========== VIEW: HARMONY =========== -->
+        <div class="app-view" id="view-harmony">
+            <div class="panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2>Harmonic Circle</h2>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span class="dim">Key:</span>
+                        <select id="harm-key" class="search-input" style="width:80px; font-weight:bold;">
+                            <option value="C">C</option>
+                            <option value="C#">C# / Db</option>
+                            <option value="D">D</option>
+                            <option value="D#">D# / Eb</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="F#">F# / Gb</option>
+                            <option value="G">G</option>
+                            <option value="G#">G# / Ab</option>
+                            <option value="A">A</option>
+                            <option value="A#">A# / Bb</option>
+                            <option value="B">B</option>
+                        </select>
+                        <select id="harm-mode" class="search-input" style="width:145px;">
+                            <option value="ionian">Ionian (Major)</option>
+                            <option value="dorian">Dorian</option>
+                            <option value="phrygian">Phrygian</option>
+                            <option value="lydian">Lydian</option>
+                            <option value="mixolydian">Mixolydian</option>
+                            <option value="aeolian">Aeolian (Minor)</option>
+                            <option value="locrian">Locrian</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="harm-chords-container" class="harmony-grid" style="margin-bottom:20px;">
+                    <!-- Chords will be injected here by JS -->
+                </div>
+
+                <div id="harm-bottom-section" style="display:flex; gap:20px; flex-wrap:wrap; align-items: stretch;">
+                    <div id="harm-master-keyboard" style="flex:1.5; min-width:350px; padding:20px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div id="harm-keyboard-title" style="font-size:18px; font-weight:bold; margin-bottom:15px; color:var(--text-muted); text-align:center;">Select a chord or extension to view fingering</div>
+                        <div id="harm-keyboard-svg" style="width:100%; display:flex; justify-content:center;"></div>
+                    </div>
+                    
+                    <div id="harm-mode-info" style="flex:1; min-width:300px; padding:20px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border); border-left:4px solid var(--accent); display:none; font-size:14px; line-height:1.6; color:var(--text);"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========== VIEW: LIBRARY =========== -->
+        <div class="app-view" id="view-library">
+            
+
+            <div class="app-layout-split">
+                
+                <!-- SIDEBAR: SUB-TABS (SONGS / EVENTS) -->
+                <div class="sidebar-col">
+                    <div class="panel" style="flex: 1; display:flex; flex-direction:column; gap:12px;">
+                        
+                        <!-- Sub-Tabs Navigation -->
+                        <div style="display:flex; gap:6px; background:rgba(0,0,0,0.2); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+                            <button id="lib-tab-btn-songs" class="btn active-tab" style="flex:1; padding:6px 12px; font-size:12px; font-weight:bold;">SONGS</button>
+                            <button id="lib-tab-btn-events" class="btn" style="flex:1; padding:6px 12px; font-size:12px; font-weight:bold;">EVENTS</button>
+                        </div>
+
+                        <!-- SUB-PANEL: SONGS -->
+                        <div id="lib-subpanel-songs" style="display:flex; flex-direction:column; gap:10px; flex:1; min-height:0;">
+                            <div style="display:flex; gap:6px; align-items:center;">
+                                <input type="text" id="lib-song-search-filter" class="search-input" placeholder="Filter by title or artist..." style="padding: 8px 12px; font-size: 13px; flex:1;">
+                                <button id="lib-btn-import" title="Importar artista de lacuerda.net"
+                                        onclick="LacuerdaImport.openPanel()"
+                                        style="padding:8px 10px; background:rgba(var(--accent-rgb,0,255,204),0.1); border:1px solid rgba(var(--accent-rgb,0,255,204),0.25); border-radius:8px; cursor:pointer; color:var(--accent); font-size:18px; line-height:1; flex-shrink:0;"
+                                        onmouseover="this.style.background='rgba(var(--accent-rgb,0,255,204),0.2)'"
+                                        onmouseout="this.style.background='rgba(var(--accent-rgb,0,255,204),0.1)'">
+                                    <span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle;">download</span>
+                                </button>
+                            </div>
+                            <div id="cloud-song-list-container" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:0; max-height:calc(100vh - 180px); position:relative; padding-right:24px; scrollbar-width:thin; scrollbar-color:var(--accent) rgba(255,255,255,0.06);">
+                                <div style="color:var(--text-muted); font-size:12px; padding:10px;">Loading song library...</div>
+                            </div>
+                        </div>
+
+                        <!-- MODAL: Importar artista de lacuerda.net -->
+                        <div id="lacuerda-import-panel" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+                            <div style="background:var(--panel-bg,#1a1a2e); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:24px; width:min(420px,90vw); display:flex; flex-direction:column; gap:14px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span style="font-size:14px; font-weight:800; color:var(--text); letter-spacing:0.05em;">IMPORTAR DE LACUERDA.NET</span>
+                                    <button onclick="LacuerdaImport.closePanel()" style="background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:20px; line-height:1;">?</button>
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:8px;">
+                                    <label style="font-size:11px; font-weight:700; color:var(--text-muted); letter-spacing:0.06em;">ARTISTA (slug en lacuerda.net) *</label>
+                                    <input id="lacuerda-input-artist" class="search-input" placeholder="ej: marco_barrientos" style="padding:8px 12px; font-size:13px;">
+                                </div>
+                                <div style="display:flex; gap:8px;">
+                                    <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
+                                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); letter-spacing:0.06em;">NOMBRE A MOSTRAR (opcional)</label>
+                                        <input id="lacuerda-input-displayname" class="search-input" placeholder="ej: Marco Barrientos" style="padding:8px 12px; font-size:13px;">
+                                    </div>
+                                    <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
+                                        <label style="font-size:11px; font-weight:700; color:var(--text-muted); letter-spacing:0.06em;">ID CARPETA (opcional)</label>
+                                        <input id="lacuerda-input-artistid" class="search-input" placeholder="ej: marco_barrientos" style="padding:8px 12px; font-size:13px;">
+                                    </div>
+                                </div>
+                                <div id="lacuerda-import-log" style="display:none; background:rgba(0,0,0,0.3); border-radius:8px; padding:10px; font-size:11px; font-family:monospace; color:var(--text-muted); max-height:160px; overflow-y:auto; white-space:pre-wrap;"></div>
+                                <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center;">
+                                    <span id="lacuerda-import-status" style="font-size:11px; color:var(--text-muted); flex:1;"></span>
+                                    <button id="lacuerda-btn-import" onclick="LacuerdaImport.run()"
+                                            style="padding:9px 20px; font-size:13px; font-weight:700; background:var(--accent); color:#000; border:none; border-radius:8px; cursor:pointer;">
+                                        Importar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUB-PANEL: EVENTS -->
+                        <div id="lib-subpanel-events" style="display:none; flex-direction:column; gap:12px; flex:1; min-height:0;">
+                            <div style="display: flex; gap: 8px;">
+                                <input type="date" id="lib-date-picker" class="search-input" style="flex: 1;">
+                                <button class="btn" id="lib-btn-add-event" style="padding: 0 14px;"><span class="material-symbols-outlined">add</span></button>
+                            </div>
+                            <div id="lib-event-list" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:0; max-height:calc(100vh - 290px); scrollbar-width:thin; scrollbar-color:var(--accent) rgba(255,255,255,0.06);">
+                                <div class="event-list-empty" style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">
+                                    No events scheduled.<br>Select a date above.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MAIN: SONG VIEWER -->
+                <div class="panel main-col">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap:15px;">
+                        <div>
+                            <h2 id="lib-song-title" style="margin: 0 0 4px 0; font-size: 26px; font-family: var(--main-font); color: var(--text);">Empty Library</h2>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span id="lib-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Select a song or search above</span>
+                                <a id="lib-song-source-link" href="#" target="_blank" rel="noopener"
+                                   style="display:none; font-size:11px; color:var(--accent); text-decoration:none; opacity:0.75;"
+                                   title="Ver en lacuerda.net">? lacuerda.net</a>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <!-- Transpose Control -->
+                            <div class="global-bar">
+                                <span class="global-label">TRANSPOSE</span>
+                                <div class="step-btns">
+                                    <button class="step-btn" id="lib-transpose-down">-</button>
+                                    <span class="step-val" id="lib-transpose-label" style="min-width:40px;">0</span>
+                                    <button class="step-btn" id="lib-transpose-up">+</button>
+                                </div>
+                                <button class="btn-reset-small" id="lib-transpose-reset">Reset</button>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <button class="btn" id="lib-btn-save-cloud" style="padding: 8px 16px; font-weight: 600; color: #33cc66; border-color: rgba(51, 204, 102, 0.4); display: none;">
+                                Save to Cloud
+                            </button>
+                            <button class="btn" id="lib-btn-fullscreen" style="padding: 8px 16px; font-weight: 600;">
+                                Maximize
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chords & Lyrics Sheet -->
+                    <div id="lib-chords-view" class="chords-canvas">
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =========== VIEW: TRAINER =========== -->
+        <div class="app-view" id="view-trainer">
+            
+            <!-- Toolbar: Quick Search and Import -->
+            <div class="panel panel-toolbar" style="align-items: center; gap: 12px;">
+                <input type="text" id="trainer-search-input" class="search-input" placeholder="Search piece or composer (e.g. Chopin, Mozart, Interstellar)..." style="flex:1; font-family: var(--main-font);">
+                
+                <label for="trainer-file-import" class="btn" style="display:flex; align-items:center; gap:8px; cursor:pointer; background:var(--accent-dim); color:var(--accent); border-color:var(--accent); padding: 8px 18px; font-weight:600; white-space:nowrap;">
+                    <span class="material-symbols-outlined">file_upload</span> Import Local MIDI
+                </label>
+                <input type="file" id="trainer-file-import" accept=".mid,.midi" style="display:none;">
+            </div>
+
+            <div class="app-layout-split">
+                
+                <!-- SIDEBAR: PIECES CATALOGUE & FILTERS -->
+                <div class="sidebar-col">
+                    <div class="panel" style="flex: 1; display:flex; flex-direction:column; gap:12px;">
+                        
+                        <!-- Difficulty Filter Chips -->
+                        <div style="display:flex; gap:4px; background:rgba(0,0,0,0.25); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); overflow-x:auto;">
+                            <button class="btn trainer-filter-btn active-tab" data-diff="all" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">ALL</button>
+                            <button class="btn trainer-filter-btn" data-diff="beginner" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">EASY</button>
+                            <button class="btn trainer-filter-btn" data-diff="intermediate" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">MID</button>
+                            <button class="btn trainer-filter-btn" data-diff="advanced" style="flex:1; padding:6px 6px; font-size:11px; font-weight:bold;">ADV</button>
+                        </div>
+
+                        <!-- Pieces List Container -->
+                        <div id="trainer-song-list-container" class="song-list-scroll" style="overflow-y:auto; flex:1; min-height:480px; max-height:calc(100vh - 290px); display:flex; flex-direction:column; gap:6px;">
+                            <div style="color:var(--text-muted); font-size:12px; padding:10px;">Loading trainer pieces...</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MAIN: ACTIVE PIECE + DAW TRANSPORT + PIANO ROLL -->
+                <div class="panel main-col" style="gap: 15px;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap:15px;">
+                        <div>
+                            <h2 id="trainer-current-song-title" style="margin: 0 0 4px 0; font-size: 24px; font-family: var(--main-font); color: var(--text);">No Piece Selected</h2>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span id="trainer-current-song-artist" style="color: var(--text-muted); font-weight: 600; font-family: var(--main-font);">Choose a piece from the catalog or import a MIDI file</span>
+                                <span id="trainer-current-song-diff" class="tone-badge" style="display:none; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:4px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DAW-STYLE TRANSPORT BAR -->
+                    <div class="daw-transport-bar" style="margin-bottom:0;">
+                        
+                        <div class="daw-btn-group">
+                            <button class="btn daw-btn-play" id="trainer-btn-play" style="display:flex; align-items:center; gap:5px;">
+                                <span class="material-symbols-outlined">play_arrow</span> Play
+                            </button>
+                            <button class="btn daw-btn-stop" id="trainer-btn-stop" style="display:flex; align-items:center; gap:5px;">
+                                <span class="material-symbols-outlined">stop</span> Stop
+                            </button>
+                            <button class="btn" id="trainer-btn-wait" style="display:flex; align-items:center; gap:5px;">
+                                <span class="material-symbols-outlined">front_hand</span> Wait Mode
+                            </button>
+                        </div>
+
+                        <div class="daw-control-group">
+                            <!-- Tempo -->
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="daw-control-label">Tempo</span>
+                                <div class="daw-stepper">
+                                    <button id="trainer-tempo-minus">-</button>
+                                    <input type="text" id="trainer-tempo-val" class="search-input" value="120" style="border: none; padding: 4px; width: 45px; text-align:center; font-weight:bold; min-height:auto; color: var(--text);">
+                                    <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">BPM</span>
+                                    <button id="trainer-tempo-plus">+</button>
+                                </div>
+                            </div>
+
+                            <!-- Pitch / MIDI Transpose -->
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="daw-control-label">Pitch</span>
+                                <div class="daw-stepper">
+                                    <button id="trainer-pitch-minus">-</button>
+                                    <input type="text" id="trainer-pitch-val" class="search-input" value="0" style="border: none; padding: 4px; width: 35px; text-align:center; font-weight:bold; color: var(--accent); min-height:auto;">
+                                    <span style="font-size: 11px; color: var(--text-muted); padding-right: 8px;">Semi</span>
+                                    <button id="trainer-pitch-plus">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PIANO ROLL RENDERER -->
+                    <div class="piano-roll-container" style="min-height:480px; height: calc(100vh - 360px);">
+                        <div id="trainer-piano-roll-canvas" class="piano-roll-canvas">
+                            <span class="piano-roll-placeholder">(Interactive MIDI Score & Piano Roll will render here)</span>
+                        </div>
+                        
+                        <!-- Simple Keyboard Mockup for structural spacing -->
+                        <div class="piano-roll-keys">
+                            <div class="piano-roll-key-mock"></div>
+                            <div class="piano-roll-key-mock"></div>
+                            <div class="piano-roll-key-mock"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div><!-- /main-console -->
+
+    <script src="raw_tones.js"></script>
+    <script src="raw_rhythms.js"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v325"></script>
+    <script src="pitch.js?v325"></script>
+    <script src="presets.js?v325"></script>
+    <script src="app.js?v325"></script>
+    <script src="harmony.js?v325"></script>
+    <script src="library.js?v325"></script>
+    <script src="trainer.js?v325"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
