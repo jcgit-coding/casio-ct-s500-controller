@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
- * lacuerda-import.js  — CasioController: importa acordes de lacuerda.net a la biblioteca local
+ * lacuerda-import.js — CasioController: importa acordes de lacuerda.net a la biblioteca local
  * Solo lacuerda.net — sin dependencias externas
  *
  * Uso:
  *   node lacuerda-import.js --artist "marcos-witt"
- *   node lacuerda-import.js --artist "marcos-witt" --delay 2000
+ *   node lacuerda-import.js --artist "marcos-witt" --dry-run
  *   node lacuerda-import.js --artist "marcos-witt" --max 50
+ *   node lacuerda-import.js --artist "marcos-witt" --song al_rey
  *   node lacuerda-import.js --artist "toma_tu_lugar" --display-name "Marcos Brunet" --artist-id "marcos_brunet"
  *
  * Opciones:
@@ -15,90 +16,66 @@
  *   --artist-id     prefijo de carpeta en library/ (sobreescribe el slug)
  *   --delay         ms entre requests (default 1400)
  *   --max           máximo de canciones base (default: todas)
+ *   --song          importar solo una canción (slug de lacuerda, ej: al_rey)
+ *   --dry-run       no escribe nada; muestra qué versiones se elegirían
+ *   --keep-old      no borra archivos chords_v*_lacuerda.txt antiguos
+ *   --keep-keys     no recalcula original_key
+ *   --verbose       muestra el contenido normalizado de cada versión
+ *
+ * Correcciones frente a la versión anterior:
+ *   - Usa la página BASE (sin .shtml), que contiene TODAS las versiones.
+ *   - Lee el tipo de cada versión (R=acordes, T=tablatura, B=bajo, K=piano).
+ *   - Descarta bajo/piano; usa tablatura solo como fallback.
+ *   - Convierte cifrado español (DO/RE/MI…) a americano (C/D/E…).
+ *   - Elimina tablaturas, <div></div>, boilerplate y normaliza C1)/V1)/Coro:.
+ *   - Calcula original_key a partir de los acordes reales.
+ *   - Actualiza index.json una sola vez al final (antes se reescribía por canción).
  */
 
 'use strict';
 
-const https  = require('https');
-const http   = require('http');
-const fs     = require('fs');
-const path   = require('path');
-const url    = require('url');
+const fs   = require('fs');
+const path = require('path');
 
+const {
+    LC_BASE,
+    fetchHTML,
+    sleep,
+    decodeEntities,
+    stripTags,
+    slugify,
+    convertChordNotation,
+    isChordToken,
+    isChordLine,
+    normalizeContent,
+    detectKey,
+    parseArtistPage,
+    parseSongPage,
+} = require('./lacuerda-parse');
+
+// ── Paths ─────────────────────────────────────────────────────────────────────
 const LIBRARY_DIR = path.resolve(__dirname, '..', 'library');
 const INDEX_FILE  = path.join(LIBRARY_DIR, 'index.json');
 
 // ── CLI args ──────────────────────────────────────────────────────────────────
 const args  = process.argv.slice(2);
-const get   = (flag, def) => { const i = args.indexOf(flag); return i !== -1 ? args[i+1] : def; };
+const get   = (flag, def) => { const i = args.indexOf(flag); return i !== -1 ? args[i + 1] : def; };
+const has   = flag => args.includes(flag);
 
 const ARTIST       = get('--artist', '');
-const DISPLAY_NAME = get('--display-name', '');  // sobrescribe el nombre del artista en la biblioteca
-const ARTIST_ID    = get('--artist-id', '');      // sobrescribe el ID/slug de artista en la biblioteca
+const DISPLAY_NAME = get('--display-name', '');
+const ARTIST_ID    = get('--artist-id', '');
 const DELAY        = parseInt(get('--delay', '1400'), 10);
 const MAX          = parseInt(get('--max', '9999'), 10);
+const ONLY_SONG    = get('--song', '');
+const DRY_RUN      = has('--dry-run');
+const KEEP_OLD     = has('--keep-old');
+const KEEP_KEYS    = has('--keep-keys');
+const VERBOSE      = has('--verbose') || has('-v');
 
 if (!ARTIST) {
-    console.error('Uso: node scrape-artist.js --artist "marcos-witt" [--display-name "Marcos Brunet"] [--artist-id "marcos_brunet"]');
+    console.error('Uso: node lacuerda-import.js --artist "marcos-witt" [--dry-run] [--max 50] [--song al_rey]');
     process.exit(1);
-}
-
-// ── HTTP fetch ────────────────────────────────────────────────────────────────
-function fetchHTML(rawUrl, redirects = 0) {
-    return new Promise((resolve, reject) => {
-        if (redirects > 5) return reject(new Error('Too many redirects'));
-        const parsed  = new url.URL(rawUrl);
-        const mod     = parsed.protocol === 'https:' ? https : http;
-        const options = {
-            hostname: parsed.hostname,
-            path: parsed.pathname + parsed.search,
-            method: 'GET',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'es-CO,es;q=0.9,en-US;q=0.8',
-                'Accept-Encoding': 'identity',
-                'Referer': 'https://www.google.com/',
-                'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive',
-            },
-            timeout: 18000
-        };
-        const req = mod.request(options, res => {
-            if ([301,302,303,307,308].includes(res.statusCode) && res.headers.location) {
-                const next = res.headers.location.startsWith('http')
-                    ? res.headers.location
-                    : parsed.origin + res.headers.location;
-                return resolve(fetchHTML(next, redirects + 1));
-            }
-            if (res.statusCode >= 400) return reject(new Error(`HTTP ${res.statusCode}`));
-            const chunks = [];
-            res.on('data', c => chunks.push(c));
-            res.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
-        });
-        req.on('error', reject);
-        req.on('timeout', () => { req.destroy(); reject(new Error('Timeout')); });
-        req.end();
-    });
-}
-
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-// ── HTML utils ────────────────────────────────────────────────────────────────
-function decodeEntities(str) {
-    return str
-        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
-        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n)))
-        .replace(/&[a-z]+;/g, '');
-}
-
-function stripTags(str) { return str.replace(/<[^>]+>/g, ''); }
-
-function slugify(str) {
-    return (str || '').toLowerCase()
-        .normalize('NFD').replace(/[̀-ͯ]/g, '')
-        .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 }
 
 // ── Index helpers ─────────────────────────────────────────────────────────────
@@ -109,181 +86,61 @@ function saveIndex(index) {
     fs.writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2) + '\n', 'utf8');
 }
 
-// ── LACUERDA ──────────────────────────────────────────────────────────────────
-const LC_BASE = 'https://acordes.lacuerda.net';
+function upsertIndexEntry(index, entry) {
+    const rec = {
+        id: entry.id,
+        title: entry.title,
+        artist: entry.artist,
+        genre: entry.genre || 'Worship',
+        original_key: entry.original_key || 'C',
+    };
+    const i = index.findIndex(e => e.id === rec.id);
+    if (i !== -1) index[i] = rec; else index.push(rec);
+}
 
+// ── Artist page ───────────────────────────────────────────────────────────────
 async function lcArtistPage(artistSlug) {
     const lcSlug  = artistSlug.replace(/-/g, '_');
     const pageUrl = `${LC_BASE}/${lcSlug}/`;
     console.log(`\n[lacuerda] ${pageUrl}`);
     const html = await fetchHTML(pageUrl);
 
-    const h1Raw = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
-    const name  = h1Raw
-        ? decodeEntities(stripTags(h1Raw[1])).replace(/^[>\s]+/, '').trim()
-        : artistSlug.replace(/[-_]/g,' ').replace(/\b\w/g, c => c.toUpperCase());
-
-    // Extraer lista completa de canciones: <ul id=b_main class=b_main>
-    // Cada <li id='rNNN' lcd='RATING'><a href="slug">Título <em>acordes</em></a></li>
-    const mainStart = html.indexOf('id=b_main');
-    const songs = [];
-    const seen  = new Set();
-
-    if (mainStart !== -1) {
-        const mainEnd = html.indexOf('</ul>', mainStart);
-        const block   = html.slice(mainStart, mainEnd > -1 ? mainEnd : mainStart + 300000);
-
-        // Captura también el atributo lcd (rating/votos) para ordenar versiones
-        const re = /<li[^>]*lcd='([^']*)'[^>]*><a href="([^"]+)">([\s\S]*?)<\/a>/gi;
-        let m;
-        while ((m = re.exec(block)) !== null) {
-            const lcd   = parseInt(m[1], 10) || 0;
-            const slug  = m[2].trim();
-            const title = decodeEntities(stripTags(m[3])).replace(/\s+acordes\s*$/i, '').trim();
-            if (!slug || seen.has(slug)) continue;
-            seen.add(slug);
-            songs.push({ slug, title, lcd, lcSlug });
-        }
-
-        // Fallback sin atributo lcd
-        if (songs.length === 0) {
-            const re2 = /<li[^>]*><a href="([^"]+)">([\s\S]*?)<\/a>/gi;
-            while ((m = re2.exec(block)) !== null) {
-                const slug  = m[1].trim();
-                const title = decodeEntities(stripTags(m[2])).replace(/\s+acordes\s*$/i, '').trim();
-                if (!slug || seen.has(slug)) continue;
-                seen.add(slug);
-                songs.push({ slug, title, lcd: 0, lcSlug });
-            }
-        }
+    // El primer <h1> suele ser el nombre del artista; el segundo es descriptivo.
+    const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)]
+        .map(m => decodeEntities(stripTags(m[1])).replace(/^[>\s]+/, '').trim())
+        .filter(Boolean);
+    let name = h1s.find(s => !/letras,\s*tablaturas/i.test(s)) || h1s[0] || '';
+    if (!name) {
+        const title = (html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1] || '';
+        name = decodeEntities(stripTags(title)).split(':')[0].trim();
     }
+    if (!name) name = artistSlug.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
-    console.log(`  Artista: "${name}"  |  Entradas en lacuerda: ${songs.length}`);
+    const songs = parseArtistPage(html, lcSlug);
+    console.log(`  Artista: "${name}"  |  Canciones en lacuerda: ${songs.length}`);
     return { artistName: name, songs, artistSlug, lcSlug };
 }
 
-/**
- * Agrupa canciones por canción base: slug sin dígito final.
- * Ejemplo: "tu_fidelidad", "tu_fidelidad2", "tu_fidelidad3" → un solo grupo.
- * Dentro del grupo, ordena por lcd descendente (más votos = mejor calidad).
- * Retorna Map<baseSlug, {title, versions:[{slug, lcd}]}>
- */
-function groupSongs(songs) {
-    const groups = new Map();
-    for (const song of songs) {
-        // Solo agrupa como versión si el slug termina en dígito precedido de LETRA
-        // (ej: tu_fidelidad2 → tu_fidelidad). NO agrupa salmo_126, salmo_3, goza_10.
-        const trailingDigit = /^(.+[a-z])(\d)$/.exec(song.slug);
-        const baseSlug = trailingDigit ? trailingDigit[1] : song.slug;
-        if (!groups.has(baseSlug)) {
-            groups.set(baseSlug, { title: song.title, versions: [] });
-        }
-        groups.get(baseSlug).versions.push({ slug: song.slug, lcd: song.lcd, title: song.title });
-    }
-    // Ordenar cada grupo por lcd descendente (más votos primero)
-    for (const g of groups.values()) {
-        g.versions.sort((a, b) => b.lcd - a.lcd);
-        // Usar como título el de la versión con más votos
-        g.title = g.versions[0].title;
-    }
-    return groups;
+// ── Song page ─────────────────────────────────────────────────────────────────
+function pickVersions(versions) {
+    const r = versions.filter(v => v.type === 'R');
+    if (r.length) return { selected: r, mode: 'R' };
+    const t = versions.filter(v => v.type === 'T');
+    if (t.length) return { selected: t, mode: 'T-fallback' };
+    return { selected: [], mode: 'none' };
 }
 
-// Tipos de versión en lacuerda:
-//   R = Guitarra / Letra y Acordes  ← preferido
-//   T = Tablatura                   ← fallback: se toma pero se filtran líneas de tab
-//   B = Bajo  P = Piano  U = Ukulele  K = otros → descartados
-const LC_CHORD_TIPOS   = new Set(['R', '']);   // tipos directamente usables
-const LC_TAB_FALLBACK  = new Set(['T']);        // aceptados solo si no hay versión R
-
-// Elimina líneas de notación de tablatura (e|--0-2-3--|, B|, fret numbers, etc.)
-function stripTabLines(text) {
-    return text.split('\n').filter(line => {
-        const t = line.trim();
-        // Líneas de tab: empieza con cuerda (e/B/G/D/A/E) seguida de | o --
-        if (/^[eEBGDAd]\s*[\|]/.test(t)) return false;
-        // Líneas solo de dashes, pipes y números (secuencias de tab)
-        if (/^[\-\|0-9p h b r ~\/\\]+$/.test(t) && t.length > 6) return false;
-        return true;
-    }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+function notationStats(raw) {
+    const tags = [...String(raw || '').matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
+        .map(m => decodeEntities(stripTags(m[1])).trim())
+        .filter(Boolean);
+    const es = tags.filter(t => /^(SOL|DO|RE|MI|FA|LA|SI)([#b]?)(?:m|maj|min|sus|add|dim|aug|\d|$)/i.test(t)).length;
+    return { total: tags.length, es };
 }
 
-async function lcFetchVersion(lcSlug, songSlug, allowTabFallback = false) {
-    const shtmlUrl = `${LC_BASE}/${lcSlug}/${songSlug}.shtml`;
-    const baseUrl  = `${LC_BASE}/${lcSlug}/${songSlug}`;
-    let html, usedUrl;
-    try {
-        html = await fetchHTML(shtmlUrl); usedUrl = shtmlUrl;
-    } catch {
-        html = await fetchHTML(baseUrl);  usedUrl = baseUrl;
-    }
-
-    const otipoM = html.match(/otipo='([^']*)'/);
-    const otipo  = otipoM ? otipoM[1].toUpperCase() : '';
-    const isTab  = LC_TAB_FALLBACK.has(otipo);
-
-    // Descartar tipos que no son guitarra ni tab (bajo, piano, ukulele)
-    if (otipoM && !LC_CHORD_TIPOS.has(otipo) && !isTab) {
-        return { usedUrl, texts: [], skippedType: otipo };
-    }
-    // Tab solo aceptado si el llamador lo permite (segunda pasada de fallback)
-    if (isTab && !allowTabFallback) {
-        return { usedUrl, texts: [], skippedType: otipo, isTabOnly: true };
-    }
-
-    const texts = [];
-
-    const extractText = raw => {
-        let t = decodeEntities(stripTags(raw)).trim();
-        if (isTab) t = stripTabLines(t);
-        return t;
-    };
-
-    // Extraer rtBody divs
-    const rtBodies = [...html.matchAll(/<div[^>]*class=['"]?rtBody['"]?[^>]*>([\s\S]*?)<\/div>/gi)];
-    for (const m of rtBodies) {
-        const preM = m[1].match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
-        if (preM) {
-            const txt = extractText(preM[1]);
-            if (txt.length > 50) texts.push(txt);
-        }
-    }
-
-    // Fallback: el <pre> más largo de la página
-    if (texts.length === 0) {
-        const preRe = /<pre[^>]*>([\s\S]*?)<\/pre>/gi;
-        let best = '';
-        let pm;
-        while ((pm = preRe.exec(html)) !== null) {
-            const t = extractText(pm[1]);
-            if (t.length > best.length) best = t;
-        }
-        if (best.length > 50) texts.push(best);
-    }
-
-    // Extraer slugs de otras versiones listadas en esta página (selector de versiones)
-    // Lacuerda muestra links como /marcos_witt/en_los_montes2 dentro de la página de la canción
-    const extraSlugs = [];
-    const baseForSong = songSlug.replace(/\d+$/, '');
-    const altRe = new RegExp(`href="/${lcSlug}/(${baseForSong}\\d+)(?:\\.shtml)?"`, 'gi');
-    let am;
-    while ((am = altRe.exec(html)) !== null) {
-        const s = am[1];
-        if (s !== songSlug) extraSlugs.push(s);
-    }
-
-    return { usedUrl, texts, extraSlugs };
-}
-
-// ── SAVE ──────────────────────────────────────────────────────────────────────
-function detectKey(text) {
-    const m = (text || '').match(/[Tt]ono[:\s]+([A-G][#b]?m?)/);
-    if (m) return m[1];
-    return 'C';
-}
-
-function saveSong(artistName, artistSlug, title, baseSlug, versionFiles) {
-    const id      = `${slugify(artistSlug)}_${slugify(baseSlug)}`;
+// ── Save ──────────────────────────────────────────────────────────────────────
+function saveSong({ artistName, artistSlug, title, songSlug, versionFiles, detectedKey }) {
+    const id      = `${slugify(artistSlug)}_${slugify(songSlug)}`;
     const songDir = path.join(LIBRARY_DIR, id);
     if (!fs.existsSync(songDir)) fs.mkdirSync(songDir, { recursive: true });
 
@@ -291,40 +148,60 @@ function saveSong(artistName, artistSlug, title, baseSlug, versionFiles) {
     let meta = {};
     try { meta = JSON.parse(fs.readFileSync(metaPath, 'utf8')); } catch {}
 
-    const existing = meta.versions || [];
+    const existing = Array.isArray(meta.versions) ? meta.versions : [];
+    const oldLacuerda = existing.filter(v => v.file && /^chords_v\d+_lacuerda\.txt$/.test(v.file));
+    const kept = existing.filter(v => !(v.file && /^chords_v\d+_lacuerda\.txt$/.test(v.file)));
 
+    const newEntries = [];
     for (const vf of versionFiles) {
-        const fname = vf.file;
-        fs.writeFileSync(path.join(songDir, fname), vf.text, 'utf8');
-        const existing_entry = existing.find(e => e.file === fname);
-        if (!existing_entry) {
-            const entry = { file: fname, source: vf.source };
-            if (vf.lcd != null) entry.lcd = vf.lcd;
-            existing.push(entry);
-        } else if (vf.lcd != null && existing_entry.lcd == null) {
-            existing_entry.lcd = vf.lcd;
+        fs.writeFileSync(path.join(songDir, vf.file), vf.text, 'utf8');
+        const entry = {
+            file: vf.file,
+            source: vf.source,
+            lacuerda_version: vf.lacuerda_version,
+            type: vf.type,
+        };
+        if (vf.label) entry.label = vf.label;
+        newEntries.push(entry);
+    }
+
+    // Borrar archivos antiguos que ya no forman parte de la importación
+    if (!KEEP_OLD) {
+        const keepFiles = new Set(newEntries.map(e => e.file));
+        for (const old of oldLacuerda) {
+            if (!keepFiles.has(old.file) && fs.existsSync(path.join(songDir, old.file))) {
+                try { fs.unlinkSync(path.join(songDir, old.file)); } catch {}
+            }
         }
     }
+
+    const versions = KEEP_OLD
+        ? mergeVersions(existing, newEntries)
+        : [...kept, ...newEntries];
+
+    const newKey = KEEP_KEYS
+        ? (meta.original_key || detectedKey || 'C')
+        : (detectedKey || meta.original_key || 'C');
 
     meta = {
         id,
         title: meta.title || title,
         artist: meta.artist || artistName,
         genre: meta.genre || 'Worship',
-        original_key: meta.original_key || detectKey(versionFiles[0]?.text || ''),
-        versions: existing
+        original_key: newKey,
+        versions,
     };
     fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n', 'utf8');
     return meta;
 }
 
-function upsertIndex(entry) {
-    const index = loadIndex();
-    const i     = index.findIndex(e => e.id === entry.id);
-    const rec   = { id: entry.id, title: entry.title, artist: entry.artist,
-                    genre: entry.genre || 'Worship', original_key: entry.original_key };
-    if (i !== -1) index[i] = rec; else index.push(rec);
-    saveIndex(index);
+function mergeVersions(existing, incoming) {
+    const out = existing.slice();
+    for (const nv of incoming) {
+        const i = out.findIndex(e => e.file === nv.file);
+        if (i !== -1) out[i] = nv; else out.push(nv);
+    }
+    return out;
 }
 
 // ── MAIN ──────────────────────────────────────────────────────────────────────
@@ -337,90 +214,139 @@ function upsertIndex(entry) {
         process.exit(1);
     }
 
-    let { artistName, songs, artistSlug, lcSlug } = info;
+    let { artistName, songs, lcSlug } = info;
+    let artistSlug = ARTIST;
 
-    // Sobrescribir nombre/ID del artista si se especificó (ej: toma_tu_lugar → Marcos Brunet)
     if (DISPLAY_NAME) artistName = DISPLAY_NAME;
     if (ARTIST_ID)    artistSlug = ARTIST_ID;
 
-    const groups = groupSongs(songs);
-    const groupList = [...groups.entries()].slice(0, MAX);
+    if (ONLY_SONG) songs = songs.filter(s => s.slug === ONLY_SONG || s.slug.replace(/\d+$/, '') === ONLY_SONG);
+    songs = songs.slice(0, MAX);
 
     console.log(`\n── Resumen ──────────────────────────────────────────`);
     console.log(`   Artista en biblioteca: "${artistName}" (id: ${slugify(artistSlug)})`);
-    console.log(`   Canciones únicas: ${groupList.length}`);
-    const totalVersionEntries = groupList.reduce((s, [, g]) => s + g.versions.length, 0);
-    console.log(`   Entradas totales (versiones): ${totalVersionEntries}`);
+    console.log(`   Canciones a procesar: ${songs.length}`);
+    console.log(`   Modo: ${DRY_RUN ? 'DRY-RUN (no escribe)' : 'ESCRITURA'}`);
     console.log(`────────────────────────────────────────────────────\n`);
 
-    let saved = 0, skipped = 0;
+    const index = DRY_RUN ? [] : loadIndex();
+    let saved = 0, skipped = 0, failed = 0;
+    const report = [];
 
-    for (let i = 0; i < groupList.length; i++) {
-        const [baseSlug, group] = groupList[i];
-        const vCount = group.versions.length;
-        process.stdout.write(`  [${i+1}/${groupList.length}] "${group.title}" (${vCount} versión${vCount > 1 ? 'es' : ''}) ... `);
+    for (let i = 0; i < songs.length; i++) {
+        const song = songs[i];
+        const baseUrl = `${LC_BASE}/${lcSlug}/${song.slug}`;
+        process.stdout.write(`  [${i + 1}/${songs.length}] "${song.title}" ... `);
 
-        const versionFiles = [];
-        let vNum = 1;
-
-        const slugQueue = group.versions.map(v => ({ slug: v.slug, lcd: v.lcd }));
-        const seenSlugs = new Set(slugQueue.map(v => v.slug));
-        const tabOnlySlugs = []; // slugs que solo tenían tablatura, para segunda pasada
-
-        for (let qi = 0; qi < slugQueue.length; qi++) {
-            const { slug, lcd } = slugQueue[qi];
+        let html;
+        try {
             await sleep(DELAY);
-            try {
-                const { usedUrl, texts, skippedType, isTabOnly, extraSlugs } = await lcFetchVersion(lcSlug, slug);
-                for (const es of (extraSlugs || [])) {
-                    if (!seenSlugs.has(es)) { seenSlugs.add(es); slugQueue.push({ slug: es, lcd: 0 }); }
-                }
-                if (isTabOnly) {
-                    tabOnlySlugs.push({ slug, lcd, usedUrl });
-                    continue;
-                }
-                if (skippedType) {
-                    process.stdout.write(`[tipo ${skippedType} ignorado] `);
-                    continue;
-                }
-                for (const txt of texts) {
-                    versionFiles.push({ file: `chords_v${vNum}_lacuerda.txt`, text: txt, source: usedUrl, lcd });
-                    vNum++;
-                }
-            } catch (e) {
-                process.stdout.write(`[error v${vNum}: ${e.message}] `);
-            }
+            html = await fetchHTML(baseUrl);
+        } catch (e) {
+            console.log(`[error: ${e.message}]`);
+            failed++;
+            continue;
         }
 
-        // Segunda pasada: tablatura como fallback si no hubo ninguna versión R
-        if (versionFiles.length === 0 && tabOnlySlugs.length > 0) {
-            process.stdout.write(`[tab fallback] `);
-            for (const { slug, lcd } of tabOnlySlugs) {
-                await sleep(DELAY);
-                try {
-                    const { usedUrl, texts } = await lcFetchVersion(lcSlug, slug, true);
-                    for (const txt of texts) {
-                        versionFiles.push({ file: `chords_v${vNum}_lacuerda.txt`, text: txt, source: usedUrl, lcd });
-                        vNum++;
-                    }
-                } catch (e) {
-                    process.stdout.write(`[error tab: ${e.message}] `);
-                }
-            }
-        }
-
-        if (!versionFiles.length) {
-            console.log('sin contenido, saltada');
+        const versions = parseSongPage(html);
+        if (!versions.length) {
+            console.log('[sin versiones / página no válida, saltada]');
             skipped++;
             continue;
         }
 
-        const entry = saveSong(artistName, artistSlug, group.title, baseSlug, versionFiles);
-        upsertIndex(entry);
-        console.log(`✓  ${versionFiles.length} archivo${versionFiles.length > 1 ? 's' : ''}`);
-        saved++;
+        const { selected, mode } = pickVersions(versions);
+        if (!selected.length) {
+            const types = [...new Set(versions.map(v => v.type || '?'))].join(',');
+            console.log(`[sin acordes utilizables; tipos: ${types}, saltada]`);
+            skipped++;
+            continue;
+        }
+
+        const versionFiles = [];
+        let vNum = 1;
+        const details = [];
+
+        for (const v of selected) {
+            const text = normalizeContent(v.raw, v.type);
+            if (!text || text.length < 50) {
+                details.push(`v${v.num} ${v.type} vacía`);
+                continue;
+            }
+            const st = notationStats(v.raw);
+            const source = v.href
+                ? `${LC_BASE}/${lcSlug}/${v.href.replace(/^\/+/, '')}`
+                : baseUrl;
+            versionFiles.push({
+                file: `chords_v${vNum}_lacuerda.txt`,
+                text,
+                source,
+                lacuerda_version: v.num,
+                type: v.type,
+                label: v.label,
+            });
+            details.push(`v${v.num} ${v.type}${v.best ? '*' : ''} ${text.length}c${st.es ? ` (ES:${st.es})` : ''}`);
+            vNum++;
+        }
+
+        if (!versionFiles.length) {
+            console.log(`[sin contenido útil, saltada] ${details.join(' | ')}`);
+            skipped++;
+            continue;
+        }
+
+        // Tonalidad: votar entre todas las versiones normalizadas.
+        // Así una versión corrupta no impone una tonalidad errónea.
+        const keyVotes = {};
+        for (const vf of versionFiles) {
+            const k = detectKey(vf.text);
+            if (k) keyVotes[k] = (keyVotes[k] || 0) + 1;
+        }
+        const key = Object.keys(keyVotes).sort((a, b) => keyVotes[b] - keyVotes[a])[0] || null;
+
+        if (DRY_RUN) {
+            console.log(`✓ ${versionFiles.length} archivo(s) [${mode}] key=${key || '?'}  ${details.join(' | ')}`);
+            if (VERBOSE) {
+                for (const vf of versionFiles) {
+                    console.log(`\n      ── ${vf.file} (v${vf.lacuerda_version} ${vf.type}) ──`);
+                    console.log(vf.text.split('\n').slice(0, 25).map(l => '      | ' + l).join('\n'));
+                    console.log('');
+                }
+            }
+        } else {
+            const meta = saveSong({
+                artistName, artistSlug, title: song.title, songSlug: song.slug,
+                versionFiles, detectedKey: key,
+            });
+            upsertIndexEntry(index, meta);
+            console.log(`✓ ${versionFiles.length} archivo(s) [${mode}] key=${meta.original_key}  ${details.join(' | ')}`);
+            saved++;
+        }
+
+        report.push({
+            id: `${slugify(artistSlug)}_${slugify(song.slug)}`,
+            title: song.title,
+            key,
+            mode,
+            files: versionFiles.map(v => ({
+                file: v.file,
+                lacuerda_version: v.lacuerda_version,
+                type: v.type,
+                chars: v.text.length,
+            })),
+        });
     }
 
-    console.log(`\n✅  ${saved} guardadas · ${skipped} sin contenido`);
-    console.log(`   Librería: ${LIBRARY_DIR}`);
+    if (!DRY_RUN) {
+        saveIndex(index);
+        console.log(`\n✅  ${saved} guardadas · ${skipped} saltadas · ${failed} con error`);
+        console.log(`   index.json actualizado (${index.length} entradas)`);
+    } else {
+        console.log(`\n[DRY-RUN] ${report.length} canciones listas · ${skipped} saltadas · ${failed} con error`);
+        console.log('   No se escribió nada.');
+    }
+
+    const reportFile = path.join(__dirname, DRY_RUN ? 'lacuerda-dry-run.json' : 'lacuerda-import-report.json');
+    fs.writeFileSync(reportFile, JSON.stringify(report, null, 2) + '\n', 'utf8');
+    console.log(`   Reporte: ${reportFile}`);
 })();

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "ingrid_rosario_que_se_llene_tu_casa",
+    "title": "Que se llene tu casa",
+    "key": "Cm",
+    "mode": "R",
+    "files": [
+      {
+        "file": "chords_v1_lacuerda.txt",
+        "lacuerda_version": 1,
+        "type": "R",
+        "chars": 253
+      },
+      {
+        "file": "chords_v2_lacuerda.txt",
+        "lacuerda_version": 2,
+        "type": "R",
+        "chars": 341
+      },
+      {
+        "file": "chords_v3_lacuerda.txt",
+        "lacuerda_version": 4,
+        "type": "R",
+        "chars": 338
+      },
+      {
+        "file": "chords_v4_lacuerda.txt",
+        "lacuerda_version": 5,
+        "type": "R",
+        "chars": 322
+      }
+    ]
+  }
+]
