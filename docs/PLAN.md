@@ -426,7 +426,7 @@ Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hic
 | 9 | Bluetooth | Web Bluetooth (§1.8 pendiente) y cuál alternativa si se quiere inalámbrico en el PC. |
 | 10 | Trainer (R1/T1) | Tempo previo a Play corregido sin poder probarlo: faltan los `.mid`. |
 | 11 | ~~Push~~ | ✅ Hecho: todo está en `main` (v321). Regla: commit y push tras cada cambio. |
-| 12 | **Sustain del Casio al cambiar ambiente / perfil** (§1.12) | Con el sustain del Casio activado, cambiar el ambiente (Studio a Live) o pulsar *Profile, 3 parts* en SUSTAIN TEST (Settings) **ya no debe cortarlo** (v319/v320: sin CC72). Verificado solo con MIDI simulado. Si el cambio de **tono** lo corta, es el Program Change del Casio y no se puede evitar desde la app. |
+| 12 | ~~Sustain del Casio al cambiar ambiente / perfil~~ (§1.12) | ✅ **Confirmado por el usuario en el teclado (15 nov): era el release (CC72).** Si el cambio de **tono** lo corta, sería el Program Change del Casio. |
 | 13 | **Octava por defecto −1** (§1.11) | Confirmar que −1 (RPN 52) suena a la altura esperada en el CT-S500. Estado guardado migrado una vez a −1 en v316. |
 | 14 | **TRANSPOSE y OCTAVE en el teclado** (§1.11) | Probar botones, Reset y atajos; el rango real es ±24 semitonos (octava −2…+2, transpose −12…+12, suma limitada). Verificado solo con MIDI simulado. |
 | 15 | **Conexión MIDI en la tablet Android** (v321) | Por cable USB conecta tras dar el permiso de MIDI en Chrome. Si el selector CONEXIÓN estaba en "Solo Bluetooth", ahora cae al cable. Pendiente: decidir si se muestra un aviso más claro cuando Chrome bloquea el permiso. |
