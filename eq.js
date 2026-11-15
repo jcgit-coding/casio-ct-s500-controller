@@ -950,7 +950,9 @@ const clampCC = (v, a, b) => Math.max(a, Math.min(b, v));
 //   - synth / lead: filter and short delay allowed
 // ----------------------------------------------------------------------
 const ROLE_CLASS = {};
-[ ['natural',   'piano ep guitar_acoustic guitar_12str guitar_jazz ethnic_string'],
+[ ['natural',   'piano guitar_acoustic guitar_12str guitar_jazz ethnic_string'],
+  // Electric pianos (tine/reed): a fairly deep chorus is the classic treatment, so it gets more chorus than acoustic sounds.
+  ['ep',        'ep'],
   // Short, percussive sounds: no chorus (it smears the transient) and almost no filter/attack change.
   ['plucked',   'harpsi clav mallet bell dulcimer harp pizz guitar_mute folk_pluck ethnic_pluck ethnic_perc'],
   // Low register: reverb and chorus on a bass muddy the low end and the kick/pedal of the band.
@@ -968,6 +970,7 @@ const ROLE_CLASS = {};
 // (a bass should not get a hall tail). live: multiplier of the reverb in Live.
 const CLASS_LIMITS = {
     natural:   { d74: 3,  d71: 2, d73: 3,  dv: 2,  r: [8, 34],  ch: [0, 6],  dl: [0, 0], hall: 1,   live: 0.7 },
+    ep:        { d74: 3,  d71: 2, d73: 3,  dv: 2,  r: [8, 34],  ch: [0, 12], dl: [0, 0], hall: 1,   live: 0.7 },
     plucked:   { d74: 3,  d71: 2, d73: 3,  dv: 2,  r: [8, 32],  ch: [0, 2],  dl: [0, 0], hall: 1,   live: 0.7 },
     bass:      { d74: 3,  d71: 2, d73: 4,  dv: 2,  r: [4, 10],  ch: [0, 0],  dl: [0, 0], hall: 0.3, live: 0.5 },
     sustained: { d74: 5,  d71: 2, d73: 6,  dv: 4,  r: [14, 40], ch: [0, 4],  dl: [0, 0], hall: 1,   live: 0.7 },
@@ -1005,6 +1008,10 @@ let eqBypass = false;
 const _sentProfile = { U1: {}, U2: {}, L: {} };
 function invalidateSentProfile(part) { if (part) _sentProfile[part] = {}; else { _sentProfile.U1 = {}; _sentProfile.U2 = {}; _sentProfile.L = {}; } }
 try { eqBypass = localStorage.getItem('casioEqBypass') === '1'; } catch (e) {}
+// CCs a profile owns. In BYPASS none of them is sent: the Casio resets exactly these (cutoff, resonance,
+// attack, release, vibrato, reverb/chorus/delay sends...) to the TONE's recommended values on every tone
+// change (User's Guide ES-63), so "no profile" = the keyboard's own design, not a made-up neutral.
+const PROFILE_CCS = new Set([74, 71, 73, 76, 77, 78, 91, 93, 94]);
 const BYPASS_PROFILE = { 74: 64, 71: 64, 73: 64, 76: 64, 77: 64, 78: 64, 91: 40, 93: 0, 94: 0 };
 
 // ======================================================================
@@ -1059,7 +1066,7 @@ function applySmartProfile(part, category, onlyChanged) {
     EQ_CONTROLS.forEach(ctrl => {
         if (PERFORMANCE_CCS.has(ctrl.cc)) return;
         const val = eqState[part][ctrl.cc];
-        if (!(onlyChanged && _sentProfile[part][ctrl.cc] === val)) sendCC(part, ctrl.cc, val);
+        if (!(eqBypass && PROFILE_CCS.has(ctrl.cc)) && !(onlyChanged && _sentProfile[part][ctrl.cc] === val)) sendCC(part, ctrl.cc, val);
         _sentProfile[part][ctrl.cc] = val;
         if (activePart === part) {
             if (ctrl.type === 'switch') {

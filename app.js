@@ -637,11 +637,22 @@ function initApp() {
             eqBypass = !eqBypass;
             try { localStorage.setItem('casioEqBypass', eqBypass ? '1' : '0'); } catch (e) {}
             paintBypass();
+            // A tone change makes the Casio restore each tone's RECOMMENDED cutoff, resonance, attack, release,
+            // vibrato and reverb/chorus/delay sends (User's Guide ES-63). Re-sending the tones is therefore the
+            // way to reach "the Casio's own sound" (BYPASS on) or a clean base for the profile (BYPASS off).
+            // Heads-up: like any tone change, this resets the Casio's SUS time.
+            invalidateSentProfile();
             ['U1', 'U2', 'L'].forEach(part => {
-                if (activeCategories[part]) applySmartProfile(part, activeCategories[part], true);
+                const t = currentTone[part];
+                if (t) changeTone(part, t.bank, t.lsb, t.program);
             });
-            resyncAllSustain();
-            switchEQ(activePart);
+            setTimeout(() => {
+                if (!eqBypass) ['U1', 'U2', 'L'].forEach(part => {
+                    if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
+                });
+                switchEQ(activePart);
+                Pitch.afterProgramChange('bypass');
+            }, 700);
         });
     }
 
@@ -1318,6 +1329,7 @@ function pushAllToKeyboard(skipTones = false) {
         ['U1','U2','L'].forEach(part => {
             EQ_CONTROLS.forEach(ctrl => {
                 if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state -- never force on reconnect
+                if (eqBypass && PROFILE_CCS.has(ctrl.cc)) return; // BYPASS = the Casio's own recommended values
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCC(part, 10, 64); // PAN is not an app control: always centred on connect
