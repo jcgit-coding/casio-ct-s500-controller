@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v309';
+    var V='v310';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v309">
+    <link rel="stylesheet" href="style.css?v310">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -107,20 +107,28 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v309</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v310</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
                     el.textContent=V;
+                    var KEY='casioBadgeDate', TTL=2*60*1000;
+                    function show(iso){
+                        var d=new Date(iso);
+                        el.textContent=V+' '+d.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short'})+' '+d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:false});
+                    }
+                    var cached=null;
+                    try{ cached=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+                    if(cached&&cached.iso) show(cached.iso);
+                    // Cached 2 min (so a fresh push shows soon): unauthenticated GitHub API is 60 req/h per IP, a 403 must not blank the badge
+                    if(cached&&Date.now()-cached.t<TTL) return;
                     fetch('https://api.github.com/repos/jcgit-coding/casio-ct-s500-controller/commits/main')
-                        .then(function(r){return r.json();})
+                        .then(function(r){return r.ok?r.json():null;})
                         .then(function(data){
                             var iso=data&&data.commit&&data.commit.committer&&data.commit.committer.date;
                             if(!iso)return;
-                            var d=new Date(iso);
-                            var ds=d.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short'});
-                            var ts=d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:false});
-                            el.textContent=V+' '+ds+' '+ts;
+                            show(iso);
+                            try{ localStorage.setItem(KEY,JSON.stringify({iso:iso,t:Date.now()})); }catch(e){}
                         }).catch(function(){});
                 })();
                 </script>
@@ -1064,13 +1072,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v309"></script>
-    <script src="pitch.js?v309"></script>
-    <script src="presets.js?v309"></script>
-    <script src="app.js?v309"></script>
-    <script src="harmony.js?v309"></script>
-    <script src="library.js?v309"></script>
-    <script src="trainer.js?v309"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v310"></script>
+    <script src="pitch.js?v310"></script>
+    <script src="presets.js?v310"></script>
+    <script src="app.js?v310"></script>
+    <script src="harmony.js?v310"></script>
+    <script src="library.js?v310"></script>
+    <script src="trainer.js?v310"></script>
 </body>
 </html>
 
