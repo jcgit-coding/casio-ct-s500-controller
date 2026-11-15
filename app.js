@@ -161,7 +161,34 @@ function loadToneEQ() {
                 delete toneEQ[id][env][11]; delete toneEQ[id][env]['11'];
             }
         }
+        migrateLegacyToneEQ();
     } catch(e) { toneEQ = {}; }
+}
+
+// M3: before v303 an override was a COPY of the whole profile (9 CCs), which froze old, unguarded
+// values per tone+environment and let them bypass the realism limits forever. Overrides are now a
+// sparse diff. A full copy cannot be turned into a diff (we do not know what the user really moved),
+// so legacy full copies are removed ONCE; the previous data is kept under 'casioToneEQ_backup_<time>'.
+const TONE_EQ_FORMAT = '2';
+const TONE_PROFILE_CCS = [74, 71, 73, 76, 77, 78, 91, 93, 94];
+function migrateLegacyToneEQ() {
+    let fmt = null;
+    try { fmt = localStorage.getItem('casioToneEQ_fmt'); } catch (e) {}
+    if (fmt === TONE_EQ_FORMAT) return;
+    const before = JSON.stringify(toneEQ);
+    let dropped = 0;
+    for (const id of Object.keys(toneEQ)) {
+        for (const env of Object.keys(toneEQ[id])) {
+            const n = TONE_PROFILE_CCS.filter(cc => toneEQ[id][env][cc] !== undefined || toneEQ[id][env][String(cc)] !== undefined).length;
+            if (n >= 8) { delete toneEQ[id][env]; dropped++; }
+        }
+        if (!Object.keys(toneEQ[id]).length) delete toneEQ[id];
+    }
+    try {
+        if (dropped) localStorage.setItem('casioToneEQ_backup_' + Date.now(), before);
+        localStorage.setItem('casioToneEQ_fmt', TONE_EQ_FORMAT);
+    } catch (e) {}
+    if (dropped) { saveToneEQ(); console.log('[toneEQ] removed ' + dropped + ' legacy full-profile overrides (backup saved)'); }
 }
 
 // Save current eqState for the active part's tone+environment
@@ -384,6 +411,10 @@ function onMIDIMessage(e) {
         // Re-assert the global pitch so U1/U2/L cannot drift apart.
         if (d1 === 121 || d1 === 120) invalidateSentProfile(part);
         if (d1 === 121 || d1 === 120) Pitch.reassert('cc' + d1, 120);
+        // The Casio transmits its own RPN (e.g. coarse tune) when a Registration is recalled
+        // (MIDI Implementation 7.23): put OCTAVE/TRANSPOSE back. Ignore it for 600 ms after our own
+        // send so a possible echo can never start a loop.
+        if ((d1 === 100 || d1 === 101) && Date.now() - (Pitch.status().last?.at || 0) > 600) Pitch.reassert('casio-rpn', 300);
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
         if (d1 === 0) { pendingBank[part] = d2; }
         if (d1 === 32) { pendingLSB[part] = d2; }
@@ -393,15 +424,15 @@ function onMIDIMessage(e) {
             const ctrl = EQ_CONTROLS.find(c => c.cc === d1);
             if (ctrl) {
                 if (ctrl.type === 'switch') {
-                    document.querySelectorAll(`.eq-switch[data-cc="${d1}"]`).forEach(btn => {
+                    eqDom(d1).switches.forEach(btn => {
                         btn.innerText = d2 > 63 ? 'ON' : 'OFF';
                         btn.classList.toggle('sus-on', d2 > 63);
                     });
                 } else {
                     beginEqProgrammatic();
-                    document.querySelectorAll(`.eq-fader[data-cc="${d1}"]`).forEach(f => { f.value = d2; });
+                    eqDom(d1).faders.forEach(f => { f.value = d2; });
                 }
-                document.querySelectorAll(`.eq-val-${d1}`).forEach(valEl => {
+                eqDom(d1).vals.forEach(valEl => {
                     valEl.innerText = ctrl.type === 'switch' ? (d2 > 63 ? 'ON' : 'OFF') : formatVal(ctrl.label, d2);
                 });
             }
@@ -413,6 +444,9 @@ function onMIDIMessage(e) {
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
         invalidateSentProfile(part); // PC resets the Casio CCs
+        // A Program Change resets the channel's Coarse Tuning. Re-assert OCTAVE/TRANSPOSE for every PC,
+        // not only when the tone is found in the app's list (scheduleProfile below runs only then).
+        Pitch.reassert('casio-pc', 200);
 
         // When moving directly on the Casio keyboard, clear any active filter
         // so the user can immediately see and browse the COMPLETE list of all 764 tones!

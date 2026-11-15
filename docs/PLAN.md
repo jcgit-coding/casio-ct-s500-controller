@@ -177,6 +177,31 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Arreglo:** `sendCC` ya **no envía CC72 al teclado** (solo lo refleja al PC Synth). Verificado con MIDI simulado: 0 mensajes CC72 en perfil, reconexión y cambio de tono. **Pendiente revisar JC:** confirmar en el teclado que Profile, 3 parts y el cambio de ambiente ya no cortan el sustain.
 - **v320, limpieza:** el reset del EQ ya no tocaba el release desde hace tiempo, pero quedaban dos envíos de CC72 (el "neutro por categoría" en cada perfil y en la reconexión). Se eliminaron junto con `releaseNeutral`, `CAT_RELEASE_NEUTRAL` y `RELEASE_MAX_DEV`. Verificado con MIDI simulado: 0 CC72 en perfil, cambio de ambiente y reenvío completo. El pendiente "CC72 tope +6 vs BYPASS" de §10 queda **obsoleto**: el release lo define el propio Casio.
 
+### 1.13 Perfiles tono+ambiente v324 (más realistas)
+
+Los CC71/73/74/76/77/78 son **relativos** al diseño de cada tono; cada desviación se suma a lo que Casio ya afinó. Por eso las familias acústicas quedan casi en neutro y solo pads/synths se mueven mucho. Nada de esto se oyó en el teclado: **Pendiente revisar JC** (comparar con BYPASS EQ).
+
+| Familia | Cutoff / Res. / Attack / Vibrato (± desde 64) | Reverb | Chorus | Delay | Hall |
+|---|---|---|---|---|---|
+| natural (piano, EP, guitarras acústicas…) | 3 / 2 / 3 / 2 | 8–34 | 0–6 | 0 | ×1 |
+| **plucked** (marimba, campanas, arpa, pizz, clav…) | 3 / 2 / 3 / 2 | 8–32 | **0–2** | 0 | ×1 |
+| **bass** (bajos, también sintéticos) | 3 / 2 / 4 / 2 | **4–10** | **0** | 0 | **×0,3** |
+| sustained (cuerdas, metales, vientos, voz) | 5 / 2 / 6 / 4 | 14–40 | 0–4 | 0 | ×1 |
+| organ | 4 / 2 / 4 / 4 | 14–40 | 0–16 | 0 | ×0,8 |
+| pad | 10 / 5 / 10 / 6 | 20–50 | 0–14 | 0 | ×0,8 |
+| synth | 10 / 5 / 10 / 4 | 8–30 | 0–18 | 0–8 | ×0,8 |
+| lead | 10 / 5 / 10 / 4 | 10–32 | 0–16 | 0–12 | ×0,8 |
+
+- **Por qué:** reverb y chorus en un bajo ensucian el grave; chorus en sonidos percusivos borra el ataque; un attack lento (+14) en cuerdas hace que las notas respondan tarde en vivo; el vibrato de órgano a +12 suena artificial.
+- **Ambientes (solo sala):** Live reverb ×0,7 (bajo ×0,5), Hall +14 con techo +12 (× el factor de la familia, bajo ×0,3), Jazz +4 y chorus ×0,5. Nunca tocan filtro, attack, vibrato ni delay.
+- **Verificado:** 60 roles × 4 ambientes sin ninguna violación de límites; todos los roles pertenecen a una familia. Ejemplo bajo en Hall: reverb 24 → 14, chorus 6–14 → 0.
+
+### 1.14 M3 y M7 (v323/v324)
+
+- **M3:** los overrides guardados antes de v303 eran copias completas del perfil (congelaban valores viejos y se saltaban las guardas). Se eliminan **una sola vez**; la copia anterior queda en `localStorage casioToneEQ_backup_<hora>`. Los overrides por diferencia (lo que de verdad moviste) se conservan.
+- **M7:** los widgets del EQ se buscan una vez por CC (`eqDom`) en vez de ~40 `querySelectorAll` por cambio de perfil.
+- **Pitch (revisión de código):** un Program Change del Casio con un tono que la app no reconocía no reenviaba OCTAVE/TRANSPOSE; ahora se reenvía siempre, y también cuando el Casio manda su RPN al recuperar un Registration (con anti-bucle de 600 ms). Los canales de recepción por defecto del manual (§1.3.2) son Upper1=1, Upper2=2, Lower=3: **si cambiaste esos canales en el menú del Casio, pitch y EQ irían a las partes equivocadas**.
+
 ## 2. Mixer / EQ (prioridad 2)
 
 | ID | Tema | Evidencia / detalle |

@@ -950,34 +950,43 @@ const clampCC = (v, a, b) => Math.max(a, Math.min(b, v));
 //   - synth / lead: filter and short delay allowed
 // ----------------------------------------------------------------------
 const ROLE_CLASS = {};
-[ ['natural',   'piano ep harpsi clav mallet bell dulcimer harp pizz guitar_acoustic guitar_12str guitar_jazz guitar_mute folk_pluck bass bass_slap ethnic_string ethnic_pluck ethnic_perc'],
+[ ['natural',   'piano ep guitar_acoustic guitar_12str guitar_jazz ethnic_string'],
+  // Short, percussive sounds: no chorus (it smears the transient) and almost no filter/attack change.
+  ['plucked',   'harpsi clav mallet bell dulcimer harp pizz guitar_mute folk_pluck ethnic_pluck ethnic_perc'],
+  // Low register: reverb and chorus on a bass muddy the low end and the kick/pedal of the band.
+  ['bass',      'bass bass_slap bass_synth seq_bass'],
   ['sustained', 'strings_solo strings_ens brass_solo brass_ens brass_hard synth_brass sax reed flute organ_pipe accordion harmonica harmonium bagpipe voice ethnic_flute ethnic_reed'],
   ['organ',     'organ'],
   ['pad',       'piano_pad synth_strings pad_strings pad_saw pad_glass synth_pad guitar_pad'],
-  ['synth',     'bass_synth seq_bass guitar_clean guitar_drive guitar_dist guitar_synth guitar_talk edm hit sfx generic vocoder'],
+  ['synth',     'guitar_clean guitar_drive guitar_dist guitar_synth guitar_talk edm hit sfx generic vocoder'],
   ['lead',      'synth_lead lead_soft pluck arp']
 ].forEach(([cls, names]) => names.split(' ').forEach(n => { ROLE_CLASS[n] = cls; }));
 
-// d74/d71/d73/dv: max deviation from 64 (cutoff, resonance, attack, vibrato).
-// r/ch/dl: [min,max] for reverb / chorus / delay sends.
+// d74/d71/d73/dv: max deviation from 64 (cutoff, resonance, attack, vibrato). The CCs are RELATIVE to
+// each tone's own design, so acoustic families stay close to neutral and only pads/synths may move far.
+// r/ch/dl: [min,max] for reverb / chorus / delay sends. hall: how much of the Hall reverb boost applies
+// (a bass should not get a hall tail). live: multiplier of the reverb in Live.
 const CLASS_LIMITS = {
-    natural:   { d74: 4,  d71: 2, d73: 6,  dv: 4,  r: [8, 34],  ch: [0, 6],  dl: [0, 0] },
-    sustained: { d74: 6,  d71: 2, d73: 10, dv: 6,  r: [14, 40], ch: [0, 4],  dl: [0, 0] },
-    organ:     { d74: 6,  d71: 2, d73: 6,  dv: 12, r: [14, 40], ch: [0, 24], dl: [0, 0] },
-    pad:       { d74: 12, d71: 6, d73: 14, dv: 8,  r: [20, 52], ch: [0, 14], dl: [0, 0] },
-    synth:     { d74: 12, d71: 6, d73: 12, dv: 6,  r: [8, 32],  ch: [0, 20], dl: [0, 8] },
-    lead:      { d74: 12, d71: 6, d73: 12, dv: 6,  r: [10, 34], ch: [0, 20], dl: [0, 12] }
+    natural:   { d74: 3,  d71: 2, d73: 3,  dv: 2,  r: [8, 34],  ch: [0, 6],  dl: [0, 0], hall: 1,   live: 0.7 },
+    plucked:   { d74: 3,  d71: 2, d73: 3,  dv: 2,  r: [8, 32],  ch: [0, 2],  dl: [0, 0], hall: 1,   live: 0.7 },
+    bass:      { d74: 3,  d71: 2, d73: 4,  dv: 2,  r: [4, 10],  ch: [0, 0],  dl: [0, 0], hall: 0.3, live: 0.5 },
+    sustained: { d74: 5,  d71: 2, d73: 6,  dv: 4,  r: [14, 40], ch: [0, 4],  dl: [0, 0], hall: 1,   live: 0.7 },
+    organ:     { d74: 4,  d71: 2, d73: 4,  dv: 4,  r: [14, 40], ch: [0, 16], dl: [0, 0], hall: 0.8, live: 0.7 },
+    pad:       { d74: 10, d71: 5, d73: 10, dv: 6,  r: [20, 50], ch: [0, 14], dl: [0, 0], hall: 0.8, live: 0.7 },
+    synth:     { d74: 10, d71: 5, d73: 10, dv: 4,  r: [8, 30],  ch: [0, 18], dl: [0, 8], hall: 0.8, live: 0.7 },
+    lead:      { d74: 10, d71: 5, d73: 10, dv: 4,  r: [10, 32], ch: [0, 16], dl: [0, 12], hall: 0.8, live: 0.7 }
 };
 
 // Environments only move the room (reverb / chorus). Cutoff, attack, vibrato and
 // delay are never touched by the environment. Hall may exceed the family reverb
-// ceiling by 12 -- that is the whole point of a hall.
+// ceiling (+12 x the class hall factor) -- that is the whole point of a hall, but
+// never for the bass.
 function shapeProfile(role, S, env) {
     const L = CLASS_LIMITS[ROLE_CLASS[role] || 'natural'];
     const dev = (v, d) => 64 + clampCC((v === undefined ? 64 : v) - 64, -d, d);
     let rev = S[91], cho = S[93], revMax = L.r[1];
-    if (env === 'Live')      { rev = Math.round(rev * 0.7); }
-    else if (env === 'Hall') { rev = rev + 14; revMax += 12; }
+    if (env === 'Live')      { rev = Math.round(rev * L.live); }
+    else if (env === 'Hall') { rev = rev + Math.round(14 * L.hall); revMax += Math.round(12 * L.hall); }
     else if (env === 'Jazz') { rev = rev + 4; cho = Math.round(cho * 0.5); }
     return {
         74: dev(S[74], L.d74), 71: dev(S[71], L.d71), 73: dev(S[73], L.d73),
@@ -1054,15 +1063,15 @@ function applySmartProfile(part, category, onlyChanged) {
         _sentProfile[part][ctrl.cc] = val;
         if (activePart === part) {
             if (ctrl.type === 'switch') {
-                document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
+                eqDom(ctrl.cc).switches.forEach(btn => {
                     btn.innerText = val > 63 ? 'ON' : 'OFF';
                     btn.classList.toggle('sus-on', val > 63);
                 });
             } else {
-                document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(f => {
+                eqDom(ctrl.cc).faders.forEach(f => {
                     f.value = val;
                 });
-                document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(valEl => {
+                eqDom(ctrl.cc).vals.forEach(valEl => {
                     valEl.innerText = formatVal(ctrl.label, val);
                 });
             }
@@ -1071,7 +1080,25 @@ function applySmartProfile(part, category, onlyChanged) {
 
 }
 
+// Per-CC DOM cache for the EQ widgets (M7): every profile change used to run ~40 document-wide
+// querySelectorAll calls. The widgets are created once by buildEQ(), so the lookup is cached.
+let _eqDomCache = null;
+function eqDom(cc) {
+    if (!_eqDomCache) _eqDomCache = new Map();
+    let d = _eqDomCache.get(cc);
+    if (!d) {
+        d = {
+            switches: Array.from(document.querySelectorAll('.eq-switch[data-cc="' + cc + '"]')),
+            faders:   Array.from(document.querySelectorAll('.eq-fader[data-cc="' + cc + '"]')),
+            vals:     Array.from(document.querySelectorAll('.eq-val-' + cc)),
+        };
+        _eqDomCache.set(cc, d);
+    }
+    return d;
+}
+
 function buildEQ() {
+    _eqDomCache = null;
     ['U1','U2','L'].forEach(part => {
         EQ_CONTROLS.forEach(ctrl => { 
             let defVal = ctrl.def;
@@ -1177,10 +1204,10 @@ function buildEQ() {
                     const v = parseInt(e.target.value);
                     // Pointer drag: keep the part captured at pointerdown. Keyboard/wheel (no pointer): follow the active part.
                     if (!_dragging) _faderPart = activePart;
-                    document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
+                    eqDom(ctrl.cc).vals.forEach(sp => {
                         sp.innerText = formatVal(ctrl.label, v);
                     });
-                    document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
+                    eqDom(ctrl.cc).faders.forEach(other => {
                         if (other !== fader) other.value = v;
                     });
                     // Programmatic writes must not echo back
@@ -1196,10 +1223,10 @@ function buildEQ() {
                     if ((cur !== undefined ? cur : ctrl.def) !== v) {
                         eqState[_faderPart][ctrl.cc] = v;
                         sendCC(_faderPart, ctrl.cc, v);
-                        document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(sp => {
+                        eqDom(ctrl.cc).vals.forEach(sp => {
                             sp.innerText = formatVal(ctrl.label, v);
                         });
-                        document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(other => {
+                        eqDom(ctrl.cc).faders.forEach(other => {
                             if (other !== fader) other.value = v;
                         });
                     }
@@ -1245,15 +1272,15 @@ function switchEQ(part) {
         const val = eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def;
 
         if (ctrl.type === 'switch') {
-            document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
+            eqDom(ctrl.cc).switches.forEach(btn => {
                 btn.innerText = val > 63 ? 'ON' : 'OFF';
                 btn.classList.toggle('sus-on', val > 63);
             });
         } else {
-            document.querySelectorAll(`.eq-fader[data-cc="${ctrl.cc}"]`).forEach(fader => {
+            eqDom(ctrl.cc).faders.forEach(fader => {
                 fader.value = val;
             });
-            document.querySelectorAll(`.eq-val-${ctrl.cc}`).forEach(valEl => {
+            eqDom(ctrl.cc).vals.forEach(valEl => {
                 valEl.innerText = formatVal(ctrl.label, val);
             });
         }
