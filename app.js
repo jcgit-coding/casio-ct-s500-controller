@@ -402,6 +402,7 @@ function onMIDIMessage(e) {
         if (!part) return;
         // Reset All Controllers (CC121) clears RPN coarse tuning on many devices.
         // Re-assert the global pitch so U1/U2/L cannot drift apart.
+        if (d1 === 121 || d1 === 120) invalidateSentProfile(part);
         if (d1 === 121 || d1 === 120) Pitch.reassert('cc' + d1, 120);
         if (d1 === 7 && window.pcSynth?.applyCC) window.pcSynth.applyCC(7, d2, ch);
         if (d1 === 0) { pendingBank[part] = d2; }
@@ -431,6 +432,7 @@ function onMIDIMessage(e) {
         const ch = status & 0x0F;
         const part = Object.keys(CHANNEL).find(k => CHANNEL[k] === ch);
         if (!part) return;
+        invalidateSentProfile(part); // PC resets the Casio CCs
 
         // When moving directly on the Casio keyboard, clear any active filter
         // so the user can immediately see and browse the COMPLETE list of all 764 tones!
@@ -509,13 +511,13 @@ function initApp() {
         try { _tsel.value = localStorage.getItem('casioMidiTransport') || 'auto'; } catch (e) {}
         _tsel.addEventListener('change', () => {
             try { localStorage.setItem('casioMidiTransport', _tsel.value); } catch (e) {}
-            _forceMidiResync = true;
+            _forceMidiResync = true; invalidateSentProfile();
             if (midiAccess) reconnectMIDI();
         });
     }
     const handleConnectClick = () => {
         midiInitAttempted = true;
-        _forceMidiResync = true;
+        _forceMidiResync = true; invalidateSentProfile();
         if (midiAccess) reconnectMIDI(); else initMIDI();
     };
     document.getElementById("connectBtn")?.addEventListener("click", handleConnectClick);
@@ -600,7 +602,7 @@ function initApp() {
             // Reapply profiles to all parts (applySmartProfile already sends the CCs --
             // no pushAllToKeyboard here: it would re-send Program Changes and force the tones)
             ['U1', 'U2', 'L'].forEach(part => {
-                if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
+                if (activeCategories[part]) applySmartProfile(part, activeCategories[part], true);
             });
             // Re-send CC72 on every part -- a ~57-CC burst from 3xapplySmartProfile
             // triggers the CT-S500 hardware controller reset multiple times.
@@ -622,7 +624,7 @@ function initApp() {
             try { localStorage.setItem('casioEqBypass', eqBypass ? '1' : '0'); } catch (e) {}
             paintBypass();
             ['U1', 'U2', 'L'].forEach(part => {
-                if (activeCategories[part]) applySmartProfile(part, activeCategories[part]);
+                if (activeCategories[part]) applySmartProfile(part, activeCategories[part], true);
             });
             resyncAllSustain();
             switchEQ(activePart);
@@ -1253,6 +1255,7 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xB0 | ch, 0x00, msb]);
     midiOutput.send([0xB0 | ch, 0x20, lsb || 0]);
     midiOutput.send([0xC0 | ch, pc]);
+    if (typeof invalidateSentProfile === 'function') invalidateSentProfile(part); // PC resets the Casio CCs
     // PC resets the channel's RPN tuning on the Casio — re-assert the global pitch
     Pitch.reassert('tone-change');
     // Re-assert the physical pedal so tone changes never drop a held sustain

@@ -983,6 +983,10 @@ function shapeProfile(role, S, env) {
 // BYPASS EQ: every relative CC at its neutral (64), sends at the GM defaults
 // (reverb 40, chorus 0, delay 0) -- to A/B a tone with and without any profile.
 let eqBypass = false;
+// Last CC values sent by applySmartProfile per part. Env/bypass changes send only the diff: a
+// ~19-CC burst per part makes the CT-S500 reset its controllers (cuts a held sustain).
+const _sentProfile = { U1: {}, U2: {}, L: {} };
+function invalidateSentProfile(part) { if (part) _sentProfile[part] = {}; else { _sentProfile.U1 = {}; _sentProfile.U2 = {}; _sentProfile.L = {}; } }
 try { eqBypass = localStorage.getItem('casioEqBypass') === '1'; } catch (e) {}
 const BYPASS_PROFILE = { 74: 64, 71: 64, 73: 64, 76: 64, 77: 64, 78: 64, 91: 40, 93: 0, 94: 0 };
 
@@ -997,7 +1001,7 @@ function getToneEnvPreset(tone, cat, env) {
     return shapeProfile(role, ROLES[role] || ROLES.generic, env || 'Studio');
 }
 
-function applySmartProfile(part, category) {
+function applySmartProfile(part, category, onlyChanged) {
     if (category) activeCategories[part] = category;
     const cat = activeCategories[part];
 
@@ -1038,7 +1042,8 @@ function applySmartProfile(part, category) {
     EQ_CONTROLS.forEach(ctrl => {
         if (PERFORMANCE_CCS.has(ctrl.cc)) return;
         const val = eqState[part][ctrl.cc];
-        sendCC(part, ctrl.cc, val);
+        if (!(onlyChanged && _sentProfile[part][ctrl.cc] === val)) sendCC(part, ctrl.cc, val);
+        _sentProfile[part][ctrl.cc] = val;
         if (activePart === part) {
             if (ctrl.type === 'switch') {
                 document.querySelectorAll(`.eq-switch[data-cc="${ctrl.cc}"]`).forEach(btn => {
