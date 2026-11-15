@@ -14,6 +14,7 @@
 3. **Persistencia versionada.** Todo snapshot en `localStorage` lleva versión y migración explícita. Nunca se restaura un valor sin validarlo.
 4. **Si no está verificado contra el CT-S500 o el MIDI Implementation oficial, se marca como no verificado** en la UI o en este plan. No se presenta como hardware real.
 5. **Cada cambio:** `node --check` de los JS tocados + prueba en navegador con `midiOutput` falso + bump de versión en `index.html` + commit descriptivo.
+6. **Hardware del usuario: CT-S500 con firmware 1.06 (la última).** No asumir 1.05. El MIDI Implementation oficial que aplica es *CT-S500 (Firmware 1.06 o superior)*; las funciones "FW 1.06+" (p. ej. Registration Memories) están disponibles.
 
 ### Cómo se verifica sin el teclado conectado
 
@@ -175,6 +176,28 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 | M8 | **CC verificados contra el spec (14 nov)** | Documentados por Casio: CC71 resonancia (47H, valor 0-127 sin tabla de neutro), CC72 release (48H), CC73 attack (49H), CC74 cutoff (4AH), CC76/77/78 vibrato rate/depth/delay (4CH/4DH/4EH), CC91/93/94 sends de reverb/chorus/delay (5BH/5DH/5EH). **CC72/73/74/76/77/78 son relativos −64…+63 con 64 = neutro**: un ROLE que ponga 90 en CC74 son +26, no "brillo": mover cutoff/attack con tanta amplitud explica sonidos artificiales (M10). Ya no hay CC "no verificados"; quitar esa marca. Falta verificar en hardware el neutro de CC71 (sin tabla). |
 | M9 | **El preset no guarda el ambiente** (`A2`) | `captureAndSavePreset` no incluye `currentEnv` → un preset guardado en Hall se carga en Studio con los CC de Hall. Añadir `environment` al snapshot y restaurarlo. **✅ v301 (ver A2).** |
 | M10 | **Los perfiles tono+ambiente suenan artificiales** (reportado 13 nov) | Hipótesis: (a) los ROLES son por rol, no por tono, y 764 tonos comparten ~40 perfiles; (b) se calibraron con `globalOctave = -1`; (c) desviaciones grandes en CC74/71 que el CT-S500 interpreta como filtro; (d) `derive()` mueve ataque/cutoff por ambiente, no solo reverb; (e) no hay bypass para comparar. **Plan:** toggle `BYPASS EQ`, tope de desviación ±6 (reverb/chorus aparte), auditar familia por familia con hardware (Anexo A) y dejar los ambientes solo en reverb/chorus. **Spec (14 nov):** los CC 72-78 son *relativos* (64 = 0), no absolutos: las desviaciones de ROLES/`derive()` se suman al ajuste interno de cada tono, por eso 764 tonos con ~40 perfiles se oyen planos o exagerados. Además M1 (CC77 en −64) afecta a todos. Prioridad: corregir M1 → BYPASS EQ → tope ±6. **v301: implementado en §1.10 (guardas por familia, ambientes solo sala, BYPASS EQ); falta validar de oído.** |
+
+---
+
+### 2.1 Auditoría de CC contra el MIDI Implementation oficial (v310, 14 nov)
+
+Fuente: *CT-S500 MIDI Implementation, firmware 1.06 o superior* (§7 Control Change, §7.23 RPN, §13 SysEx). Texto extraído con `pdftotext`; el PDF dio un aviso de fuente japonesa, así que un párrafo suelto podría faltar.
+
+| Mensaje | Estado en la app |
+|---|---|
+| CC0/32 Bank, CC7 Volume, CC10 Pan, CC11 Expression | ✅ ya en el Mixer |
+| CC1 Modulation, CC5 Port. Time, CC65 Portamento | ✅ ya (controles de ejecución, no entran en perfiles) |
+| CC66 Sostenuto, CC67 Soft | ✅ ya (el usuario solo tiene pedal de sustain) |
+| CC71 Resonance, CC72 Release, CC73 Attack, CC74 Cutoff | ✅ ya |
+| CC76/77/78 Vibrato Rate/Depth/Delay | ✅ ya (relativos, ver §1.10) |
+| CC91/93/94 Reverb/Chorus/Delay send | ✅ ya |
+| CC64 Sustain | El Casio lo recibe; en timbre Piano/LM Piano es **continuo** (velocidad de decaimiento), en Melody/Hex Layer on/off. La app no lo controla. |
+| **RPN 0:0 Pitch Bend Range** (0–24 semitonos) | ❌ **no está.** Candidato real a añadir por pista. Pendiente revisar JC: confirmar si se quiere, y que el Program Change lo resetea como al fine tuning. |
+| CC84 Portamento Control | ❌ no añadir: legato entre dos notas concretas, muy específico. |
+| **CC126/CC127 Mono/Poly** | ⚠️ **El botón MONO no hace nada útil.** §7.29: "This Instrument always operates in Poly Mode On"; recibir CC126/127 solo ejecuta un **All Notes Off**. El botón corta las notas sonando (puede soltar un sustain). **Decisión pendiente: quitar el botón MONO.** |
+| Salida de audio mono/estéreo | No existe CC ni SysEx para eso en el manual (buscado: mono, stereo, output, local control). Es ajuste de menú del teclado; confirmar en el manual de usuario. |
+
+Resultado: no hay más CC documentados que valga la pena añadir; lo único pendiente es Pitch Bend Range y quitar MONO.
 
 ---
 
