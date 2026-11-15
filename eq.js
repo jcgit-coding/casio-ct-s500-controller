@@ -1,6 +1,6 @@
 // Short English descriptions under each EQ control (the whole Mixer UI is in English); ctrl.tip stays as tooltip.
 const EQ_DESC = {
-    7: "Part volume", 11: "Dynamics: lowers level, keeps the tone", 10: "Left / right position",
+    7: "Part volume", 11: "Dynamics: lowers level, keeps the tone",
     74: "Brightness: opens or closes the filter", 71: "Boost around the cutoff",
     73: "How fast the sound starts",
     76: "Vibrato speed", 77: "Vibrato depth", 78: "Time before vibrato starts",
@@ -15,7 +15,6 @@ const EQ_SECTIONS = [
         controls: [
             { label: 'Volume',  cc: 7,  def: 100, tip: 'Volume' },
             { label: 'EXPRESSION',  cc: 11, def: 127, tip: 'EXPRESSION (dynamics)' },
-            { label: 'PAN',  cc: 10, def: 64,  tip: 'Pan (left/right)' },
         ]
     },
     {

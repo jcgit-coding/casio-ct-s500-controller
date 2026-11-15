@@ -1298,6 +1298,7 @@ function pushAllToKeyboard(skipTones = false) {
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
             sendCC(part, 72, releaseNeutral(part));
+            sendCC(part, 10, 64); // PAN is not an app control: always centred on connect
             if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         });
         // OCTAVE/TRANSPOSE after the burst so they are not lost in the queue.
