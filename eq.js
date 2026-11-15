@@ -21,12 +21,6 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        title: 'Pitch & Tuning',
-        controls: [
-            { label: 'DETUNE',  cc: 999, def: 64, tip: 'Fine Tuning RPN (-50c to +50c)' },
-        ]
-    },
-    {
         title: 'Vibrato (LFO)',
         controls: [
             { label: 'RATE',  cc: 76, def: 64, tip: 'Vibrato Rate' },

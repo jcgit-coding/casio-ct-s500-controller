@@ -1225,17 +1225,6 @@ function sendCC(part, cc, value) {
     if (!midiOutput && !window.pcSynth) return;
     const ch = CHANNEL[part];
 
-    // Detune pseudo-CC: RPN 00 01H Fine Tuning (-50c to +50c, center 64 = 0c)
-    if (cc === 999 || cc === 'detune') {
-        if (midiOutput) {
-            midiOutput.send([0xB0 | ch, 101, 0x00]); // RPN MSB
-            midiOutput.send([0xB0 | ch, 100, 0x01]); // RPN LSB (Fine Tuning)
-            midiOutput.send([0xB0 | ch,   6, value]); // Data Entry MSB
-            midiOutput.send([0xB0 | ch, 101, 0x7F]); // RPN Reset
-            midiOutput.send([0xB0 | ch, 100, 0x7F]);
-        }
-        return;
-    }
 
     // Mono Mode: CC 126 (Mono Mode On) / CC 127 (Poly Mode On)
     if (cc === 126) {
