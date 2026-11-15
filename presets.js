@@ -322,7 +322,7 @@ function renderPresets() {
 
 // Bump whenever the persisted shape/meaning changes. Older snapshots are
 // migrated in loadAppState() instead of being silently trusted.
-const APP_STATE_VERSION = 316;
+const APP_STATE_VERSION = 322;
 
 function saveAppState() {
     // Deep-copy eqState excluding PERFORMANCE_CCS (live-state -- must not be forced on reload)
@@ -361,6 +361,9 @@ function loadAppState() {
             // v316: the default octave is -1 again (PITCH_DEFAULT_OCTAVE). Older snapshots may hold
             // 0, -2 or -3 from the previous defaults/ranges: start from the default once.
             saved.globalOctave = PITCH_DEFAULT_OCTAVE;
+            // v322: U2 volume is 100 like U1/L (it was 75). The saved snapshot kept the old 75 and
+            // re-sent it to the keyboard on every connect, so fix the stored value once.
+            if (saved.eqState && saved.eqState.U2 && Number(saved.eqState.U2[7]) === 75) saved.eqState.U2[7] = 100;
             saved.v = APP_STATE_VERSION;
             try { localStorage.setItem('casioAppState', JSON.stringify(saved)); } catch(e) {}
         }
