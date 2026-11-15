@@ -375,6 +375,7 @@ function setStatus(text, connected) {
 // ======================================================================
 function onMIDIMessage(e) {
     const [status, d1, d2] = e.data;
+    if (window.SusTest) SusTest.incoming(e.data);
 
     if (pcSynthEnabled && window.sf2Ready && window.pcSynth) {
         const cmd    = status & 0xF0;
@@ -1728,3 +1729,50 @@ if (document.readyState === 'loading') {
 } else {
     initApp();
 }
+
+
+// ======================================================================
+//  SUSTAIN TEST -- find which message class cuts a sustain held on the Casio.
+//  Each button sends ONE kind of traffic with the current values (no audible
+//  change). The log also shows what the Casio itself sends back (CC64 / CC120 /
+//  CC121 / CC123 / Program Change) so a reset by the keyboard is visible.
+// ======================================================================
+const SusTest = (() => {
+    const lines = [];
+    let sent = 0;
+    const t0 = () => new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' + String(Date.now() % 1000).padStart(3, '0');
+    function log(s) {
+        lines.push(t0() + '  ' + s);
+        while (lines.length > 14) lines.shift();
+        const el = document.getElementById('susLog');
+        if (el) el.textContent = lines.join('\n');
+    }
+    function counted(fn, label) {
+        if (!midiOutput) { log('no MIDI output -- connect the Casio first'); return; }
+        const orig = midiOutput.send.bind(midiOutput);
+        let n = 0;
+        midiOutput.send = m => { n++; return orig(m); };
+        try { fn(); } finally { midiOutput.send = orig; }
+        log('SENT ' + label + ' (' + n + ' msgs) -- did the sustain cut?');
+    }
+    function incoming(d) {
+        const st = d[0] & 0xF0, ch = (d[0] & 0x0F) + 1;
+        if (st === 0xB0 && [64, 120, 121, 123].includes(d[1])) log('CASIO CC' + d[1] + '=' + d[2] + ' ch' + ch);
+        else if (st === 0xC0) log('CASIO Program Change ' + d[1] + ' ch' + ch);
+    }
+    function init() {
+        const on = (id, fn) => document.getElementById(id)?.addEventListener('click', fn);
+        on('susT1', () => counted(() => sendCC('U1', 74, eqState.U1[74] ?? 64), '1 CC (cutoff, U1)'));
+        on('susT2', () => counted(() => EQ_CONTROLS.forEach(c => {
+            if (PERFORMANCE_CCS.has(c.cc)) return;
+            sendCC('U1', c.cc, eqState.U1[c.cc] !== undefined ? eqState.U1[c.cc] : c.def);
+        }), 'EQ burst U1'));
+        on('susT3', () => counted(() => { const t = currentTone.U1; if (t) changeTone('U1', t.bank, t.lsb, t.program); else log('U1 has no tone selected'); }, 'same tone U1 (bank+PC)'));
+        on('susT4', () => counted(() => Pitch.sendNow('sustain-test'), 'pitch RPN (first channel counted; the other two follow 10-20 ms later)'));
+        on('susT5', () => counted(() => ['U1', 'U2', 'L'].forEach(p => { if (activeCategories[p]) applySmartProfile(p, activeCategories[p]); }), 'profile on U1+U2+L'));
+        log('ready');
+    }
+    return { init, incoming };
+})();
+window.SusTest = SusTest;
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => SusTest.init()); else SusTest.init();
