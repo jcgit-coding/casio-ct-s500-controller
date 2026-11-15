@@ -409,7 +409,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 
 ---
 
-## 10. Pendiente revisar JC (consolidado, actualizado 15 nov, v321)
+## 10. Pendiente revisar JC (consolidado, actualizado 15 nov, v325)
 
 Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hicieron a ciegas.
 
@@ -420,7 +420,7 @@ Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hic
 | 3 | ~~CC72 con tope +6~~ | **Obsoleto (v320):** la app ya no envía CC72 (es el sustain del Casio, §1.12). |
 | 4 | Neutro de CC71 | El spec no lo define; se asume 64. |
 | 5 | Reverb/Delay **tipo** por SysEx | El único modo de que "ambiente" cambie de verdad la sala. Requiere `sysex: true` (permiso de Chrome) y probar en hardware (§3 S1-S3). |
-| 6 | Overrides legacy (M3) | Los perfiles completos guardados antes de v303 no reciben las guardas. ¿Reset EQ por tono? |
+| 6 | ~~Overrides legacy (M3)~~ | ✅ v323: los perfiles completos viejos se eliminaron una vez (copia en `casioToneEQ_backup_<hora>`); lo que moviste a mano se conserva. |
 | 7 | Transpose/Octave por RPN (§1.6/§1.7) | Prueba A/B con el teclado: RPN +12 vs tocar 12 semitonos más arriba. |
 | 8 | VIRTUAL: faders RVB/CHO | Mandan CC directo, fuera de `eqState`: pueden desincronizarse del Mixer. ¿Quitarlos o enlazarlos? |
 | 9 | Bluetooth | Web Bluetooth (§1.8 pendiente) y cuál alternativa si se quiere inalámbrico en el PC. |
@@ -432,6 +432,9 @@ Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hic
 | 15 | **Conexión MIDI en la tablet Android** (v321) | Por cable USB conecta tras dar el permiso de MIDI en Chrome. Si el selector CONEXIÓN estaba en "Solo Bluetooth", ahora cae al cable. Pendiente: decidir si se muestra un aviso más claro cuando Chrome bloquea el permiso. |
 | 16 | **Pitch Bend Range** (RPN 0:0, §2.1) | Único control del manual que falta. ¿Se quiere por pista? |
 | 17 | **Selector de ambiente y perfiles en el teclado** (§1.10) | Con CC72 fuera, volver a oír cuerdas, pads y metales: el release ahora lo define el Casio. Comparar con BYPASS EQ. |
+| 18 | **U2 y L con la octava del resto** (§1.14, v325) | Hipótesis: el Casio resetea el pitch de cada parte al terminar de cargar su tono, y U2/L cargan después de U1. Ahora se reenvía 5 veces tras cada Program Change. Confirmar en el teclado; si sigue, probar si pasa también sin cambiar tonos (canales de recepción distintos del 1/2/3 por defecto, o partes inactivas). |
+| 19 | **Volumen de U2 = 100** (v322/v323) | Confirmar que U2 ya no suena más bajo que U1 y L. |
+| 20 | **Tonos: mapeo y familias** (§1.13, §1.14) | 764 tonos con rol propio; 8 corregidos. Oír tonos de cada familia con BYPASS EQ y avisar los que suenen mal para reasignarlos. |
 
 ## Anexo A — Prompt de recalibración de ROLES (§2 M2)
 
