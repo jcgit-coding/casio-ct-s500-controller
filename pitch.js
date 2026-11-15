@@ -30,12 +30,18 @@ const PITCH_MAX_SEMITONES = 24;
 const PITCH_PARTS       = ['U1', 'U2', 'L'];
 const PITCH_DEBOUNCE_MS = 40;   // coalesce button mashing
 const PITCH_CHANNEL_GAP = 10;   // space the 3 channels (avoid bursts)
+// The Casio resets a part's Coarse Tuning when it FINISHES loading a Program Change, which can take
+// hundreds of ms (three tones sent together load one after another). A single re-assert 50-200 ms
+// after the PC can land before the reset: U1 (loaded first) keeps the octave, U2/L lose it. So the
+// pitch is re-asserted at several later moments after every PC (idempotent: same value each time).
+const PITCH_PC_TAPS     = [60, 300, 700, 1300, 2200];
 const PITCH_RPN_MSB     = 0x00;
 const PITCH_RPN_LSB     = 0x02; // Coarse Tuning
 
 const Pitch = (() => {
     let timer = null;
     let gen   = 0;
+    let tapTimers = [];
     let last  = null;   // { value, reason, at }
 
     function clampInt(value, min, max) {
@@ -204,6 +210,12 @@ const Pitch = (() => {
             if (delay) return setTimeout(() => schedule(reason), delay);
             schedule(reason);
             return null;
+        },
+
+        // Call after ANY Program Change (app or keyboard): re-asserts now and at PITCH_PC_TAPS.
+        afterProgramChange(reason = 'program-change') {
+            tapTimers.forEach(clearTimeout);
+            tapTimers = PITCH_PC_TAPS.map(d => setTimeout(() => schedule(reason + '+' + d), d));
         },
 
         // Immediate send, no debounce (used by the self-test and by hand).

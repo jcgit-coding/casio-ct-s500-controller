@@ -446,7 +446,7 @@ function onMIDIMessage(e) {
         invalidateSentProfile(part); // PC resets the Casio CCs
         // A Program Change resets the channel's Coarse Tuning. Re-assert OCTAVE/TRANSPOSE for every PC,
         // not only when the tone is found in the app's list (scheduleProfile below runs only then).
-        Pitch.reassert('casio-pc', 200);
+        Pitch.afterProgramChange('casio-pc');
 
         // When moving directly on the Casio keyboard, clear any active filter
         // so the user can immediately see and browse the COMPLETE list of all 764 tones!
@@ -1262,7 +1262,7 @@ function changeTone(part, msb, lsb, pc) {
     midiOutput.send([0xC0 | ch, pc]);
     if (typeof invalidateSentProfile === 'function') invalidateSentProfile(part); // PC resets the Casio CCs
     // PC resets the channel's RPN tuning on the Casio — re-assert the global pitch
-    Pitch.reassert('tone-change');
+    Pitch.afterProgramChange('tone-change');
     // Re-assert the physical pedal so tone changes never drop a held sustain
     if (physCC64[part] > 0) {
         scheduleSustainResync(part, [30, 120, 300, 700]);
@@ -1325,6 +1325,7 @@ function pushAllToKeyboard(skipTones = false) {
         });
         // OCTAVE/TRANSPOSE after the burst so they are not lost in the queue.
         Pitch.reassert('connect');
+        Pitch.afterProgramChange('connect');
     }, skipTones ? 0 : 150);
     resyncAllSustain();
 }
