@@ -18,8 +18,11 @@
 
 // Global pitch state -- shared by app.js / presets.js / library.js.
 // Declared here (not in app.js) so there is exactly one owner.
-let globalOctave = 0;      // -3..+3 octaves
+let globalOctave = 0;      // -2..+2 octaves
 let globalTranspose = 0;   // -12..+12 semitones
+// CT-S500 MIDI Implementation 7.23.3: Coarse Tune accepts 28H-58H (40..88) = 64 +/- 24 semitones.
+// Anything outside is invalid for the keyboard, so octave*12 + transpose is capped at +/-24.
+const PITCH_MAX_SEMITONES = 24;
 
 const PITCH_PARTS       = ['U1', 'U2', 'L'];
 const PITCH_DEBOUNCE_MS = 40;   // coalesce button mashing
@@ -39,7 +42,18 @@ const Pitch = (() => {
     }
 
     function rpnValue() {
-        return Math.max(0, Math.min(127, 64 + globalOctave * 12 + globalTranspose));
+        return Math.max(64 - PITCH_MAX_SEMITONES, Math.min(64 + PITCH_MAX_SEMITONES, 64 + globalOctave * 12 + globalTranspose));
+    }
+
+    // Keep octave*12 + transpose inside +/-24 by trimming the value that was just changed.
+    function fitTotal(changed) {
+        const total = globalOctave * 12 + globalTranspose;
+        if (Math.abs(total) <= PITCH_MAX_SEMITONES) return;
+        if (changed === 'octave') {
+            globalOctave = clampInt(globalOctave, Math.ceil((-PITCH_MAX_SEMITONES - globalTranspose) / 12), Math.floor((PITCH_MAX_SEMITONES - globalTranspose) / 12));
+        } else {
+            globalTranspose = clampInt(globalTranspose, -PITCH_MAX_SEMITONES - globalOctave * 12, PITCH_MAX_SEMITONES - globalOctave * 12);
+        }
     }
 
     function hasOutput() {
@@ -152,7 +166,8 @@ const Pitch = (() => {
         get: () => ({ octave: globalOctave, transpose: globalTranspose, value: rpnValue() }),
 
         setOctave(value, reason = 'octave') {
-            globalOctave = clampInt(value, -3, 3);
+            globalOctave = clampInt(value, -2, 2);
+            fitTotal('octave');
             updateUI();
             schedule(reason);
             return globalOctave;
@@ -160,6 +175,7 @@ const Pitch = (() => {
 
         setTranspose(value, reason = 'transpose') {
             globalTranspose = clampInt(value, -12, 12);
+            fitTotal('transpose');
             updateUI();
             schedule(reason);
             return globalTranspose;
@@ -227,8 +243,9 @@ const Pitch = (() => {
             await run('octava +1',               () => { globalOctave = 1;  globalTranspose = 0;  }, 76);
             await run('octava +2, transpose -3', () => { globalOctave = 2;  globalTranspose = -3; }, 85);
             await run('transpose +12',           () => { globalOctave = 0;  globalTranspose = 12; }, 76);
-            await run('octava -3',               () => { globalOctave = -3; globalTranspose = 0;  }, 28);
-            await run('clamp (oct 9, trn -99)',  () => { api.setOctave(9); api.setTranspose(-99); }, 88);
+            await run('octava -2 (limite)',        () => { globalOctave = -2; globalTranspose = 0;  }, 40);
+            await run('trn +12 y octava +2 -> octava recorta a +1 (total 24)', () => { api.setOctave(0); api.setTranspose(12); api.setOctave(2); }, 88);
+            await run('clamp (oct 9, trn -99)',  () => { api.setTranspose(0); api.setOctave(9); api.setTranspose(-99); }, 76);
             await run('NaN -> 0',                () => { api.setOctave(0); api.setTranspose('abc'); }, 64);
 
             // Debounce: three quick changes must leave only the final value.

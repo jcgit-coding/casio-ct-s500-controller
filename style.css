@@ -2098,3 +2098,7 @@ input[type="range"].rc-fader::-moz-range-thumb {
 }
 
 .nav-tab .material-symbols-outlined { font-size: 18px !important; }
+/* Pedals & Glide: switch-only section; rows centred vertically so it matches the fader sections' height */
+.fader-section--switches { justify-content: flex-start; }
+.fader-section--switches .fader-section-switches { flex-direction: column !important; align-items: center; gap: 18px !important; margin: 0 !important; flex: 1; justify-content: center; }
+.fader-section--switches .fader-note { min-height: 0; margin-top: 0; }

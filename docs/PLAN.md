@@ -162,6 +162,13 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 
 ---
 
+### 1.11 Rango real de OCTAVE + TRANSPOSE (v313)
+
+- **Hallazgo:** el MIDI Implementation §7.23.3 dice que Coarse Tune acepta **28H a 58H (40 a 88)**, o sea 64 ± 24 semitonos. `pitch.js` permitía octava ±3 y transpose ±12 (hasta ±48) y enviaba valores fuera de rango (28 o 100) que el teclado no acepta.
+- **Ahora:** octava −2…+2, transpose −12…+12, y **octava×12 + transpose limitado a ±24**: si lo que cambias lo pasaría, se recorta ese valor y la pantalla muestra lo que realmente se envía.
+- **Verificado en navegador (MIDI simulado):** cada botón, Reset, atajos Alt+↑/↓ y Shift+Alt+↑/↓, reenvío a los 3 canales tras CC121, Program Change del Casio, cambio de tono desde la app, carga de preset, recarga de la página con estado guardado y reconexión. **No verificado en el teclado real.**
+- **Pendiente revisar JC:** confirmar en el CT-S500 que ±2 octavas y ±12 semitonos suenan como muestra la pantalla.
+
 ## 2. Mixer / EQ (prioridad 2)
 
 | ID | Tema | Evidencia / detalle |

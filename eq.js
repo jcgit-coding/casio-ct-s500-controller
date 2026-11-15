@@ -1,12 +1,12 @@
-// Descripciones cortas (es) bajo cada control del EQ; ctrl.tip queda como tooltip.
+// Short English descriptions under each EQ control (the whole Mixer UI is in English); ctrl.tip stays as tooltip.
 const EQ_DESC = {
-    7: "Volumen de esta pista", 11: "Dinámica: baja el nivel sin cambiar el timbre", 10: "Izquierda / derecha",
-    74: "Brillo: abre o cierra el filtro", 71: "Énfasis en la frecuencia de corte",
-    73: "Rapidez de entrada del sonido",
-    76: "Velocidad del vibrato", 77: "Profundidad del vibrato", 78: "Retardo antes de que entre el vibrato",
-    91: "Cantidad de reverb", 93: "Cantidad de chorus (ancho)", 94: "Cantidad de eco (delay)",
-    1: "Rueda de modulación", 5: "Duración del deslizamiento",
-    65: "Desliza entre notas", 66: "Sostiene solo las notas ya pulsadas", 67: "Suaviza el volumen"
+    7: "Part volume", 11: "Dynamics: lowers level, keeps the tone", 10: "Left / right position",
+    74: "Brightness: opens or closes the filter", 71: "Boost around the cutoff",
+    73: "How fast the sound starts",
+    76: "Vibrato speed", 77: "Vibrato depth", 78: "Time before vibrato starts",
+    91: "Amount of reverb", 93: "Amount of chorus (width)", 94: "Amount of echo (delay)",
+    1: "Modulation wheel amount", 5: "Glide duration",
+    65: "Slides between notes", 66: "Holds only notes already pressed", 67: "Softens the volume"
 };
 
 const EQ_SECTIONS = [
@@ -48,11 +48,16 @@ const EQ_SECTIONS = [
         ]
     },
     {
-        title: 'Modulation & Voicing',
+        title: 'Modulation',
         controls: [
             { label: 'MODULATION', cc: 1,   def: 0, tip: 'Modulation Wheel' },
-            { label: 'PORTAMENTO', cc: 65,  def: 0, tip: 'Portamento On/Off', type: 'switch' },
             { label: 'PORT. TIME', cc: 5,   def: 30, tip: 'Portamento Time (glide)' },
+        ]
+    },
+    {
+        title: 'Pedals & Glide',
+        controls: [
+            { label: 'PORTAMENTO', cc: 65,  def: 0, tip: 'Portamento On/Off', type: 'switch' },
             { label: 'SOSTENUTO',  cc: 66,  def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
             { label: 'SOFT',       cc: 67,  def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
         ]
@@ -1085,7 +1090,7 @@ function buildEQ() {
     EQ_SECTIONS.forEach(section => {
         const secEl = document.createElement('div');
         secEl.className = 'fader-section';
-        { const n = Math.max(2, section.controls.filter(c => c.type !== 'switch').length); secEl.style.flex = n + ' 1 ' + (n * 96) + 'px'; }
+        { const nf = section.controls.filter(c => c.type !== 'switch').length; const n = nf ? Math.max(2, nf) : 2; secEl.style.flex = n + ' 1 ' + (n * 96) + 'px'; if (!nf) secEl.classList.add('fader-section--switches'); }
 
         const titleEl = document.createElement('div');
         titleEl.className = 'fader-section-title';

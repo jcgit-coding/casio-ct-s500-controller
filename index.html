@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v312';
+    var V='v313';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v312">
+    <link rel="stylesheet" href="style.css?v313">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -79,24 +79,24 @@
         <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
             <!-- GLOBAL PITCH — U1+U2+L a la vez, una sola fila en el sub-header del Mixer (como antes de pitch.js).
                  Aspecto original del Mixer (.global-bar / .step-btn / "Reset"), IDs sin cambio. -->
-            <div class="pitch-wrap" id="pitchBar" title="Global para U1, U2 y L">
+            <div class="pitch-wrap" id="pitchBar" title="Global for U1, U2 and L">
                 <div class="global-bar">
                     <span class="global-label">TRANSPOSE</span>
                     <div class="step-btns">
-                        <button class="step-btn" id="gTrnMinus" title="Transpose -1 (Alt+Abajo)">-</button>
+                        <button class="step-btn" id="gTrnMinus" title="Transpose -1 (Alt+Down)">-</button>
                         <span class="step-val" id="gTrnVal">0</span>
-                        <button class="step-btn" id="gTrnPlus" title="Transpose +1 (Alt+Arriba)">+</button>
+                        <button class="step-btn" id="gTrnPlus" title="Transpose +1 (Alt+Up)">+</button>
                     </div>
-                    <button class="btn-reset-small" id="gTrnReset" title="Transpose a 0">Reset</button>
+                    <button class="btn-reset-small" id="gTrnReset" title="Reset transpose to 0">Reset</button>
                 </div>
                 <div class="global-bar">
                     <span class="global-label">OCTAVE</span>
                     <div class="step-btns">
-                        <button class="step-btn" id="gOctMinus" title="Octava -1 (Shift+Alt+Abajo)">-</button>
+                        <button class="step-btn" id="gOctMinus" title="Octave -1 (Shift+Alt+Down)">-</button>
                         <span class="step-val" id="gOctVal">0</span>
-                        <button class="step-btn" id="gOctPlus" title="Octava +1 (Shift+Alt+Arriba)">+</button>
+                        <button class="step-btn" id="gOctPlus" title="Octave +1 (Shift+Alt+Up)">+</button>
                     </div>
-                    <button class="btn-reset-small" id="gOctReset" title="Octava a 0">Reset</button>
+                    <button class="btn-reset-small" id="gOctReset" title="Reset octave to 0">Reset</button>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v312</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v313</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -115,7 +115,7 @@
                     var KEY='casioBadgeDate', TTL=2*60*1000;
                     function show(iso){
                         var d=new Date(iso);
-                        el.textContent=V+' '+d.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short'})+' '+d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',hour12:false});
+                        el.textContent=V+' '+d.toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
                     }
                     var cached=null;
                     try{ cached=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
@@ -321,7 +321,7 @@
                 <option value="Hall">Concert Hall</option>
                 <option value="Jazz">Jazz Club (Intimate)</option>
             </select>
-            <button id="btnEqBypass" class="btn" style="padding:4px 10px; font-size:11px; font-weight:700;" title="Compara el tono sin ningún perfil: CC relativos en 64, reverb 40, chorus 0, delay 0">BYPASS EQ</button>
+            <button id="btnEqBypass" class="btn" style="padding:4px 10px; font-size:11px; font-weight:700;" title="Compare the tone with no profile: relative CCs at 64, reverb 40, chorus 0, delay 0">BYPASS EQ</button>
         </div>
                 </div>
                 <div class="eq-faders" id="eqFaders"></div>
@@ -1072,13 +1072,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v312"></script>
-    <script src="pitch.js?v312"></script>
-    <script src="presets.js?v312"></script>
-    <script src="app.js?v312"></script>
-    <script src="harmony.js?v312"></script>
-    <script src="library.js?v312"></script>
-    <script src="trainer.js?v312"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v313"></script>
+    <script src="pitch.js?v313"></script>
+    <script src="presets.js?v313"></script>
+    <script src="app.js?v313"></script>
+    <script src="harmony.js?v313"></script>
+    <script src="library.js?v313"></script>
+    <script src="trainer.js?v313"></script>
 </body>
 </html>
 
