@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v307';
+    var V='v308';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v307">
+    <link rel="stylesheet" href="style.css?v308">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -66,7 +66,19 @@
                 <button class="nav-tab nav-tab-external" id="btnOpenGraphs" title="Architecture Graph — abre en ventana del navegador"><span class="material-symbols-outlined" style="vertical-align:middle; margin-right:5px;">hub</span> GRAPHS</button>
             </div>
 
-            <!-- GLOBAL PITCH — U1+U2+L a la vez (header, visible en todas las vistas).
+            </div>
+        </div>
+
+            </header>
+
+    <div class="main-console">
+
+
+        <!-- =========== VIEW: MIXER (PISTAS & EQ) =========== -->
+        <div class="app-view active" id="view-mixer">
+
+        <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
+            <!-- GLOBAL PITCH — U1+U2+L a la vez, una sola fila en el sub-header del Mixer (como antes de pitch.js).
                  Aspecto original del Mixer (.global-bar / .step-btn / "Reset"), IDs sin cambio. -->
             <div class="pitch-wrap" id="pitchBar" title="Global para U1, U2 y L">
                 <div class="global-bar">
@@ -87,18 +99,6 @@
                     </div>
                     <button class="btn-reset-small" id="gOctReset" title="Octava a 0">Reset</button>
                 </div>
-            </div>
-        </div>
-
-            </header>
-
-    <div class="main-console">
-
-
-        <!-- =========== VIEW: MIXER (PISTAS & EQ) =========== -->
-        <div class="app-view active" id="view-mixer">
-
-        <div class="sub-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding: 0 0 15px 0; background: transparent; border-bottom: none; flex-wrap: wrap;">
 
             <div style="display: flex; align-items: center; gap: 10px;">
                 <button id="btnThemeToggle" class="btn" style="padding: 6px 12px; font-size: 16px;" title="Toggle Theme"><span class="material-symbols-outlined" style="font-size:inherit; vertical-align:middle;">light_mode</span></button>
@@ -107,7 +107,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v307</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v308</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -1064,13 +1064,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v307"></script>
-    <script src="pitch.js?v307"></script>
-    <script src="presets.js?v307"></script>
-    <script src="app.js?v307"></script>
-    <script src="harmony.js?v307"></script>
-    <script src="library.js?v307"></script>
-    <script src="trainer.js?v307"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v308"></script>
+    <script src="pitch.js?v308"></script>
+    <script src="presets.js?v308"></script>
+    <script src="app.js?v308"></script>
+    <script src="harmony.js?v308"></script>
+    <script src="library.js?v308"></script>
+    <script src="trainer.js?v308"></script>
 </body>
 </html>
 
