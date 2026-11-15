@@ -291,11 +291,15 @@ function reconnectMIDI() {
     let pref = 'auto';
     try { pref = localStorage.getItem('casioMidiTransport') || 'auto'; } catch (e) {}
     const outs = usable(allOuts), ins = usable(allIns);
+    // A forced transport that has no port must NOT leave the app disconnected (the preference is stored
+    // per device: "Solo Bluetooth" left on a tablet silently ignored the USB cable). Fall back to auto.
+    let _fellBack = false;
     const pick = (list, want) => {
         const wired = list.filter(p => !isBle(p)), ble = list.filter(isBle);
-        if (want === 'ble')   return best(ble);
-        if (want === 'wired') return best(wired);
-        return best(wired.filter(p => !isVirtual(p))) || best(ble) || best(wired);
+        const auto = () => best(wired.filter(p => !isVirtual(p))) || best(ble) || best(wired);
+        if (want === 'ble')   { const p = best(ble);   if (p) return p; _fellBack = _fellBack || !!auto(); return auto(); }
+        if (want === 'wired') { const p = best(wired); if (p) return p; _fellBack = _fellBack || !!auto(); return auto(); }
+        return auto();
     };
     midiOutput = pick(outs, pref);
     // Input follows the output's transport so a cable output never pairs with a BT input.
@@ -304,7 +308,8 @@ function reconnectMIDI() {
     const _tp = document.getElementById('midiTransportInfo');
     if (_tp) _tp.textContent =
         'Out: ' + (outs.map(o => o.name + (isBle(o) ? ' [BT]' : '')).join(', ') || '—') +
-        ' | In: ' + (ins.map(i => i.name + (isBle(i) ? ' [BT]' : '')).join(', ') || '—');
+        ' | In: ' + (ins.map(i => i.name + (isBle(i) ? ' [BT]' : '')).join(', ') || '—') +
+        (_fellBack ? '  (no port for the selected connection "' + pref + '"; using what was found)' : '');
     console.log('[MIDI] selected output:', midiOutput?.name, '| selected input:', midiInput?.name);
 
     if (midiOutput) {
