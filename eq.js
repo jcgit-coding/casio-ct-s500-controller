@@ -1,3 +1,14 @@
+// Descripciones cortas (es) bajo cada control del EQ; ctrl.tip queda como tooltip.
+const EQ_DESC = {
+    7: "Volumen de esta pista", 11: "Dinámica: baja el nivel sin cambiar el timbre", 10: "Izquierda / derecha",
+    74: "Brillo: abre o cierra el filtro", 71: "Énfasis en la frecuencia de corte",
+    73: "Rapidez de entrada del sonido",
+    76: "Velocidad del vibrato", 77: "Profundidad del vibrato", 78: "Retardo antes de que entre el vibrato",
+    91: "Cantidad de reverb", 93: "Cantidad de chorus (ancho)", 94: "Cantidad de eco (delay)",
+    1: "Rueda de modulación", 5: "Duración del deslizamiento",
+    65: "Desliza entre notas", 66: "Sostiene solo las notas ya pulsadas", 67: "Suaviza el volumen"
+};
+
 const EQ_SECTIONS = [
     {
         title: 'Volume & Panning',
@@ -1074,6 +1085,7 @@ function buildEQ() {
     EQ_SECTIONS.forEach(section => {
         const secEl = document.createElement('div');
         secEl.className = 'fader-section';
+        { const n = Math.max(2, section.controls.filter(c => c.type !== 'switch').length); secEl.style.flex = n + ' 1 ' + (n * 96) + 'px'; }
 
         const titleEl = document.createElement('div');
         titleEl.className = 'fader-section-title';
@@ -1127,6 +1139,7 @@ function buildEQ() {
                 
                 sWrap.appendChild(sLbl);
                 sWrap.appendChild(btn);
+                if (EQ_DESC[ctrl.cc]) { const sd = document.createElement('div'); sd.className = 'fader-note'; sd.style.minHeight = '0'; sd.style.marginTop = '0'; sd.innerText = EQ_DESC[ctrl.cc]; sWrap.appendChild(sd); }
                 switchesEl.appendChild(sWrap);
             } else {
                 const group = document.createElement('div');
@@ -1194,7 +1207,7 @@ function buildEQ() {
     
                 const note = document.createElement('div');
                 note.className = 'fader-note';
-                note.innerText = ctrl.tip;
+                note.innerText = EQ_DESC[ctrl.cc] || ctrl.tip;
     
                 group.appendChild(lbl);
                 group.appendChild(fader);

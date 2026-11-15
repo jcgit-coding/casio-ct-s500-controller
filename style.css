@@ -936,7 +936,7 @@ header h1 {
 .eq-faders {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
     justify-content: flex-start;
     overflow-x: auto;
     overflow-y: visible;
@@ -955,8 +955,8 @@ header h1 {
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    min-width: 50px;
-    flex-shrink: 0;
+    min-width: 64px;
+    flex: 1 1 0;
     justify-content: flex-start;
 }
 .fader-label {
@@ -967,7 +967,7 @@ header h1 {
     letter-spacing: 0px;
     text-align: center;
     white-space: normal;
-    width: 50px;
+    width: 100%;
     line-height: 1.1;
     height: 22px;
     display: flex;
@@ -975,7 +975,8 @@ header h1 {
     justify-content: center;
 }
 .fader-section {
-    flex: 0 0 auto; flex-shrink: 0; /* DO NOT GROW inconsistently! */
+    /* width is set per section from JS: flex-grow = number of faders, so sections fill the row */
+    flex: 1 1 auto; min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1352,12 +1353,13 @@ input[type="range"].eq-fader:active::-moz-range-thumb {
 }
 
 .fader-note {
-    font-size: 8.5px;
+    font-size: 10px;
     color: var(--text-muted);
     text-align: center;
     line-height: 1.2;
     margin-top: 6px;
-    width: 50px;
+    width: 100%;
+    padding: 0 2px;
     white-space: normal;
     word-wrap: break-word;
     opacity: 0.7;
