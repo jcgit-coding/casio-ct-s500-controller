@@ -1778,6 +1778,9 @@ const SusTest = (() => {
         on('susT7', () => counted(() => sendCC('U1', 91, eqState.U1[91] ?? 40), 'reverb same value (U1)'));
         on('susT8', () => counted(() => sendCC('U1', 64, 127), 'CC64 = 127 (U1)'));
         on('susT9', () => counted(() => sendCC('U1', 64, 0), 'CC64 = 0 (U1)'));
+        on('susT10', () => counted(() => sendCC('U1', 72, releaseNeutral('U1')), 'CC72 release = ' + releaseNeutral('U1') + ' (U1)'));
+        [['susT11', 'U1'], ['susT12', 'U2'], ['susT13', 'L']].forEach(([id, p]) =>
+            on(id, () => counted(() => { if (activeCategories[p]) applySmartProfile(p, activeCategories[p]); else log(p + ' has no category'); }, 'profile on ' + p + ' only')));
         log('ready');
     }
     return { init, incoming };
