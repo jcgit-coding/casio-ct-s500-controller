@@ -382,7 +382,7 @@ Solo se implementa **después** de probarlo en el aparato. No se inventan estruc
 
 ---
 
-## 10. Pendiente revisar JC (consolidado, 14 nov)
+## 10. Pendiente revisar JC (consolidado, actualizado 15 nov, v321)
 
 Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hicieron a ciegas.
 
@@ -390,7 +390,7 @@ Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hic
 |---|---|---|
 | 1 | Límites por familia (§1.10) | ¿Se oyen profesionales cuerdas, metales y pads? Ajustar `CLASS_LIMITS` en `eq.js`. Usar BYPASS EQ para comparar. |
 | 2 | Ambientes (§1.10) | Hall +14, Live ×0,7, Jazz +4 de reverb: ¿se notan lo suficiente o son demasiado tímidos? |
-| 3 | CC72 con tope +6 | Comparar cuerdas/pads/metales con y sin BYPASS (64). |
+| 3 | ~~CC72 con tope +6~~ | **Obsoleto (v320):** la app ya no envía CC72 (es el sustain del Casio, §1.12). |
 | 4 | Neutro de CC71 | El spec no lo define; se asume 64. |
 | 5 | Reverb/Delay **tipo** por SysEx | El único modo de que "ambiente" cambie de verdad la sala. Requiere `sysex: true` (permiso de Chrome) y probar en hardware (§3 S1-S3). |
 | 6 | Overrides legacy (M3) | Los perfiles completos guardados antes de v303 no reciben las guardas. ¿Reset EQ por tono? |
@@ -398,7 +398,13 @@ Decisiones o pruebas que necesitan tu oído, tu teclado o tu criterio. No se hic
 | 8 | VIRTUAL: faders RVB/CHO | Mandan CC directo, fuera de `eqState`: pueden desincronizarse del Mixer. ¿Quitarlos o enlazarlos? |
 | 9 | Bluetooth | Web Bluetooth (§1.8 pendiente) y cuál alternativa si se quiere inalámbrico en el PC. |
 | 10 | Trainer (R1/T1) | Tempo previo a Play corregido sin poder probarlo: faltan los `.mid`. |
-| 11 | Push | Los commits v301–v305 están **solo en local** (sin push). |
+| 11 | ~~Push~~ | ✅ Hecho: todo está en `main` (v321). Regla: commit y push tras cada cambio. |
+| 12 | **Sustain del Casio al cambiar ambiente / perfil** (§1.12) | Con el sustain del Casio activado, cambiar el ambiente (Studio a Live) o pulsar *Profile, 3 parts* en SUSTAIN TEST (Settings) **ya no debe cortarlo** (v319/v320: sin CC72). Verificado solo con MIDI simulado. Si el cambio de **tono** lo corta, es el Program Change del Casio y no se puede evitar desde la app. |
+| 13 | **Octava por defecto −1** (§1.11) | Confirmar que −1 (RPN 52) suena a la altura esperada en el CT-S500. Estado guardado migrado una vez a −1 en v316. |
+| 14 | **TRANSPOSE y OCTAVE en el teclado** (§1.11) | Probar botones, Reset y atajos; el rango real es ±24 semitonos (octava −2…+2, transpose −12…+12, suma limitada). Verificado solo con MIDI simulado. |
+| 15 | **Conexión MIDI en la tablet Android** (v321) | Por cable USB conecta tras dar el permiso de MIDI en Chrome. Si el selector CONEXIÓN estaba en "Solo Bluetooth", ahora cae al cable. Pendiente: decidir si se muestra un aviso más claro cuando Chrome bloquea el permiso. |
+| 16 | **Pitch Bend Range** (RPN 0:0, §2.1) | Único control del manual que falta. ¿Se quiere por pista? |
+| 17 | **Selector de ambiente y perfiles en el teclado** (§1.10) | Con CC72 fuera, volver a oír cuerdas, pads y metales: el release ahora lo define el Casio. Comparar con BYPASS EQ. |
 
 ## Anexo A — Prompt de recalibración de ROLES (§2 M2)
 
