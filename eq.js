@@ -42,7 +42,6 @@ const EQ_SECTIONS = [
             { label: 'MODULATION', cc: 1,   def: 0, tip: 'Modulation Wheel' },
             { label: 'PORTAMENTO', cc: 65,  def: 0, tip: 'Portamento On/Off', type: 'switch' },
             { label: 'PORT. TIME', cc: 5,   def: 30, tip: 'Portamento Time (glide)' },
-            { label: 'MONO',       cc: 126, def: 0, tip: 'Mono Mode (Legato solos/vientos)', type: 'switch' },
             { label: 'SOSTENUTO',  cc: 66,  def: 0, tip: 'Sostenuto Pedal (active notes only)', type: 'switch' },
             { label: 'SOFT',       cc: 67,  def: 0, tip: 'Soft Pedal (reduces volume)', type: 'switch' },
         ]

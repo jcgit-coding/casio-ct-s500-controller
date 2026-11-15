@@ -46,9 +46,9 @@ function releaseNeutral(part) {
     return Math.min(v, RELEASE_NEUTRAL + RELEASE_MAX_DEV);
 }
 // CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
-// CC1=Modulation, CC5=Portamento Time, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal, CC126=Mono Mode
+// CC1=Modulation, CC5=Portamento Time, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal
 // (Sostenuto/Soft stay in the app: the player only owns a sustain pedal, CC64.)
-const PERFORMANCE_CCS = new Set([1, 5, 65, 66, 67, 126]);
+const PERFORMANCE_CCS = new Set([1, 5, 65, 66, 67]);
 
 function pcNoteOff(ch, note) {
     const info = pcActiveNotes[ch + ':' + note];
@@ -1225,13 +1225,6 @@ function sendCC(part, cc, value) {
     if (!midiOutput && !window.pcSynth) return;
     const ch = CHANNEL[part];
 
-
-    // Mono Mode: CC 126 (Mono Mode On) / CC 127 (Poly Mode On)
-    if (cc === 126) {
-        const targetCC = value > 63 ? 126 : 127;
-        if (midiOutput) midiOutput.send([0xB0 | ch, targetCC, 0]);
-        return;
-    }
 
     if (midiOutput) midiOutput.send([0xB0 | ch, cc, value]);
     // Mirror CCs al PC Synth en el canal de ese part
