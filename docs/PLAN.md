@@ -175,7 +175,7 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Causa (MIDI Implementation §7.13, Release Time CC72):** "It will be changed when sustain is used". El sustain propio del Casio se implementa cambiando su CC72. La app mandaba CC72 en cada perfil, ambiente, reconexión y cambio de tono, y pisaba ese valor: el sustain "se cortaba".
 - **Evidencia en el SUSTAIN TEST del usuario:** cortó *Profile, 3 parts* (manda CC72); no cortaron *1 CC* ni *EQ burst U1* (no mandan CC72). La variabilidad (a veces cortaba, a veces no) depende de si el valor enviado coincidía con el release que el Casio tenía en ese momento.
 - **Arreglo:** `sendCC` ya **no envía CC72 al teclado** (solo lo refleja al PC Synth). Verificado con MIDI simulado: 0 mensajes CC72 en perfil, reconexión y cambio de tono. **Pendiente revisar JC:** confirmar en el teclado que Profile, 3 parts y el cambio de ambiente ya no cortan el sustain.
-- **Consecuencia:** `releaseNeutral()` ya no afecta al Casio; el release de cada tono lo define el propio Casio.
+- **v320, limpieza:** el reset del EQ ya no tocaba el release desde hace tiempo, pero quedaban dos envíos de CC72 (el "neutro por categoría" en cada perfil y en la reconexión). Se eliminaron junto con `releaseNeutral`, `CAT_RELEASE_NEUTRAL` y `RELEASE_MAX_DEV`. Verificado con MIDI simulado: 0 CC72 en perfil, cambio de ambiente y reenvío completo. El pendiente "CC72 tope +6 vs BYPASS" de §10 queda **obsoleto**: el release lo define el propio Casio.
 
 ## 2. Mixer / EQ (prioridad 2)
 

@@ -70,7 +70,7 @@ const EQ_CONTROLS = EQ_SECTIONS.flatMap(s => s.controls);
 let currentEnv = 'Studio';
 // Verified CT-S500 CCs: 71=Resonance 73=Attack 74=Cutoff 76=VibRate 77=VibDepth 78=VibDelay 91=Reverb 93=Chorus 94=Echo
 // CC102/103/104 (Casio "EQ" Low/Mid/High) removed — verified the CT-S500 ignores them.
-// CC72 (Release) excluded from EQ state — the app only sends releaseNeutral
+// CC72 (Release) excluded from EQ state — the app never sends it (it is the Casio's own sustain)
 // CC75 (Decay) excluded — unverified on CT-S500, caused tone distortion at non-neutral values
 // Casio Categories (raw_tones): PIANO HARPSICHORD ELEC.PIANO CLAVI VIB./CHROM.PERC. ELEC.ORGAN PIPE ORGAN ACCORDION
 //   ACOUS.GUITAR ELEC.GUITAR ACOUS.BASS ELEC.BASS SOLO STRINGS STRING ENSEMBLE SOLO BRASS BRASS ENSEMBLE
@@ -1069,8 +1069,6 @@ function applySmartProfile(part, category, onlyChanged) {
         }
     });
 
-    // 5. CC72: per-category neutral release (Casio resets CC72 on Program Change; keeps the PC synth in sync).
-    sendCC(part, 72, releaseNeutral(part));
 }
 
 function buildEQ() {

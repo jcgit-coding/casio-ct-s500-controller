@@ -11,40 +11,14 @@ let pcSynthEnabled = false;  // OFF by default -- user must toggle on
 let mctrlEnabled = false;    // VIRTUAL keyboard ON/OFF -- off by default
 
 // The app has NO sustain control: sustain is handled directly by the player (pedal / Casio panel).
-// CC72 is only ever sent at the per-category neutral (releaseNeutral).
-const RELEASE_NEUTRAL = 64;
+// The app NEVER sends CC72 (Release Time) to the keyboard: the Casio's own sustain is implemented
+// through it (MIDI Implementation 7.13), so any CC72 from the app overwrites that sustain.
 // Taps used to re-assert the physical pedal (CC64) after ANY burst of CCs. The CT-S500 resets its
 // controllers (on every channel) after a large burst, and over Bluetooth the
 // outgoing queue can still be draining hundreds of ms after the app finished
 // writing -- hence the deliberately late last tap.
 const SUSTAIN_TAPS = [100, 200, 350, 550, 850, 1300];
 
-// Per-category CC72 neutral: these instruments have long natural decay;
-// sending 64 after a tone load would shorten it below the preset's intent.
-const CAT_RELEASE_NEUTRAL = {
-    'SYNTH-PAD':        82,
-    'CHOIR':            78,
-    'STRING ENSEMBLE':  75,
-    'SOLO STRINGS':     72,
-    'SYNTH-BRASS':      76,
-    'BRASS ENSEMBLE':   76,
-    'SOLO BRASS':       78,
-    'SYNTH-LEAD':       74,
-    'REED':             76,
-    'SAX':              74,
-    'PIPE':             76,
-    'EDM SYNTH':        74,
-};
-// CC72 is RELATIVE (64 = the tone's own release, tabla 14.4), so a "longer than neutral"
-// value is an app-added tail on top of what Casio designed. v301 caps it at +6
-// (it was up to +18) so strings/brass/pads do not smear, and BYPASS EQ sends 64.
-// Pendiente revisar JC: oir strings/pads/brass con +6 vs 64 (BYPASS) en el teclado.
-const RELEASE_MAX_DEV = 6;
-function releaseNeutral(part) {
-    if (typeof eqBypass !== 'undefined' && eqBypass) return RELEASE_NEUTRAL;
-    const v = CAT_RELEASE_NEUTRAL[activeCategories[part]] ?? RELEASE_NEUTRAL;
-    return Math.min(v, RELEASE_NEUTRAL + RELEASE_MAX_DEV);
-}
 // CCs that represent live performance state -- never save to toneEQ, never reset on tone/env change.
 // CC1=Modulation, CC5=Portamento Time, CC65=Portamento SW, CC66=Sostenuto, CC67=Soft Pedal
 // (Sostenuto/Soft stay in the app: the player only owns a sustain pedal, CC64.)
@@ -1229,7 +1203,7 @@ function sendCC(part, cc, value) {
     // CC72 (Release Time) belongs to the Casio's own sustain: MIDI Implementation 7.13 says it
     // "will be changed when sustain is used". Sending it overwrote the release the keyboard set
     // for its sustain and cut it on every profile / environment / tone change. It is therefore
-    // never sent to the keyboard; only the PC synth mirror still receives it.
+    // never sent to the keyboard (guard kept in case a future caller adds one); only the PC synth mirror gets it.
     if (cc === 72) {
         if (window.pcSynth?.applyCC) window.pcSynth.applyCC(cc, value, ch);
         return;
@@ -1307,7 +1281,6 @@ function pushAllToKeyboard(skipTones = false) {
                 if (PERFORMANCE_CCS.has(ctrl.cc)) return; // live-state -- never force on reconnect
                 sendCC(part, ctrl.cc, eqState[part][ctrl.cc] !== undefined ? eqState[part][ctrl.cc] : ctrl.def);
             });
-            sendCC(part, 72, releaseNeutral(part));
             sendCC(part, 10, 64); // PAN is not an app control: always centred on connect
             if (physCC64[part] > 0) sendCC(part, 64, physCC64[part]);
         });
@@ -1427,7 +1400,6 @@ async function sf2Init(source, name) {
                 const v = eqState[part][ctrl.cc];
                 window.pcSynth.applyCC(ctrl.cc, v !== undefined ? v : ctrl.def, CHANNEL[part]);
             });
-            window.pcSynth.applyCC(72, releaseNeutral(part), CHANNEL[part]);
         });
         window.sf2Ready = true;
         if (statusEl) {
@@ -1787,7 +1759,7 @@ const SusTest = (() => {
         on('susT7', () => counted(() => sendCC('U1', 91, eqState.U1[91] ?? 40), 'reverb same value (U1)'));
         on('susT8', () => counted(() => sendCC('U1', 64, 127), 'CC64 = 127 (U1)'));
         on('susT9', () => counted(() => sendCC('U1', 64, 0), 'CC64 = 0 (U1)'));
-        on('susT10', () => counted(() => { if (midiOutput) midiOutput.send([0xB0 | CHANNEL.U1, 72, releaseNeutral('U1')]); }, 'RAW CC72 release = ' + releaseNeutral('U1') + ' (U1) -- the app no longer sends this'));
+        on('susT10', () => counted(() => { if (midiOutput) midiOutput.send([0xB0 | CHANNEL.U1, 72, 100]); }, 'RAW CC72 = 100 (U1) -- the app never sends this'));
         [['susT11', 'U1'], ['susT12', 'U2'], ['susT13', 'L']].forEach(([id, p]) =>
             on(id, () => counted(() => { if (activeCategories[p]) applySmartProfile(p, activeCategories[p]); else log(p + ' has no category'); }, 'profile on ' + p + ' only')));
         log('ready');
