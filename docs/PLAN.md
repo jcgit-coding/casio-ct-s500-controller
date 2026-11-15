@@ -7,6 +7,24 @@
 
 ---
 
+## Salvavidas: versión de referencia v325
+
+> **v325 suena muy bien según el usuario (15 nov 2026).** Puede tener errores, pero se guarda como **referencia** y como **salvavidas** para cuando haya que resolver algo al instante tocando en vivo.
+
+- **Commit:** `f284748` · **etiqueta Git:** `salvavidas-v325` (subida a GitHub). No se mueve ni se borra.
+- **Qué incluye (todo hasta ese commit):** sin CC72 (el sustain del Casio ya no se corta al cambiar ambiente/perfil), volumen de U2 en 100, octava −1 por defecto con rango real ±24, reenvío de OCTAVE/TRANSPOSE tras cada Program Change (U2/L), perfiles por familia (bajos sin chorus, percusivos sin chorus, límites estrechos), 8 tonos reasignados, M3 y M7.
+- **Qué NO incluye (lo posterior):** v326 botón *Pitch check*; v327 piano eléctrico con chorus hasta 12; v328 **BYPASS EQ = sonido propio del Casio** (no manda CC de perfil y reenvía los tonos) y el resto de la documentación de §1.15.
+
+**Cómo usarla en una emergencia** (de más rápido a más completo):
+
+1. **Sin Git:** descargar `https://github.com/jcgit-coding/casio-ct-s500-controller/archive/refs/tags/salvavidas-v325.zip`, descomprimir y abrir `index.html` con `open-app.bat` (o servir la carpeta con cualquier servidor local: Web MIDI exige `localhost` o HTTPS, no `file://`).
+2. **Con Git, sin tocar `main`:** `git worktree add ../CasioController-v325 salvavidas-v325` y abrir esa carpeta. Así `main` sigue intacto.
+3. **Volver `main` a v325** (solo si hay que cortar por lo sano): `git revert` de los commits posteriores (`git log --oneline f284748..HEAD`), nunca `reset --hard` ni `push --force`.
+
+**Para comparar:** `git diff salvavidas-v325 main -- eq.js app.js pitch.js` muestra exactamente qué cambió desde que sonaba bien. Si algo suena peor después, empezar por esas diferencias.
+
+Si más adelante otra versión suena mejor, se añade una etiqueta nueva (`salvavidas-vNNN`) en vez de mover esta.
+
 ## 0. Reglas del proyecto
 
 1. **Nada se da por hecho sin verificación.** Un cambio se cierra cuando se ve el mensaje MIDI real (o el comportamiento en el CT-S500), no cuando "debería" funcionar. Los últimos tres falsos positivos (`globalOctave`, octava por pista, transpose) salieron exactamente de cambiar el *default* del código y no el **estado persistido**.
