@@ -168,6 +168,7 @@ const Pitch = (() => {
 
         document.getElementById('pitchSelftest')?.addEventListener('click', () => Pitch.selftest());
         document.getElementById('pitchResync')?.addEventListener('click', () => Pitch.reassert('manual'));
+        document.getElementById('pitchCheck')?.addEventListener('click', () => Pitch.audioCheck());
     }
 
     // ── Public API ────────────────────────────────────────────────────
@@ -216,6 +217,31 @@ const Pitch = (() => {
         afterProgramChange(reason = 'program-change') {
             tapTimers.forEach(clearTimeout);
             tapTimers = PITCH_PC_TAPS.map(d => setTimeout(() => schedule(reason + '+' + d), d));
+        },
+
+        // Audible check: Middle C on U1, U2, L one after another (600 ms each), then the three together.
+        // Re-asserts the pitch first. All three must sound at the same pitch; if one differs, that part
+        // did not take the OCTAVE/TRANSPOSE value.
+        async audioCheck() {
+            const el = document.getElementById('pitchDiag');
+            if (!hasOutput()) { if (el) el.textContent = 'Pitch check: no MIDI output -- connect the Casio first.'; return; }
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            api.sendNow('pitch-check');
+            await sleep(400);
+            const say = t => { if (el) el.textContent = 'PITCH CHECK -- ' + t; };
+            for (const part of PITCH_PARTS) {
+                const ch = CHANNEL[part];
+                say(part + ' (channel ' + (ch + 1) + ')');
+                midiOutput.send([0x90 | ch, 60, 90]);
+                await sleep(600);
+                midiOutput.send([0x80 | ch, 60, 0]);
+                await sleep(250);
+            }
+            say('U1 + U2 + L together: they must sound as ONE pitch');
+            PITCH_PARTS.forEach(p => midiOutput.send([0x90 | CHANNEL[p], 60, 90]));
+            await sleep(1500);
+            PITCH_PARTS.forEach(p => midiOutput.send([0x80 | CHANNEL[p], 60, 0]));
+            updateDiag();
         },
 
         // Immediate send, no debounce (used by the self-test and by hand).
