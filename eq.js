@@ -1039,7 +1039,7 @@ function applySmartProfile(part, category, onlyChanged) {
 
     // 3. Part Mix Rules always applied -- CC7 is per-part balance, not per-tone character.
     if (part === 'U1') eqState[part][7] = 100;
-    if (part === 'U2') eqState[part][7] = 75;
+    if (part === 'U2') eqState[part][7] = 100;
     if (part === 'L')  eqState[part][7] = 100;
 
     // CC72 (Release) is never an EQ fader
@@ -1075,7 +1075,7 @@ function buildEQ() {
     ['U1','U2','L'].forEach(part => {
         EQ_CONTROLS.forEach(ctrl => { 
             let defVal = ctrl.def;
-            if (part === 'U2' && ctrl.cc === 7) defVal = 75;
+            if (part === 'U2' && ctrl.cc === 7) defVal = 100;
             eqState[part][ctrl.cc] = defVal; 
         });
     });

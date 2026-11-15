@@ -1466,7 +1466,7 @@ function initMidiController() {
         const volSlider = document.getElementById('mctrl-vol-' + part);
         const volVal = document.getElementById('mctrl-vol-' + part + '-val');
         if (volSlider) {
-            const cap = part === 'U2' ? 75 : 100;
+            const cap = 100;
             volSlider.max = cap; // slider range matches Part Mix Rules -- no dead zone above cap
             volSlider.addEventListener('input', () => {
                 const v = parseInt(volSlider.value);
