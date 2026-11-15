@@ -1,0 +1,23 @@
+{
+  "id": "dahiara_yo_navegare",
+  "title": "Yo Navegaré",
+  "artist": "Dahiara",
+  "genre": "Worship",
+  "original_key": "G#m",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/dahiara/yo_navegare.shtml",
+      "lacuerda_version": 1,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/dahiara/yo_navegare-2.shtml",
+      "lacuerda_version": 2,
+      "type": "R",
+      "label": "Letra y Acordes"
+    }
+  ]
+}

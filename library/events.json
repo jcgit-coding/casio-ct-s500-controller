@@ -4,11 +4,31 @@
     "name": "Sábado 17 oct",
     "date": "2026-10-17",
     "songs": [
-      { "id": "ibi_santo_por_siempre",                              "versionFile": null, "transpose": 0 },
-      { "id": "juan_carlos_alvarado_el_poderoso_de_israel",         "versionFile": null, "transpose": 5 },
-      { "id": "fernel_monroy_remolineando",                         "versionFile": null, "transpose": 7 },
-      { "id": "marcos_witt_oh_moradora_de_sion",                    "versionFile": null, "transpose": 8 },
-      { "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre", "versionFile": null, "transpose": 3 }
+      {
+        "id": "ibi_santo_por_siempre",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "juan_carlos_alvarado_el_poderoso_de_israel",
+        "versionFile": null,
+        "transpose": 5
+      },
+      {
+        "id": "fernel_monroy_remolineando",
+        "versionFile": null,
+        "transpose": 7
+      },
+      {
+        "id": "marcos_witt_oh_moradora_de_sion",
+        "versionFile": null,
+        "transpose": 8
+      },
+      {
+        "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre",
+        "versionFile": null,
+        "transpose": 3
+      }
     ]
   },
   {
@@ -16,14 +36,46 @@
     "name": "Domingo 8 nov",
     "date": "2026-11-08",
     "songs": [
-      { "id": "christine_dclario_como_dijiste",                       "versionFile": null, "transpose": 0 },
-      { "id": "israel_houghton_tu_presencia_es_el_cielo",            "versionFile": null, "transpose": 0 },
-      { "id": "juan_carlos_alvarado_el_poderoso_de_israel",           "versionFile": null, "transpose": 5  },
-      { "id": "doris_machin_vamos_escalando_peldanios",               "versionFile": null, "transpose": 0  },
-      { "id": "ebenezer_en_el_principio_el_espiritu_de_dios",         "versionFile": null, "transpose": 3  },
-      { "id": "catolicas_oh_jerusalen_que_bonita_eres",               "versionFile": null, "transpose": -4 },
-      { "id": "marcos_witt_oh_moradora_de_sion",                      "versionFile": null, "transpose": 0  },
-      { "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre",   "versionFile": null, "transpose": 0  }
+      {
+        "id": "christine_dclario_como_dijiste",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "israel_houghton_tu_presencia_es_el_cielo",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "juan_carlos_alvarado_el_poderoso_de_israel",
+        "versionFile": null,
+        "transpose": 5
+      },
+      {
+        "id": "doris_machin_vamos_escalando_peldanios",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "ebenezer_en_el_principio_el_espiritu_de_dios",
+        "versionFile": null,
+        "transpose": 3
+      },
+      {
+        "id": "catolicas_oh_jerusalen_que_bonita_eres",
+        "versionFile": null,
+        "transpose": -4
+      },
+      {
+        "id": "marcos_witt_oh_moradora_de_sion",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "juan_carlos_alvarado_cantare_al_senior_por_siempre",
+        "versionFile": null,
+        "transpose": 0
+      }
     ]
   },
   {
@@ -31,9 +83,48 @@
     "name": "Domingo 18 oct",
     "date": "2026-10-18",
     "songs": [
-      { "id": "new_wine_incomprensible_amor",          "versionFile": null, "transpose": 0 },
-      { "id": "christine_dclario_ya_no_soy_esclavo",  "versionFile": null, "transpose": 0 },
-      { "id": "new_wine_libre_para_adorar",            "versionFile": null, "transpose": 0 }
+      {
+        "id": "new_wine_incomprensible_amor",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "christine_dclario_ya_no_soy_esclavo",
+        "versionFile": null,
+        "transpose": 0
+      },
+      {
+        "id": "new_wine_libre_para_adorar",
+        "versionFile": null,
+        "transpose": 0
+      }
+    ]
+  },
+  {
+    "id": "evt_domingo_20261115",
+    "name": "Domingo 15 nov",
+    "date": "2026-11-15",
+    "songs": [
+      {
+        "id": "dahiara_yo_navegare",
+        "versionFile": "chords_v1_lacuerda.txt",
+        "transpose": -4
+      },
+      {
+        "id": "barak_espiritu_santo_ven",
+        "versionFile": "chords_v2_lacuerda.txt",
+        "transpose": 0
+      },
+      {
+        "id": "ingrid_rosario_que_se_llene_tu_casa",
+        "versionFile": "chords_v4_lacuerda.txt",
+        "transpose": 0
+      },
+      {
+        "id": "danilo_montero_la_casa_de_dios",
+        "versionFile": "chords_v1_lacuerda.txt",
+        "transpose": 0
+      }
     ]
   }
 ]

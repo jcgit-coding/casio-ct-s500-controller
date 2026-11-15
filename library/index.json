@@ -668,7 +668,7 @@
     "title": "Espíritu Santo ven",
     "artist": "Barak",
     "genre": "Worship",
-    "original_key": "F#m"
+    "original_key": "Em"
   },
   {
     "id": "barak_fuego_y_poder",
@@ -11343,7 +11343,7 @@
     "title": "Que se llene tu casa",
     "artist": "Ingrid Rosario",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Cm"
   },
   {
     "id": "ingrid_rosario_quiero_estar_en_tu_presencia",
@@ -27556,5 +27556,12 @@
     "artist": "Doris Machin",
     "genre": "Worship",
     "original_key": "Dm"
+  },
+  {
+    "id": "dahiara_yo_navegare",
+    "title": "Yo Navegaré",
+    "artist": "Dahiara",
+    "genre": "Worship",
+    "original_key": "G#m"
   }
 ]

@@ -3,12 +3,35 @@
   "title": "Que se llene tu casa",
   "artist": "Ingrid Rosario",
   "genre": "Worship",
-  "original_key": "C",
+  "original_key": "Cm",
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
       "source": "https://acordes.lacuerda.net/ingrid_rosario/que_se_llene_tu_casa.shtml",
-      "lcd": 0
+      "lacuerda_version": 1,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ingrid_rosario/que_se_llene_tu_casa-2.shtml",
+      "lacuerda_version": 2,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v3_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ingrid_rosario/que_se_llene_tu_casa-4.shtml",
+      "lacuerda_version": 4,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v4_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/ingrid_rosario/que_se_llene_tu_casa-5.shtml",
+      "lacuerda_version": 5,
+      "type": "R",
+      "label": "Letra y Acordes"
     }
   ]
 }
