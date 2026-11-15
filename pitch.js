@@ -18,7 +18,10 @@
 
 // Global pitch state -- shared by app.js / presets.js / library.js.
 // Declared here (not in app.js) so there is exactly one owner.
-let globalOctave = 0;      // -2..+2 octaves
+// Default octave -1: the player's chosen starting register (RPN 52). With -1 every transpose
+// -12..+12 stays inside the Casio's +/-24 semitone limit; at -2 negative transpose is blocked.
+const PITCH_DEFAULT_OCTAVE = -1;
+let globalOctave = PITCH_DEFAULT_OCTAVE;      // -2..+2 octaves
 let globalTranspose = 0;   // -12..+12 semitones
 // CT-S500 MIDI Implementation 7.23.3: Coarse Tune accepts 28H-58H (40..88) = 64 +/- 24 semitones.
 // Anything outside is invalid for the keyboard, so octave*12 + transpose is capped at +/-24.
@@ -142,7 +145,7 @@ const Pitch = (() => {
         bindStep(document.getElementById('gTrnPlus'),  () => Pitch.stepTranspose(+1, 'boton'));
         bindStep(document.getElementById('gTrnMinus'), () => Pitch.stepTranspose(-1, 'boton'));
 
-        document.getElementById('gOctReset')?.addEventListener('click', () => Pitch.setOctave(0, 'reset'));
+        document.getElementById('gOctReset')?.addEventListener('click', () => Pitch.setOctave(PITCH_DEFAULT_OCTAVE, 'reset'));
         document.getElementById('gTrnReset')?.addEventListener('click', () => Pitch.setTranspose(0, 'reset'));
 
         // Shortcuts: Alt+Up/Down = transpose, Shift+Alt+Up/Down = octave.
@@ -179,6 +182,17 @@ const Pitch = (() => {
             updateUI();
             schedule(reason);
             return globalTranspose;
+        },
+
+        // Set both at once (preset / saved state). Setting them one by one lets the previous value
+        // of the other one clip the new one (e.g. current octave +2 would trim a restored transpose +12).
+        setBoth(octave, transpose, reason = 'state') {
+            globalOctave = clampInt(octave === undefined ? globalOctave : octave, -2, 2);
+            globalTranspose = clampInt(transpose === undefined ? globalTranspose : transpose, -12, 12);
+            fitTotal('transpose');
+            updateUI();
+            schedule(reason);
+            return api.get();
         },
 
         stepOctave(delta, reason = 'octave')     { return api.setOctave(globalOctave + delta, reason); },

@@ -168,6 +168,7 @@ Pitch.status() → { octave, transpose, lastSentAt, lastValue, channels }
 - **Ahora:** octava −2…+2, transpose −12…+12, y **octava×12 + transpose limitado a ±24**: si lo que cambias lo pasaría, se recorta ese valor y la pantalla muestra lo que realmente se envía.
 - **Verificado en navegador (MIDI simulado):** cada botón, Reset, atajos Alt+↑/↓ y Shift+Alt+↑/↓, reenvío a los 3 canales tras CC121, Program Change del Casio, cambio de tono desde la app, carga de preset, recarga de la página con estado guardado y reconexión. **No verificado en el teclado real.**
 - **Pendiente revisar JC:** confirmar en el CT-S500 que ±2 octavas y ±12 semitonos suenan como muestra la pantalla.
+- **v316, octava por defecto = −1** (`PITCH_DEFAULT_OCTAVE`, RPN 52): decisión del usuario. El botón Reset de OCTAVE vuelve a −1. Con −1 cualquier transpose −12…+12 cabe en el rango ±24 (con −2 el transpose negativo queda bloqueado). El estado guardado se migra una vez a −1 (versión 316). Los presets restauran el valor con que se guardaron. `Pitch.setBoth(oct, trn)` restaura ambos a la vez para que el valor actual de uno no recorte al otro. Verificado en navegador: 125 combinaciones octava×transpose sin anomalías; **no verificado en el teclado**. Pendiente revisar JC: confirmar que −1 suena a la altura que esperas.
 
 ## 2. Mixer / EQ (prioridad 2)
 

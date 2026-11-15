@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script>
-    var V='v315';
+    var V='v316';
     (function(){
         if(localStorage.getItem('_cv')!==V){
             localStorage.setItem('_cv',V);
@@ -21,7 +21,7 @@
     <title>Casio CT-S500 Pro Controller</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="style.css?v315">
+    <link rel="stylesheet" href="style.css?v316">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -93,10 +93,10 @@
                     <span class="global-label">OCTAVE</span>
                     <div class="step-btns">
                         <button class="step-btn" id="gOctMinus" title="Octave -1 (Shift+Alt+Down)">-</button>
-                        <span class="step-val" id="gOctVal">0</span>
+                        <span class="step-val" id="gOctVal">-1</span>
                         <button class="step-btn" id="gOctPlus" title="Octave +1 (Shift+Alt+Up)">+</button>
                     </div>
-                    <button class="btn-reset-small" id="gOctReset" title="Reset octave to 0">Reset</button>
+                    <button class="btn-reset-small" id="gOctReset" title="Reset octave to the default (-1)">Reset</button>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@
                     <div class="status-indicator" id="statusIndicator"></div>
                     <span id="statusText">Searching MIDI...</span>
                 </div>
-                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v315</span>
+                <span id="appVersionBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 600; opacity: 0.5; padding-left: 5px; cursor: default;" title="App Version">v316</span>
                 <script>
                 (function(){
                     var el=document.getElementById('appVersionBadge');
@@ -548,7 +548,7 @@
                     </div>
                     <div style="flex-basis:100%; margin-top:14px; padding-top:12px; border-top:1px solid var(--panel-border); display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                         <span class="pitch-label" style="font-size:10px;">SUSTAIN TEST</span>
-                        <span style="flex-basis:100%; font-size:12px; color:var(--text-muted); line-height:1.5;">Hold the sustain pedal on the Casio, play a chord, press ONE button, and note which one cuts the sound. Needs the Casio connected.</span>
+                        <span style="flex-basis:100%; font-size:12px; color:var(--text-muted); line-height:1.5;">Turn on the Casio's own sustain (no pedal needed), play a chord, press ONE button, and note which one cuts the sound. Needs the Casio connected. The log also shows whether the Casio reports its sustain as CC64.</span>
                         <button class="btn" id="susT1" style="padding:6px 10px; font-size:12px;" title="Re-sends the current Cutoff value on U1 (no audible change)">1 CC</button>
                         <button class="btn" id="susT2" style="padding:6px 10px; font-size:12px;" title="Re-sends all current EQ values on U1 (no audible change)">EQ burst U1</button>
                         <button class="btn" id="susT3" style="padding:6px 10px; font-size:12px;" title="Re-sends the current tone (Bank + Program Change) on U1">Same tone U1</button>
@@ -1082,13 +1082,13 @@
 
     <script src="raw_tones.js"></script>
     <script src="raw_rhythms.js"></script>
-    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v315"></script>
-    <script src="pitch.js?v315"></script>
-    <script src="presets.js?v315"></script>
-    <script src="app.js?v315"></script>
-    <script src="harmony.js?v315"></script>
-    <script src="library.js?v315"></script>
-    <script src="trainer.js?v315"></script>
+    <script src="spessasynth_processor.min.js"></script>    <script src="eq.js?v316"></script>
+    <script src="pitch.js?v316"></script>
+    <script src="presets.js?v316"></script>
+    <script src="app.js?v316"></script>
+    <script src="harmony.js?v316"></script>
+    <script src="library.js?v316"></script>
+    <script src="trainer.js?v316"></script>
 </body>
 </html>
 
