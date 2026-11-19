@@ -381,9 +381,9 @@ function loadAppState() {
             });
         }
         if (saved.activeCategories) Object.assign(activeCategories, saved.activeCategories);
-        if (saved.globalTranspose !== undefined || saved.globalOctave !== undefined) {
-            Pitch.setBoth(saved.globalOctave, saved.globalTranspose, 'state');
-        }
+        // v329: OCTAVE/TRANSPOSE are NOT restored from the saved state. A stale value kept in the
+        // browser storage made the keyboard start transposed. Startup always uses the defaults
+        // (octave PITCH_DEFAULT_OCTAVE, transpose 0); presets can still set them explicitly.
 
         if (saved.activePart) {
             activePart = saved.activePart;
