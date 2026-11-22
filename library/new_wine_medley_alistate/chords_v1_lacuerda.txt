@@ -1,6 +1,6 @@
 [Alístate / Hay gozo en los cielos]
 Intro:  Dm  Gm  A
-D  F  E  D  G#  A
+Notas: D  F  E  D  G#  A
 
 Verso 1:
 Dm
@@ -45,10 +45,10 @@ Dm   Gm   A
 Hay fiesta en la tierra
 Dm   Gm   A
 Su novia ya está lista
-A#   A
+Bb   A
 El Rey pronto regresa
 
-[Salta, dando vueltas]
+[Salta, danza, grita]
 Intro:  Dm  C  Dm  Bb  F  Dm  Am
 
 Coro:
@@ -71,25 +71,25 @@ Me encontrará, me encontrará, me encontrará
 Intro : //Dm A Dm A //
 
   Dm                               A
-//Estamos anunciando que CRISTO volverá 
+//Estamos anunciando que Cristo volverá
  A                                        Dm
-  Estamos celebrando que el REY pronto vendrá 
+  Estamos celebrando que el Rey pronto vendrá
 Dm                                A
-  Estamos esperando al que regresará 
+  Estamos esperando al que regresará
  A                        Dm    Bb-A
-  Y en las nubes Nos llevará //
+  Y en las nubes nos llevará //
 
    Dm                           A
-//El ESPÍRITU y la NOVIA dicen " VEN JESÚS "
+//El Espíritu y la novia dicen: "Ven, Jesús"
    A                            Dm
-  El ESPÍRITU y la NOVIA dicen " VEN JESÚS "
+  El Espíritu y la novia dicen: "Ven, Jesús"
   Dm                            A
-  El ESPÍRITU y la NOVIA dicen " VEN JESÚS "
+  El Espíritu y la novia dicen: "Ven, Jesús"
                Dm
-  Ven SEÑOR JESÚS //
+  Ven, Señor Jesús //
 
 [Yo sé que viene rompimiento / Recibo mi milagro]
-Instrumental: [Dm x8 - Gm x4 - A x4] x3
+Instrumental: Dm x8 - Gm x4 - A x4  (x3)
 
      Dm
 Yo sé que viene, viene rompimiento
@@ -100,14 +100,14 @@ Yo sé que viene, viene rompimiento
       Gm             A - G - F - E
 Yo sé que viene en mí, rompimiento
 
-[Dm x8 - Gm x4 - A  x4]   x2
+Instrumental: Dm x8 - Gm x4 - A x4  (x2)
 
     Dm
 Lo alabo por mi rompimiento
-     Gm       G#         A
+     Gm       Ab         A
 Antes que venga mi bendición
-   Dm  -   C   -   G/B  -    A#   -   Gm  -    A#     -   A
-Antes de que lo vea Mi fe dice ahora Yo sé que hecho está
+   Dm  -  C  -  G/B  -  Bb  -  Gm  -  Bb  -  A
+Antes de que lo vea, mi fe dice ahora: yo sé que hecho está
 
      Dm
 Yo sé que viene, viene rompimiento
@@ -120,7 +120,7 @@ Yo sé que viene en mí, rompimiento
 
 //Dm - Gm - A//
 
-Dm ----] para todo el rap
+Rap (sobre Dm):
 
 Señor, tu amor me lleva a la cima
 Declaro y recibo tu gloria en mi vida
