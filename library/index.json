@@ -19057,7 +19057,7 @@
     "title": "Mi Plenitud",
     "artist": "Marcos Brunet",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "A"
   },
   {
     "id": "marcos_brunet_mi_shalom",
@@ -19554,7 +19554,7 @@
     "title": "Yeshua: quiero conocer a Jesús",
     "artist": "Marcos Brunet",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "D"
   },
   {
     "id": "marcos_brunet_yo_soy_libre",
@@ -24489,7 +24489,7 @@
     "title": "La Sunamita",
     "artist": "Montesanto",
     "genre": "Worship",
-    "original_key": "C"
+    "original_key": "Ab"
   },
   {
     "id": "montesanto_mas_el_dios_de_toda_gracia",
@@ -27577,12 +27577,5 @@
     "artist": "Oasis Ministry",
     "genre": "Worship",
     "original_key": "Em"
-  },
-  {
-    "id": "varios_medley_cristo_jesus_eres_mi_plenitud_yeshua",
-    "title": "Medley Cristo Jesús eres mi plenitud + Yeshua",
-    "artist": "Varios",
-    "genre": "Worship",
-    "original_key": "A"
   }
 ]

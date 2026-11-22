@@ -1,20 +1,15 @@
-CAPO EN TERCER TRASTE
+[Estrofa]
 
+A/F#   E/G# A          B     E/C#
+Cristo Jesús eres mi plenitud
+B/G#        A           A/F# E
+Cristo Jesús eres mi plenitud
 
-ESTROFA:
-G         C9                E7
-Cristo Jesús, eres mi plenitud
+[Coro]
 
-          C9                 G
-Cristo Jesús, eres mi plenitud
-
-
-CORO:
-               C9
-Si te tengo a ti lo tengo todo
-
-E7                D
+                 A
+Si te tengo a ti, lo tengo todo
+B     E/C#      B/G#
 Mi amado, mi tesoro
-
-C9                         G
-Fuera de ti nada deseo, Jesús
+            A            A/F#  E
+Fuera de ti, nada deseo, Señor

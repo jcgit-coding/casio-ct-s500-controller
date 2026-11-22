@@ -1,10 +1,8 @@
-Intro
+[Intro]
 
 Ab  Db/F  Cm/Eb  Db
 
-
-Verso
-
+[Verso]
 
 Ab           Db/F
 Viniste a mi casa
@@ -21,8 +19,7 @@ Yo quiero que te quedes
    Db                   Eb
 He preparado un aposento para ti
 
-
-Coro
+[Coro]
 
 Db
 Mi amado
@@ -39,8 +36,7 @@ Mi amado
             Ab                       Eb
 Todo lo que ves lo he preparado para ti
 
-
-Puente
+[Puente]
 
 Db
 No importa todo lo que cueste

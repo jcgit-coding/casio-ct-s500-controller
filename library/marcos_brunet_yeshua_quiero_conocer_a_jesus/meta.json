@@ -3,12 +3,35 @@
   "title": "Yeshua: quiero conocer a Jesús",
   "artist": "Marcos Brunet",
   "genre": "Worship",
-  "original_key": "C",
+  "original_key": "D",
   "versions": [
     {
       "file": "chords_v1_lacuerda.txt",
       "source": "https://acordes.lacuerda.net/marcos_brunet/yeshua_quiero_conocer_a_jesus.shtml",
-      "lcd": 0
+      "lacuerda_version": 1,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marcos_brunet/yeshua_quiero_conocer_a_jesus-2.shtml",
+      "lacuerda_version": 2,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v3_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marcos_brunet/yeshua_quiero_conocer_a_jesus-3.shtml",
+      "lacuerda_version": 3,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v4_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/marcos_brunet/yeshua_quiero_conocer_a_jesus-4.shtml",
+      "lacuerda_version": 4,
+      "type": "R",
+      "label": "Letra y Acordes"
     }
   ]
 }
