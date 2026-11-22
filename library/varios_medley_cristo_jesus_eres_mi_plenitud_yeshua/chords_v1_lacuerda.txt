@@ -1,5 +1,5 @@
 Tonalidad: A
-(Acordes del mensaje de WhatsApp; la letra sale de "Mi plenitud" y "El fuego nunca duerme" de Marcos Brunet. Los acordes de Yeshua faltan.)
+(Acordes de "Cristo Jesús" y "Mi amado" tomados de tu mensaje de WhatsApp. Yeshua: de "Quiero conocer a Jesús" de Marcos Brunet, subida de E a A.)
 
 [Cristo Jesús eres mi plenitud]
 A  B  C#m  B  A  F#m  E
@@ -9,9 +9,20 @@ Si te tengo a ti lo tengo todo
 Mi amado, mi tesoro
 Fuera de ti nada deseo, Jesús
 
-[Yeshua]
-(sin acordes: el mensaje se cortó aquí)
-Yeshuaaaa
+[Yeshua - Quiero conocer a Jesús]
+A                  B
+Quiero conocer a Jesús
+C#m                B
+Quiero conocer a Jesús
+A                  B
+Quiero conocer a Jesús
+C#m                B
+Quiero conocer a Jesús
+
+A      B   C#m      B
+Yeshua ahh...
+A      B   C#m      B
+Yeshua ahh...
 
 [Mi amado es el más bello]
 A  B  C#m  B  E  B
