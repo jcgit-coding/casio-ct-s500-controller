@@ -9,6 +9,11 @@
       "file": "chords_v1_lacuerda.txt",
       "source": "https://acordes.lacuerda.net/marco_barrientos/hossana.shtml",
       "lcd": 0
+    },
+    {
+      "file": "chords_v2_limpia.txt",
+      "source": "v1 limpia (sin comentario final, D/F# como en las otras copias)",
+      "lcd": 0
     }
   ]
 }

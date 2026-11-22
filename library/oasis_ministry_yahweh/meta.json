@@ -1,0 +1,51 @@
+{
+  "id": "oasis_ministry_yahweh",
+  "title": "Yahweh",
+  "artist": "Oasis Ministry",
+  "genre": "Worship",
+  "original_key": "Em",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/oasis_ministry/yahweh.shtml",
+      "lacuerda_version": 1,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v2_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/oasis_ministry/yahweh-2.shtml",
+      "lacuerda_version": 2,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v3_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/oasis_ministry/yahweh-3.shtml",
+      "lacuerda_version": 3,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v4_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/oasis_ministry/yahweh-4.shtml",
+      "lacuerda_version": 4,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v5_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/oasis_ministry/yahweh-5.shtml",
+      "lacuerda_version": 5,
+      "type": "R",
+      "label": "Letra y Acordes"
+    },
+    {
+      "file": "chords_v6_lacuerda.txt",
+      "source": "https://acordes.lacuerda.net/oasis_ministry/yahweh-6.shtml",
+      "lacuerda_version": 6,
+      "type": "R",
+      "label": "Letra y Acordes"
+    }
+  ]
+}

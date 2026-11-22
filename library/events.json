@@ -126,5 +126,37 @@
         "transpose": 0
       }
     ]
+  },
+  {
+    "id": "evt_domingo_20261122",
+    "name": "Domingo 22 nov",
+    "date": "2026-11-22",
+    "songs": [
+      {
+        "id": "montesanto_la_sunamita",
+        "versionFile": "chords_v2_captura.txt",
+        "transpose": 0
+      },
+      {
+        "id": "varios_medley_cristo_jesus_eres_mi_plenitud_yeshua",
+        "versionFile": "chords_v1_lacuerda.txt",
+        "transpose": 0
+      },
+      {
+        "id": "oasis_ministry_yahweh",
+        "versionFile": "chords_v4_lacuerda.txt",
+        "transpose": -3
+      },
+      {
+        "id": "marco_barrientos_hossana",
+        "versionFile": "chords_v2_limpia.txt",
+        "transpose": 0
+      },
+      {
+        "id": "new_wine_medley_alistate",
+        "versionFile": "chords_v1_lacuerda.txt",
+        "transpose": 0
+      }
+    ]
   }
 ]

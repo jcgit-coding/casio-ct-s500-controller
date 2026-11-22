@@ -495,8 +495,31 @@ const RepertoireSync = {
                     norm(s.title).includes(qn) || norm(s.artist).includes(qn)
                 );
                 this._renderSearchResults(filtered, q);
+                // Búsqueda también en la letra (desde 3 letras): el índice se baja una sola vez
+                if (qn.length >= 3) {
+                    const token = this._searchToken = (this._searchToken || 0) + 1;
+                    this._loadLyricsIndex().then(idx => {
+                        if (token !== this._searchToken || !idx) return;
+                        const qw = qn.replace(/[^a-z0-9ñ ]+/g, ' ').replace(/\s+/g, ' ').trim();
+                        if (qw.length < 3) return;
+                        const have = new Set(filtered.map(s => s.id));
+                        const byLyric = this.allSongs.filter(s => !have.has(s.id) && idx[s.id] && idx[s.id].includes(qw));
+                        if (!byLyric.length) return;
+                        this._renderSearchResults(filtered.concat(byLyric), q, new Set(byLyric.map(s => s.id)));
+                    });
+                }
             }
         });
+    },
+
+    // Índice de letras (library/lyrics-index.json, se genera con scripts/build_lyrics_index.js)
+    _loadLyricsIndex() {
+        if (!this._lyricsPromise) {
+            this._lyricsPromise = fetch('library/lyrics-index.json?v=' + Date.now())
+                .then(r => r.ok ? r.json() : null)
+                .catch(() => null);
+        }
+        return this._lyricsPromise;
     },
 
     // Pantalla 1: lista de artistas
@@ -623,7 +646,7 @@ const RepertoireSync = {
     },
 
     // Búsqueda activa: resultados planos agrupados
-    _renderSearchResults(songs, q) {
+    _renderSearchResults(songs, q, lyricIds) {
         const wrap = document.getElementById('cloud-song-list-container');
         if (!wrap) return;
         this._clearAlphaIndex();
@@ -661,6 +684,7 @@ const RepertoireSync = {
                          onmouseout="this.style.background='rgba(255,255,255,0.03)'"
                          onclick="RepertoireSync.openSong('${jsArg(s.id)}')">
                         <span style="font-weight:600;font-size:13px;color:var(--text);">${hl(s.title)}</span>
+                        ${lyricIds && lyricIds.has(s.id) ? '<span style="font-size:10px;opacity:0.6;margin-left:6px;">· en la letra</span>' : ''}
                     </div>`).join('')}
             </div>`).join('');
     },

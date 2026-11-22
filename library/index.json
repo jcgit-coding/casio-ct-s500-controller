@@ -27570,5 +27570,19 @@
     "artist": "New Wine",
     "genre": "Worship",
     "original_key": "Dm"
+  },
+  {
+    "id": "oasis_ministry_yahweh",
+    "title": "Yahweh",
+    "artist": "Oasis Ministry",
+    "genre": "Worship",
+    "original_key": "Em"
+  },
+  {
+    "id": "varios_medley_cristo_jesus_eres_mi_plenitud_yeshua",
+    "title": "Medley Cristo Jesús eres mi plenitud + Yeshua",
+    "artist": "Varios",
+    "genre": "Worship",
+    "original_key": "A"
   }
 ]

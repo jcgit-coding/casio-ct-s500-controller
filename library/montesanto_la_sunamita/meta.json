@@ -9,6 +9,11 @@
       "file": "chords_v1_lacuerda.txt",
       "source": "https://acordes.lacuerda.net/montesanto/la_sunamita.shtml",
       "lcd": 0
+    },
+    {
+      "file": "chords_v2_captura.txt",
+      "source": "captura del usuario (domingo 22 nov)",
+      "lcd": 0
     }
   ]
 }
