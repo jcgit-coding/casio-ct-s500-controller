@@ -1,0 +1,14 @@
+{
+  "id": "new_wine_medley_alistate",
+  "title": "Medley Alístate",
+  "artist": "New Wine",
+  "genre": "Worship",
+  "original_key": "Dm",
+  "versions": [
+    {
+      "file": "chords_v1_lacuerda.txt",
+      "source": "https://www.scribd.com/document/736761406/MEDLEY-ALISTATE-New-Wine-Sencillo (+ Ebenezer El espíritu y la novia, New Wine Rompimiento)",
+      "lcd": 0
+    }
+  ]
+}
